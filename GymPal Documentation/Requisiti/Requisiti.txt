@@ -1,0 +1,49 @@
+REQUISITI FUNZIONALI
+
+Membro dello staff:
+deve poter effettuare il login
+deve poter inviare messaggi e comunicazioni ai clienti e/o ad altri membri dello staff
+
+Manager:
+deve poter visualizzare tutti i dati utente
+deve poter modificare i dati utente normalmente non modificabili da altri membri dello staff, quali dati anagrafici e recapiti.
+deve poter accedere al calendario delle attività della palestra
+deve poter modificare, aggiungere o rimuovere eventi dal calendario delle attività della palestra 
+deve poter definire le politiche di sconto varie e d eventuali
+deve poter creare o eliminare gli account dello staff 
+
+Receptionist:
+deve poter iscrivere un cliente alla palestra
+deve poter modificare, eliminare o rinnovare l'abbonamento dei clienti
+deve poter schedulare corsi o appuntamenti con i personal trainer per i clienti
+deve poter aggiornare i dati salvati sul badge
+
+Sistema:
+deve poter creare un profilo per ciascun cliente associato ad un identificatore univoco 
+deve poter salvare i dati utente quali generalità, recapiti, tipologia di abbonamento, credito sul badge
+deve poter associare i dati utente al profilo utente
+deve poter permettere allo staff di visualizzare i profili utente e modificarli in base al livello di autorizzazione
+deve poter permette allo staff di modificare il calendario in base al livello di autorizzazione
+deve poter notificare staff e clienti di avvenimenti calendarizzati 
+deve poter applicare sconti in procedura di iscrizione o rinnovo abbonamento
+
+
+REQUISITI NON FUNZIONALI
+Il sistema deve poter essere facilmente utilizzabile dopo un corso di 2 ore
+Il sistema deve essere scritto in linguaggio Java 
+Il sistema deve essere terminato entro metà Giugno 2025
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
