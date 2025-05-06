@@ -12,6 +12,8 @@ public abstract class Staff implements IDateFormat{
 	
 	
 	private String staffID;
+	
+	public Staff() {}; //Da rimuovere, in caso
 
 	//costruttore
 	public Staff(String nome, String cognome, String contatto, LocalDate dataDiNascita) {
@@ -68,5 +70,8 @@ public abstract class Staff implements IDateFormat{
 	}
 	
 	
+	public void presence() {System.out.println("STAFF: ci sono!");}
+	
+		
 	
 }
