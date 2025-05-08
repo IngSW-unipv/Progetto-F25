@@ -22,13 +22,18 @@ public class LoginView extends JFrame {
     	
         setTitle("Login Staff");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 250);
-        setLocationRelativeTo(null); // Centra la finestra
+        
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = kit.getScreenSize();
+        int screenHeight = screenSize.height;
+        int screenWidth = screenSize.width;
+        setSize(screenWidth/2,screenHeight/2);
+        setLocation(screenWidth/4,screenHeight/4);
 
         // Inizializzazione componenti
-        nomeField = new JTextField(20);
+        nomeField = new JTextField(20); /*Tra parentesi tonde, la larghezza del campo, in colonne*/
         cognomeField = new JTextField(20);
-        idField = new JTextField(15);
+        idField = new JTextField(20);
         loginButton = new JButton("Accedi");
 
         // Creazione pannello principale con layout
@@ -86,6 +91,9 @@ public class LoginView extends JFrame {
 	//----------------------------------------------------------------
     
     public String getNome() {
+    	
+        /*Il metodo "getText()" restituisce sotto forma di "String"
+         *il contenuto del campo di testo su cui è invocato*/
     	
         return nomeField.getText().trim();
         
