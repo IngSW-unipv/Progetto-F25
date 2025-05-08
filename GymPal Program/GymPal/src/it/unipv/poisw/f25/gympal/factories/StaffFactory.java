@@ -1,4 +1,4 @@
-package factories;
+package it.unipv.poisw.f25.gympal.factories;
 
 import it.unipv.poisw.f25.gympal.staff.*;
 

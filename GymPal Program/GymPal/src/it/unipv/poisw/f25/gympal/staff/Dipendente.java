@@ -13,5 +13,8 @@ public class Dipendente extends Staff {
 	
 	@Override
 	public void presence() {System.out.println("DIP: ci sono!");}
+	
+	@Override
+	public void initGUI() {System.out.println("GUI inizializzata");}
 
 }

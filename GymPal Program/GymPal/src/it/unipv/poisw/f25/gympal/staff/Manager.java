@@ -13,5 +13,8 @@ public class Manager extends Staff{
 	
 	@Override
 	public void presence() {System.out.println("MAN: ci sono!");}
+	
+	@Override
+	public void initGUI() {System.out.println("GUI inizializzata");}
 
 }

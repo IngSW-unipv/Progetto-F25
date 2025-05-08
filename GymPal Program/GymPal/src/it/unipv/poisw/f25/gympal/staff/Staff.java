@@ -72,6 +72,8 @@ public abstract class Staff implements IDateFormat{
 	
 	public void presence() {System.out.println("STAFF: ci sono!");}
 	
+	public void initGUI() {};
+	
 		
 	
 }
