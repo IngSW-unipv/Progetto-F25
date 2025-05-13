@@ -1,4 +1,5 @@
 package it.unipv.poisw.f25.gympal.utility;
+import it.unipv.poisw.f25.gympal.DAOs.CredentialsPOJO;
 import it.unipv.poisw.f25.gympal.factories.StaffFactory;
 import it.unipv.poisw.f25.gympal.staff.Staff;
 

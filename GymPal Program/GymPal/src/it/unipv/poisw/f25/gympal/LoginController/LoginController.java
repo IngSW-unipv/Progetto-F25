@@ -1,6 +1,7 @@
-package it.unipv.poisw.f25.gympal.Controller;
+package it.unipv.poisw.f25.gympal.LoginController;
 
 import it.unipv.poisw.f25.gympal.GUI.LoginView;
+import it.unipv.poisw.f25.gympal.factories.DashboardDispatcherFactory;
 import it.unipv.poisw.f25.gympal.staff.Staff;
 import it.unipv.poisw.f25.gympal.utility.LoginManager;
 
@@ -40,9 +41,16 @@ public class LoginController {
 
             if (staff != null) {
             	
-                view.mostraMessaggio("Login riuscito! Benvenuto, " + staff.getClass().getSimpleName());
-                // Procedi con cambio schermata
+                view.mostraMessaggio("Login riuscito! Benvenuto, " 
+                					  + staff.getClass().getSimpleName());
                 
+                
+                // Procedi con cambio schermata                
+                DashboardDispatcherFactory.getDashboardPer(staff).avvia();
+                
+                view.dispose(); /*Elimina la view corrente*/
+                
+                                
             } else {
             	
                 view.mostraMessaggio("Credenziali non valide.");

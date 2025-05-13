@@ -1,10 +1,11 @@
-package it.unipv.poisw.f25.gympal.utility;
+package it.unipv.poisw.f25.gympal.DAOs;
 import java.io.Serializable;
 
 public class CredentialsPOJO implements Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
+	
 	private String nome, cognome, staffID;
 	
 	

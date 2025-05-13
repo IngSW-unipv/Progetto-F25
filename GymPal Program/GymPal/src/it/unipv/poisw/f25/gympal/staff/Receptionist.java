@@ -28,7 +28,7 @@ public class Receptionist extends Staff {
 
 	//----------------------------------------------------------------
 	
-	public void inizializzaIscrizione() {};
+	public void creaProfiloUtente() {};
 	
 	//----------------------------------------------------------------
 	

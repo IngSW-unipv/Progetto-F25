@@ -45,6 +45,9 @@ public class LoginView extends JFrame {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        /*Dapprima sono impostate le coordinate a cui sarà collocato il componente, agendo su
+         *"gbc", dopodiché si procede ad aggiungere il componente al pannello*/
+        
         // Riga 1 - Nome
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -82,9 +85,9 @@ public class LoginView extends JFrame {
     
 	//----------------------------------------------------------------
 
-    public void aggiungiLoginListener(ActionListener l) {
+    public void aggiungiLoginListener(ActionListener al) {
     	
-        loginButton.addActionListener(l);
+        loginButton.addActionListener(al);
         
     }
 
