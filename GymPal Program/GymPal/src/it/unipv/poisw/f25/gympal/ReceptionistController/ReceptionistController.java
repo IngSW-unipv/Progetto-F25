@@ -65,7 +65,7 @@ public class ReceptionistController {
             JButton bottone = entry.getKey();
             
             String comando = entry.getValue();
-//
+
             bottone.setActionCommand(comando);
             
             bottone.addActionListener(gestoreEventi);
