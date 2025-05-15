@@ -80,7 +80,7 @@ public class ReceptionistDashboardView extends JFrame{
         
         pannelloDestro = new JPanel(cardLayout);
         
-        JPanel schermata0 = creaSchermata("Benvenuto, Receptionist! Scegli un'operazione~", Color.WHITE);
+        JPanel schermata0 = creaSchermata("Benvenuto, Receptionist! Seleziona un'operazione~", Color.WHITE);
         
         JPanel schermata1 = creaSchermata("Sei nella schermata 1", Color.CYAN);
         

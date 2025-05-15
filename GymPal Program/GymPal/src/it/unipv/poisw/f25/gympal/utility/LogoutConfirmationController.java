@@ -12,7 +12,7 @@ public class LogoutConfirmationController {
     private LogoutConfirmationView view;
     private ReceptionistDashboardView mainView;
 
-
+    //----------------------------------------------------------------
 
     public LogoutConfirmationController(LogoutConfirmationView logoutView, ReceptionistDashboardView recDashView,
     									String schermata) {
@@ -59,4 +59,6 @@ public class LogoutConfirmationController {
             
         });
     }
+    
+    //----------------------------------------------------------------
 }

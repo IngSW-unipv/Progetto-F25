@@ -1,6 +1,5 @@
 package it.unipv.poisw.f25.gympal.ReceptionistController;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
@@ -10,16 +9,17 @@ import javax.swing.JButton;
 
 import it.unipv.poisw.f25.gympal.GUI.LogoutConfirmationView;
 import it.unipv.poisw.f25.gympal.GUI.ReceptionistDashboardView;
+import it.unipv.poisw.f25.gympal.GUI.SubscriptionCustomizationView;
 import it.unipv.poisw.f25.gympal.staff.Receptionist;
 import it.unipv.poisw.f25.gympal.utility.LogoutConfirmationController;
 
 public class ReceptionistController {
 
 	private ReceptionistDashboardView recDashView;
-	private Receptionist receptionist;
-	
     private LogoutConfirmationView logoutView;
+    private SubscriptionCustomizationView subView;
     
+	private Receptionist receptionist;
     private String schermataPreLogout;
 
   //----------------------------------------------------------------
@@ -44,6 +44,10 @@ public class ReceptionistController {
         // 1. Schermata di conferma logout
         logoutView = new LogoutConfirmationView();
         recDashView.getPannelloDestro().add(logoutView, "LOGOUT_VIEW");
+        
+        // 2. Schermata composizione abbonamento
+        subView = new SubscriptionCustomizationView();
+        recDashView.getPannelloDestro().add(subView, "SUB_VIEW");
 
     }
 	
@@ -58,7 +62,13 @@ public class ReceptionistController {
 
         ActionListener gestoreEventi = creaGestoreEventi();
 
-        /*"entrySet()" restituisce una coppia chiave valore "(bottone1, comando1)"*/
+        /*"mappaComandi.entrySet()" restituisce un insieme (Set) di oggetti Map.Entry<K, V>
+         * 
+         * Ogni Map.Entry<K, V> rappresenta una coppia (chiave, valore) della mappa*/
+        
+        /*"entry" è il nome della variabile temporanea usata per accedere alla coppia chiave-val*/
+        
+        /*I ":" stanno a significare "per ogni entry nella mappa"*/
         
         for (Map.Entry<JButton, String> entry : mappaComandi.entrySet()) {
         	
@@ -87,6 +97,7 @@ public class ReceptionistController {
         mappa.put(bottoni.get(2), "LOGOUT");
 
         return mappa;
+        
     }
 
     //----------------------------------------------------------------
@@ -99,7 +110,12 @@ public class ReceptionistController {
 
             switch (comando) {
             
-                case "REGISTER": mostraSchermata("SCHERMATA1"); break;
+                case "REGISTER": 
+                	
+                	mostraSchermata("SUB_VIEW");
+                	new SubscriptionCustomizationController(subView, recDashView);
+                	recDashView.getCardLayout().show(recDashView.getPannelloDestro(), "SUB_VIEW");
+                	break;
                 
                 case "MODIFY": mostraSchermata("SCHERMATA2"); break;
                 

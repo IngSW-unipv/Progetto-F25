@@ -18,9 +18,9 @@ public class ReceptionistDashboardAvviabile implements IDashboardAvviabile{
     @Override
     public void avvia() {
     	
-        ReceptionistDashboardView view = new ReceptionistDashboardView();
-        new ReceptionistController(view, receptionist);
-        view.setVisible(true);
+        ReceptionistDashboardView recDashView = new ReceptionistDashboardView();
+        new ReceptionistController(recDashView, receptionist);
+        recDashView.setVisible(true);
         
     }
 

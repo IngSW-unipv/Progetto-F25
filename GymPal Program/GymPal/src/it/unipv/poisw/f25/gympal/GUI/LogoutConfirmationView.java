@@ -19,9 +19,7 @@ public class LogoutConfirmationView extends JPanel {
 	
 	public LogoutConfirmationView() {
 		
-		confirmButton = new JButton("Si");
-		cancelButton = new JButton("No");
-		
+				
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JLabel messageLabel = new JLabel("Sei sicuro di voler uscire?");
