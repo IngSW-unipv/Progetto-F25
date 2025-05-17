@@ -56,6 +56,7 @@ public class LoginController {
                 view.mostraMessaggio("Credenziali non valide.");
             }
             
+                        
         });
         
     }

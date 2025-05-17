@@ -78,9 +78,20 @@ public class LoginView extends JFrame {
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(loginButton, gbc);
-
+                
         // Aggiunta del pannello principale al frame
         add(mainPanel);
+        
+        
+        
+        /*Questa istruzione fa si che "loginButton" corrisponda al bottone di 'default' della
+         *view, di modo che esso reagisca alla pressione del tasto "Invio"*/
+        
+        /*Il metodo "setDefaultButton" funziona perché invocato in una classe che estende
+         *"JFrame"*/
+        
+        getRootPane().setDefaultButton(loginButton);
+        
     }
     
 	//----------------------------------------------------------------
@@ -125,5 +136,7 @@ public class LoginView extends JFrame {
         JOptionPane.showMessageDialog(this, msg);
         
     }
+    
+   //----------------------------------------------------------------
     
 }

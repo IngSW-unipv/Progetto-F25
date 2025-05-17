@@ -8,11 +8,13 @@ import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
+import javax.swing.SwingUtilities;
 
 
 public class SubscriptionCustomizationView extends JPanel {
@@ -31,7 +33,10 @@ public class SubscriptionCustomizationView extends JPanel {
 	private JCheckBox cB5;
 
 	private JPanel corsiPanel;
-	private JSplitPane splitPane; 
+	private JSplitPane splitPaneChild;
+	private JSplitPane splitPaneFather;
+	
+	private JButton avanti;
 
 	//----------------------------------------------------------------
 
@@ -53,6 +58,7 @@ public class SubscriptionCustomizationView extends JPanel {
 		cB4 = new JCheckBox("Zumba");
 		cB5 = new JCheckBox("Fullbody");
 		
+		avanti = new JButton("Avanti");
 
 		corsiPanel = new JPanel();
 		corsiPanel.setLayout(new BoxLayout(corsiPanel, BoxLayout.Y_AXIS));
@@ -65,7 +71,11 @@ public class SubscriptionCustomizationView extends JPanel {
 		
 		corsiPanel.setVisible(false);
 		
-
+		/*############################################################*/
+		
+		/*Creo una lista di bottoni basata sul super-tipo, così posso scrivere un solo ciclo
+		 *for per assegnare a tutti le proprietà comuni*/
+		
 		List<AbstractButton> allButtons = new ArrayList<>();
 		allButtons.addAll(getBottoniToggle());
 		allButtons.addAll(getCheckBoxes());
@@ -81,8 +91,9 @@ public class SubscriptionCustomizationView extends JPanel {
 			add(Box.createVerticalStrut(10));
 		}
 
-		// MODIFICATO: splitPane ora è un campo, non più locale
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		/*############################################################*/
+		
+		splitPaneChild = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
 
 		JPanel upperPanel = new JPanel();
@@ -98,11 +109,49 @@ public class SubscriptionCustomizationView extends JPanel {
 		upperPanel.add(toggleBtn4);
 		upperPanel.add(Box.createVerticalStrut(15));
 
-		splitPane.setTopComponent(upperPanel);
-		splitPane.setBottomComponent(corsiPanel);
+		splitPaneChild.setTopComponent(upperPanel);
+		splitPaneChild.setBottomComponent(corsiPanel);
+		
+		/*############################################################*/
 
-		add(splitPane);
+		/*Non è possibile utilizzare "GridLayout()" - questo UImanager non rispetta il metodo
+		 *"setMaximumSize()" - ecco allora che la scelta ricade su "BoxLayout()"*/
+		
+		JPanel bottomPanel = new JPanel();
+		
+		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
+
+		avanti.setMaximumSize(new Dimension(80, 40)); 
+
+		bottomPanel.add(Box.createHorizontalGlue());
+		bottomPanel.add(avanti);
+		bottomPanel.add(Box.createHorizontalGlue());
+		
+		/*############################################################*/
+		
+		splitPaneFather = new JSplitPane(JSplitPane.VERTICAL_SPLIT, splitPaneChild, bottomPanel);
+		
+		
+		/*E' necessario utilizzare "invokeLater": se si imposta "setDividerLocation()" prima che
+		 *il layout del componente sia visibile a schermo, il valore in percentuale non viene 
+		 *rispettato correttamente siccome la dimensione del contenitore padre non è ancora 
+		 *definita.*/
+		
+		SwingUtilities.invokeLater(() -> {
+			
+			/*Alloca 80% dello splitPaneFather a splitPaneChild*/
+		    splitPaneFather.setDividerLocation(0.8); 
+		    
+		});
+		
+		splitPaneFather.setEnabled(false);
+		
+		/*############################################################*/
+		
+		add(splitPaneFather);
 		add(Box.createVerticalGlue());
+		
+		
 	}
 
 	//----------------------------------------------------------------
@@ -137,13 +186,25 @@ public class SubscriptionCustomizationView extends JPanel {
 	//----------------------------------------------------------------
 	
 	public JPanel getCorsiPanel() {
+		
 		return corsiPanel;
+		
 	}
 
 	//----------------------------------------------------------------
 	
-	public JSplitPane getSplitPane() {
-		return splitPane;
+	public JSplitPane getSplitPaneChild() {
+		
+		return splitPaneChild;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public JButton getAvantiButton() {
+		
+		return avanti;
+		
 	}
 	
 	//----------------------------------------------------------------

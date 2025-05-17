@@ -4,8 +4,9 @@ import java.awt.Color;
 
 import java.util.List;
 
-
+import javax.swing.AbstractButton;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
@@ -18,29 +19,49 @@ public class SubscriptionCustomizationController {
 	private SubscriptionCustomizationView view;
 	private ReceptionistDashboardView mainView;
 	
+	/*Questo Runnable serve ad istituire un metodo di "CallBack" che avvisi il
+	 *"ReceptionistController" dell'avvenuta pressione del tasto "avanti", di modo che
+	 *detto controller possa cambiare schermata*/
+	
+	private Runnable onAvanti;
+	
+	/*La callback è una funzione che viene passata come parametro al controller. 
+	 *Una volta che l'utente completa la personalizzazione dell'abbonamento (premendo il 
+	 *pulsante "Avanti" -in questo caso- nella SubscriptionCustomizationView), la
+	 *callback viene invocata, permettendo di passare alla schermata successiva.*/
+	
 	//----------------------------------------------------------------
 	
 	public SubscriptionCustomizationController(SubscriptionCustomizationView scv,
-											   ReceptionistDashboardView recDashView) {
+											   ReceptionistDashboardView recDashView,
+                                               Runnable onAvantiCallback) {
 		
 		view = scv;
 		mainView = recDashView;
 		
+		this.onAvanti = onAvantiCallback;
+		
 		impostaEventiToggleBtns();
 		impostaEventiCheckBox();
+		impostaEventoAvanti();
 		
 	}
 	
 	//----------------------------------------------------------------
 	
 	private void impostaEventiToggleBtns() {
+		
 		List<JToggleButton> toggleBtnsList = view.getBottoniToggle();
 
 		for (JToggleButton btn : toggleBtnsList) {
 
 			// Ascoltatore per il bottone "Sala corsi"
 			
+						
 			if (btn == view.getBottoniToggle().get(3)) {
+				
+				/*Al contrario di "ActionListener", "ItemListener" tiene traccia del fatto
+				 *che un elemento sia selezionato oppure no.*/
 				
 				btn.addItemListener(e -> {
 					
@@ -53,10 +74,12 @@ public class SubscriptionCustomizationController {
 						// Forzatura aggiornamento divider
 						SwingUtilities.invokeLater(() -> {
 							
-							view.getSplitPane().setDividerLocation(0.5);
+							view.getSplitPaneChild().setDividerLocation(0.5);
 							
 						});
 
+						//Aggiungi logica che collega bottone a dominio
+						
 					} else {
 						
 						btn.setBackground(Color.RED);
@@ -65,14 +88,19 @@ public class SubscriptionCustomizationController {
 
 						SwingUtilities.invokeLater(() -> {
 							
-							view.getSplitPane().setDividerLocation(1.0); // Divider tutto in alto
+							view.getSplitPaneChild().setDividerLocation(1.0); // Divider tutto in alto
 							
 						});
 						
+						//Aggiungi logica che collega bottone a dominio
+						
 					}
 
+					/*Questi metodi forzano l'aggiornamento del pannello 'view' ogni volta che
+					 *il bottone "Sala Corsi" è premuto*/
 					view.revalidate();
 					view.repaint();
+					
 				});
 				
 			} else {
@@ -83,10 +111,15 @@ public class SubscriptionCustomizationController {
 						
 						btn.setBackground(Color.GREEN); // Modifica colore quando selezionato
 						
+						//Aggiungi logica che collega bottone a dominio
+						
 					} else {
 						
 						btn.setBackground(Color.RED); // Modifica colore quando non selezionato
+						
+						//Aggiungi logica che collega bottone a dominio
 					}
+					
 				});
 			}
 		}
@@ -106,10 +139,14 @@ public class SubscriptionCustomizationController {
 	            	
 	                btn.setBackground(Color.GREEN);
 	                
+	              //Aggiungi logica che collega bottone a dominio
+	                
 	                
 	            } else {
 	            	
 	                btn.setBackground(Color.RED);
+	                
+	              //Aggiungi logica che collega bottone a dominio
 	                
 	            }
 	            
@@ -121,4 +158,59 @@ public class SubscriptionCustomizationController {
 	
 	//----------------------------------------------------------------
 
+	private void impostaEventoAvanti() {
+		
+				
+		view.getAvantiButton().addActionListener(e -> {
+			
+		    if (!verificaSelezione(view.getBottoniToggle())) {
+		    	
+		    	/*Controlla che almeno un abbonamento sia selezionato*/
+		    	
+		        JOptionPane.showMessageDialog(view, "Seleziona almeno un'abbonamento prima "
+		        								  + "di continuare.");
+		        
+		    } else if (view.getBottoniToggle().get(3).isSelected() && 
+		    		   !verificaSelezione(view.getCheckBoxes())){
+		    	
+		    	/*Se "Sala Corsi" è selezionato, controlla anche che sia selezionato almeno un
+		    	 *corso.*/
+		    	
+		    	JOptionPane.showMessageDialog(view, "Seleziona almeno un corso prima"
+		    									  + "di continuare");
+		        
+		    } else {
+
+		    	if (onAvanti != null) {
+		    		
+                    onAvanti.run(); // E' qui richiamata la callback per cambiare schermata
+                    
+                }	    
+		    
+		    }
+		    
+		});
+		
+	}
+
+	//----------------------------------------------------------------
+		
+	private boolean verificaSelezione(List<? extends AbstractButton> listaBottoni) {
+		
+		for (AbstractButton btn : listaBottoni) {
+			
+			if(btn.isSelected()) {
+				
+				return true;
+				
+			}
+		
+		}
+		
+		return false;
+			
+	}
+		
+	//----------------------------------------------------------------
+	
 }

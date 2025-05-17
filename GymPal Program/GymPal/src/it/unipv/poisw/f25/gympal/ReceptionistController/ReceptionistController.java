@@ -48,6 +48,15 @@ public class ReceptionistController {
         // 2. Schermata composizione abbonamento
         subView = new SubscriptionCustomizationView();
         recDashView.getPannelloDestro().add(subView, "SUB_VIEW");
+        
+        /*Posto in questo punto, il "SubscriptionCustomizationController" è creato una sola
+         *volta, il ché assicura che esso non venga ri-creato più volte (no duplicazione
+         *listeners).*/
+        
+        new SubscriptionCustomizationController(subView, recDashView, () -> {
+            									mostraSchermata("SCHERMATA_SUCCESSIVA");});
+        
+        // 3.
 
     }
 	
@@ -104,6 +113,7 @@ public class ReceptionistController {
     
     /*Crea un unico gestore di eventi per tutti i pulsanti*/
     private ActionListener creaGestoreEventi() {
+    	
         return e -> {
         	
             String comando = e.getActionCommand();
@@ -113,16 +123,17 @@ public class ReceptionistController {
                 case "REGISTER": 
                 	
                 	mostraSchermata("SUB_VIEW");
-                	new SubscriptionCustomizationController(subView, recDashView);
-                	recDashView.getCardLayout().show(recDashView.getPannelloDestro(), "SUB_VIEW");
                 	break;
                 
-                case "MODIFY": mostraSchermata("SCHERMATA2"); break;
+                case "MODIFY": 
+                	
+                	mostraSchermata("SCHERMATA2"); 
+                	break;
                 
                 case "LOGOUT": {
                 	
                     new LogoutConfirmationController(logoutView, recDashView, schermataPreLogout);
-                    recDashView.getCardLayout().show(recDashView.getPannelloDestro(), "LOGOUT_VIEW");
+                    mostraSchermata("LOGOUT_VIEW");
                     break;
                     
                 }
