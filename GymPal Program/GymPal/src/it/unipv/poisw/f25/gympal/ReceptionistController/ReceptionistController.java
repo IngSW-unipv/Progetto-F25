@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.swing.JButton;
 
+import it.unipv.poisw.f25.gympal.GUI.ClientInfosView;
 import it.unipv.poisw.f25.gympal.GUI.LogoutConfirmationView;
 import it.unipv.poisw.f25.gympal.GUI.ReceptionistDashboardView;
 import it.unipv.poisw.f25.gympal.GUI.SubscriptionCustomizationView;
@@ -18,6 +19,7 @@ public class ReceptionistController {
 	private ReceptionistDashboardView recDashView;
     private LogoutConfirmationView logoutView;
     private SubscriptionCustomizationView subView;
+    private ClientInfosView clientInfosView;
     
 	private Receptionist receptionist;
     private String schermataPreLogout;
@@ -54,9 +56,13 @@ public class ReceptionistController {
          *listeners).*/
         
         new SubscriptionCustomizationController(subView, recDashView, () -> {
-            									mostraSchermata("SCHERMATA_SUCCESSIVA");});
+            									mostraSchermata("INFOS_VIEW");});
         
-        // 3.
+        // 3. Raccolta dati cliente
+        clientInfosView = new ClientInfosView();
+        recDashView.getPannelloDestro().add(clientInfosView, "INFOS_VIEW");
+        new ClientInfosController(clientInfosView, () -> {mostraSchermata("---");}, 
+        										   () -> {mostraSchermata("SUB_VIEW");});
 
     }
 	

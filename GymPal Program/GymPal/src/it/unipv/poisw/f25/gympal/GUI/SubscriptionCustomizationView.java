@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 
 public class SubscriptionCustomizationView extends JPanel {
@@ -43,6 +44,7 @@ public class SubscriptionCustomizationView extends JPanel {
 	public SubscriptionCustomizationView () {
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.setBorder(new EmptyBorder(10, 5, 10, 5));
 
 		JLabel messageLabel = new JLabel("-=Componi l'abbonamento=-");
 		messageLabel.setAlignmentX(CENTER_ALIGNMENT);

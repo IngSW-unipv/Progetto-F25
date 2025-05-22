@@ -8,8 +8,11 @@ public class RegexCheck {
 	//Ricevute in input una stringa ed una regex, il metodo le mette a confronto, restituendo
 	//'true' oppure 'false' a seconda che la stringa rispetti la regex, oppure no
 	
-	public boolean check(String campo, String regex) {
-        return campo != null && campo.matches(regex);
+	public static boolean check(String campo, String regex) {
+		
+		if((campo!=null) && (campo.length() <= 50) && campo.matches(regex)) {return true;}
+		else {return false;}
+		
     }
 	
 	public String retrieveSubString(String staffID) {

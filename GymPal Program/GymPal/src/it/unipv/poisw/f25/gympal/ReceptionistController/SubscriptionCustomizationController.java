@@ -39,7 +39,7 @@ public class SubscriptionCustomizationController {
 		view = scv;
 		mainView = recDashView;
 		
-		this.onAvanti = onAvantiCallback;
+		onAvanti = onAvantiCallback;
 		
 		impostaEventiToggleBtns();
 		impostaEventiCheckBox();
@@ -160,6 +160,7 @@ public class SubscriptionCustomizationController {
 
 	private void impostaEventoAvanti() {
 		
+		//Alla pressione di 'Avanti' devono essere salvate le selezioni, da qualche parte nel dominio
 				
 		view.getAvantiButton().addActionListener(e -> {
 			
@@ -168,7 +169,7 @@ public class SubscriptionCustomizationController {
 		    	/*Controlla che almeno un abbonamento sia selezionato*/
 		    	
 		        JOptionPane.showMessageDialog(view, "Seleziona almeno un'abbonamento prima "
-		        								  + "di continuare.");
+		        								  + "di continuare.", "Errore", JOptionPane.ERROR_MESSAGE);
 		        
 		    } else if (view.getBottoniToggle().get(3).isSelected() && 
 		    		   !verificaSelezione(view.getCheckBoxes())){
@@ -176,9 +177,10 @@ public class SubscriptionCustomizationController {
 		    	/*Se "Sala Corsi" è selezionato, controlla anche che sia selezionato almeno un
 		    	 *corso.*/
 		    	
-		    	JOptionPane.showMessageDialog(view, "Seleziona almeno un corso prima"
-		    									  + "di continuare");
-		        
+	            JOptionPane.showMessageDialog(view, "Seleziona almeno un corso prima"
+						  	 + "di continuare", "Errore", JOptionPane.ERROR_MESSAGE);
+		    	
+		    			        
 		    } else {
 
 		    	if (onAvanti != null) {
