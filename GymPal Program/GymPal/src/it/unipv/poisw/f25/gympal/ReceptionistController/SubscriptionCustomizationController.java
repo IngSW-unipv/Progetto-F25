@@ -1,7 +1,7 @@
 package it.unipv.poisw.f25.gympal.ReceptionistController;
 
 import java.awt.Color;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractButton;
@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
+import it.unipv.poisw.f25.gympal.DTOs.AbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.GUI.ReceptionistDashboardView;
 import it.unipv.poisw.f25.gympal.GUI.SubscriptionCustomizationView;
 
@@ -18,6 +19,8 @@ public class SubscriptionCustomizationController {
 	
 	private SubscriptionCustomizationView view;
 	private ReceptionistDashboardView mainView;
+	
+	private AbbonamentoDTO abbonamentoDTO;
 	
 	/*Questo Runnable serve ad istituire un metodo di "CallBack" che avvisi il
 	 *"ReceptionistController" dell'avvenuta pressione del tasto "avanti", di modo che
@@ -34,10 +37,13 @@ public class SubscriptionCustomizationController {
 	
 	public SubscriptionCustomizationController(SubscriptionCustomizationView scv,
 											   ReceptionistDashboardView recDashView,
-                                               Runnable onAvantiCallback) {
+                                               Runnable onAvantiCallback,
+                                               AbbonamentoDTO abbonamentoDTO) {
 		
 		view = scv;
 		mainView = recDashView;
+		
+		this.abbonamentoDTO = abbonamentoDTO;
 		
 		onAvanti = onAvantiCallback;
 		
@@ -109,7 +115,7 @@ public class SubscriptionCustomizationController {
 					
 					if (btn.isSelected()) {
 						
-						btn.setBackground(Color.GREEN); // Modifica colore quando selezionato
+						btn.setBackground(Color.decode("#b2fab4")); // Modifica colore quando selezionato
 						
 						//Aggiungi logica che collega bottone a dominio
 						
@@ -137,7 +143,7 @@ public class SubscriptionCustomizationController {
 	           
 	            if (btn.isSelected()) {
 	            	
-	                btn.setBackground(Color.GREEN);
+	                btn.setBackground(Color.decode("#b2fab4"));
 	                
 	              //Aggiungi logica che collega bottone a dominio
 	                
@@ -183,6 +189,29 @@ public class SubscriptionCustomizationController {
 		    			        
 		    } else {
 
+		    	aggiornaDTO(abbonamentoDTO);
+		    	
+		    	// Debug: stampa il contenuto delle liste nel DTO
+		    	System.out.println("DEBUG - Sezioni abbonamento selezionate:");
+		    	if (abbonamentoDTO.getSezioniAbbonamento() != null) {
+		    	    for (String s : abbonamentoDTO.getSezioniAbbonamento()) {
+		    	        System.out.println(" - " + s);
+		    	    }
+		    	} else {
+		    	    System.out.println("Lista sezioni abbonamento è null");
+		    	}
+
+		    	System.out.println("DEBUG - Corsi selezionati:");
+		    	if (abbonamentoDTO.getCorsiSelezionati() != null) {
+		    	    for (String c : abbonamentoDTO.getCorsiSelezionati()) {
+		    	        System.out.println(" - " + c);
+		    	    }
+		    	} else {
+		    	    System.out.println("Lista corsi selezionati è null");
+		    	}
+		    	/////////////////////////////////////////////////////////////////
+		    	
+		    	
 		    	if (onAvanti != null) {
 		    		
                     onAvanti.run(); // E' qui richiamata la callback per cambiare schermata
@@ -213,6 +242,53 @@ public class SubscriptionCustomizationController {
 			
 	}
 		
+	//----------------------------------------------------------------
+	
+	private void aggiornaDTO(AbbonamentoDTO abbonamentoDTO) {
+		
+	    // Lista temporanea per le sezioni dell'abbonamento
+	    List<String> componentiSelezionate = new ArrayList<>();
+	    
+	    
+	    for (JToggleButton btn : view.getBottoniToggle()) {
+	    	
+	        if (btn.isSelected()) {
+	        	
+	            // Se il toggle è selezionato, allora la corrispondente label è posta nella lista
+	            componentiSelezionate.add(btn.getText());
+	        }
+	        
+	    }
+	    
+	    abbonamentoDTO.setSezioniAbbonamento(componentiSelezionate);
+	    
+	    // Se il toggle "Sala Corsi" è selezionato
+	    if (view.getBottoniToggle().get(3).isSelected()) {
+	    	
+	        List<String> corsiSelezionati = new ArrayList<>();
+	        
+	        for (JCheckBox cb : view.getCheckBoxes()) {
+	        	
+	            if (cb.isSelected()) {
+	            	
+	            	//Stesso trattamento per i CheckBoxes
+	                corsiSelezionati.add(cb.getText());
+	                
+	            }
+	            
+	        }
+	        
+	        abbonamentoDTO.setCorsiSelezionati(corsiSelezionati);
+	        
+	    } else {
+	    	
+	        // Se "Sala Corsi" non è selezionato, allora la corrispondente lista è posta vuota
+	        abbonamentoDTO.setCorsiSelezionati(new ArrayList<>());
+	        
+	    }
+	    
+	}
+	
 	//----------------------------------------------------------------
 	
 }

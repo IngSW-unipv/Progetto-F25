@@ -82,13 +82,13 @@ public class ReceptionistDashboardView extends JFrame{
         
         JPanel schermata0 = creaSchermata("Benvenuto, Receptionist! Seleziona un'operazione~", Color.WHITE);
         
-        JPanel schermata1 = creaSchermata("Sei nella schermata 1", Color.CYAN);
+        //JPanel schermata1 = creaSchermata("Sei nella schermata 1", Color.CYAN);
         
         JPanel schermata2 = creaSchermata("Sei nella schermata 2", Color.PINK);
   
-        pannelloDestro.add(schermata0, "SCHERMATA0");
+        pannelloDestro.add(schermata0, "SCHERMATA0"); //Schermata di benvenuto
         
-        pannelloDestro.add(schermata1, "SCHERMATA1");
+        //pannelloDestro.add(schermata1, "SCHERMATA1");
         
         pannelloDestro.add(schermata2, "SCHERMATA2");
         

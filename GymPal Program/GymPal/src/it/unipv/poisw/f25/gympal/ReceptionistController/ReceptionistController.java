@@ -7,9 +7,11 @@ import java.util.Map;
 
 import javax.swing.JButton;
 
+import it.unipv.poisw.f25.gympal.DTOs.AbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.GUI.ClientInfosView;
 import it.unipv.poisw.f25.gympal.GUI.LogoutConfirmationView;
 import it.unipv.poisw.f25.gympal.GUI.ReceptionistDashboardView;
+import it.unipv.poisw.f25.gympal.GUI.RiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.SubscriptionCustomizationView;
 import it.unipv.poisw.f25.gympal.staff.Receptionist;
 import it.unipv.poisw.f25.gympal.utility.LogoutConfirmationController;
@@ -20,9 +22,12 @@ public class ReceptionistController {
     private LogoutConfirmationView logoutView;
     private SubscriptionCustomizationView subView;
     private ClientInfosView clientInfosView;
+    private RiepilogoEPagamentoView riepilogoEPagamento = null;
     
 	private Receptionist receptionist;
     private String schermataPreLogout;
+    
+    private AbbonamentoDTO abbonamentoDTO;
 
   //----------------------------------------------------------------
     
@@ -32,22 +37,20 @@ public class ReceptionistController {
         
         this.receptionist = receptionist;
         
+        abbonamentoDTO = new AbbonamentoDTO();
+        
         registraAzioniPulsanti();
-        inizializzaSchermate();
+        inizializzaCicloRegistrazioneCliente();
+        inizializzaSchermateStatiche();
         
     }
 
     //----------------------------------------------------------------
     
-    private void inizializzaSchermate() {
+    private void inizializzaCicloRegistrazioneCliente() {
         
-    	// Inizializza e registra le schermate con logica propria
-
-        // 1. Schermata di conferma logout
-        logoutView = new LogoutConfirmationView();
-        recDashView.getPannelloDestro().add(logoutView, "LOGOUT_VIEW");
         
-        // 2. Schermata composizione abbonamento
+        // 1. Schermata composizione abbonamento
         subView = new SubscriptionCustomizationView();
         recDashView.getPannelloDestro().add(subView, "SUB_VIEW");
         
@@ -56,16 +59,68 @@ public class ReceptionistController {
          *listeners).*/
         
         new SubscriptionCustomizationController(subView, recDashView, () -> {
-            									mostraSchermata("INFOS_VIEW");});
+            									mostraSchermata("INFOS_VIEW");},
+        									    abbonamentoDTO);
         
-        // 3. Raccolta dati cliente
+        // 2. Raccolta dati cliente
+        
         clientInfosView = new ClientInfosView();
         recDashView.getPannelloDestro().add(clientInfosView, "INFOS_VIEW");
-        new ClientInfosController(clientInfosView, () -> {mostraSchermata("---");}, 
-        										   () -> {mostraSchermata("SUB_VIEW");});
+        
+        new ClientInfosController(
+        	    
+        	    clientInfosView,
+
+        	    // Callback onAvanti
+        	    () -> {
+        	    	
+        	        // Rimuove la vecchia view, se esiste
+        	        if (riepilogoEPagamento != null) {
+        	        	
+        	            recDashView.getPannelloDestro().remove(riepilogoEPagamento);
+        	            
+        	        }
+
+        	        // Creati view e controller associato
+        	        riepilogoEPagamento = new RiepilogoEPagamentoView();
+        	        
+                    new RiepilogoEPagamentoController(riepilogoEPagamento, abbonamentoDTO,
+                    		
+                            () -> mostraSchermata("INFOS_VIEW"), // Callback "onIndietro" da riepilogo a clientInfos
+                            
+                            () -> {
+                            	inizializzaCicloRegistrazioneCliente(); // Reset del ciclo
+                                mostraSchermata("SCHERMATA0"); // Ritorna alla schermata di benvenuto della dashboard
+                            });
+
+                        // Aggiunge la nuova view al pannello e la mostra
+                        recDashView.getPannelloDestro().add(riepilogoEPagamento, "RECAP_PAYMENT");
+                        mostraSchermata("RECAP_PAYMENT");
+                        
+                    },
+
+        	    // Callback "onIndietro" da ClienInfosView a subView
+        	    () -> mostraSchermata("SUB_VIEW"), 
+        	    
+        	    //Questo DTO finisce in ClientInfosController
+        	    abbonamentoDTO);
 
     }
 	
+    //----------------------------------------------------------------
+    
+    private void inizializzaSchermateStatiche() {
+    	
+    	
+    	// Inizializza e registra le schermate che non fanno parte di un ciclo
+
+        // 1. Schermata di conferma logout
+        logoutView = new LogoutConfirmationView();
+        recDashView.getPannelloDestro().add(logoutView, "LOGOUT_VIEW");
+    	
+    }
+    
+    
     //----------------------------------------------------------------
 	
     /* Crea una mappa dei bottoni con i relativi comandi associati, 

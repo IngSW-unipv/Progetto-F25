@@ -1,0 +1,12 @@
+# Prezzi base per le componenti principali dell'abbonamento
+componenti.Allenamento_mirato_con_personal_trainer=50.0
+componenti.Sala_allenamento_a_corpo_libero=20.0
+componenti.Sala_pesi=25.0
+componenti.Sala_corsi=30.0
+
+# Prezzi per i corsi individuali (visibili solo se "Sala corsi" è selezionata)
+corsi.Crossfit=15.0
+corsi.Yoga=10.0
+corsi.Pilates=12.0
+corsi.Zumba=10.0
+corsi.Fullbody=18.0

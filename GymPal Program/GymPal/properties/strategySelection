@@ -1,0 +1,3 @@
+strategia.standard=it.unipv.poisw.f25.gympal.StrategieDiPagamento.PrezzoStandardStrategy
+strategia.under18=it.unipv.poisw.f25.gympal.StrategieDiPagamento.PrezzoUnderAgeStrategy
+strategia.over60=it.unipv.poisw.f25.gympal.StrategieDiPagamento.PrezzoAnzianiStrategy

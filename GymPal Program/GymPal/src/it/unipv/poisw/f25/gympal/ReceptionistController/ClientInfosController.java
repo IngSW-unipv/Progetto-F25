@@ -1,10 +1,13 @@
 package it.unipv.poisw.f25.gympal.ReceptionistController;
 
 import java.awt.Color;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
 
+import it.unipv.poisw.f25.gympal.DTOs.AbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.GUI.ClientInfosView;
 import it.unipv.poisw.f25.gympal.utility.EtaCliente;
 import it.unipv.poisw.f25.gympal.utility.IRegexExpression;
@@ -14,18 +17,23 @@ public class ClientInfosController implements IRegexExpression {
 
 	private ClientInfosView clientInfos;
 	
+	private AbbonamentoDTO abbonamentoDTO;
+	
 	private Runnable onAvanti;
 	private Runnable onIndietro;
 	
 	//----------------------------------------------------------------
 	
 	public ClientInfosController(ClientInfosView infos, Runnable onAvantiCallback,
-														Runnable onIndietroCallback) {
+														Runnable onIndietroCallback,
+														AbbonamentoDTO abbonamentoDTO) {
 		
 		clientInfos = infos;
 		
 		onAvanti = onAvantiCallback;
 		onIndietro = onIndietroCallback;
+		
+		this.abbonamentoDTO = abbonamentoDTO;
 		
 		impostaEventiTextFields();
 		impostaControlloEta ();
@@ -91,9 +99,9 @@ public class ClientInfosController implements IRegexExpression {
 	        
 	        // Syso per verificare lo stato dei campi
 	        
-	        System.out.println("Nome background: " + clientInfos.getNome().getBackground());
+	        /*System.out.println("Nome background: " + clientInfos.getNome().getBackground());
 	        System.out.println("Cognome background: " + clientInfos.getCognome().getBackground());
-	        System.out.println("Codice Fiscale background: " + clientInfos.getCodiceFiscale().getBackground());
+	        System.out.println("Codice Fiscale background: " + clientInfos.getCodiceFiscale().getBackground());*/
 
 	        
 	        // Estrazione valori RGB per ogni campo
@@ -124,8 +132,8 @@ public class ClientInfosController implements IRegexExpression {
 	        /* Controllo RadioButtons: è verificato che i radio per Certificato di Idoneità e Permesso Genitori
 	         * siano su "Si"*/
 	        
-	        System.out.println("Certificato di Idoneità: " + clientInfos.getCertIdoneitàSi().isSelected());
-	        System.out.println("Permesso Genitori: " + clientInfos.getPermessoGenitoriSi().isSelected());
+	        /*System.out.println("Certificato di Idoneità: " + clientInfos.getCertIdoneitàSi().isSelected());
+	        System.out.println("Permesso Genitori: " + clientInfos.getPermessoGenitoriSi().isSelected());*/
 
 	        if (!clientInfos.getCertIdoneitàSi().isSelected() || 
 	        	!clientInfos.getPermessoGenitoriSi().isSelected()) {
@@ -138,6 +146,33 @@ public class ClientInfosController implements IRegexExpression {
 	        // Se tutto è valido, procedi con l'azione "Avanti"
 	        
 	        if (validitaCampi) {
+	        	
+	        	abbonamentoDTO.setNome(clientInfos.getNome().getText().trim());
+	        	abbonamentoDTO.setCognome(clientInfos.getCognome().getText().trim());
+	        	abbonamentoDTO.setCodiceFiscale(clientInfos.getCodiceFiscale().getText().trim());
+	        	
+	        	if(clientInfos.getMaschio().isSelected()) {
+	        		
+	        		abbonamentoDTO.setSesso("Maschio");
+	        		
+	        	} else {abbonamentoDTO.setSesso("Femmina");}
+	        	
+	        	
+	        	/*Per poter giungere a questa istruzione, il bottone "certIdoneitàSi" -DEVE-
+	        	 *essere stato selezionato - quindi non ha senso un 'if'. Non c'è possibilità
+	        	 *che si abbia un'alternativa*/
+	        	abbonamentoDTO.setCertificatoIdoneita(true);
+	        	
+	        	/*Stesso il discorso per il bottone "permessoGenitoriSi"*/
+	        	abbonamentoDTO.setPermessoGenitori(true);
+	        	
+	        	
+	        	/*L'informazione contenuta nel JDateSpinner è tradotta nel formato accettato dal
+	        	 *metodo "setDataNascita(LocalDate dataNascita)"*/
+	        	Date dataDiNascita = (Date) clientInfos.getDateSpinner().getValue();
+	        	LocalDate nascita = dataDiNascita.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	        	abbonamentoDTO.setDataNascita(nascita);
+	        	
 	        	
 	            onAvanti.run();
 	            
@@ -156,7 +191,9 @@ public class ClientInfosController implements IRegexExpression {
 	        	 * */
 	        	
 	            JOptionPane.showMessageDialog(clientInfos, "Per favore, compila correttamente "
-	            					  + "tutti i campi.", "Errore", JOptionPane.ERROR_MESSAGE);
+	            					  + "tutti i campi (Verde = OK) - per completare la procedura"
+	            					  + " il cliente -DEVE- fornire certificato di idonetà"
+	            					  + " e/o il permesso genitoriale.", "Errore", JOptionPane.ERROR_MESSAGE);
 	            
 	        }
 	        
