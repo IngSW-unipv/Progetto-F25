@@ -1,5 +1,8 @@
 package it.unipv.poisw.f25.gympal;
 
+import java.sql.Connection;
+import it.unipv.poisw.f25.gympal.MySQLUtil.MySQLConnector;
+
 import javax.swing.SwingUtilities;
 
 import it.unipv.poisw.f25.gympal.GUI.LoginView;
@@ -31,6 +34,19 @@ public class GymPalApp {
             view.setVisible(true);
             
         });
+        
+        //prova di connessione
+        
+        Connection conn = null;
+		
+		conn= MySQLConnector.startConnection(conn,"prova");
+		
+		System.out.println("first check "+MySQLConnector.isOpen(conn)+"\n");
+		
+		MySQLConnector.closeConnection(conn);
+		
+		System.out.println("second check "+MySQLConnector.isOpen(conn)+"\n");
+		
         
     }
 
