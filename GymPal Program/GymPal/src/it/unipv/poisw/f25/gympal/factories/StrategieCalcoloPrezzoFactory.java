@@ -69,6 +69,8 @@ public class StrategieCalcoloPrezzoFactory {
     	        ? Period.between(abbonamentoDTO.getDataNascita(), LocalDate.now()).getYears()
     	        : -1;
 
+    	    //Se scatta la "if", la variabile "chiave" è sovrascritta
+    	    
     	    if (scontoEta && eta >= 0) {
     	    	
     	        if (eta < 18) {chiave = "strategia.under18";}
@@ -82,6 +84,8 @@ public class StrategieCalcoloPrezzoFactory {
     	        
     	        Class<?> classeBase = Class.forName(nomeClasseSconto);
     	        
+    	        /*La variabile "strategiaBase" referenzia un oggeto pronto per
+    	         *essere stratificato con altre strategie*/
     	        strategiaBase = (IStrategieCalcoloPrezzo) classeBase.getConstructor(Properties.class)
     	        												   .newInstance(prezzi);
     	        
@@ -108,7 +112,9 @@ public class StrategieCalcoloPrezzoFactory {
     	            
     	            Class<?> durataClass = Class.forName(durataClassName);
 
-    	            // Cerca un costruttore con IStrategieCalcoloPrezzo come argomento
+    	            /* Prende il costruttore della classe associata alla chiave, e gli passa 
+    	             * la "strategiaBase" proveniente dal blocco di istruzioni soprastante,
+    	             * si che essa venga stratificata(avvolto) da un'ulteriore strategia.*/
     	            
     	            strategiaBase = (IStrategieCalcoloPrezzo) durataClass
     	            		
@@ -121,6 +127,7 @@ public class StrategieCalcoloPrezzoFactory {
     	            throw new RuntimeException("Errore durante la composizione della strategia di durata", e);
     	            
     	        }
+    	        
     	    }
 
     	    return strategiaBase;

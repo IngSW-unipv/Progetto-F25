@@ -8,6 +8,7 @@ public class PrezzoTrimestraleStrategy implements IStrategieCalcoloPrezzo{
 	
 	//----------------------------------------------------------------
 	
+	/*Il costruttore riceve la strategia da avvolgere ("wrappare")*/
 	public PrezzoTrimestraleStrategy(IStrategieCalcoloPrezzo strategiaBase) {
 		
 		base = strategiaBase;
@@ -19,7 +20,9 @@ public class PrezzoTrimestraleStrategy implements IStrategieCalcoloPrezzo{
 	@Override
 	public double calcolaPrezzo(AbbonamentoDTO abbonamentoDTO) {
 		
-		//Applica 5% di sconto
+		/*La chiamata "base.calcolaPrezzo()" restituisce il prezzo di base (che può essere
+		 *quello standard, oppure un prezzo mediato dalle strategie basate su età), cui è
+		 *applicato un 5% di sconto*/
 		return base.calcolaPrezzo(abbonamentoDTO) * 0.95;
 		
 	}
