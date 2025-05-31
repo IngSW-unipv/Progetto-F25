@@ -9,30 +9,33 @@ import it.unipv.poisw.f25.gympal.utility.KeysConversionUtility;
 public class PrezzoStandardStrategy implements IStrategieCalcoloPrezzo{
 	
     private Properties prezzi;
+    
+	//----------------------------------------------------------------
 
     public PrezzoStandardStrategy(Properties prezzi) {
     	
         this.prezzi = prezzi;
         
     }
-
+    
+	//----------------------------------------------------------------
 
     @Override
-    public double calcolaPrezzo(AbbonamentoDTO abbonamento) {
+    public double calcolaPrezzo(AbbonamentoDTO abbonamentoDTO) {
     	
-        System.out.println("DEBUG nella strategia - componentiAbbonamento:");
+        /*System.out.println("DEBUG nella strategia - componentiAbbonamento:");
         for (String s : abbonamento.getSezioniAbbonamento()) {
             System.out.println(" - " + s);
         }
         System.out.println("DEBUG nella strategia - corsiSelezionati:");
         for (String s : abbonamento.getCorsiSelezionati()) {
             System.out.println(" - " + s);
-        }
+        }*/
     	
         double totale = 0.0;
         
-        System.out.println("Componenti abbonamento:");
-        for (String componente : abbonamento.getSezioniAbbonamento()) {
+        //System.out.println("Componenti abbonamento:");
+        for (String componente : abbonamentoDTO.getSezioniAbbonamento()) {
         	
         	/*Questa istruzione richiama un metodo di utilità che rimuove spazi dalle chiavi
         	 *e li sostituisce con underscores, per avere la corrispondenza con il contenuto
@@ -54,27 +57,28 @@ public class PrezzoStandardStrategy implements IStrategieCalcoloPrezzo{
             
             String prezzo = prezzi.getProperty("componenti." + componenteKey, "0");
             
-            System.out.println(" - " + componente + " (chiave: 'componenti." + componenteKey + "'): " + prezzo);
+            //System.out.println(" - " + componente + " (chiave: 'componenti." + componenteKey + "'): " + prezzo);
             
             /*Questa istruzione converte il valore ottenuto pocanzi da "String" a "Double", ed 
              *esegue la somma*/
             totale += Double.parseDouble(prezzo);
         }
 
-        System.out.println("Corsi selezionati:");
+        //System.out.println("Corsi selezionati:");
         
-        for (String corso : abbonamento.getCorsiSelezionati()) {
+        for (String corso : abbonamentoDTO.getCorsiSelezionati()) {
         	
             String prezzo = prezzi.getProperty("corsi." + corso, "0");
             
-            System.out.println(" - " + corso + ": " + prezzo);
+            //System.out.println(" - " + corso + ": " + prezzo);
             
             totale += Double.parseDouble(prezzo);
         }
 
-        System.out.println("Totale calcolato: " + totale);
+        //System.out.println("Totale calcolato: " + totale);
         return totale;
     }
 
+	//----------------------------------------------------------------
 
 }

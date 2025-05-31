@@ -13,15 +13,10 @@ public interface IRegexExpression {
 	
 	public static final String CODICE_FISCALE = "^[A-Z]{6}[0-9]{2}[A-EHLMPRST]{1}[0-9]{2}[A-Z]{1}[0-9A-Z]{3}[A-Z]{1}$";
 	
-	/*1) Aggiornate le regex affinché impongano la presenza di una maiuscola in testa alla stringa,
-	 *   per nomi, cognomi.
-	 *
-	 *NOTA: il "+" che precede "$" impone che nella stringa vi sia almeno un'altro carattere, oltre
-	 *	    alla maiuscola in testa. Se il "$" fosse preceduto da "*", allora si potrebbe avere
-	 * 	    anche solo la maiuscola iniziale, senza altro carattere a seguirla.*/
+	public static final String EMAIL = "^[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,253}\\.[a-zA-Z]{2,}$"; 
+
 	
-	/*2) Ulteriore aggiornamento regex per tener conto di lettere accentate, apostrofi, trattini
-	 *   e spazi in nomi e cognomi.*/
+
 	
 	/*Struttura delle regex:
 	 * 
@@ -55,7 +50,13 @@ public interface IRegexExpression {
 	 * "$" ---> Demarca la fine della stringa, in modo che la regex si aspetti l'assenza di ulte-
 	 * 			riori caratteri in coda a "(REC|MAN|DIP)".
 	 * 
-	 * */
+	 *
+	 *Per la regex della mail:
+	 *
+	 * "\\." ---> impone la presenza del punto prima del dominio
+	 * 
+	 * "[a-zA-Z]{2,}" ---> il dominio deve essere composto da almeno due lettere, vincolo imposto
+	 * 					   da "{2,}"*/
 	
 		
 }

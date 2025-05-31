@@ -11,10 +11,14 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
@@ -27,13 +31,28 @@ public class RiepilogoEPagamentoView extends JPanel{
 	
 	private JSplitPane mainSplitPanel;
 	private JPanel mainUpperPanel;
-	private JPanel mainBottomPanel; //Qui finisce il riepilogo
+	private JPanel mainBottomLeftPanel; //Qui finisce il riepilogo
+	private JPanel mainBottomRightPanel; //Opzioni per la factory che calcola i prezzi
+	
+	private JSplitPane mainBottomSplitPanel;
 	
 	private JSplitPane secondSplitPanel; //Il pannello superiore coincide con "mainSplitPanel"
 	private JPanel indietroConfermaPanel; //Qui finisce il pannello con il bottone "Intrietro"
 	
+	private JCheckBox scontoEtaCheckBox;
+	private JCheckBox scontoOccasioniCheckBox;
+	
+	private JButton scontoSuBaseMesi;
 	private JButton indietro;
 	private JButton conferma;
+	
+	private JRadioButtonMenuItem trimestrale;
+	private JRadioButtonMenuItem semestrale;
+	private JRadioButtonMenuItem annuale;
+	private JRadioButtonMenuItem nessuno;
+	
+	private JPopupMenu popupMenu;
+	private ButtonGroup sceltaMesi;
 	
 	private JLabel prezzoTotaleLabel;
 	
@@ -55,15 +74,81 @@ public class RiepilogoEPagamentoView extends JPanel{
 	    
 	    /*############################################################*/
 	    
-        mainBottomPanel = new JPanel();
+        mainBottomLeftPanel = new JPanel();
         
-        mainBottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        mainBottomLeftPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         
         prezzoTotaleLabel = new JLabel("Totale: € 0.00");
         
-        mainBottomPanel.add(prezzoTotaleLabel);
+        mainBottomLeftPanel.add(prezzoTotaleLabel);
 
-        mainSplitPanel.setBottomComponent(mainBottomPanel);
+        //mainSplitPanel.setBottomComponent(mainBottomLeftPanel);
+        
+        /*############################################################*/
+        
+        mainBottomRightPanel = new JPanel();
+        
+        mainBottomRightPanel.setLayout(new GridLayout(0, 1, 5, 5));
+        
+        scontoEtaCheckBox = new JCheckBox("Applica sconto età");
+        mainBottomRightPanel.add(scontoEtaCheckBox);
+        
+        scontoOccasioniCheckBox = new JCheckBox("Applica sconto occasioni");
+        mainBottomRightPanel.add(scontoOccasioniCheckBox);
+        
+        trimestrale = new JRadioButtonMenuItem("Trimestrale");
+        semestrale = new JRadioButtonMenuItem("Semestrale");
+        annuale = new JRadioButtonMenuItem("Annuale");
+        nessuno = new JRadioButtonMenuItem("Nessuno");
+        
+        sceltaMesi = new ButtonGroup();
+        sceltaMesi.add(trimestrale);
+        sceltaMesi.add(semestrale);
+        sceltaMesi.add(annuale);
+        sceltaMesi.add(nessuno);
+        
+        /*Il JPopupMenu non è un componente visivo fisso, come un JPanel o un JButton.
+         *Esso è visualizzato in modo dinamico, su base temporanea, tramite invocazione del
+         *metodo "show", che per input ha:
+         *
+         *- il componente che invoca il PopupMenu
+         *
+         *- la posizione "x" rispetto al componente che invoca il menu
+         *
+         *- la posizione "y" rispetto al componente che invoca il menu
+         *
+         *ES: popupMenu.show(scontoSuBaseMesi, 0, 0); */
+        
+        popupMenu = new JPopupMenu();
+        popupMenu.add(trimestrale);
+        popupMenu.add(semestrale);
+        popupMenu.add(annuale);
+        popupMenu.add(nessuno);
+        
+        scontoSuBaseMesi = new JButton("Numero mesi");
+                
+        mainBottomRightPanel.add(scontoSuBaseMesi);
+
+        sceltaMesi = new ButtonGroup();
+        
+        
+	    /*############################################################*/
+	    
+	    mainBottomSplitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+	    
+	    mainBottomSplitPanel.setRightComponent(mainBottomLeftPanel);
+	    
+	    mainBottomSplitPanel.setLeftComponent(mainBottomRightPanel);
+	    
+		SwingUtilities.invokeLater(() -> {
+			
+			mainBottomSplitPanel.setDividerLocation(0.5); 
+		    
+		});
+		
+		mainBottomSplitPanel.setEnabled(false);
+	    
+	    mainSplitPanel.setBottomComponent(mainBottomSplitPanel);
         
 	    /*############################################################*/
 	    
@@ -117,7 +202,7 @@ public class RiepilogoEPagamentoView extends JPanel{
 	
 	//----------------------------------------------------------------
 	
-		private JScrollPane listaAScorrimento(List<String> selezione) {
+	private JScrollPane listaAScorrimento(List<String> selezione) {
 			
 			/*La parte "selezione.toArray(new String[0])" converte la "List<String> selezione"
 			 *in un array di tipo "String[]", il formato richiesto dal costruttore di "JList"*/
@@ -126,12 +211,12 @@ public class RiepilogoEPagamentoView extends JPanel{
 			 *il tipo. Alla fine è restituito un array avente tanti elementi quanti sono gli
 			 *elementi della lista convertita.*/
 			
-			JList<String> lista = new JList<>(selezione != null ? selezione.toArray(new String[0]) : new String[0]);
-			lista.setEnabled(false); //Listan NON modificabile
+		JList<String> lista = new JList<>(selezione != null ? selezione.toArray(new String[0]) : new String[0]);
+		lista.setEnabled(false); //Listan NON modificabile
 			
-			return new JScrollPane(lista);
+		return new JScrollPane(lista);
 			
-		}
+	}
 	
 	//----------------------------------------------------------------
 	
@@ -152,6 +237,7 @@ public class RiepilogoEPagamentoView extends JPanel{
 	    labeledEntry(mainUpperPanel, "Cognome: ", abbDTO.getCognome());
 	    labeledEntry(mainUpperPanel, "Codice Fiscale: ", abbDTO.getCodiceFiscale());
 	    labeledEntry(mainUpperPanel, "Sesso: ", abbDTO.getSesso());
+	    labeledEntry(mainUpperPanel, "Contatto: ", abbDTO.getContatto());
 
 	    
 	    /*Protezione contro eccezione di tipo "NullPointerException"*/	    
@@ -178,6 +264,7 @@ public class RiepilogoEPagamentoView extends JPanel{
 	    labeledList(mainUpperPanel, "Corsi selezionati: ", abbDTO.getCorsiSelezionati());
 
 	    revalidate(); 
+	    
 	    repaint();
 	    
 	}
@@ -192,6 +279,73 @@ public class RiepilogoEPagamentoView extends JPanel{
 	
 	public JButton getConfermaButton() {
 		return conferma;
+	}
+	
+	//----------------------------------------------------------------
+	
+	public JButton getScontoSuBaseMesi () {
+		
+		return scontoSuBaseMesi;
+		
+	}
+	
+	
+	//----------------------------------------------------------------
+	
+	public JPopupMenu getPopupMenu () {
+		
+		return popupMenu;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+
+	
+	public JRadioButtonMenuItem getTrimestrale() {
+		
+		return trimestrale;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public JRadioButtonMenuItem getSemestrale() {
+		
+		return semestrale;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public JRadioButtonMenuItem getAnnuale() {
+		
+		return annuale;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public JRadioButtonMenuItem getNessuno() {
+		
+		return nessuno;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public JCheckBox getScontoEtaCheckBox() {
+		
+		return scontoEtaCheckBox;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public JCheckBox getScontoOccasioniCheckBox() {
+		
+		return scontoOccasioniCheckBox;
+		
 	}
 	
 	//----------------------------------------------------------------

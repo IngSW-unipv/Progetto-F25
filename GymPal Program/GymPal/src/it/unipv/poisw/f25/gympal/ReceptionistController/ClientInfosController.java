@@ -51,6 +51,8 @@ public class ClientInfosController implements IRegexExpression {
 		ValidazioneCampo.aggiungiValidatore(clientInfos.getCognome(), SURNAME_REGEXEXPRESSION);
 		
 		ValidazioneCampo.aggiungiValidatore(clientInfos.getCodiceFiscale(), CODICE_FISCALE);
+		
+		ValidazioneCampo.aggiungiValidatore(clientInfos.getContatto(), EMAIL);
 
 	}
 	
@@ -109,6 +111,7 @@ public class ClientInfosController implements IRegexExpression {
 	        Color nomeColor = clientInfos.getNome().getBackground();
 	        Color cognomeColor = clientInfos.getCognome().getBackground();
 	        Color codiceFiscaleColor = clientInfos.getCodiceFiscale().getBackground();
+	        Color contatto = clientInfos.getContatto().getBackground();
 
 	        
 	        // E' controllato che i colori siano uguali a #b2fab4 (r=178, g=250, b=180).
@@ -122,7 +125,8 @@ public class ClientInfosController implements IRegexExpression {
 	        
 	        if (nomeColor.getRed() != 178 || nomeColor.getGreen() != 250 || nomeColor.getBlue() != 180 ||
 	            cognomeColor.getRed() != 178 || cognomeColor.getGreen() != 250 || cognomeColor.getBlue() != 180 ||
-	            codiceFiscaleColor.getRed() != 178 || codiceFiscaleColor.getGreen() != 250 || codiceFiscaleColor.getBlue() != 180) {
+	            codiceFiscaleColor.getRed() != 178 || codiceFiscaleColor.getGreen() != 250 || codiceFiscaleColor.getBlue() != 180
+	            || contatto.getRed() != 178 || contatto.getGreen() != 250 || contatto.getBlue() != 180) {
 	        	
 	            validitaCampi = false;
 	            
@@ -150,6 +154,7 @@ public class ClientInfosController implements IRegexExpression {
 	        	abbonamentoDTO.setNome(clientInfos.getNome().getText().trim());
 	        	abbonamentoDTO.setCognome(clientInfos.getCognome().getText().trim());
 	        	abbonamentoDTO.setCodiceFiscale(clientInfos.getCodiceFiscale().getText().trim());
+	        	abbonamentoDTO.setContatto(clientInfos.getContatto().getText().trim());
 	        	
 	        	if(clientInfos.getMaschio().isSelected()) {
 	        		
