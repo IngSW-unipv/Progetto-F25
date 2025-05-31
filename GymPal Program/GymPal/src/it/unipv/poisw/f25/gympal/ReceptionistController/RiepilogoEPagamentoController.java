@@ -11,6 +11,8 @@ public class RiepilogoEPagamentoController {
 	
 	private RiepilogoEPagamentoView riepilogoEPagamento;
 	
+	private AbbonamentoDTO abbonamentoDTO;
+	
 	private Runnable onIndietro;
 	private Runnable onConferma;
 	
@@ -21,7 +23,8 @@ public class RiepilogoEPagamentoController {
 										  Runnable onIndietro,
 										  Runnable onConferma) {
 		
-		
+		//DEBUG
+		/*
 	    System.out.println("DEBUG nel controller riepilogo - sezioni:");
 	    if (abbonamentoDTO.getSezioniAbbonamento() != null) {
 	        for (String s : abbonamentoDTO.getSezioniAbbonamento()) {
@@ -33,25 +36,27 @@ public class RiepilogoEPagamentoController {
 	        for (String c : abbonamentoDTO.getCorsiSelezionati()) {
 	            System.out.println(" - " + c);
 	        }
-	    }
+	    }*/
 		
 		
 		riepilogoEPagamento = view;
 		
+		this.abbonamentoDTO = abbonamentoDTO;
 		this.onIndietro = onIndietro;
 		this.onConferma = onConferma;
 		
 		/*Inizializzazione della view "RiepilogoEPagamento" con i dati acquisiti durante la
 		 *procedura di iscrizione*/
 		riepilogoEPagamento.setDatiAbbonamento(abbonamentoDTO);
+		aggiornaPrezzo();
 		
-        IStrategieCalcoloPrezzo strategia = StrategieCalcoloPrezzoFactory.getStrategy(abbonamentoDTO);
-        double totale = strategia.calcolaPrezzo(abbonamentoDTO);
-        
-        riepilogoEPagamento.setPrezzoTotale(totale);
+
 		
 		impostaEventoIndietro();
 		impostaEventoConferma();
+		impostaEventoScontoSuBaseMesi();
+		impostaEventoMensilita();
+		impostaEventiCheckBox();
 		
 		
 	}
@@ -115,12 +120,132 @@ public class RiepilogoEPagamentoController {
                         JOptionPane.ERROR_MESSAGE
                         
                     );
+                    
                 }
+                
             }
 
         });
+        
     }
 	
+	//----------------------------------------------------------------
+	
+	private void impostaEventoScontoSuBaseMesi () {
+		
+		riepilogoEPagamento.getScontoSuBaseMesi().addActionListener(e -> {
+			
+			//Mostra il menu popup
+			riepilogoEPagamento.getPopupMenu().show(riepilogoEPagamento.getScontoSuBaseMesi(), 
+					
+								     0, riepilogoEPagamento.getScontoSuBaseMesi().getHeight());
+			
+		});
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	private void impostaEventoMensilita () {
+		
+		riepilogoEPagamento.getTrimestrale().addActionListener(e -> {
+			
+			if(riepilogoEPagamento.getTrimestrale().isSelected()) {
+				
+				riepilogoEPagamento.getScontoSuBaseMesi().setText(riepilogoEPagamento.
+														  getTrimestrale().getText());
+				
+				aggiornaPrezzo();
+
+			}
+			
+		});
+		
+		riepilogoEPagamento.getSemestrale().addActionListener(e -> {
+			
+			if(riepilogoEPagamento.getSemestrale().isSelected()) {
+				
+				riepilogoEPagamento.getScontoSuBaseMesi().setText(riepilogoEPagamento.
+														  getSemestrale().getText());
+				
+				aggiornaPrezzo();
+			}
+			
+		});
+		
+		riepilogoEPagamento.getAnnuale().addActionListener(e -> {
+			
+			if(riepilogoEPagamento.getAnnuale().isSelected()) {
+				
+				riepilogoEPagamento.getScontoSuBaseMesi().setText(riepilogoEPagamento.
+														  getAnnuale().getText());
+				
+				aggiornaPrezzo();
+			}
+			
+		});
+		
+		
+		riepilogoEPagamento.getNessuno().addActionListener(e -> {
+			
+			if(riepilogoEPagamento.getNessuno().isSelected()) {
+				
+				riepilogoEPagamento.getScontoSuBaseMesi().setText(riepilogoEPagamento.
+														  getNessuno().getText());
+				
+				aggiornaPrezzo();
+			}
+			
+		});
+		
+	}
+	
+	//----------------------------------------------------------------	
+	
+	private void impostaEventiCheckBox() {
+		
+	    riepilogoEPagamento.getScontoEtaCheckBox().addActionListener(e -> aggiornaPrezzo());
+	    
+	    riepilogoEPagamento.getScontoOccasioniCheckBox().addActionListener(e -> aggiornaPrezzo());
+	    
+	}
+	
+	//----------------------------------------------------------------
+	
+	private void aggiornaPrezzo() {
+		
+	    boolean scontoEta = riepilogoEPagamento.getScontoEtaCheckBox().isSelected();
+	    
+	    boolean scontoOccasioni = riepilogoEPagamento.getScontoOccasioniCheckBox().isSelected();
+
+	    String durata = null;
+	    
+	    if (riepilogoEPagamento.getTrimestrale().isSelected()) {
+	    	
+	        durata = "trimestrale";
+	        
+	    } else if (riepilogoEPagamento.getSemestrale().isSelected()) {
+	    	
+	        durata = "semestrale";
+	        
+	    } else if (riepilogoEPagamento.getAnnuale().isSelected()) {
+	    	
+	        durata = "annuale";
+	    }
+
+	    IStrategieCalcoloPrezzo strategia = StrategieCalcoloPrezzoFactory.getStrategy(
+	        abbonamentoDTO,
+	        scontoEta,
+	        scontoOccasioni,
+	        durata
+	    );
+
+	    double totale = strategia.calcolaPrezzo(abbonamentoDTO);
+	    
+	    riepilogoEPagamento.setPrezzoTotale(totale);
+	    
+	}
+
 	//----------------------------------------------------------------
 	
 }

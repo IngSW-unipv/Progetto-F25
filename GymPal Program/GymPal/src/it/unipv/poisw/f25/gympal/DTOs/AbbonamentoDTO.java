@@ -11,6 +11,7 @@ public class AbbonamentoDTO {
     private String cognome;
     private String codiceFiscale;
     private String sesso; // "Maschio" o "Femmina"
+    private String contatto; //indirizzo posta elettronica
     
     private LocalDate dataNascita;    
         
@@ -168,6 +169,22 @@ public class AbbonamentoDTO {
     	
         this.corsiSelezionati = corsiSelezionati;
     
+    }
+    
+    //----------------------------------------------------------------
+    
+    public void setContatto(String contatto) {
+    	
+    	this.contatto = contatto;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    public String getContatto() {
+    	
+    	return contatto;
+    	
     }
     
     //----------------------------------------------------------------

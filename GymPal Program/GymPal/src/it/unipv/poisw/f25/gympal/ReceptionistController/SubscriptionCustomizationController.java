@@ -192,7 +192,7 @@ public class SubscriptionCustomizationController {
 		    	aggiornaDTO(abbonamentoDTO);
 		    	
 		    	// Debug: stampa il contenuto delle liste nel DTO
-		    	System.out.println("DEBUG - Sezioni abbonamento selezionate:");
+		    	/*System.out.println("DEBUG - Sezioni abbonamento selezionate:");
 		    	if (abbonamentoDTO.getSezioniAbbonamento() != null) {
 		    	    for (String s : abbonamentoDTO.getSezioniAbbonamento()) {
 		    	        System.out.println(" - " + s);
@@ -208,7 +208,7 @@ public class SubscriptionCustomizationController {
 		    	    }
 		    	} else {
 		    	    System.out.println("Lista corsi selezionati è null");
-		    	}
+		    	}*/
 		    	/////////////////////////////////////////////////////////////////
 		    	
 		    	

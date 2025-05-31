@@ -2,11 +2,11 @@ package it.unipv.poisw.f25.gympal.utility;
 
 public class KeysConversionUtility {
 	
-    public static String toPropertyKey(String nome) {
+    public static String toPropertyKey(String nomeProprieta) {
     	
     	//Sostituisce ogni spazio con un underscore
     	
-        return nome.trim().replaceAll("\\s+", "_");
+        return nomeProprieta.trim().replaceAll("\\s+", "_");
     }
 
 }

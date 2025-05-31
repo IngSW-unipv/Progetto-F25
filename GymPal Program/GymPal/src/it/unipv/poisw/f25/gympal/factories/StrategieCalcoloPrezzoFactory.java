@@ -4,7 +4,6 @@ package it.unipv.poisw.f25.gympal.factories;
 
 import it.unipv.poisw.f25.gympal.DTOs.AbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.StrategieDiPagamento.IStrategieCalcoloPrezzo;
-
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -16,6 +15,7 @@ public class StrategieCalcoloPrezzoFactory {
     private static Properties strategie;
     private static Properties prezzi;
 
+	//----------------------------------------------------------------
     
     static {
     	
@@ -36,8 +36,8 @@ public class StrategieCalcoloPrezzoFactory {
             	
                 prezzi.load(prezziInput);
                 
-                //////////////
-                prezzi.forEach((key, value) -> System.out.println("KEY: " + key + " = " + value));
+                //DEBUG
+                //prezzi.forEach((key, value) -> System.out.println("KEY: " + key + " = " + value));
                 /////////////
             }
 
@@ -48,48 +48,92 @@ public class StrategieCalcoloPrezzoFactory {
         }
         
     }
-
-    public static IStrategieCalcoloPrezzo getStrategy(AbbonamentoDTO abbonamento) {
+    
+	//----------------------------------------------------------------
+    
+    public static IStrategieCalcoloPrezzo getStrategy(
+    		AbbonamentoDTO abbonamentoDTO,
+    	    boolean scontoEta,
+    	    boolean scontoOccasioni,
+    	    String durata // valori: "trimestrale", "semestrale", "annuale", oppure null
+    	) {
     	
-        String chiave;
+    	    IStrategieCalcoloPrezzo strategiaBase;
 
-        int eta = -1;
+    	    // Strategia base: età oppure standard
+    	    
+    	    String chiave = "strategia.standard";
+    	    
+    	    int eta = abbonamentoDTO.getDataNascita() != null
+    	    		
+    	        ? Period.between(abbonamentoDTO.getDataNascita(), LocalDate.now()).getYears()
+    	        : -1;
 
-        if (abbonamento.getDataNascita() != null) {
-        	
-            eta = Period.between(abbonamento.getDataNascita(), LocalDate.now()).getYears();
-            
-        }
+    	    //Se scatta la "if", la variabile "chiave" è sovrascritta
+    	    
+    	    if (scontoEta && eta >= 0) {
+    	    	
+    	        if (eta < 18) {chiave = "strategia.under18";}
+    	        else if (eta >= 60) {chiave = "strategia.over60";}
+    	        
+    	    }
 
-        if (eta >= 0 && eta < 18) {
-        	
-            chiave = "strategia.under18";
-            
-        } else if (eta >= 60) {
-        	
-            chiave = "strategia.over60";
-            
-        } else {
-        	
-            chiave = "strategia.standard";
-            
-        }
+    	    try {
+    	    	
+    	        String nomeClasseSconto = strategie.getProperty(chiave);
+    	        
+    	        Class<?> classeBase = Class.forName(nomeClasseSconto);
+    	        
+    	        /*La variabile "strategiaBase" referenzia un oggeto pronto per
+    	         *essere stratificato con altre strategie*/
+    	        strategiaBase = (IStrategieCalcoloPrezzo) classeBase.getConstructor(Properties.class)
+    	        												   .newInstance(prezzi);
+    	        
+    	    } catch (Exception e) {
+    	    	
+    	        throw new RuntimeException("Errore con strategia base", e);
+    	        
+    	    }
 
-        try {
-        	
-            String className = strategie.getProperty(chiave);
-            
-            Class<?> classe = Class.forName(className);
+    	    /* Wrapper con strategia occasioni (basato su reflection, come il resto)
+    	    if (scontoOccasioni) {
+    	        strategiaBase = ... Lasciato in sospeso, per ora
+    	    }*/
 
-            return (IStrategieCalcoloPrezzo) classe.getConstructor(Properties.class)
-                    							   .newInstance(prezzi);
+    	    
+    	    // Wrapper con strategia durata
+    	    if (durata != null && !durata.isEmpty()) {
+    	    	
+    	        try {
+    	        	
+    	            String durataKey = "strategia." + durata.toLowerCase(); // es: strategia.annuale
+    	            
+    	            String durataClassName = strategie.getProperty(durataKey);
+    	            
+    	            Class<?> durataClass = Class.forName(durataClassName);
 
-        } catch (Exception e) {
-        	
-            throw new RuntimeException("Errore durante l'istanziazione della strategia: " + chiave, e);
-            
-        }
-        
-    }
+    	            /* Prende il costruttore della classe associata alla chiave, e gli passa 
+    	             * la "strategiaBase" proveniente dal blocco di istruzioni soprastante,
+    	             * si che essa venga stratificata(avvolto) da un'ulteriore strategia.*/
+    	            
+    	            strategiaBase = (IStrategieCalcoloPrezzo) durataClass
+    	            		
+    	                .getConstructor(IStrategieCalcoloPrezzo.class)
+    	                
+    	                .newInstance(strategiaBase);
+    	            
+    	        } catch (Exception e) {
+    	        	
+    	            throw new RuntimeException("Errore durante la composizione della strategia di durata", e);
+    	            
+    	        }
+    	        
+    	    }
+
+    	    return strategiaBase;
+    	}
+
+    
+	//----------------------------------------------------------------
 
 }

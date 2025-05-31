@@ -21,6 +21,8 @@ public class PrezzoUnderAgeStrategy extends PrezzoStandardStrategy {
         
     }
 
+	//----------------------------------------------------------------
+    
     @Override
     public double calcolaPrezzo(AbbonamentoDTO abbonamento) {
     	
@@ -40,5 +42,7 @@ public class PrezzoUnderAgeStrategy extends PrezzoStandardStrategy {
         }
         return prezzoBase;
     }
+    
+	//----------------------------------------------------------------
 	
 }

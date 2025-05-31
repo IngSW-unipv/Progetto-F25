@@ -28,9 +28,9 @@ public class LoginManager implements IRegexExpression {
         RegexCheck reg = new RegexCheck();
         StaffFactory factory = new StaffFactory();
 
-        if (reg.check(nome, NAME_REGEXEXPRESSION)
-            && reg.check(cognome, SURNAME_REGEXEXPRESSION)
-            && reg.check(staffID, STAFF_ID_REGEXEXPRESSION)) {
+        if (RegexCheck.check(nome, NAME_REGEXEXPRESSION)
+            && RegexCheck.check(cognome, SURNAME_REGEXEXPRESSION)
+            && RegexCheck.check(staffID, STAFF_ID_REGEXEXPRESSION)) {
 
             CredentialsPOJO credentials = new CredentialsPOJO();
             credentials.setAllProperties(nome, cognome, staffID);

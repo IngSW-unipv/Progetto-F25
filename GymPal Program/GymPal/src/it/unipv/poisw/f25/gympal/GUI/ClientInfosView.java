@@ -27,6 +27,7 @@ public class ClientInfosView extends JPanel{
 	private JTextField nome;
 	private JTextField cognome;
 	private JTextField codiceFiscale;
+	private JTextField contatto;
 	
 	private JSpinner dateSpinner;
 	
@@ -67,6 +68,8 @@ public class ClientInfosView extends JPanel{
 		cognome = new JTextField(80);
 				
 		codiceFiscale = new JTextField(80);
+		
+		contatto = new JTextField(80);
 		
 		
 		/*############################################################*/
@@ -114,6 +117,7 @@ public class ClientInfosView extends JPanel{
 		cognome.setAlignmentX(CENTER_ALIGNMENT);
 		codiceFiscale.setAlignmentX(CENTER_ALIGNMENT);
 		dateSpinner.setAlignmentX(CENTER_ALIGNMENT);
+		contatto.setAlignmentX(CENTER_ALIGNMENT);
 		
 		maschio.setAlignmentX(CENTER_ALIGNMENT);
 		femmina.setAlignmentX(CENTER_ALIGNMENT);
@@ -147,6 +151,9 @@ public class ClientInfosView extends JPanel{
 		upperPanel.add(Box.createVerticalStrut(10));
 		
 		upperPanel.add(EtichettaPiuCampoFactory.creaCampoEtichettato("Codice Fiscale: ", codiceFiscale));
+		upperPanel.add(Box.createVerticalStrut(10));
+		
+		upperPanel.add(EtichettaPiuCampoFactory.creaCampoEtichettato("Contatto cliente (email): ", contatto));
 		upperPanel.add(Box.createVerticalStrut(10));
 		
 		
@@ -273,6 +280,12 @@ public class ClientInfosView extends JPanel{
 		return codiceFiscale;
 	}
 
+	//----------------------------------------------------------------
+	
+	public JTextField getContatto() {
+		return contatto;
+	}
+	
 	//----------------------------------------------------------------
 
 	public JSpinner getDateSpinner() {
