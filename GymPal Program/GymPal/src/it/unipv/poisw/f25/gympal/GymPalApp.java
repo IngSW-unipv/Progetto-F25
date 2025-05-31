@@ -65,7 +65,11 @@ public class GymPalApp {
         } catch (SQLException e) {
             System.err.println("[ERRORE TEST] Errore durante la gestione della connessione:");
             e.printStackTrace();
+            
+          
         }
+        
+        System.out.println("fine prova db");
    
       //FINE TEST #########################################
         
