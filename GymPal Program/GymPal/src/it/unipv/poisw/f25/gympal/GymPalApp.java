@@ -1,7 +1,12 @@
 package it.unipv.poisw.f25.gympal;
 
+//i prossimi 4 package servono per il test di connessione al DB
 import java.sql.Connection;
-import it.unipv.poisw.f25.gympal.MySQLUtil.MySQLConnector;
+import java.sql.SQLException;
+import it.unipv.poisw.f25.gympal.persistence.util.IConnectionFactory;
+import it.unipv.poisw.f25.gympal.persistence.util.MySQLConnectionFactory;
+
+
 
 import javax.swing.SwingUtilities;
 
@@ -35,18 +40,36 @@ public class GymPalApp {
             
         });
         
-        //prova di connessione
+   //NUOVO TEST CONNESSIONE DB INIZIA QUI ####################################       
         
+        IConnectionFactory factory = MySQLConnectionFactory.getInstance();
         Connection conn = null;
-		
-		conn= MySQLConnector.startConnection(conn,"prova");
-		
-		System.out.println("first check "+MySQLConnector.isOpen(conn)+"\n");
-		
-		MySQLConnector.closeConnection(conn);
-		
-		System.out.println("second check "+MySQLConnector.isOpen(conn)+"\n");
-		
+
+        try {
+            conn = factory.createConnection("prova");
+
+            if (factory.isOpen(conn)) {
+                System.out.println("✅ Connessione APERTA con successo.");
+            } else {
+                System.err.println("❌ Connessione NON valida.");
+            }
+
+            factory.closeConnection(conn);
+
+            if (!factory.isOpen(conn)) {
+                System.out.println("✅ Connessione CHIUSA correttamente.");
+            } else {
+                System.err.println("❌ Connessione NON chiusa.");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("[ERRORE TEST] Errore durante la gestione della connessione:");
+            e.printStackTrace();
+        }
+   
+      //FINE TEST #########################################
+        
+        
         
     }
 
