@@ -1,0 +1,19 @@
+package it.unipv.poisw.f25.gympal.persistence.util;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public interface IConnectionFactory {
+
+    //Apre e restituisce una nuova Connection sullo schema indicato.
+   
+    Connection createConnection(String schema) throws SQLException;
+
+    // Controlla se una Connection è aperta (non null e non chiusa).
+     
+    boolean isOpen(Connection conn);
+
+    // Chiude la Connection passata (ignora se già chiusa o null).
+     
+    void closeConnection(Connection conn);
+}
