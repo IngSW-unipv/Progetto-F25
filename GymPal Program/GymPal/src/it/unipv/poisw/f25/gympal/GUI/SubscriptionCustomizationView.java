@@ -38,6 +38,7 @@ public class SubscriptionCustomizationView extends JPanel {
 	private JSplitPane splitPaneFather;
 	
 	private JButton avanti;
+	private JButton annulla;
 
 	//----------------------------------------------------------------
 
@@ -61,6 +62,7 @@ public class SubscriptionCustomizationView extends JPanel {
 		cB5 = new JCheckBox("Fullbody");
 		
 		avanti = new JButton("Avanti");
+		annulla = new JButton("Annulla");
 
 		corsiPanel = new JPanel();
 		corsiPanel.setLayout(new BoxLayout(corsiPanel, BoxLayout.Y_AXIS));
@@ -124,8 +126,11 @@ public class SubscriptionCustomizationView extends JPanel {
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
 
 		avanti.setMaximumSize(new Dimension(80, 40)); 
+		annulla.setMaximumSize(new Dimension(80, 40));
 
 		bottomPanel.add(Box.createHorizontalGlue());
+		bottomPanel.add(annulla);
+		bottomPanel.add(Box.createHorizontalStrut(200));
 		bottomPanel.add(avanti);
 		bottomPanel.add(Box.createHorizontalGlue());
 		
@@ -206,6 +211,14 @@ public class SubscriptionCustomizationView extends JPanel {
 	public JButton getAvantiButton() {
 		
 		return avanti;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public JButton getAnnullaButton() {
+		
+		return annulla;
 		
 	}
 	

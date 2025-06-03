@@ -17,6 +17,7 @@ public class AbbonamentoDTO {
         
     private boolean certificatoIdoneita;
     private boolean permessoGenitori; //Posto a 'true', di default
+    private boolean statoPagamento;
     
     
     //----------------------------------------------------------------
@@ -184,6 +185,22 @@ public class AbbonamentoDTO {
     public String getContatto() {
     	
     	return contatto;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    public void setStatoPagamento(boolean pagamento) {
+    	
+    	statoPagamento = pagamento;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    public boolean getStatoPagamento() {
+    	
+    	return statoPagamento;
     	
     }
     

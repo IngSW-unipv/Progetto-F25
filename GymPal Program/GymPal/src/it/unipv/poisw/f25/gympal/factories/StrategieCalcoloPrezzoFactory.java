@@ -128,6 +128,7 @@ public class StrategieCalcoloPrezzoFactory {
     	            
     	        }
     	        
+    	        
     	    }
 
     	    return strategiaBase;

@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -42,9 +43,15 @@ public class RiepilogoEPagamentoView extends JPanel{
 	private JCheckBox scontoEtaCheckBox;
 	private JCheckBox scontoOccasioniCheckBox;
 	
+	private JRadioButton carta;
+	private JRadioButton contanti;
+	private JRadioButton noPagamento;
+	
 	private JButton scontoSuBaseMesi;
 	private JButton indietro;
 	private JButton conferma;
+	private JButton annulla;
+	private JButton avvioPagamento;
 	
 	private JRadioButtonMenuItem trimestrale;
 	private JRadioButtonMenuItem semestrale;
@@ -53,6 +60,7 @@ public class RiepilogoEPagamentoView extends JPanel{
 	
 	private JPopupMenu popupMenu;
 	private ButtonGroup sceltaMesi;
+	private ButtonGroup modalitaPagamento;
 	
 	private JLabel prezzoTotaleLabel;
 	
@@ -74,16 +82,40 @@ public class RiepilogoEPagamentoView extends JPanel{
 	    
 	    /*############################################################*/
 	    
-        mainBottomLeftPanel = new JPanel();
+        mainBottomLeftPanel = new JPanel(new BorderLayout(10, 10));
         
         mainBottomLeftPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         
-        prezzoTotaleLabel = new JLabel("Totale: € 0.00");
+        prezzoTotaleLabel = new JLabel("Totale: € 0.00", JLabel.CENTER);
         
-        mainBottomLeftPanel.add(prezzoTotaleLabel);
+        avvioPagamento = new JButton("Avvio Pagamento");
+        
+        carta = new JRadioButton(" - Carta di credito / Bancomat");
+        contanti = new JRadioButton(" - Contanti");
+        noPagamento = new JRadioButton (" - No pagamento (abbonamento provvisorio - 30gg)");
+        
+        modalitaPagamento = new ButtonGroup();
+        
+        modalitaPagamento.add(carta);
+        modalitaPagamento.add(contanti);
+        modalitaPagamento.add(noPagamento);
+        
+        //Sottopannello locale a "mainBottomLeftPanel"
+        JPanel sceltaModalitaPagamento = new JPanel ();
+        sceltaModalitaPagamento.setLayout(new BoxLayout(sceltaModalitaPagamento, BoxLayout.Y_AXIS));
 
-        //mainSplitPanel.setBottomComponent(mainBottomLeftPanel);
+        sceltaModalitaPagamento.add(carta);
+        sceltaModalitaPagamento.add(Box.createVerticalStrut(5));
+        sceltaModalitaPagamento.add(contanti);
+        sceltaModalitaPagamento.add(Box.createVerticalStrut(5));
+        sceltaModalitaPagamento.add(noPagamento);
+        sceltaModalitaPagamento.add(Box.createVerticalStrut(5));
         
+        mainBottomLeftPanel.add(prezzoTotaleLabel, BorderLayout.NORTH);
+        mainBottomLeftPanel.add(sceltaModalitaPagamento, BorderLayout.WEST);
+        mainBottomLeftPanel.add(avvioPagamento, BorderLayout.SOUTH);
+
+                
         /*############################################################*/
         
         mainBottomRightPanel = new JPanel();
@@ -162,9 +194,14 @@ public class RiepilogoEPagamentoView extends JPanel{
 		conferma = new JButton ("Conferma");
 		conferma.setMaximumSize(new Dimension(80, 40));
 		
+		annulla = new JButton ("Annulla");
+		annulla.setMaximumSize(new Dimension(80, 40));
+		
 		indietroConfermaPanel.add(Box.createHorizontalGlue());
+		indietroConfermaPanel.add(annulla);
+		indietroConfermaPanel.add(Box.createHorizontalStrut(100));
 		indietroConfermaPanel.add(indietro);
-		indietroConfermaPanel.add(Box.createHorizontalStrut(200));
+		indietroConfermaPanel.add(Box.createHorizontalStrut(100));
 		indietroConfermaPanel.add(conferma);
 		indietroConfermaPanel.add(Box.createHorizontalGlue());
 	    
@@ -272,13 +309,25 @@ public class RiepilogoEPagamentoView extends JPanel{
 	//----------------------------------------------------------------
 	
 	public JButton getIndietroButton() {
+		
 		return indietro;
+		
 	}
 	
 	//----------------------------------------------------------------
 	
 	public JButton getConfermaButton() {
+		
 		return conferma;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public JButton getAnnullaButton() {
+		
+		return annulla;
+		
 	}
 	
 	//----------------------------------------------------------------
@@ -349,6 +398,38 @@ public class RiepilogoEPagamentoView extends JPanel{
 	}
 	
 	//----------------------------------------------------------------
+	
+	public JRadioButton getCarta() {
+		
+		return carta;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public JRadioButton getContanti() {
+		
+		return contanti;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public JRadioButton getNoPagamento() {
+		
+		return noPagamento;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public JButton getAvvioPagamento() {
+		
+		return avvioPagamento;
+		
+	}
+	
+	//----------------------------------------------------------------
 
     public void setPrezzoTotale(double totale) {
     	
@@ -359,5 +440,7 @@ public class RiepilogoEPagamentoView extends JPanel{
         prezzoTotaleLabel.setText("Totale: " + df.format(totale));
         
     }
+    
+	//----------------------------------------------------------------
 	
 }

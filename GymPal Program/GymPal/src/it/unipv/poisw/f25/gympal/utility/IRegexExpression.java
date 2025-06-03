@@ -5,7 +5,7 @@ public interface IRegexExpression {
 	public static final String STAFF_ID_REGEXEXPRESSION =
 		    "^(?!.*[\";<>%=])[A-ZÀ-Ý][a-zà-ÿA-ZÀ-Ý]*(?:[ '-][A-ZÀ-Ý][a-zà-ÿA-ZÀ-Ý]*)*_" +
 		    "[A-ZÀ-Ý][a-zà-ÿA-ZÀ-Ý]*(?:[ '-][A-ZÀ-Ý][a-zà-ÿA-ZÀ-Ý]*)*_" +
-		    "(REC|MAN|DIP)$";
+		    "(REC|MAN|DIP)_[0-9]{4}[A-ZÀ-Ý]{2,34}$";
 
 	public static final String NAME_REGEXEXPRESSION = "^(?!.*[\";<>%=]).*[A-ZÀ-Ý][a-zà-ÿA-ZÀ-Ý]*(?:[ '-][A-ZÀ-Ý][a-zà-ÿA-ZÀ-Ý]*){0,4}$";
 	
@@ -56,7 +56,13 @@ public interface IRegexExpression {
 	 * "\\." ---> impone la presenza del punto prima del dominio
 	 * 
 	 * "[a-zA-Z]{2,}" ---> il dominio deve essere composto da almeno due lettere, vincolo imposto
-	 * 					   da "{2,}"*/
+	 * 					   da "{2,}"
+	 * 
+	 * "{1, 253}" ---> non è scelto a caso. Il massimo numero di caratteri consentito per un 
+	 * 				   intero nome di dominio è 255 byte secondo lo standard RFC 1035.
+	 * 
+	 * 				   Sottraendo la "@" e il punto "." finale, rimangono 253 caratteri
+	 * 				   utilizzabili nel dominio vero e proprio.*/
 	
 		
 }

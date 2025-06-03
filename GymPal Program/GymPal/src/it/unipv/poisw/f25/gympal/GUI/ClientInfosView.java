@@ -42,6 +42,8 @@ public class ClientInfosView extends JPanel{
 	
 	private JButton avanti;
 	private JButton indietro;
+	private JButton annulla;
+	private JButton acquisisciPermesso;
 	
 	private ButtonGroup sesso;
 	private ButtonGroup idoneità;
@@ -111,6 +113,8 @@ public class ClientInfosView extends JPanel{
 		permessoGenitori.add(permessoGenitoriNo);
 		permessoGenitoriSi.setSelected(true);
 		
+		acquisisciPermesso = new JButton("Avvia acquisizione documento");
+		
 		/*############################################################*/
 		
 		nome.setAlignmentX(CENTER_ALIGNMENT);
@@ -127,6 +131,7 @@ public class ClientInfosView extends JPanel{
 		
 		permessoGenitoriSi.setAlignmentX(CENTER_ALIGNMENT);
 		permessoGenitoriNo.setAlignmentX(CENTER_ALIGNMENT);
+		acquisisciPermesso.setAlignmentX(CENTER_ALIGNMENT);
 		
 		/*############################################################*/
 		
@@ -201,9 +206,12 @@ public class ClientInfosView extends JPanel{
 		bottomPanel.add(permessoGenitoriNo);
 		bottomPanel.add(Box.createVerticalStrut(10));
 		
+		bottomPanel.add(acquisisciPermesso);
+		bottomPanel.add(Box.createVerticalStrut(10));
+		
 		bottomPanel.add(Box.createVerticalGlue());
 		
-		bottomPanel.setVisible(true);
+		//bottomPanel.setVisible(true);
 		
 		/*############################################################*/
 		
@@ -215,7 +223,7 @@ public class ClientInfosView extends JPanel{
 		SwingUtilities.invokeLater(() -> {
 			
 			
-			informazioniUtenteSplitPanel.setDividerLocation(0.85); 
+			informazioniUtenteSplitPanel.setDividerLocation(0.75); 
 		    
 		});
 		
@@ -233,9 +241,14 @@ public class ClientInfosView extends JPanel{
 		indietro = new JButton ("Indietro");
 		indietro.setMaximumSize(new Dimension(80, 40)); 
 		
+		annulla = new JButton ("Annulla");
+		annulla.setMaximumSize(new Dimension(80, 40));
+		
 		avantiIndietroPanel.add(Box.createHorizontalGlue());
+		avantiIndietroPanel.add(annulla);
+		avantiIndietroPanel.add(Box.createHorizontalStrut(100));
 		avantiIndietroPanel.add(indietro);
-		avantiIndietroPanel.add(Box.createHorizontalStrut(10));
+		avantiIndietroPanel.add(Box.createHorizontalStrut(100));
 		avantiIndietroPanel.add(avanti);
 		avantiIndietroPanel.add(Box.createHorizontalGlue());
 		
@@ -341,6 +354,14 @@ public class ClientInfosView extends JPanel{
 	}
 
 	//----------------------------------------------------------------
+	
+	public JButton getAnnullaButton() {
+		
+		return annulla;
+		
+	}
+	
+	//----------------------------------------------------------------
 
 	public JSplitPane getMainSplitPanel() {
 		return mainSplitPanel;
@@ -363,5 +384,15 @@ public class ClientInfosView extends JPanel{
 	public JLabel getPermessoGenitoriLabel () {
 		return permesso;
 	}
+	
+	//----------------------------------------------------------------
+	
+	public JButton getAcquisisciPermesso() {
+		
+		return acquisisciPermesso;
+		
+	}
+	
+	//----------------------------------------------------------------
 
 }

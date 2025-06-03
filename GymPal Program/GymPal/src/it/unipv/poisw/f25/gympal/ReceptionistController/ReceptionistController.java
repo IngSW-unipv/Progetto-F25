@@ -58,8 +58,9 @@ public class ReceptionistController {
          *volta, il ché assicura che esso non venga ri-creato più volte (no duplicazione
          *listeners).*/
         
-        new SubscriptionCustomizationController(subView, recDashView, () -> {
-            									mostraSchermata("INFOS_VIEW");},
+        new SubscriptionCustomizationController(subView, () -> {mostraSchermata("INFOS_VIEW");},
+        										() -> {inizializzaCicloRegistrazioneCliente();
+        										mostraSchermata("SCHERMATA0");},
         									    abbonamentoDTO);
         
         // 2. Raccolta dati cliente
@@ -101,6 +102,10 @@ public class ReceptionistController {
 
         	    // Callback "onIndietro" da ClienInfosView a subView
         	    () -> mostraSchermata("SUB_VIEW"), 
+        	    
+        	    // Callback "onAnnulla" 
+        	    () -> {inizializzaCicloRegistrazioneCliente();
+				mostraSchermata("SCHERMATA0");},
         	    
         	    //Questo DTO finisce in ClientInfosController
         	    abbonamentoDTO);

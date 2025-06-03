@@ -5,10 +5,12 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import it.unipv.poisw.f25.gympal.DTOs.AbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.GUI.ClientInfosView;
+import it.unipv.poisw.f25.gympal.GUI.SimulazioneOperazione;
 import it.unipv.poisw.f25.gympal.utility.EtaCliente;
 import it.unipv.poisw.f25.gympal.utility.IRegexExpression;
 import it.unipv.poisw.f25.gympal.utility.ValidazioneCampo;
@@ -21,17 +23,20 @@ public class ClientInfosController implements IRegexExpression {
 	
 	private Runnable onAvanti;
 	private Runnable onIndietro;
+	private Runnable onAnnulla;
 	
 	//----------------------------------------------------------------
 	
 	public ClientInfosController(ClientInfosView infos, Runnable onAvantiCallback,
 														Runnable onIndietroCallback,
+														Runnable onAnnullaCallback,
 														AbbonamentoDTO abbonamentoDTO) {
 		
 		clientInfos = infos;
 		
 		onAvanti = onAvantiCallback;
 		onIndietro = onIndietroCallback;
+		onAnnulla = onAnnullaCallback;
 		
 		this.abbonamentoDTO = abbonamentoDTO;
 		
@@ -39,6 +44,8 @@ public class ClientInfosController implements IRegexExpression {
 		impostaControlloEta ();
 		impostaEventoAvanti();
 		impostaEventoIndietro();
+		impostaEventoAnulla();
+		impostaEventoAcquisisciPermesso();
 		
 	}
 	
@@ -71,12 +78,14 @@ public class ClientInfosController implements IRegexExpression {
 		        clientInfos.getPermessoGenitoriSi().setVisible(true);
 		        clientInfos.getPermessoGenitoriNo().setVisible(true);
 		        clientInfos.getPermessoGenitoriLabel().setVisible(true);
+		        clientInfos.getAcquisisciPermesso().setVisible(true);
 		        
 		    } else {
 		    	
 		        clientInfos.getPermessoGenitoriSi().setVisible(false);
 		        clientInfos.getPermessoGenitoriNo().setVisible(false);
 		        clientInfos.getPermessoGenitoriLabel().setVisible(false);
+		        clientInfos.getAcquisisciPermesso().setVisible(false);
 		    }
 		    
 		    clientInfos.revalidate();
@@ -218,7 +227,38 @@ public class ClientInfosController implements IRegexExpression {
 	        
 	    });
 	    
-	}		
+	}
+	
+	//----------------------------------------------------------------
+	
+	private void impostaEventoAnulla() {
+		
+		clientInfos.getAnnullaButton().addActionListener(e -> {
+			
+			onAnnulla.run();
+			
+		});
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	private void impostaEventoAcquisisciPermesso() {
+		
+		clientInfos.getAcquisisciPermesso().addActionListener(e -> {
+			
+			JFrame framePadre = (JFrame) javax.swing.
+					SwingUtilities.getWindowAncestor((java.awt.Component) e.
+					getSource());
+
+			SimulazioneOperazione simulazione = new SimulazioneOperazione(framePadre);
+			simulazione.start();
+			
+		});
+		
+	}	
+	
+	//----------------------------------------------------------------
 		
 	
 	

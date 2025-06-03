@@ -11,14 +11,12 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import it.unipv.poisw.f25.gympal.DTOs.AbbonamentoDTO;
-import it.unipv.poisw.f25.gympal.GUI.ReceptionistDashboardView;
 import it.unipv.poisw.f25.gympal.GUI.SubscriptionCustomizationView;
 
 
 public class SubscriptionCustomizationController {
 	
 	private SubscriptionCustomizationView view;
-	private ReceptionistDashboardView mainView;
 	
 	private AbbonamentoDTO abbonamentoDTO;
 	
@@ -33,23 +31,26 @@ public class SubscriptionCustomizationController {
 	 *pulsante "Avanti" -in questo caso- nella SubscriptionCustomizationView), la
 	 *callback viene invocata, permettendo di passare alla schermata successiva.*/
 	
+	private Runnable onAnulla;
+	
 	//----------------------------------------------------------------
 	
 	public SubscriptionCustomizationController(SubscriptionCustomizationView scv,
-											   ReceptionistDashboardView recDashView,
-                                               Runnable onAvantiCallback,
+											   Runnable onAvantiCallback,
+											   Runnable onAnnullaCallback,
                                                AbbonamentoDTO abbonamentoDTO) {
 		
 		view = scv;
-		mainView = recDashView;
 		
 		this.abbonamentoDTO = abbonamentoDTO;
 		
 		onAvanti = onAvantiCallback;
+		onAnulla = onAnnullaCallback;
 		
 		impostaEventiToggleBtns();
 		impostaEventiCheckBox();
 		impostaEventoAvanti();
+		impostaEventoAnulla();
 		
 	}
 	
@@ -224,6 +225,18 @@ public class SubscriptionCustomizationController {
 		
 	}
 
+	//----------------------------------------------------------------
+	
+	private void impostaEventoAnulla() {
+		
+		view.getAnnullaButton().addActionListener(e -> {
+			
+			onAnulla.run();
+			
+		});
+		
+	}
+	
 	//----------------------------------------------------------------
 		
 	private boolean verificaSelezione(List<? extends AbstractButton> listaBottoni) {
