@@ -50,14 +50,14 @@ public class FailoverConnectionFactoryProxy implements IConnectionFactory {
     
     //Metodo per inizializzare il DataSource Locale H2
     private void initializeLocalDataSource() {
-        try {
+    	try {
             localDataSource = new JdbcDataSource();
             // Usa le proprietà caricate
             localDataSource.setURL(this.h2DbUrl);
             localDataSource.setUser(this.h2DbUser);
             localDataSource.setPassword(this.h2DbPassword);
-            System.out.println("DataSource locale H2 inizializzato con URL: " + this.h2DbUrl);
-        } catch (Exception e) { 
+        } 
+    	catch (Exception e) { 
             System.err.println("Errore durante l'inizializzazione del DataSource locale H2: " + e.getMessage());
             e.printStackTrace(); 
         }

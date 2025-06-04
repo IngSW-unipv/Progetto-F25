@@ -77,14 +77,11 @@ public class MySQLConnectionFactory implements IConnectionFactory
 
     //Metodo che controlla che la connessione al database sia aperta
     @Override
-    public boolean isOpen(Connection conn) 
-    {
-    	try 
-	    {
+    public boolean isOpen(Connection conn){
+    	try{
 	        return conn != null && !conn.isClosed(); // Ritorna true se la connessione non è nulla e non è chiusa
 	    } 
-	    catch (SQLException e) 
-	    {
+	    catch (SQLException e){
 	    	System.err.println("Impossibile verificare lo stato della connessione: " + e.getMessage());
 	        e.printStackTrace();
 	        return false;
@@ -93,21 +90,16 @@ public class MySQLConnectionFactory implements IConnectionFactory
     
     //Metodo che chiude la connessione al database
     @Override
-    public void closeConnection(Connection conn) 
-    {
-        if (conn == null)
-        {
+    public void closeConnection(Connection conn){
+        if (conn == null){
             return;
         }
-        try 
-        {
-            if (!conn.isClosed()) 
-            {
+        try{
+            if (!conn.isClosed()){
                 conn.close();
             }
         } 
-        catch (SQLException e) 
-        {
+        catch (SQLException e){
         	System.err.println("Impossibile chiudere la connessione: " + e.getMessage());
 			e.printStackTrace();
         }
