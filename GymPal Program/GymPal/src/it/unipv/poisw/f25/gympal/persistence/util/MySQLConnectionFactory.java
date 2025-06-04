@@ -75,6 +75,7 @@ public class MySQLConnectionFactory implements IConnectionFactory
         
     }
 
+    //Metodo che controlla che la connessione al database sia aperta
     @Override
     public boolean isOpen(Connection conn) 
     {
@@ -89,7 +90,8 @@ public class MySQLConnectionFactory implements IConnectionFactory
 	        return false;
 	    }
     }
-
+    
+    //Metodo che chiude la connessione al database
     @Override
     public void closeConnection(Connection conn) 
     {
