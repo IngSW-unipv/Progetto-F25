@@ -52,7 +52,7 @@ public class FailoverConnectionFactoryProxy implements IConnectionFactory {
     private void initializeLocalDataSource() {
     	try {
             localDataSource = new JdbcDataSource();
-            // Usa le proprietà caricate
+            //Usa le proprietà caricate
             localDataSource.setURL(this.h2DbUrl);
             localDataSource.setUser(this.h2DbUser);
             localDataSource.setPassword(this.h2DbPassword);
@@ -102,7 +102,11 @@ public class FailoverConnectionFactoryProxy implements IConnectionFactory {
         
         throw new SQLException("Stato inconsistente in FailoverConnectionFactoryProxy dopo tentativi di connessione.");
     }
-
+    
+    //metodo per ottenere localDataSource, usato per sincronizzare h2 con MySQL (vedi classe DataSynchronizer)
+    public JdbcDataSource getLocalH2DataSource() {
+        return this.localDataSource;
+    }
     
     //Ovveride dei metodi isOpen e closeConnection stesso funzionamento di MySQLConnectionFactory
     @Override

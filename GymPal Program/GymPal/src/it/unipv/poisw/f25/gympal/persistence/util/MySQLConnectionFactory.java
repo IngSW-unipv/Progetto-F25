@@ -17,10 +17,8 @@ public class MySQLConnectionFactory implements IConnectionFactory
     
     //Ritorna l'istanza unica di MySQLConnector, creandola se necessario.
      
-    public static synchronized MySQLConnectionFactory getInstance() 
-    {
-        if (instance == null) 
-        {
+    public static synchronized MySQLConnectionFactory getInstance(){
+        if (instance == null){
             instance = new MySQLConnectionFactory();
         }
         return instance;
@@ -31,27 +29,23 @@ public class MySQLConnectionFactory implements IConnectionFactory
     
     //Costruttore privato: carica db.properties in un campo di istanza.
      
-    private MySQLConnectionFactory() 
-    {
+    private MySQLConnectionFactory(){
         this.props = new Properties();
-        try (InputStream input = MySQLConnectionFactory.class.getClassLoader().getResourceAsStream("db.properties")) 
-        {
-            if (input == null) 
-            {
+        
+        try (InputStream input = MySQLConnectionFactory.class.getClassLoader().getResourceAsStream("db.properties")){
+            if (input == null){
                 throw new IllegalStateException("File 'db.properties' non trovato nelle risorse.");
             }
             props.load(input);
         } 
-        catch (IOException e) 
-        {
+        catch (IOException e){
             throw new RuntimeException("Impossibile caricare db.properties", e);
         }
     }
 
 
     @Override
-    public Connection createConnection(String schema) throws SQLException 
-    {
+    public Connection createConnection(String schema) throws SQLException{
         // Recupero valori dal Properties caricato in costruttore
         String url = props.getProperty("db.url") + schema;
         String user = props.getProperty("db.username");
@@ -59,17 +53,14 @@ public class MySQLConnectionFactory implements IConnectionFactory
         String driver = props.getProperty("db.driver");
 
         // Carico il driver
-        try 
-        {
+        try{
             Class.forName(driver);  // Caricamento dinamico del driver
             return DriverManager.getConnection(url, user, pass); // Apertura connessione
         } 
-        catch (ClassNotFoundException e) 
-        {
+        catch (ClassNotFoundException e){
             throw new SQLException("Driver JDBC non trovato: " + driver, e);
         }
-        catch (SQLException e)
-        {
+        catch (SQLException e){
             throw new SQLException("Errore SQL durante la connessione a " + url, e);
         }
         
