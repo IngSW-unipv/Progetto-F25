@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import org.h2.jdbcx.JdbcDataSource;
 
 // Classe responsabile per la sincronizzazione dei dati da un database primario (MySQL) a un database locale di backup (H2).
@@ -32,12 +34,17 @@ public class DataSynchronizer {
                 synchronizeTable("DIPENDENTI", "SELECT STAFF_ID, NOME, COGNOME, CONTATTO FROM DIPENDENTI", "INSERT INTO DIPENDENTI (STAFF_ID, NOME, COGNOME, CONTATTO) VALUES (?, ?, ?, ?)", new String[]{"STAFF_ID", "NOME", "COGNOME", "CONTATTO"});
                 synchronizeTable("CLIENTI", "SELECT CF, NOME, COGNOME, SESSO, FLAG_MINOR, CONTATTO, ABBONAMENTO FROM CLIENTI", "INSERT INTO CLIENTI (CF, NOME, COGNOME, SESSO, FLAG_MINOR, CONTATTO, ABBONAMENTO) VALUES (?, ?, ?, ?, ?, ?, ?)", new String[]{"CF", "NOME", "COGNOME", "SESSO", "FLAG_MINOR", "CONTATTO", "ABBONAMENTO"});
                 synchronizeTable("CALENDARIO", "SELECT NOME_EVENTO, DATA_EVENTO, MESSAGGIO, DESTINATARIO_MESSAGGIO FROM CALENDARIO", "INSERT INTO CALENDARIO (NOME_EVENTO, DATA_EVENTO, MESSAGGIO, DESTINATARIO_MESSAGGIO) VALUES (?, ?, ?, ?)", new String[]{"NOME_EVENTO", "DATA_EVENTO", "MESSAGGIO", "DESTINATARIO_MESSAGGIO"});
-
+                
+                //Aggiorno il timestamp dell'ultima sincronizzazione corretta
+                updateLastSyncTimestamp();
+                
                 System.out.println("Sincronizzazione dati da MySQL a H2 completata con successo.");
             }
         } catch (SQLException e) {
             System.err.println("MySQL è offline o si è verificato un errore durante il check: " + e.getMessage());
-            System.out.println("Sincronizzazione dati da MySQL a H2 saltata. H2 opererà con i dati esistenti (se presenti) o vuoto.");
+            System.out.println("Sincronizzazione dati da MySQL a H2 saltata.");
+            //Mostro lo stato del backup H2 esistente
+            DatabaseInfrastructureSetup.reportLastSyncStatus(this.localH2DataSource);
         }
     }
 
@@ -76,6 +83,25 @@ public class DataSynchronizer {
 
         } catch (SQLException e) {
             System.err.println("ERRORE durante la sincronizzazione della tabella '" + tableName + "': " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    //Metodo che aggiorna il timestamp dell'ultima sincronizzazione
+    private void updateLastSyncTimestamp() {
+        String timestampString = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        String sql = "MERGE INTO SINCRO_INFO (CHIAVE, VALORE) KEY(CHIAVE) VALUES (?, ?)";
+
+        System.out.println("Aggiornamento timestamp dell'ultima sincronizzazione a: " + timestampString);
+        try (Connection localConn = localH2DataSource.getConnection();
+             PreparedStatement stmt = localConn.prepareStatement(sql)) {
+            
+            stmt.setString(1, "LAST_SYNC_TIMESTAMP");
+            stmt.setString(2, timestampString);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("ERRORE: Impossibile aggiornare il timestamp dell'ultima sincronizzazione su H2.");
             e.printStackTrace();
         }
     }

@@ -2,11 +2,19 @@ package it.unipv.poisw.f25.gympal.persistence.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Properties;
 import org.h2.jdbcx.JdbcDataSource;
 
-// Classe di utilità che configura e inizializza l'intera infrastruttura di persistenza.
+// Classe di utilità che la configura e l'inizializza l'intera infrastruttura di persistenza.
 public final class DatabaseInfrastructureSetup {
+	
     // Costruttore privato 
     private DatabaseInfrastructureSetup() {}
 
@@ -27,7 +35,7 @@ public final class DatabaseInfrastructureSetup {
                 throw new IllegalStateException("Creazione del DataSource H2 fallita.");
             }
         
-            //4. Creo il Proxy, iniettando le sue dipendenze
+            //4. Creo il Proxy
             IConnectionFactory proxyFactory = new FailoverConnectionFactoryProxy(mysqlFactory, h2DataSource);
             System.out.println("[SETUP] Istanza di FailoverConnectionFactoryProxy creata.");
 
@@ -64,7 +72,7 @@ public final class DatabaseInfrastructureSetup {
         String h2Password = props.getProperty("h2.db.password");
 
         if (h2Url == null || h2User == null || h2Password == null) {
-            System.err.println("Proprietà di configurazione H2 (h2.db.url, h2.db.username, h2.db.password) non trovate in db.properties.");
+            System.err.println("Proprietà di configurazione H2 non trovate in db.properties.");
             return null;
         }
 
@@ -79,6 +87,33 @@ public final class DatabaseInfrastructureSetup {
             System.err.println("[SETUP] Errore durante la creazione del DataSource H2: " + e.getMessage());
             e.printStackTrace();
             return null;
+        }
+    }
+
+    //Metodo che legge il timestamp dell'ultima sincronizzazione da H2
+    public static void reportLastSyncStatus(JdbcDataSource localH2DataSource) {
+        if (localH2DataSource == null) {
+            System.err.println("ATTENZIONE: DataSource H2 non disponibile, impossibile verificare lo stato della sincronizzazione.");
+            return;
+        }
+        System.out.println("INFO: Controllo dello stato del database di backup...");
+        String sql = "SELECT VALORE FROM SINCRO_INFO WHERE CHIAVE = 'LAST_SYNC_TIMESTAMP'";
+        
+        try (Connection localConn = localH2DataSource.getConnection();
+             PreparedStatement stmt = localConn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            if (rs.next()) {
+                String timestampString = rs.getString("VALORE");
+                LocalDateTime timestamp = LocalDateTime.parse(timestampString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                DateTimeFormatter userFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
+                System.out.println("ATTENZIONE: I dati di backup sono aggiornati al: " + timestamp.format(userFormatter));
+            } else {
+                System.out.println("ATTENZIONE: Nessuna sincronizzazione precedente trovata. Il database di backup è vuoto o contiene dati molto vecchi.");
+            }
+        } catch (SQLException e) {
+            System.err.println("ATTENZIONE: Impossibile leggere lo stato dell'ultima sincronizzazione. I dati potrebbero essere non aggiornati.");
+            e.printStackTrace();
         }
     }
 }

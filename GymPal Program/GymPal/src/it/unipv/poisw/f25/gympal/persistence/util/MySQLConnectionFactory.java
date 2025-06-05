@@ -12,13 +12,6 @@ public class MySQLConnectionFactory implements IConnectionFactory {
     private static MySQLConnectionFactory instance;
     private final Properties props;
     
-    //Ritorna l'istanza unica di MySQLConnector, creandola se necessario.
-    public static synchronized MySQLConnectionFactory getInstance() {
-        if (instance == null) {
-            instance = new MySQLConnectionFactory();
-        }
-        return instance;
-    }
 
     //Costruttore privato: carica db.properties in un campo di istanza.
     private MySQLConnectionFactory() {
@@ -33,6 +26,15 @@ public class MySQLConnectionFactory implements IConnectionFactory {
         }
     }
 
+    //Ritorna l'istanza unica di MySQLConnector, creandola se necessario.
+    public static synchronized MySQLConnectionFactory getInstance() {
+        if (instance == null) {
+            instance = new MySQLConnectionFactory();
+        }
+        return instance;
+    }
+    
+    //Metodo che restituisce una connection al server MySQL
     @Override
     public Connection createConnection() throws SQLException {
         // Recupero valori dal Properties caricato in costruttore
