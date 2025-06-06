@@ -4,33 +4,38 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import org.h2.jdbcx.JdbcDataSource;
 
+//Classse resposabile del passaggio a database locale H2 in caso di failover del database primario
 public class FailoverConnectionFactoryProxy implements IConnectionFactory {
 
     private final IConnectionFactory primaryFactory;
     private final JdbcDataSource localDataSource;
+    //Flag che indica l'indisponibilità del database
     private boolean primaryDbUnavailable = false;
     //Flag per mostrare il messaggio di failover una sola volta
     private boolean failoverMessageShown = false; 
     
     //Costruttore
+    //Riceve una factory per la connessione al database primario
+    //Riceve una JdbcDataSource pper la connessione ad H2
     public FailoverConnectionFactoryProxy(IConnectionFactory primaryFactory, JdbcDataSource localH2DataSource) {
         if (primaryFactory == null || localH2DataSource == null) {
-            throw new IllegalArgumentException("La factory primaria e il datasource locale non possono essere null.");
+            throw new IllegalArgumentException("Factory e DataSource non possono essere null");
         }
         this.primaryFactory = primaryFactory;
         this.localDataSource = localH2DataSource;
     }
 
-    //Metodo principale del proxy, prova a stabilire una connessione a MySQL e in caso di fallimento passa alla local datasource H2
+    //Metodo principale del proxy, ovveride del metodo createConnection
+    //Prova a stabilire una connessione a MySQL e in caso di fallimento passa alla local datasource H2
     @Override
     public synchronized Connection createConnection() throws SQLException {
         //Se MySQL risulta disponibile prova a stabilire una connessione
     	if (!primaryDbUnavailable) {
             try {
-                Connection conn = primaryFactory.createConnection();
+                Connection conn = primaryFactory.createConnection(); //La connesssione creata dipende dalla factory passata al costruttore
                 //Se la connessione ha successo e prima il DB era offline, logga il ripristino e modifica il flag di indisponibilità
                 if (primaryDbUnavailable) { 
-                    System.out.println("Database primario tornato online.");
+                    System.out.println("Database primario tornato ONLINE");
                     // Reset del flag di failover quando il DB torna online
                     failoverMessageShown = false;
                 }
@@ -40,8 +45,8 @@ public class FailoverConnectionFactoryProxy implements IConnectionFactory {
                 primaryDbUnavailable = true;
                 //Mostro il messaggio di failover una sola volta
                 if (!failoverMessageShown) {
-                    System.err.println("Errore connessione al DB primario: " + e.getMessage() + ".");
-                    //Chiamo il metodo centralizzato per riportare lo stato del backup
+                    System.err.println("ATTENZIONE: Database primario non disponibile, passaggio al database locale: " + e.getMessage());
+                    //Chiamo il metodo per riportare il timestamp dell'ultima sincronizzazione avvenuta con successso
                     DatabaseInfrastructureSetup.reportLastSyncStatus(this.localDataSource);
                     failoverMessageShown = true;
                 }
@@ -53,7 +58,7 @@ public class FailoverConnectionFactoryProxy implements IConnectionFactory {
                 //Connessione dal datasource H2 locale.
                 return localDataSource.getConnection();
             } catch (SQLException localDbException) {
-                System.err.println("Errore critico: Impossibile connettersi anche al DB locale H2: " + localDbException.getMessage());
+                System.err.println("Impossibile connettersi anche al DB locale H2: " + localDbException.getMessage());
                 localDbException.printStackTrace(); 
                 throw localDbException; 
             }

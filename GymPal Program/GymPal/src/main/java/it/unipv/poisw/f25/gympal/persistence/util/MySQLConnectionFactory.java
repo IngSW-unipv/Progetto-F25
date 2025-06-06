@@ -38,7 +38,7 @@ public class MySQLConnectionFactory implements IConnectionFactory {
     @Override
     public Connection createConnection() throws SQLException {
         // Recupero valori dal Properties caricato in costruttore
-        String url = props.getProperty("db.url") + props.getProperty("db.schema", "gympal");
+        String url = props.getProperty("db.url") + props.getProperty("db.schema");
         String user = props.getProperty("db.username");
         String pass = props.getProperty("db.password");
         String driver = props.getProperty("db.driver");
