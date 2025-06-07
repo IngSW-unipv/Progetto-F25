@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean;
+package it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,51 +11,51 @@ import java.util.List;
 
 import it.unipv.poisw.f25.gympal.persistence.util.IConnectionFactory;
 
-public class ClienteDAO implements IClienteDAO {
+public class DipendenteDAO implements IDipendenteDAO {
 	
 	private final IConnectionFactory connectionFactory;
 	
 	//Costruttore, riceve una factory per la creazione di connessioni
-	public ClienteDAO(IConnectionFactory connectionFactory) {
+	public DipendenteDAO(IConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
     }
 	
-	//Recupera tutti i clienti dal database
+	//Recupera tutti i dipendenti dal database  
 	@Override
-    public List<Cliente> selectAll() {
-        List<Cliente> clienti = new ArrayList<>();
-        String query = "SELECT * FROM CLIENTI";
+	public List<Dipendente> selectAll() {
+        List<Dipendente> dipendenti = new ArrayList<>();
+        String query = "SELECT * FROM DIPENDENTI";
         
         //Blocco try-with-resources, chiude in automatico la connessione, statement e result set alla fine del try
         try (Connection conn = connectionFactory.createConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
-            
+
             while (rs.next()) {
-                clienti.add(mapResultSetToCliente(rs));
+                dipendenti.add(mapResultSetToDipendente(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return clienti;
+        return dipendenti;
     }
 
-	//Recupera un singolo cliente basato sul suo codice fiscale
-    @Override
-    public Cliente selectCliente(String cf) {
-        Cliente result = null;
-        String query = "SELECT * FROM CLIENTI WHERE CF = ?";
+	//Recupera un singolo dipendente basato sul suo codice fiscale 
+	@Override
+    public Dipendente selectDipendente(String staffId) {
+        Dipendente result = null;
+        String query = "SELECT * FROM DIPENDENTI WHERE STAFF_ID = ?";
         
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            
-            ps.setString(1, cf);
+
+            ps.setString(1, staffId);
             
             //Blocco try-with-resources
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    result = mapResultSetToCliente(rs);
+                    result = mapResultSetToDipendente(rs);
                 }
             }
         } catch (SQLException e) {
@@ -64,28 +64,25 @@ public class ClienteDAO implements IClienteDAO {
         return result;
     }
     
-    //Inserisce un nuovo cliente nel database
-    @Override
-    public boolean insertCliente(Cliente cliente) {
+    //Inserisce un nuovo dipendente nel database
+	@Override
+    public boolean insertDipendente(Dipendente dipendente) {
         if (connectionFactory.isReadOnlyMode()) {
             System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
             return false;
         }
-        
-        String query = "INSERT INTO CLIENTI (CF, NOME, COGNOME, SESSO, FLAG_MINOR, CONTATTO, ABBONAMENTO) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        String query = "INSERT INTO DIPENDENTI (STAFF_ID, NOME, COGNOME, CONTATTO) VALUES (?, ?, ?, ?)";
         
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            
-            ps.setString(1, cliente.getCf());
-            ps.setString(2, cliente.getNome());
-            ps.setString(3, cliente.getCognome());
-            ps.setString(4, cliente.getSesso());
-            ps.setBoolean(5, cliente.isMinorenne()); // Il driver JDBC converte boolean in TINYINT(1)
-            ps.setString(6, cliente.getContatto());
-            ps.setString(7, cliente.getAbbonamento());
-            
+
+            ps.setString(1, dipendente.getStaffId());
+            ps.setString(2, dipendente.getNome());
+            ps.setString(3, dipendente.getCognome());
+            ps.setString(4, dipendente.getContatto());
+
             return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
@@ -94,51 +91,48 @@ public class ClienteDAO implements IClienteDAO {
         }
     }
     
-    //Aggiorna i dati di un cliente esistente nel database
+    //Aggiorna i dati di un dipendente esistente nel database
     @Override
-    public boolean updateCliente(Cliente cliente) {
+    public boolean updateDipendente(Dipendente dipendente) {
         if (connectionFactory.isReadOnlyMode()) {
             System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile aggiornare i dati.");
             return false;
         }
-        
-        String query = "UPDATE CLIENTI SET NOME = ?, COGNOME = ?, SESSO = ?, FLAG_MINOR = ?, CONTATTO = ?, ABBONAMENTO = ? WHERE CF = ?";
-        
+
+        String query = "UPDATE DIPENDENTI SET NOME = ?, COGNOME = ?, CONTATTO = ? WHERE STAFF_ID = ?";
+
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            
-            ps.setString(1, cliente.getNome());
-            ps.setString(2, cliente.getCognome());
-            ps.setString(3, cliente.getSesso());
-            ps.setBoolean(4, cliente.isMinorenne());
-            ps.setString(5, cliente.getContatto());
-            ps.setString(6, cliente.getAbbonamento());
-            ps.setString(7, cliente.getCf());
-            
-            return ps.executeUpdate() > 0;
 
+            ps.setString(1, dipendente.getNome());
+            ps.setString(2, dipendente.getCognome());
+            ps.setString(3, dipendente.getContatto());
+            ps.setString(4, dipendente.getStaffId());
+
+            return ps.executeUpdate() > 0;
+            
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    //Cancella un cliente dal database usando il suo codice fiscale
+    //Cancella un dipendente dal database usando il suo codice fiscale
     @Override
-    public boolean deleteCliente(String cf) {
+    public boolean deleteDipendente(String staffId) {
         if (connectionFactory.isReadOnlyMode()) {
             System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
             return false;
         }
-        
-        String query = "DELETE FROM CLIENTI WHERE CF = ?";
-        
+
+        String query = "DELETE FROM DIPENDENTI WHERE STAFF_ID = ?";
+
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            
-            ps.setString(1, cf);
+
+            ps.setString(1, staffId);
             return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
@@ -148,16 +142,13 @@ public class ClienteDAO implements IClienteDAO {
     }
 
     //Metodo privato per mappare una riga del ResultSet a un oggetto Cliente
-    private Cliente mapResultSetToCliente(ResultSet rs) throws SQLException {
-        String cf = rs.getString("CF");
+    private Dipendente mapResultSetToDipendente(ResultSet rs) throws SQLException {
+        String staffId = rs.getString("STAFF_ID");
         String nome = rs.getString("NOME");
         String cognome = rs.getString("COGNOME");
-        String sesso = rs.getString("SESSO");
-        boolean isMinorenne = rs.getBoolean("FLAG_MINOR"); // Il driver JDBC converte TINYINT(1) in boolean
         String contatto = rs.getString("CONTATTO");
-        String abbonamento = rs.getString("ABBONAMENTO");
-        
-        return new Cliente(cf, nome, cognome, sesso, isMinorenne, contatto, abbonamento);
+
+        return new Dipendente(staffId, nome, cognome, contatto);
     }
 
 }

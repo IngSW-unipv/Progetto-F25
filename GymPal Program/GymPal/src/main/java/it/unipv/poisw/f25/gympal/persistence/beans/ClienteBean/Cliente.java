@@ -83,18 +83,10 @@ public class Cliente {
 	public void setAbbonamento(String abbonamento) {
 		this.abbonamento = abbonamento;
 	}
-    
-	@Override
-    public String toString() {
-        return "Cliente{" +
-                "cf='" + cf + '\'' +
-                ", nome='" + nome + '\'' +
-                ", cognome='" + cognome + '\'' +
-                ", sesso='" + sesso + '\'' +
-                ", isMinorenne=" + isMinorenne +
-                ", contatto='" + contatto + '\'' +
-                ", abbonamento='" + abbonamento + '\'' +
-                '}';
-    }
 
+	@Override
+	public String toString() {
+		return "Cliente [cf=" + cf + ", nome=" + nome + ", cognome=" + cognome + ", sesso=" + sesso + ", isMinorenne="
+				+ isMinorenne + ", contatto=" + contatto + ", abbonamento=" + abbonamento + "]";
+	}
 }
