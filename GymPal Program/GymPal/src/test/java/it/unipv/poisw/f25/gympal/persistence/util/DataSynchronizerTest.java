@@ -141,5 +141,10 @@ public class DataSynchronizerTest {
                 }
             }
         }
+        
+        @Override
+        public boolean isReadOnlyMode() {
+            return false; 
+        }
     }
 }

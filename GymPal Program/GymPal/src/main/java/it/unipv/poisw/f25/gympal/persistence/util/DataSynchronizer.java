@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+
 import org.h2.jdbcx.JdbcDataSource;
 
 // Classe responsabile per la sincronizzazione dei dati da un database primario MySQL a un database locale di backup H2.
@@ -126,8 +128,11 @@ public class DataSynchronizer {
         //Merge permette di cercare attraverso una copppia chiave valore in SINCRO_INFO e sovrascrivere i dati se presenti 
         //Se non trova una corrispondenza per la chiave inserisce una nuova riga con quella chiave e quel valore.
         String sql = "MERGE INTO SINCRO_INFO (CHIAVE, VALORE) KEY(CHIAVE) VALUES (?, ?)";
-
-        System.out.println("Aggiornamento timestamp dell'ultima sincronizzazione a: " + timestampString);
+        
+        LocalDateTime timestamp = LocalDateTime.parse(timestampString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        DateTimeFormatter userFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
+        System.out.println("Aggiornamento timestamp dell'ultima sincronizzazione a: " + timestamp.format(userFormatter));
+        
         //Try-with-resources che esegue la query
         try (Connection localConn = localH2DataSource.getConnection();
              PreparedStatement stmt = localConn.prepareStatement(sql)) {

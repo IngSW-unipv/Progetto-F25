@@ -93,4 +93,10 @@ public class FailoverConnectionFactoryProxy implements IConnectionFactory {
             }
         }
     }
+    
+    // La modalità di sola lettura è attiva se e solo se il DB primario non è disponibile
+    @Override
+    public boolean isReadOnlyMode() {
+        return primaryDbUnavailable;
+    }
 }

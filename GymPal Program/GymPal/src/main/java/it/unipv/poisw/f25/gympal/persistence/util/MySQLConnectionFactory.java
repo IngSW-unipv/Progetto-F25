@@ -78,4 +78,9 @@ public class MySQLConnectionFactory implements IConnectionFactory {
             e.printStackTrace();
         }
     }
+    
+    @Override
+    public boolean isReadOnlyMode() {
+        return false; // La connessione primaria non è mai in sola lettura
+    }
 }
