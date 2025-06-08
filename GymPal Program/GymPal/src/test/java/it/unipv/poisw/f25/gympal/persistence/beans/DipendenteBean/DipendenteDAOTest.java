@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import it.unipv.poisw.f25.gympal.persistence.connection.IConnectionFactory;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,8 +17,6 @@ import java.sql.Statement;
 import java.util.List;
 
 import org.h2.jdbcx.JdbcDataSource;
-
-import it.unipv.poisw.f25.gympal.persistence.util.IConnectionFactory;
 
 //Classe di test di integrazione per DipendenteDAO.
 //Utilizza un database H2 in-memory per isolare i test 

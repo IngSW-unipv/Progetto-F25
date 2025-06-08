@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.persistence.util;
+package it.unipv.poisw.f25.gympal.persistence.connection;
 
 import java.sql.Connection;
 import java.sql.SQLException;

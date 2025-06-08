@@ -1,7 +1,7 @@
-package it.unipv.poisw.f25.gympal.persistence.util;
+package it.unipv.poisw.f25.gympal.persistence.connection;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.sql.Connection;

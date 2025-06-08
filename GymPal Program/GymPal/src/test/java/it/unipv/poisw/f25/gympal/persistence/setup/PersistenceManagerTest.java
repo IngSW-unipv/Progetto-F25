@@ -1,11 +1,14 @@
-package it.unipv.poisw.f25.gympal.persistence.util;
+package it.unipv.poisw.f25.gympal.persistence.setup;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import it.unipv.poisw.f25.gympal.persistence.connection.IConnectionFactory;
 
 //Test per  PersistenceManager
 public class PersistenceManagerTest {

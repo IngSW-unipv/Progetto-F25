@@ -5,8 +5,7 @@ import javax.swing.SwingUtilities;
 
 import it.unipv.poisw.f25.gympal.GUI.LoginView;
 import it.unipv.poisw.f25.gympal.LoginController.LoginController;
-
-import it.unipv.poisw.f25.gympal.persistence.util.PersistenceManager;
+import it.unipv.poisw.f25.gympal.persistence.setup.PersistenceManager;
 
 public class GymPalApp {
 

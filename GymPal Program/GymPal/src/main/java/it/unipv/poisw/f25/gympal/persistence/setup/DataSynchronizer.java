@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.persistence.util;
+package it.unipv.poisw.f25.gympal.persistence.setup;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +10,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
 import org.h2.jdbcx.JdbcDataSource;
+
+import it.unipv.poisw.f25.gympal.persistence.connection.IConnectionFactory;
 
 // Classe responsabile per la sincronizzazione dei dati da un database primario MySQL a un database locale di backup H2.
 public class DataSynchronizer {

@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.persistence.util;
+package it.unipv.poisw.f25.gympal.persistence.connection;
 
 import java.io.IOException;
 import java.io.InputStream;

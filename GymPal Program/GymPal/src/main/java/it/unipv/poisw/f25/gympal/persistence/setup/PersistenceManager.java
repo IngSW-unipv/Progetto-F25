@@ -1,4 +1,6 @@
-package it.unipv.poisw.f25.gympal.persistence.util;
+package it.unipv.poisw.f25.gympal.persistence.setup;
+
+import it.unipv.poisw.f25.gympal.persistence.connection.IConnectionFactory;
 
 // Classe che gestisce l'accesso all'infrastruttura di persistenza per l'intera applicazione.
 public final class PersistenceManager {

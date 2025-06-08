@@ -1,10 +1,8 @@
-package it.unipv.poisw.f25.gympal.persistence.util;
+package it.unipv.poisw.f25.gympal.persistence.setup;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -12,6 +10,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.h2.jdbcx.JdbcDataSource;
+import org.junit.Before;
+import org.junit.Test;
+
+import it.unipv.poisw.f25.gympal.persistence.connection.IConnectionFactory;
 
 
 

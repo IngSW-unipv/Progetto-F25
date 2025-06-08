@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unipv.poisw.f25.gympal.persistence.util.IConnectionFactory;
+import it.unipv.poisw.f25.gympal.persistence.connection.IConnectionFactory;
 
 public class DipendenteDAO implements IDipendenteDAO {
 	

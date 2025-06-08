@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import it.unipv.poisw.f25.gympal.persistence.connection.IConnectionFactory;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,8 +19,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.h2.jdbcx.JdbcDataSource;
-
-import it.unipv.poisw.f25.gympal.persistence.util.IConnectionFactory;
 
 //Classe di test per CalendarioDAO
 //Utilizza un database H2 in-memory per isolare i test 

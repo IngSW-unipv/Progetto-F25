@@ -1,8 +1,10 @@
-package it.unipv.poisw.f25.gympal.persistence.util;
+package it.unipv.poisw.f25.gympal.persistence.connection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.h2.jdbcx.JdbcDataSource;
+
+import it.unipv.poisw.f25.gympal.persistence.setup.DatabaseInfrastructureSetup;
 
 //Classse resposabile del passaggio a database locale H2 in caso di failover del database primario
 public class FailoverConnectionFactoryProxy implements IConnectionFactory {

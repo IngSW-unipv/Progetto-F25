@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.persistence.util;
+package it.unipv.poisw.f25.gympal.persistence.setup;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +11,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Properties;
 import org.h2.jdbcx.JdbcDataSource;
+
+import it.unipv.poisw.f25.gympal.persistence.connection.FailoverConnectionFactoryProxy;
+import it.unipv.poisw.f25.gympal.persistence.connection.IConnectionFactory;
+import it.unipv.poisw.f25.gympal.persistence.connection.MySQLConnectionFactory;
 
 // Classe di utilità che la configura e l'inizializza l'intera infrastruttura di persistenza.
 public final class DatabaseInfrastructureSetup {
