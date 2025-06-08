@@ -2,8 +2,8 @@ package it.unipv.poisw.f25.gympal.StrategieDiPagamento;
 
 import java.util.Properties;
 
-import it.unipv.poisw.f25.gympal.DTOs.AbbonamentoDTO;
-import it.unipv.poisw.f25.gympal.utility.KeysConversionUtility;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.StrategieDiPagamento.StrategyUtilities.KeysConversionUtility;
 
 
 public class PrezzoStandardStrategy implements IStrategieCalcoloPrezzo{

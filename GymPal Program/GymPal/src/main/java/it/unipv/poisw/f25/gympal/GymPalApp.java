@@ -3,8 +3,8 @@ package it.unipv.poisw.f25.gympal;
 
 import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.GUI.LoginView;
-import it.unipv.poisw.f25.gympal.LoginController.LoginController;
+import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginController;
+import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginView;
 import it.unipv.poisw.f25.gympal.persistence.setup.PersistenceManager;
 
 public class GymPalApp {
