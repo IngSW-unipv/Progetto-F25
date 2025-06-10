@@ -33,8 +33,10 @@ public class DataSynchronizer {
     //Metodo principale che gestisce la sincronizzazione
     public void synchronizeMySQLToH2OnStartup() {
         System.out.println("Tentativo di sincronizzazione dati da MySQL a H2");
-        try (Connection mySQLConnectionForCheck = primaryFactory.createConnection()) {
-            if (primaryFactory.isOpen(mySQLConnectionForCheck)) {
+        // Tenta una connessione di prova per verificare lo stato del DB primario
+        //Blocco try-wiith-resources chiude la connessione automaticamente
+        try (Connection check = primaryFactory.createConnection()) {
+            if (primaryFactory.isOpen(check)) {
                 System.out.println("Database primario ONLINE. Avvio della sincronizzazione dei dati");
                 
                 synchronizeTable("DIPENDENTI", 
@@ -86,7 +88,7 @@ public class DataSynchronizer {
                 localDeleteStmt.executeUpdate("DELETE FROM " + tableName);
             }
             
-            //Eseguo la query di select all dal db priincipale e ottengo un result set
+            //Eseguo la query di select all dal db principale e ottengo un result set
             try (ResultSet rs = primaryStmt.executeQuery(selectAllQuery)) {
             	//Itero ogni singola riga del result set
             	while (rs.next()) {
@@ -131,6 +133,7 @@ public class DataSynchronizer {
         //Se non trova una corrispondenza per la chiave inserisce una nuova riga con quella chiave e quel valore.
         String sql = "MERGE INTO SINCRO_INFO (CHIAVE, VALORE) KEY(CHIAVE) VALUES (?, ?)";
         
+        //Creo un timestamp in formato più leggibile
         LocalDateTime timestamp = LocalDateTime.parse(timestampString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         DateTimeFormatter userFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
         System.out.println("Aggiornamento timestamp dell'ultima sincronizzazione a: " + timestamp.format(userFormatter));

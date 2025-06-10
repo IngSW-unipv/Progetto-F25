@@ -16,6 +16,8 @@ public class MySQLConnectionFactory implements IConnectionFactory {
     //Costruttore privato: carica db.properties in un campo di istanza.
     private MySQLConnectionFactory() {
         this.props = new Properties();
+        // Apre il file "db.properties" come risorsa del classpath
+        // Ne garantisce la chiusura automatica (blocco try-with-resources)
         try (InputStream input = MySQLConnectionFactory.class.getClassLoader().getResourceAsStream("db.properties")) {
             if (input == null) {
                 throw new IllegalStateException("File 'db.properties' non trovato nelle risorse.");
@@ -44,7 +46,9 @@ public class MySQLConnectionFactory implements IConnectionFactory {
         String driver = props.getProperty("db.driver");
 
         try {
+        	// Carica dinamicamente la classe del driver JDBC in memoria
             Class.forName(driver);
+            // Utilizza il DriverManager per ottenere una connessione database
             return DriverManager.getConnection(url, user, pass);
         } catch (ClassNotFoundException e) {
             throw new SQLException("Driver JDBC non trovato: " + driver, e);
