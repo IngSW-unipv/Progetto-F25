@@ -60,10 +60,10 @@ public class Cliente {
 		this.sesso = sesso;
 	}
 
-	public boolean isMinorenne() {
+	public boolean getIsMinorenne() {
 		return isMinorenne;
 	}
-
+	
 	public void setMinorenne(boolean isMinorenne) {
 		this.isMinorenne = isMinorenne;
 	}
@@ -89,4 +89,5 @@ public class Cliente {
 		return "Cliente [cf=" + cf + ", nome=" + nome + ", cognome=" + cognome + ", sesso=" + sesso + ", isMinorenne="
 				+ isMinorenne + ", contatto=" + contatto + ", abbonamento=" + abbonamento + "]";
 	}
+	
 }

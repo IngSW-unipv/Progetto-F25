@@ -82,7 +82,7 @@ public class ClienteDAO implements IClienteDAO {
             ps.setString(2, cliente.getNome());
             ps.setString(3, cliente.getCognome());
             ps.setString(4, cliente.getSesso());
-            ps.setBoolean(5, cliente.isMinorenne()); // Il driver JDBC converte boolean in TINYINT(1)
+            ps.setBoolean(5, cliente.getIsMinorenne()); // Il driver JDBC converte boolean in TINYINT(1)
             ps.setString(6, cliente.getContatto());
             ps.setString(7, cliente.getAbbonamento());
             
@@ -111,7 +111,7 @@ public class ClienteDAO implements IClienteDAO {
             ps.setString(1, cliente.getNome());
             ps.setString(2, cliente.getCognome());
             ps.setString(3, cliente.getSesso());
-            ps.setBoolean(4, cliente.isMinorenne());
+            ps.setBoolean(4, cliente.getIsMinorenne());
             ps.setString(5, cliente.getContatto());
             ps.setString(6, cliente.getAbbonamento());
             ps.setString(7, cliente.getCf());

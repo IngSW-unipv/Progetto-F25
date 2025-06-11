@@ -11,7 +11,11 @@ public interface IRegexExpression {
 	
 	public static final String SURNAME_REGEXEXPRESSION = "^(?!.*[\";<>%=]).*[A-ZÀ-Ý][a-zà-ÿA-ZÀ-Ý]*(?:[ '-][A-ZÀ-Ý][a-zà-ÿA-ZÀ-Ý]*){0,4}$";
 	
-	public static final String CODICE_FISCALE = "^[A-Z]{6}[0-9]{2}[A-EHLMPRST]{1}[0-9]{2}[A-Z]{1}[0-9A-Z]{3}[A-Z]{1}$";
+	//Corretto per codice italiano standard
+	//public static final String CODICE_FISCALE = "^[A-Z]{6}[0-9]{2}[A-EHLMPRST]{1}[0-9]{2}[A-Z]{1}[0-9A-Z]{3}[A-Z]{1}$";
+	
+	//Temporaneo fino a modifica db 
+	public static final String CODICE_FISCALE = "^[A-Z]{6}[0-9]{2}[A-Z]{1}[0-9]{2}[A-Z]{1}[0-9A-Z]{3}[A-Z]{1}$";
 	
 	public static final String EMAIL = "^[a-zA-Z0-9._%+-]{1,64}@" +                      // Local part
 	        						   "(?!-)(?!.*--)[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*" + // Domain: non inizia con -, no doppi --, lettere e numeri

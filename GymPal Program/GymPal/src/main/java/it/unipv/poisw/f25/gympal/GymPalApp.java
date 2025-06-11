@@ -43,8 +43,7 @@ public class GymPalApp {
                 System.err.println("Impossibile avviare l'applicazione a causa di un errore critico di inizializzazione:");
                 e.printStackTrace();
                 return; // Interrompi l'avvio se il setup fallisce
-            }
-        
+            }  
     }
 
 }
