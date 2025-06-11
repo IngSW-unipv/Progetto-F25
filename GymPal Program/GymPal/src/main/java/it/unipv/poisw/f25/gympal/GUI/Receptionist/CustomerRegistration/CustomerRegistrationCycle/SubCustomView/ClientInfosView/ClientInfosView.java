@@ -1,6 +1,6 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.SubCustomView.ClientInfosView;
+package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView;
 
-import java.awt.Component;
+
 import java.awt.Dimension;
 
 import javax.swing.Box;
@@ -17,7 +17,7 @@ import javax.swing.SpinnerDateModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.EtichettaPiuCampoFactory;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.EtichettaPiuCampoFactory;
 
 public class ClientInfosView extends JPanel implements IClientInfosView{
 
@@ -397,7 +397,7 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 	//----------------------------------------------------------------
 	
 	@Override
-	public Component getRootComponent() {
+	public JPanel getMainPanel() {
 	    return this; // se la classe estende JPanel o JFrame
 	}
 	

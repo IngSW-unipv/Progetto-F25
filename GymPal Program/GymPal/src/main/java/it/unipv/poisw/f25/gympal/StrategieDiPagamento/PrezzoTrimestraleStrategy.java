@@ -1,6 +1,6 @@
 package it.unipv.poisw.f25.gympal.StrategieDiPagamento;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
 
 public class PrezzoTrimestraleStrategy implements IStrategieCalcoloPrezzo{
 

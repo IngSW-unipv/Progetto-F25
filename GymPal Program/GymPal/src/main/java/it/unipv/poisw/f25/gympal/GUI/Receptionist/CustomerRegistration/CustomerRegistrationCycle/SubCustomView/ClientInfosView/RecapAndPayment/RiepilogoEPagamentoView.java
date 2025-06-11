@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment;
+package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -25,7 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
 
 public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagamentoView{
 
@@ -436,6 +436,15 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	    @Override
 	    public void showPopupMenu() {
 	        popupMenu.show(scontoSuBaseMesi, 0, scontoSuBaseMesi.getHeight());
+	    }
+	    
+	//----------------------------------------------------------------
+	    
+	    @Override
+	    public JPanel getMainPanel() {
+	    	
+	    	return this;
+	    	
 	    }
 	    
 	//----------------------------------------------------------------

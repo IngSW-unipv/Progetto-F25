@@ -2,7 +2,7 @@ package it.unipv.poisw.f25.gympal.factories;
 
 
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.StrategieDiPagamento.IStrategieCalcoloPrezzo;
 import java.io.FileInputStream;
 import java.io.InputStream;

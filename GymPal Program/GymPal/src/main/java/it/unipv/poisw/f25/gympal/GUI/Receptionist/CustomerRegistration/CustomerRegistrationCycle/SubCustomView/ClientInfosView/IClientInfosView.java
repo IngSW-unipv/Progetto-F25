@@ -1,6 +1,6 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.SubCustomView.ClientInfosView;
+package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView;
 
-import java.awt.Component;
+
 import javax.swing.*;
 
 public interface IClientInfosView {
@@ -83,7 +83,7 @@ public interface IClientInfosView {
     
     //----------------------------------------------------------------
     
-    public Component getRootComponent();
+    public JPanel getMainPanel();
     
     //----------------------------------------------------------------
 

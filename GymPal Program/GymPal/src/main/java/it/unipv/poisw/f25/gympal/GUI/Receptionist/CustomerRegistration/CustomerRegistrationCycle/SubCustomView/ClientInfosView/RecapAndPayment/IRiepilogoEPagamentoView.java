@@ -1,8 +1,10 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment;
+package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment;
 
 import java.awt.event.ActionListener;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import javax.swing.JPanel;
+
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
 
 public interface IRiepilogoEPagamentoView {
 	
@@ -96,6 +98,10 @@ public interface IRiepilogoEPagamentoView {
 	
 	/* Metodo per mostrare il popup menu dello sconto su base mesi */
 	public void showPopupMenu();
+	
+	//----------------------------------------------------------------
+	
+	public JPanel getMainPanel();
 	
 	//----------------------------------------------------------------
 }

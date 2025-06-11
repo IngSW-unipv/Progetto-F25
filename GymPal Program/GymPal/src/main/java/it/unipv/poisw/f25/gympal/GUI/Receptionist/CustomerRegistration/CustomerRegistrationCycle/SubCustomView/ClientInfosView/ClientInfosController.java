@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.SubCustomView.ClientInfosView;
+package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView;
 
 import java.awt.Color;
 import java.time.LocalDate;
@@ -8,9 +8,9 @@ import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.EtaCliente;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.ValidazioneCampo;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.EtaCliente;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.ValidazioneCampo;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
 
@@ -199,7 +199,7 @@ public class ClientInfosController implements IRegexExpression {
                  * da mostrare accanto al testo
                  */
                 
-                JOptionPane.showMessageDialog(clientInfos.getRootComponent(), 
+                JOptionPane.showMessageDialog(clientInfos.getMainPanel(), 
                     "Per favore, compila correttamente tutti i campi (Verde = OK) - per completare la procedura" +
                     " il cliente -DEVE- fornire certificato di idonetà e/o il permesso genitoriale.", 
                     "Errore", JOptionPane.ERROR_MESSAGE);

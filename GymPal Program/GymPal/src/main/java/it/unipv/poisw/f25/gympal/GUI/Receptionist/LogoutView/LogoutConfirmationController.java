@@ -45,7 +45,7 @@ public class LogoutConfirmationController {
         
         view.getCancelButton().addActionListener(e -> {
             // Torna alla schermata precedente nella dashboard
-            mainView.mostraSchermata(schermataPrecedente);
+            mainView.mostraSchermata(this.schermataPrecedente);
         });
         
     }

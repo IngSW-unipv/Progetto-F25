@@ -1,9 +1,9 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment;
+package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
 import it.unipv.poisw.f25.gympal.StrategieDiPagamento.IStrategieCalcoloPrezzo;
 import it.unipv.poisw.f25.gympal.factories.StrategieCalcoloPrezzoFactory;
@@ -136,10 +136,15 @@ public class RiepilogoEPagamentoController {
         riepilogoEPagamento.addScontoOccasioniListener(e -> aggiornaPrezzo());
         
         riepilogoEPagamento.addMetodoPagamentoListener(e -> {
+        	
             if(riepilogoEPagamento.isContantiSelected() || riepilogoEPagamento.isCartaSelected()) {
+            	
                 abbonamentoDTO.setStatoPagamento(true);
+                
             } else if (riepilogoEPagamento.isNoPagamentoSelected()) {
+            	
                 abbonamentoDTO.setStatoPagamento(false);
+                
             }
         });
         

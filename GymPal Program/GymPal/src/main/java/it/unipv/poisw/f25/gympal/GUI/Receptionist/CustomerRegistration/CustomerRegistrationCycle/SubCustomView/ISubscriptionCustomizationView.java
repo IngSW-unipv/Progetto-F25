@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.SubCustomView;
+package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView;
 
 import java.util.List;
 
@@ -12,32 +12,32 @@ public interface ISubscriptionCustomizationView {
 
     //----------------------------------------------------------------
     
-    List<JToggleButton> getBottoniToggle();
+    public List<JToggleButton> getBottoniToggle();
     
     //----------------------------------------------------------------
     
-    List<JCheckBox> getCheckBoxes();
+    public List<JCheckBox> getCheckBoxes();
     
     //----------------------------------------------------------------
     
-    JPanel getCorsiPanel();
+    public JPanel getCorsiPanel();
     
     //----------------------------------------------------------------
     
-    JSplitPane getSplitPaneChild();
+    public JSplitPane getSplitPaneChild();
     
     //----------------------------------------------------------------
     
-    JButton getAvantiButton();
+    public JButton getAvantiButton();
     
     //----------------------------------------------------------------
     
-    JButton getAnnullaButton();
+    public JButton getAnnullaButton();
     
     //----------------------------------------------------------------
     
     // Metodo aggiunto per ottenere il componente Swing principale
-    JPanel getMainPanel();
+    public JPanel getMainPanel();
     
     //----------------------------------------------------------------
 }

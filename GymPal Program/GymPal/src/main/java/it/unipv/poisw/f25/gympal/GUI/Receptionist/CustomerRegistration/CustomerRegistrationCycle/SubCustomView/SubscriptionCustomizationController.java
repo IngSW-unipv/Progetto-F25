@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.SubCustomView;
+package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
 
 public class SubscriptionCustomizationController {
 	

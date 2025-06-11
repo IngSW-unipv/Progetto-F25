@@ -4,11 +4,11 @@ import javax.swing.JButton;
 
 public interface ILogoutConfirmationView {
 	
-    JButton getConfirmButton();
+    public JButton getConfirmButton();
     
 	//----------------------------------------------------------------
     
-    JButton getCancelButton();
+    public JButton getCancelButton();
     
 	//----------------------------------------------------------------
     
