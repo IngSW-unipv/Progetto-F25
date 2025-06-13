@@ -2,7 +2,7 @@ package it.unipv.poisw.f25.gympal.StrategieDiPagamento;
 
 import java.util.Properties;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
 import it.unipv.poisw.f25.gympal.StrategieDiPagamento.StrategyUtilities.KeysConversionUtility;
 
 
@@ -21,7 +21,7 @@ public class PrezzoStandardStrategy implements IStrategieCalcoloPrezzo{
 	//----------------------------------------------------------------
 
     @Override
-    public double calcolaPrezzo(AbbonamentoDTO abbonamentoDTO) {
+    public double calcolaPrezzo(IRiepilogoDTO abbonamentoDTO) {
     	
         /*System.out.println("DEBUG nella strategia - componentiAbbonamento:");
         for (String s : abbonamento.getSezioniAbbonamento()) {

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Properties;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
 
 public class PrezzoAnzianiStrategy extends PrezzoStandardStrategy {
 	
@@ -17,7 +17,7 @@ public class PrezzoAnzianiStrategy extends PrezzoStandardStrategy {
 	//----------------------------------------------------------------
     
     @Override
-    public double calcolaPrezzo(AbbonamentoDTO abbonamento) {
+    public double calcolaPrezzo(IRiepilogoDTO abbonamento) {
     	
         double prezzoBase = super.calcolaPrezzo(abbonamento);
 

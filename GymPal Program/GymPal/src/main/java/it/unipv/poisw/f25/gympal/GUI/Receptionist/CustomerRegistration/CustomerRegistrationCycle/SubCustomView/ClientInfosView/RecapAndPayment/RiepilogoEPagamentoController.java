@@ -3,7 +3,8 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.Customer
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
 import it.unipv.poisw.f25.gympal.StrategieDiPagamento.IStrategieCalcoloPrezzo;
 import it.unipv.poisw.f25.gympal.factories.StrategieCalcoloPrezzoFactory;
@@ -11,8 +12,9 @@ import it.unipv.poisw.f25.gympal.factories.StrategieCalcoloPrezzoFactory;
 public class RiepilogoEPagamentoController {
     
     private IRiepilogoEPagamentoView riepilogoEPagamento;
+    private IRegistrationCoordinator coordinator;
     
-    private AbbonamentoDTO abbonamentoDTO;
+    private IRiepilogoDTO abbonamentoDTO;
     
     private Runnable onIndietro;
     private Runnable onConferma;
@@ -21,9 +23,10 @@ public class RiepilogoEPagamentoController {
     //----------------------------------------------------------------
     
     public RiepilogoEPagamentoController (IRiepilogoEPagamentoView view, 
-                                          AbbonamentoDTO abbonamentoDTO, 
+    									  IRiepilogoDTO abbonamentoDTO, 
                                           Runnable onIndietroCallback,
-                                          Runnable onConfermaCallback) {
+                                          Runnable onConfermaCallback,
+                                          IRegistrationCoordinator coordinator) {
         
         //DEBUG
         /*
@@ -42,7 +45,7 @@ public class RiepilogoEPagamentoController {
         
         
         riepilogoEPagamento = view;
-        
+        this.coordinator=coordinator;
         this.abbonamentoDTO = abbonamentoDTO;
         onIndietro = onIndietroCallback;
         onConferma = onConfermaCallback;
@@ -57,10 +60,9 @@ public class RiepilogoEPagamentoController {
         /*Inizializzazione della view "RiepilogoEPagamento" con i dati acquisiti durante la
          *procedura di iscrizione*/
         riepilogoEPagamento.setDatiAbbonamento(abbonamentoDTO);
+        
         aggiornaPrezzo();
-        
 
-        
         impostaEventi();
                 
         
@@ -88,18 +90,11 @@ public class RiepilogoEPagamentoController {
                 
                 if (result == JOptionPane.YES_OPTION) {
                     try {
-                        //AbbonamentoDAO dao = new AbbonamentoDAO(); //Creazione nuovo DAO
-                        
-                        /*Il metodo "inserisciAbbonamento" deve fare tre cose:
-                         * 
-                         *1) Estrae i dati dal DAO
-                         *
-                         *2) Costruisce una query SQL
-                         *
-                         *3) Esegue la query*/
-                        
-                        //dao.inserisciAbbonamento(abbonamentoDTO); 
-    
+                    	
+                    	/*Bisogna dire al coordinatore che la fase di acquisizione
+                    	 *dati è terminata, pertanto bisogna inviare le informazioni
+                    	 *raccolte al service-layer*/
+                    	
                         onConferma.run(); // Ritorno alla schermata iniziale e reset per un nuovo ciclo
     
                     } catch (Exception ex) {
@@ -139,11 +134,11 @@ public class RiepilogoEPagamentoController {
         	
             if(riepilogoEPagamento.isContantiSelected() || riepilogoEPagamento.isCartaSelected()) {
             	
-                abbonamentoDTO.setStatoPagamento(true);
+                coordinator.acquisisciStatoPagamento(true);
                 
             } else if (riepilogoEPagamento.isNoPagamentoSelected()) {
             	
-                abbonamentoDTO.setStatoPagamento(false);
+                coordinator.acquisisciStatoPagamento(false);
                 
             }
         });

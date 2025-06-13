@@ -2,7 +2,8 @@ package it.unipv.poisw.f25.gympal.factories;
 
 
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
 import it.unipv.poisw.f25.gympal.StrategieDiPagamento.IStrategieCalcoloPrezzo;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -52,7 +53,7 @@ public class StrategieCalcoloPrezzoFactory {
 	//----------------------------------------------------------------
     
     public static IStrategieCalcoloPrezzo getStrategy(
-    		AbbonamentoDTO abbonamentoDTO,
+    		IRiepilogoDTO abbonamentoDTO,
     	    boolean scontoEta,
     	    boolean scontoOccasioni,
     	    String durata // valori: "trimestrale", "semestrale", "annuale", oppure null

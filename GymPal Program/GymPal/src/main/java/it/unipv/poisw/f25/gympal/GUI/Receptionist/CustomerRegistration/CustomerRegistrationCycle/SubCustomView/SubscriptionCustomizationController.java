@@ -11,13 +11,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
+
 
 public class SubscriptionCustomizationController {
 	
 	private ISubscriptionCustomizationView view;
+	private IRegistrationCoordinator coordinator;
 	
-	private AbbonamentoDTO abbonamentoDTO;
+
 	
 	/*Questo Runnable serve ad istituire un metodo di "CallBack" che avvisi il
 	 *"ReceptionistController" dell'avvenuta pressione del tasto "avanti", di modo che
@@ -37,11 +39,10 @@ public class SubscriptionCustomizationController {
 	public SubscriptionCustomizationController(ISubscriptionCustomizationView scv,
 											   Runnable onAvantiCallback,
 											   Runnable onAnnullaCallback,
-                                               AbbonamentoDTO abbonamentoDTO) {
+											   IRegistrationCoordinator coordinator) {
 		
 		view = scv;
-		
-		this.abbonamentoDTO = abbonamentoDTO;
+		this.coordinator = coordinator;
 		
 		onAvanti = onAvantiCallback;
 		onAnulla = onAnnullaCallback;
@@ -121,7 +122,7 @@ public class SubscriptionCustomizationController {
 						
 					} else {
 						
-						btn.setBackground(Color.RED); // Modifica colore quando non selezionato
+						btn.setBackground(Color.decode("#ffcccc")); // Modifica colore quando non selezionato
 						
 						//Aggiungi logica che collega bottone a dominio
 					}
@@ -150,7 +151,7 @@ public class SubscriptionCustomizationController {
 	                
 	            } else {
 	            	
-	                btn.setBackground(Color.RED);
+	                btn.setBackground(Color.decode("#ffcccc"));
 	                
 	              //Aggiungi logica che collega bottone a dominio
 	                
@@ -190,7 +191,7 @@ public class SubscriptionCustomizationController {
 		    			        
 		    } else {
 
-		    	aggiornaDTO(abbonamentoDTO);
+		    	aggiornaDTO();
 		    	
 		    	// Debug: stampa il contenuto delle liste nel DTO
 		    	/*System.out.println("DEBUG - Sezioni abbonamento selezionate:");
@@ -257,7 +258,7 @@ public class SubscriptionCustomizationController {
 		
 	//----------------------------------------------------------------
 	
-	private void aggiornaDTO(AbbonamentoDTO abbonamentoDTO) {
+	private void aggiornaDTO() {
 		
 	    // Nomi delle sezioni abbonamento corrispondenti ai toggle
 	    List<String> nomiSezioni = Arrays.asList(
@@ -285,7 +286,7 @@ public class SubscriptionCustomizationController {
 	        }
 	        
 	    }
-	    abbonamentoDTO.setSezioniAbbonamento(sezioniSelezionate);
+
 
 	    // Lista corsi selezionati
 	    List<String> corsiSelezionati = new ArrayList<>();
@@ -296,7 +297,9 @@ public class SubscriptionCustomizationController {
 	        }
 	        
 	    }
-	    abbonamentoDTO.setCorsiSelezionati(corsiSelezionati);
+	    
+	    coordinator.acquisisciComponentiAbbonamento(sezioniSelezionate, corsiSelezionati);
+	    
 	}
 	
 	//----------------------------------------------------------------

@@ -25,7 +25,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
 
 public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagamentoView{
 
@@ -268,8 +269,8 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	//----------------------------------------------------------------
 	
 	  @Override
-	    public void setDatiAbbonamento(AbbonamentoDTO abbDTO) {
-	        // Usa il tuo metodo originale che gestisce la view dinamica
+	  public void setDatiAbbonamento(IRiepilogoDTO abbDTO) {
+
 	        mainUpperPanel.removeAll();
 
 	        labeledEntry(mainUpperPanel, "Nome: ", abbDTO.getNome());

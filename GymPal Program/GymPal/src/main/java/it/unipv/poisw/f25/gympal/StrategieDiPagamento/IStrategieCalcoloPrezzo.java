@@ -1,9 +1,10 @@
 package it.unipv.poisw.f25.gympal.StrategieDiPagamento;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
 
 public interface IStrategieCalcoloPrezzo {
 	
-	double calcolaPrezzo(AbbonamentoDTO abbonamento);
+	double calcolaPrezzo(IRiepilogoDTO abbonamento);
 
 }

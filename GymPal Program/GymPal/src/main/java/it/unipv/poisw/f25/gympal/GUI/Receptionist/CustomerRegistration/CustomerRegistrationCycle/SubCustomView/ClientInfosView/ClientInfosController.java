@@ -8,8 +8,8 @@ import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.EtaCliente;
+
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.ValidazioneCampo;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
@@ -17,8 +17,9 @@ import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
 public class ClientInfosController implements IRegexExpression {
 
     private IClientInfosView clientInfos;
+    private IRegistrationCoordinator coordinator;
     
-    private AbbonamentoDTO abbonamentoDTO;
+
     
     private Runnable onAvanti;
     private Runnable onIndietro;
@@ -27,17 +28,18 @@ public class ClientInfosController implements IRegexExpression {
     //----------------------------------------------------------------
     
     public ClientInfosController(IClientInfosView infos, Runnable onAvantiCallback,
-                                                        Runnable onIndietroCallback,
-                                                        Runnable onAnnullaCallback,
-                                                        AbbonamentoDTO abbonamentoDTO) {
+                                                         Runnable onIndietroCallback,
+                                                         Runnable onAnnullaCallback,
+                                                 IRegistrationCoordinator coordinator) {
         
         clientInfos = infos;
-        
         onAvanti = onAvantiCallback;
         onIndietro = onIndietroCallback;
         onAnnulla = onAnnullaCallback;
         
-        this.abbonamentoDTO = abbonamentoDTO;
+        this.coordinator = coordinator;
+        
+ 
         
         impostaEventiTextFields();
         impostaControlloEta ();
@@ -70,9 +72,11 @@ public class ClientInfosController implements IRegexExpression {
             
             Date dataDiNascita = (Date) clientInfos.getDateSpinner().getValue();
             
-            int eta = EtaCliente.calcolaEta(dataDiNascita);
+            LocalDate nascita = dataDiNascita.toInstant().atZone(ZoneId.systemDefault())
+                    									 .toLocalDate();
             
-            if (eta < 18) {
+            
+            if (coordinator.isMinorenne(nascita)) {
                 
                 clientInfos.getPermessoGenitoriSi().setVisible(true);
                 clientInfos.getPermessoGenitoriNo().setVisible(true);
@@ -156,32 +160,28 @@ public class ClientInfosController implements IRegexExpression {
             
             if (validitaCampi) {
                 
-                abbonamentoDTO.setNome(clientInfos.getNome().getText().trim());
-                abbonamentoDTO.setCognome(clientInfos.getCognome().getText().trim());
-                abbonamentoDTO.setCodiceFiscale(clientInfos.getCodiceFiscale().getText().trim());
-                abbonamentoDTO.setContatto(clientInfos.getContatto().getText().trim());
+            	String sesso;
                 
                 if(clientInfos.getMaschio().isSelected()) {
-                    abbonamentoDTO.setSesso("Maschio");
+                    sesso = "Maschio";
                 } else {
-                    abbonamentoDTO.setSesso("Femmina");
+                    sesso = "Femmina";
                 }
                 
-                /* Per poter giungere a questa istruzione, il bottone "certIdoneitàSi" -DEVE-
-                 * essere stato selezionato - quindi non ha senso un 'if'. Non c'è possibilità
-                 * che si abbia un'alternativa
-                 */
-                abbonamentoDTO.setCertificatoIdoneita(true);
-                
-                /* Stesso il discorso per il bottone "permessoGenitoriSi" */
-                abbonamentoDTO.setPermessoGenitori(true);
+
                 
                 /* L'informazione contenuta nel JDateSpinner è tradotta nel formato accettato dal
                  * metodo "setDataNascita(LocalDate dataNascita)"
                  */
                 Date dataDiNascita = (Date) clientInfos.getDateSpinner().getValue();
                 LocalDate nascita = dataDiNascita.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                abbonamentoDTO.setDataNascita(nascita);
+   
+                
+                coordinator.acquisisciDatiAnagrafici(clientInfos.getNome().getText().trim(),
+                									 clientInfos.getCognome().getText().trim(),
+                									 clientInfos.getCodiceFiscale().getText().trim(),
+                									 clientInfos.getContatto().getText().trim(),
+                									 sesso, true, true, nascita);
                 
                 onAvanti.run();
                 

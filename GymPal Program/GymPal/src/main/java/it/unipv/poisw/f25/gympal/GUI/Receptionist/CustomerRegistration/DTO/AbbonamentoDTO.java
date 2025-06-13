@@ -1,9 +1,9 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO;
+package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class AbbonamentoDTO {
+public class AbbonamentoDTO implements IRiepilogoDTO{
 	
     // Anagrafica
 	
@@ -30,6 +30,7 @@ public class AbbonamentoDTO {
     
     // --- Getters & Setters -----------------------------------------
     
+     @Override
     public String getNome() {
     	
         return nome;
@@ -46,6 +47,7 @@ public class AbbonamentoDTO {
 
     //----------------------------------------------------------------
     
+    @Override
     public String getCognome() {
     	
         return cognome;
@@ -62,6 +64,7 @@ public class AbbonamentoDTO {
     
     //----------------------------------------------------------------
 
+    @Override
     public String getCodiceFiscale() {
     	
         return codiceFiscale;
@@ -78,6 +81,7 @@ public class AbbonamentoDTO {
     
     //----------------------------------------------------------------
 
+    @Override
     public LocalDate getDataNascita() {
     	
         return dataNascita;
@@ -94,6 +98,7 @@ public class AbbonamentoDTO {
     
     //----------------------------------------------------------------
 
+    @Override
     public String getSesso() {
     	
         return sesso;
@@ -110,6 +115,7 @@ public class AbbonamentoDTO {
     
     //----------------------------------------------------------------
 
+    @Override
     public boolean getCertificatoIdoneita() {
     	
         return certificatoIdoneita;
@@ -126,7 +132,8 @@ public class AbbonamentoDTO {
     
     //----------------------------------------------------------------
 
-    public Boolean getPermessoGenitori() {
+    @Override
+    public boolean getPermessoGenitori() {
     	
         return permessoGenitori;
         
@@ -142,6 +149,7 @@ public class AbbonamentoDTO {
     
     //----------------------------------------------------------------
 
+    @Override
     public List<String> getSezioniAbbonamento() {
     	
         return componentiAbbonamento;
@@ -158,6 +166,7 @@ public class AbbonamentoDTO {
     
     //----------------------------------------------------------------
 
+    @Override
     public List<String> getCorsiSelezionati() {
     	
         return corsiSelezionati;
@@ -182,6 +191,7 @@ public class AbbonamentoDTO {
     
     //----------------------------------------------------------------
     
+    @Override
     public String getContatto() {
     	
     	return contatto;
@@ -198,6 +208,7 @@ public class AbbonamentoDTO {
     
     //----------------------------------------------------------------
     
+    @Override
     public boolean getStatoPagamento() {
     	
     	return statoPagamento;

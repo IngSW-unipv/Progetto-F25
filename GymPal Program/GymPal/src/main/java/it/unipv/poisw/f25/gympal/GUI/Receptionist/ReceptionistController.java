@@ -1,6 +1,8 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist;
 import javax.swing.JPanel;
 
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.CalcoloEtaService;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationView;
@@ -26,8 +28,15 @@ public class ReceptionistController implements ICustomerRegistrationViewHandler 
         registraAzioniPulsanti();
         inizializzaSchermateStatiche();
 
+        /*Servizi di dominio da passare al coordinatore per realizzare comunicazione
+         *fra GUI e strato di dominio*/
+        
+        /*Siccome "ReceptionistController" incarna il confine fra GUI e Dominio, è lecito
+         *che esso istanzi oggetti concreti.*/
+        ICalcoloEtaService etaService = new CalcoloEtaService();
+        
         // Inizializza il coordinator passando this come handler
-        customerRegistrationCoordinator = new CustomerRegistrationCoordinator(this);
+        customerRegistrationCoordinator = new CustomerRegistrationCoordinator(this, etaService);
         
     }
 

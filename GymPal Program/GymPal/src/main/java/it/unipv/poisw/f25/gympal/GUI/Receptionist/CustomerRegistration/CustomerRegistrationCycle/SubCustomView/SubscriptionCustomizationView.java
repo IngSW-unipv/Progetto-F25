@@ -84,7 +84,7 @@ public class SubscriptionCustomizationView extends JPanel implements ISubscripti
 		allButtons.addAll(getCheckBoxes());
 
 		for (AbstractButton btn : allButtons) {
-			btn.setBackground(Color.RED);
+			btn.setBackground(Color.decode("#ffcccc"));
 			btn.setOpaque(true);
 			btn.setContentAreaFilled(true);
 			btn.setBorderPainted(true);

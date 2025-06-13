@@ -4,12 +4,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
 
 public interface IRiepilogoEPagamentoView {
 	
 	/* Metodi per inizializzare la view con i dati dell'abbonamento */
-	public void setDatiAbbonamento(AbbonamentoDTO abbonamentoDTO);
+	public void setDatiAbbonamento(IRiepilogoDTO abbonamentoDTO);
 	
 	//----------------------------------------------------------------
 	//----------------------------------------------------------------
