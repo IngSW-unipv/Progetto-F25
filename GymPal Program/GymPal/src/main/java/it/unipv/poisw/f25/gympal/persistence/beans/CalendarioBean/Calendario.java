@@ -1,11 +1,14 @@
 package it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Calendario {
 	
 	private String nomeEvento;
     private LocalDate dataEvento;
+    private LocalTime oraInizio;   // Nuovo campo per l'orario di inizio dell'evento
+    private LocalTime oraFine;
     private String messaggio;
     private String destinatarioMessaggio;
     
@@ -14,15 +17,19 @@ public class Calendario {
     }
     
     //Costruttore parametrizzato
-	public Calendario(String nomeEvento, LocalDate dataEvento, String messaggio, String destinatarioMessaggio) {
+    public Calendario(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine, String messaggio,
+			String destinatarioMessaggio) {
+		super();
 		this.nomeEvento = nomeEvento;
 		this.dataEvento = dataEvento;
+		this.oraInizio = oraInizio;
+		this.oraFine = oraFine;
 		this.messaggio = messaggio;
 		this.destinatarioMessaggio = destinatarioMessaggio;
 	}
-	
-	//Getters e setters
-
+    
+    
+    //Getters e setters
 	public String getNomeEvento() {
 		return nomeEvento;
 	}
@@ -37,6 +44,22 @@ public class Calendario {
 
 	public void setDataEvento(LocalDate dataEvento) {
 		this.dataEvento = dataEvento;
+	}
+
+	public LocalTime getOraInizio() {
+		return oraInizio;
+	}
+
+	public void setOraInizio(LocalTime oraInizio) {
+		this.oraInizio = oraInizio;
+	}
+
+	public LocalTime getOraFine() {
+		return oraFine;
+	}
+
+	public void setOraFine(LocalTime oraFine) {
+		this.oraFine = oraFine;
 	}
 
 	public String getMessaggio() {
@@ -57,7 +80,8 @@ public class Calendario {
 
 	@Override
 	public String toString() {
-		return "Calendario [nomeEvento=" + nomeEvento + ", dataEvento=" + dataEvento + ", messaggio=" + messaggio
-				+ ", destinatarioMessaggio=" + destinatarioMessaggio + "]";
+		return "Calendario [nomeEvento=" + nomeEvento + ", dataEvento=" + dataEvento + ", oraInizio=" + oraInizio
+				+ ", oraFine=" + oraFine + ", messaggio=" + messaggio + ", destinatarioMessaggio="
+				+ destinatarioMessaggio + "]";
 	}
 }

@@ -50,9 +50,9 @@ public class DataSynchronizer {
                 		new String[]{"CF", "NOME", "COGNOME", "SESSO", "FLAG_MINOR", "CONTATTO", "ABBONAMENTO"});
                 
                 synchronizeTable("CALENDARIO", 
-                		"SELECT NOME_EVENTO, DATA_EVENTO, MESSAGGIO, DESTINATARIO_MESSAGGIO FROM CALENDARIO", 
-                		"INSERT INTO CALENDARIO (NOME_EVENTO, DATA_EVENTO, MESSAGGIO, DESTINATARIO_MESSAGGIO) VALUES (?, ?, ?, ?)", 
-                		new String[]{"NOME_EVENTO", "DATA_EVENTO", "MESSAGGIO", "DESTINATARIO_MESSAGGIO"});
+                		"SELECT NOME_EVENTO, DATA_EVENTO, ORA_INIZIO, ORA_FINE, MESSAGGIO, DESTINATARIO_MESSAGGIO FROM CALENDARIO", 
+                		"INSERT INTO CALENDARIO (NOME_EVENTO, DATA_EVENTO, ORA_INIZIO, ORA_FINE, MESSAGGIO, DESTINATARIO_MESSAGGIO) VALUES (?, ?, ?, ?, ?, ?)", 
+                		new String[]{"NOME_EVENTO", "DATA_EVENTO", "ORA_INIZIO", "ORA_FINE", "MESSAGGIO", "DESTINATARIO_MESSAGGIO"});
                 
                 //Aggiorno il timestamp dell'ultima sincronizzazione corretta
                 updateLastSyncTimestamp();

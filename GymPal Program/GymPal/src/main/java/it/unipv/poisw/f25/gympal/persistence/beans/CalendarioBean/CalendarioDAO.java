@@ -5,8 +5,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time; 
 
 import java.time.LocalDate;
+import java.time.LocalTime; 
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ public class CalendarioDAO implements ICalendarioDAO {
 
     private final IConnectionFactory connectionFactory;
 
+    //Costruttore, riceve una factory per la creazione di connessioni
     public CalendarioDAO(IConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
     }
@@ -28,14 +31,16 @@ public class CalendarioDAO implements ICalendarioDAO {
             System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
             return false;
         }
-        String query = "INSERT INTO CALENDARIO (NOME_EVENTO, DATA_EVENTO, MESSAGGIO, DESTINATARIO_MESSAGGIO) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO CALENDARIO (NOME_EVENTO, DATA_EVENTO, ORA_INIZIO, ORA_FINE, MESSAGGIO, DESTINATARIO_MESSAGGIO) VALUES (?, ?, ?, ?, ?, ?)";
         //Blocco try-with-resources, chiude in automatico la connessione e prepared statement alla fine del try
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, evento.getNomeEvento());
-            ps.setDate(2, Date.valueOf(evento.getDataEvento())); //converte l'oggetto data di Java in un formato compatibile con il database.
-            ps.setString(3, evento.getMessaggio());
-            ps.setString(4, evento.getDestinatarioMessaggio());
+            ps.setDate(2, Date.valueOf(evento.getDataEvento()));
+            ps.setTime(3, Time.valueOf(evento.getOraInizio())); 
+            ps.setTime(4, Time.valueOf(evento.getOraFine()));   
+            ps.setString(5, evento.getMessaggio());
+            ps.setString(6, evento.getDestinatarioMessaggio());
             
             return ps.executeUpdate() > 0;
             
@@ -52,7 +57,7 @@ public class CalendarioDAO implements ICalendarioDAO {
             System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile aggiornare i dati.");
             return false;
         }
-        String query = "UPDATE CALENDARIO SET MESSAGGIO = ?, DESTINATARIO_MESSAGGIO = ? WHERE NOME_EVENTO = ? AND DATA_EVENTO = ?";
+        String query = "UPDATE CALENDARIO SET MESSAGGIO = ?, DESTINATARIO_MESSAGGIO = ? WHERE NOME_EVENTO = ? AND DATA_EVENTO = ? AND ORA_INIZIO = ? AND ORA_FINE = ?";
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
@@ -60,6 +65,8 @@ public class CalendarioDAO implements ICalendarioDAO {
             ps.setString(2, evento.getDestinatarioMessaggio());
             ps.setString(3, evento.getNomeEvento());
             ps.setDate(4, Date.valueOf(evento.getDataEvento()));
+            ps.setTime(5, Time.valueOf(evento.getOraInizio()));
+            ps.setTime(6, Time.valueOf(evento.getOraFine()));
             
             return ps.executeUpdate() > 0;
             
@@ -71,17 +78,19 @@ public class CalendarioDAO implements ICalendarioDAO {
 
     //Cancella un evento dal calendario
     @Override
-    public boolean deleteEvento(String nomeEvento, LocalDate dataEvento) {
+    public boolean deleteEvento(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine) {
         if (connectionFactory.isReadOnlyMode()) {
             System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
             return false;
         }
-        String query = "DELETE FROM CALENDARIO WHERE NOME_EVENTO = ? AND DATA_EVENTO = ?";
+        String query = "DELETE FROM CALENDARIO WHERE NOME_EVENTO = ? AND DATA_EVENTO = ? AND ORA_INIZIO = ? AND ORA_FINE = ?";
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, nomeEvento);
             ps.setDate(2, Date.valueOf(dataEvento));
+            ps.setTime(3, Time.valueOf(oraInizio));
+            ps.setTime(4, Time.valueOf(oraFine));
             
             return ps.executeUpdate() > 0;
             
@@ -93,14 +102,16 @@ public class CalendarioDAO implements ICalendarioDAO {
 
     //Recupera un singolo evento
     @Override
-    public Calendario selectEvento(String nomeEvento, LocalDate dataEvento) {
+    public Calendario selectEvento(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine) {
         Calendario result = null;
-        String query = "SELECT * FROM CALENDARIO WHERE NOME_EVENTO = ? AND DATA_EVENTO = ?";
+        String query = "SELECT * FROM CALENDARIO WHERE NOME_EVENTO = ? AND DATA_EVENTO = ? AND ORA_INIZIO = ? AND ORA_FINE = ?";
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, nomeEvento);
             ps.setDate(2, Date.valueOf(dataEvento));
+            ps.setTime(3, Time.valueOf(oraInizio));
+            ps.setTime(4, Time.valueOf(oraFine));
             //Blocco try-with-resources
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -160,9 +171,10 @@ public class CalendarioDAO implements ICalendarioDAO {
     private Calendario mapResultSetToCalendario(ResultSet rs) throws SQLException {
         String nomeEvento = rs.getString("NOME_EVENTO");
         LocalDate dataEvento = rs.getDate("DATA_EVENTO").toLocalDate();
+        LocalTime oraInizio = rs.getTime("ORA_INIZIO").toLocalTime(); 
+        LocalTime oraFine = rs.getTime("ORA_FINE").toLocalTime();     
         String messaggio = rs.getString("MESSAGGIO");
         String destinatarioMessaggio = rs.getString("DESTINATARIO_MESSAGGIO");
-        return new Calendario(nomeEvento, dataEvento, messaggio, destinatarioMessaggio);
+        return new Calendario(nomeEvento, dataEvento, oraInizio, oraFine, messaggio, destinatarioMessaggio);
     }
 }
-
