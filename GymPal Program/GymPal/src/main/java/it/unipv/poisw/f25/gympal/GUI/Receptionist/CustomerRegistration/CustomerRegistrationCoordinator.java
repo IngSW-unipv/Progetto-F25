@@ -3,7 +3,10 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration;
 import java.time.LocalDate;
 import java.util.List;
 
+import it.unipv.poisw.f25.gympal.Dominio.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
+import it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
+import it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.ICustomerRegistrationViewHandler;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ISubscriptionCustomizationView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.SubscriptionCustomizationController;
@@ -19,12 +22,18 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.Costr
 
 public class CustomerRegistrationCoordinator implements IRegistrationCoordinator{
 
-    private final ICustomerRegistrationViewHandler viewHandler;
+    private ICustomerRegistrationViewHandler viewHandler;
 
+    /*Viste*/
     private ISubscriptionCustomizationView subView;
     private IClientInfosView clientInfosView;
     private IRiepilogoEPagamentoView riepilogoEPagamento;
+    
+    /*Servizi*/
     private ICalcoloEtaService etaService;
+    private ICampoValidabileFactory campovalidabileFactory;
+    private IValidatoreCampi validatoreCampi;
+    private ICtrlReqAnagraficiService controlloRequisiti;
 
     private AbbonamentoDTO abbonamentoDTO;
     private CostruttoreDTOHelper costruttoreDTOHelper;
@@ -33,10 +42,16 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
 
 
     public CustomerRegistrationCoordinator(ICustomerRegistrationViewHandler viewHandler,
-    									   ICalcoloEtaService etaService) {
+    									   ICalcoloEtaService etaService,
+    									   ICampoValidabileFactory campovalidabileFactory,
+    									   IValidatoreCampi validatoreCampi,
+    									   ICtrlReqAnagraficiService controlloRequisiti) {
         
     	this.viewHandler = viewHandler;
     	this.etaService = etaService;
+    	this.campovalidabileFactory = campovalidabileFactory;
+    	this.validatoreCampi = validatoreCampi;
+    	this.controlloRequisiti = controlloRequisiti;
         inizializzaCicloRegistrazioneCliente();
                 
     }
@@ -179,5 +194,32 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     };
     
     //----------------------------------------------------------------
+    
+    @Override
+    public ICampoValidabileFactory getCampoValidabileFactory() {
+    	
+    	return campovalidabileFactory;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public IValidatoreCampi getValidatoreCampi() {
+    	
+    	return validatoreCampi;
+    	
+    }
+     
+    //----------------------------------------------------------------
+    
+    @Override
+    public ICtrlReqAnagraficiService getCtrlReqAnagraficiService() {
+    	
+    	return controlloRequisiti;
+    	
+    }
+    
+   //----------------------------------------------------------------
     
 }

@@ -6,25 +6,25 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import it.unipv.poisw.f25.gympal.GUI.Utilities.RegexCheck;
+import it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.CampoValidabile.ICampoValidabile;
 
 public class ValidazioneCampo {
-	
-	public static void aggiungiValidatore(JTextField field, String regex) {
-		
+
+    public static void applicaFeedbackSwing(ICampoValidabile campo) {
+    	
+        JTextField field = campo.getField();
+
         field.getDocument().addDocumentListener(new DocumentListener() {
 
             private void validazione() {
             	
-                String contenutoCampo = field.getText().trim();
-                
-                if (RegexCheck.check(contenutoCampo, regex)) {
+                if (campo.isValido()) {
                 	
-                    field.setBackground(Color.decode("#b2fab4")); // Verde chiaro
+                    field.setBackground(Color.decode("#b2fab4")); // verde chiaro
                     
                 } else {
                 	
-                    field.setBackground(Color.decode("#ffcccc")); // Rosso chiaro
+                    field.setBackground(Color.decode("#ffcccc")); // rosso chiaro
                     
                 }
                 
@@ -32,25 +32,22 @@ public class ValidazioneCampo {
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-            	
                 validazione();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-            	
                 validazione();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-            	
-                // Questo metodo non viene utilizzato con i JTextField
-            	
+                // non usato con JTextField
             }
             
         });
         
     }
-
+    
 }
+
