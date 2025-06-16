@@ -78,7 +78,7 @@ public class CalendarioDAO implements ICalendarioDAO {
 
     //Cancella un evento dal calendario
     @Override
-    public boolean deleteEvento(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine) {
+    public boolean deleteEvento(Calendario evento) {
         if (connectionFactory.isReadOnlyMode()) {
             System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
             return false;
@@ -87,10 +87,10 @@ public class CalendarioDAO implements ICalendarioDAO {
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, nomeEvento);
-            ps.setDate(2, Date.valueOf(dataEvento));
-            ps.setTime(3, Time.valueOf(oraInizio));
-            ps.setTime(4, Time.valueOf(oraFine));
+            ps.setString(1, evento.getNomeEvento());
+            ps.setDate(2, Date.valueOf(evento.getDataEvento()));
+            ps.setTime(3, Time.valueOf(evento.getOraInizio()));
+            ps.setTime(4, Time.valueOf(evento.getOraFine()));
             
             return ps.executeUpdate() > 0;
             
@@ -102,16 +102,16 @@ public class CalendarioDAO implements ICalendarioDAO {
 
     //Recupera un singolo evento
     @Override
-    public Calendario selectEvento(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine) {
+    public Calendario selectEvento(Calendario evento) {
         Calendario result = null;
         String query = "SELECT * FROM CALENDARIO WHERE NOME_EVENTO = ? AND DATA_EVENTO = ? AND ORA_INIZIO = ? AND ORA_FINE = ?";
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, nomeEvento);
-            ps.setDate(2, Date.valueOf(dataEvento));
-            ps.setTime(3, Time.valueOf(oraInizio));
-            ps.setTime(4, Time.valueOf(oraFine));
+        	ps.setString(1, evento.getNomeEvento());
+            ps.setDate(2, Date.valueOf(evento.getDataEvento()));
+            ps.setTime(3, Time.valueOf(evento.getOraInizio()));
+            ps.setTime(4, Time.valueOf(evento.getOraFine()));
             //Blocco try-with-resources
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -126,13 +126,13 @@ public class CalendarioDAO implements ICalendarioDAO {
 
     //Recupera tutti gli eventi in una data specifica
     @Override
-    public List<Calendario> selectAllEventiByDate(LocalDate data) {
+    public List<Calendario> selectAllEventiByDate(Calendario evento) {
         List<Calendario> eventi = new ArrayList<>();
         String query = "SELECT * FROM CALENDARIO WHERE DATA_EVENTO = ?";
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setDate(1, Date.valueOf(data));
+            ps.setDate(1, Date.valueOf(evento.getDataEvento()));
             //Blocco try-with-resources
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -147,14 +147,14 @@ public class CalendarioDAO implements ICalendarioDAO {
 
     //Recupera tutti gli eventi in un intervallo di date (incluso)
     @Override
-    public List<Calendario> selectAllEventiByDateRange(LocalDate dataInizio, LocalDate dataFine) {
+    public List<Calendario> selectAllEventiByDateRange(Calendario eventoInizio, Calendario eventoFine) {
         List<Calendario> eventi = new ArrayList<>();
         String query = "SELECT * FROM CALENDARIO WHERE DATA_EVENTO BETWEEN ? AND ?";
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setDate(1, Date.valueOf(dataInizio));
-            ps.setDate(2, Date.valueOf(dataFine));
+            ps.setDate(1, Date.valueOf(eventoInizio.getDataEvento()));
+            ps.setDate(2, Date.valueOf(eventoFine.getDataEvento()));
             //Blocco try-with-resources
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {

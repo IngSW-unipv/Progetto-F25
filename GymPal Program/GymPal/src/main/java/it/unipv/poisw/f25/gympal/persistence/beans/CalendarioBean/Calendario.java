@@ -7,7 +7,7 @@ public class Calendario {
 	
 	private String nomeEvento;
     private LocalDate dataEvento;
-    private LocalTime oraInizio;   // Nuovo campo per l'orario di inizio dell'evento
+    private LocalTime oraInizio;
     private LocalTime oraFine;
     private String messaggio;
     private String destinatarioMessaggio;
