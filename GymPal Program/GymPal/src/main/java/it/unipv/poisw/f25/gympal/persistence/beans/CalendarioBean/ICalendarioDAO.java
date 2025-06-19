@@ -14,8 +14,7 @@ public interface ICalendarioDAO {
     boolean deleteEvento(Calendario evento);
 
     //Recupera un singolo evento 
-    //Caalendario usa una chiave primaria composita (nomeEvento + dataEvento)
-    Calendario selectEvento(Calendario eventoe);
+    Calendario selectEvento(Calendario evento);
 
     //Recupera tutti gli eventi in una data specifica
     List<Calendario> selectAllEventiByDate(Calendario evento);
