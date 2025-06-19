@@ -39,7 +39,7 @@ public class DipendenteDAOTest {
 			return ds.getConnection();
 		}
 		
-//L'unico metodo che veramente mi serve è createConnection
+		//L'unico metodo che veramente mi serve è createConnection
         
         
         @Override
@@ -53,13 +53,6 @@ public class DipendenteDAOTest {
 
         @Override
         public void closeConnection(Connection conn) {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {}
-            }
-            
-
             if (conn != null) {
                 try {
                     conn.close();
@@ -117,7 +110,10 @@ public class DipendenteDAOTest {
 
     @Test
     public void testSelectDipendenteFound() {
-        Dipendente dipendente = dipendenteDAO.selectDipendente("ID_TEST_01");
+        Dipendente dipendenteDaCercare = new Dipendente();
+        dipendenteDaCercare.setStaffId("ID_TEST_01");
+        
+        Dipendente dipendente = dipendenteDAO.selectDipendente(dipendenteDaCercare);
         assertNotNull("Il dipendente dovrebbe essere trovato", dipendente);
         assertEquals("Il nome non corrisponde", "Mario", dipendente.getNome());
     }
@@ -128,7 +124,7 @@ public class DipendenteDAOTest {
         Dipendente nuovoDipendente = new Dipendente("ID_TEST_03", "Luca", "Verdi", "luca.verdi@email.com");
         assertTrue("L'inserimento dovrebbe ritornare true", dipendenteDAO.insertDipendente(nuovoDipendente));
 
-        Dipendente dipendenteInserito = dipendenteDAO.selectDipendente("ID_TEST_03");
+        Dipendente dipendenteInserito = dipendenteDAO.selectDipendente(nuovoDipendente);
         assertNotNull("Il dipendente inserito non dovrebbe essere null", dipendenteInserito);
         assertEquals("Il nome del dipendente inserito non corrisponde", "Luca", dipendenteInserito.getNome());
         assertEquals("Il numero totale di dipendenti dovrebbe essere 3", 3, dipendenteDAO.selectAll().size());
@@ -139,15 +135,18 @@ public class DipendenteDAOTest {
         Dipendente dipendenteDaModificare = new Dipendente("ID_TEST_01", "Mario", "Rossi", "mario.rossi.new@email.com");
         assertTrue("L'aggiornamento dovrebbe ritornare true", dipendenteDAO.updateDipendente(dipendenteDaModificare));
         
-        Dipendente dipendenteModificato = dipendenteDAO.selectDipendente("ID_TEST_01");
+        Dipendente dipendenteModificato = dipendenteDAO.selectDipendente(dipendenteDaModificare);
         assertEquals("Il contatto dovrebbe essere stato aggiornato", "mario.rossi.new@email.com", dipendenteModificato.getContatto());
     }
     
     @Test
     public void testDeleteDipendente() {
-        assertTrue("La cancellazione dovrebbe ritornare true", dipendenteDAO.deleteDipendente("ID_TEST_01"));
+        Dipendente dipendenteDaCancellare = new Dipendente();
+        dipendenteDaCancellare.setStaffId("ID_TEST_01");
         
-        Dipendente dipendenteCancellato = dipendenteDAO.selectDipendente("ID_TEST_01");
+        assertTrue("La cancellazione dovrebbe ritornare true", dipendenteDAO.deleteDipendente(dipendenteDaCancellare));
+        
+        Dipendente dipendenteCancellato = dipendenteDAO.selectDipendente(dipendenteDaCancellare);
         assertNull("Il dipendente cancellato dovrebbe essere null", dipendenteCancellato);
         assertEquals("Dovrebbe rimanere 1 solo dipendente", 1, dipendenteDAO.selectAll().size());
     }

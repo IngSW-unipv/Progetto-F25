@@ -8,7 +8,7 @@ public interface IDipendenteDAO {
     List<Dipendente> selectAll();
     
     //Recupera un singolo dipendente basato sul suo codice fiscale    
-    Dipendente selectDipendente(String staffId);
+    Dipendente selectDipendente(Dipendente dipendente);
 
     //Inserisce un nuovo dipendente nel database
     boolean insertDipendente(Dipendente dipendente);
@@ -17,5 +17,5 @@ public interface IDipendenteDAO {
     boolean updateDipendente(Dipendente dipendente);
 
     //Cancella un dipendente dal database usando il suo codice fiscale
-    boolean deleteDipendente(String staffId);
+    boolean deleteDipendente(Dipendente dipendente);
 }

@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.time.LocalDate;
-import java.time.LocalTime; // Importato per LocalTime
+import java.time.LocalTime;
 
 import java.util.List;
 
@@ -73,7 +73,7 @@ public class CalendarioDAOTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         dataSource = new JdbcDataSource();
-        dataSource.setURL("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1");
+        dataSource.setURL("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false");
         dataSource.setUser("sa");
         dataSource.setPassword("");
 
@@ -118,7 +118,8 @@ public class CalendarioDAOTest {
         Calendario nuovoEvento = new Calendario("Corso Pilates", domani, oraInserimento, oraInserimento.plusHours(1), "Lezione di Pilates base", "Clienti");
         assertTrue("L'inserimento dell'evento dovrebbe ritornare true", calendarioDAO.insertEvento(nuovoEvento));
         
-        Calendario eventoInserito = calendarioDAO.selectEvento("Corso Pilates", domani, oraInserimento, oraInserimento.plusHours(1));
+        // Per la verifica si usa l'oggetto evento, come richiesto dalla nuova interfaccia
+        Calendario eventoInserito = calendarioDAO.selectEvento(nuovoEvento);
         assertNotNull("L'evento inserito non dovrebbe essere null", eventoInserito);
         assertEquals("Il messaggio non corrisponde", "Lezione di Pilates base", eventoInserito.getMessaggio());
     }
@@ -131,9 +132,10 @@ public class CalendarioDAOTest {
         Calendario eventoDaModificare = new Calendario("Corso Yoga", oggi, oraMattina, oraMattina.plusHours(1), "Lezione di Vinyasa Yoga - Avanzato", "Clienti");
         assertTrue("L'aggiornamento dell'evento dovrebbe ritornare true", calendarioDAO.updateEvento(eventoDaModificare));
         
-        // Selezioniamo l'evento usando la sua chiave primaria originale
-        Calendario eventoModificato = calendarioDAO.selectEvento("Corso Yoga", oggi, oraMattina, oraMattina.plusHours(1));
-        assertNotNull("L'evento modificato non dovrebbe essere null", eventoModificato); // Aggiunto per robustezza
+        // Per verificare, creo un oggetto Calendario con la chiave primaria
+        Calendario chiaveRicerca = new Calendario("Corso Yoga", oggi, oraMattina, oraMattina.plusHours(1), null, null);
+        Calendario eventoModificato = calendarioDAO.selectEvento(chiaveRicerca);
+        assertNotNull("L'evento modificato non dovrebbe essere null", eventoModificato); 
         assertEquals("Il messaggio dovrebbe essere stato aggiornato", "Lezione di Vinyasa Yoga - Avanzato", eventoModificato.getMessaggio());
     }
 
@@ -141,9 +143,12 @@ public class CalendarioDAOTest {
     public void testDeleteEvento() {
         LocalDate oggi = LocalDate.now();
         LocalTime oraMattina = LocalTime.of(9, 0);
-        assertTrue("La cancellazione dovrebbe ritornare true", calendarioDAO.deleteEvento("Corso Yoga", oggi, oraMattina, oraMattina.plusHours(1)));
+        // Per cancellare, creo un oggetto Calendario che contiene la chiave primaria
+        Calendario eventoDaCancellare = new Calendario("Corso Yoga", oggi, oraMattina, oraMattina.plusHours(1), null, null);
+        assertTrue("La cancellazione dovrebbe ritornare true", calendarioDAO.deleteEvento(eventoDaCancellare));
         
-        Calendario eventoCancellato = calendarioDAO.selectEvento("Corso Yoga", oggi, oraMattina, oraMattina.plusHours(1));
+        // Verifico l'avvenuta cancellazione cercando lo stesso evento
+        Calendario eventoCancellato = calendarioDAO.selectEvento(eventoDaCancellare);
         assertNull("L'evento cancellato dovrebbe essere null", eventoCancellato);
     }
 
@@ -151,7 +156,9 @@ public class CalendarioDAOTest {
     public void testSelectEventoFound() {
         LocalDate oggi = LocalDate.now();
         LocalTime oraPomeriggio = LocalTime.of(15, 0);
-        Calendario evento = calendarioDAO.selectEvento("Riunione Staff", oggi, oraPomeriggio, oraPomeriggio.plusHours(1));
+        // Per la ricerca creo un oggetto con la chiave primaria dell'evento desiderato
+        Calendario chiaveRicerca = new Calendario("Riunione Staff", oggi, oraPomeriggio, oraPomeriggio.plusHours(1), null, null);
+        Calendario evento = calendarioDAO.selectEvento(chiaveRicerca);
         assertNotNull("L'evento dovrebbe essere trovato", evento);
         assertEquals("Il destinatario non corrisponde", "Dipendenti", evento.getDestinatarioMessaggio());
     }
@@ -160,14 +167,20 @@ public class CalendarioDAOTest {
     public void testSelectEventoNotFound() {
         LocalDate ieri = LocalDate.now().minusDays(1);
         LocalTime oraFittizia = LocalTime.of(10, 0);
-        Calendario evento = calendarioDAO.selectEvento("Evento Inesistente", ieri, oraFittizia, oraFittizia.plusHours(1));
+        // Anche per cercare un evento non esistente, uso un oggetto Calendario
+        Calendario chiaveRicerca = new Calendario("Evento Inesistente", ieri, oraFittizia, oraFittizia.plusHours(1), null, null);
+        Calendario evento = calendarioDAO.selectEvento(chiaveRicerca);
         assertNull("L'evento non dovrebbe essere trovato", evento);
     }
 
     @Test
     public void testSelectAllEventiByDate() {
         LocalDate oggi = LocalDate.now();
-        List<Calendario> eventiDiOggi = calendarioDAO.selectAllEventiByDate(oggi);
+        // Creo un oggetto Calendario "dummy" con solo la data per la ricerca
+        Calendario eventoConData = new Calendario();
+        eventoConData.setDataEvento(oggi);
+
+        List<Calendario> eventiDiOggi = calendarioDAO.selectAllEventiByDate(eventoConData);
         assertEquals("Ci dovrebbero essere 2 eventi per oggi", 2, eventiDiOggi.size());
     }
 
@@ -175,7 +188,15 @@ public class CalendarioDAOTest {
     public void testSelectAllEventiByDateRange() {
         LocalDate oggi = LocalDate.now();
         LocalDate traUnaSettimana = oggi.plusDays(7);
-        List<Calendario> eventi = calendarioDAO.selectAllEventiByDateRange(oggi, traUnaSettimana);
+        
+        // Creo due oggetti Calendario "dummy" per l'intervallo di date
+        Calendario eventoInizio = new Calendario();
+        eventoInizio.setDataEvento(oggi);
+        
+        Calendario eventoFine = new Calendario();
+        eventoFine.setDataEvento(traUnaSettimana);
+
+        List<Calendario> eventi = calendarioDAO.selectAllEventiByDateRange(eventoInizio, eventoFine);
         assertEquals("Ci dovrebbero essere 3 eventi nell'intervallo di una settimana", 3, eventi.size());
     }
 }

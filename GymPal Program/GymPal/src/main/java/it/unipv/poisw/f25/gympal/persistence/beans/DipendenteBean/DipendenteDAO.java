@@ -42,7 +42,7 @@ public class DipendenteDAO implements IDipendenteDAO {
 
 	//Recupera un singolo dipendente basato sul suo codice fiscale 
 	@Override
-    public Dipendente selectDipendente(String staffId) {
+    public Dipendente selectDipendente(Dipendente dipendente) {
         Dipendente result = null;
         String query = "SELECT * FROM DIPENDENTI WHERE STAFF_ID = ?";
         
@@ -50,7 +50,7 @@ public class DipendenteDAO implements IDipendenteDAO {
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
 
-            ps.setString(1, staffId);
+            ps.setString(1, dipendente.getStaffId());
             
             //Blocco try-with-resources
             try (ResultSet rs = ps.executeQuery()) {
@@ -120,7 +120,7 @@ public class DipendenteDAO implements IDipendenteDAO {
 
     //Cancella un dipendente dal database usando il suo codice fiscale
     @Override
-    public boolean deleteDipendente(String staffId) {
+    public boolean deleteDipendente(Dipendente dipendente) {
         if (connectionFactory.isReadOnlyMode()) {
             System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
             return false;
@@ -132,7 +132,7 @@ public class DipendenteDAO implements IDipendenteDAO {
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
 
-            ps.setString(1, staffId);
+            ps.setString(1, dipendente.getStaffId());
             return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
@@ -141,7 +141,7 @@ public class DipendenteDAO implements IDipendenteDAO {
         }
     }
 
-    //Metodo privato per mappare una riga del ResultSet a un oggetto Cliente
+    //Metodo privato per mappare una riga del ResultSet a un oggetto Dipendente
     private Dipendente mapResultSetToDipendente(ResultSet rs) throws SQLException {
         String staffId = rs.getString("STAFF_ID");
         String nome = rs.getString("NOME");

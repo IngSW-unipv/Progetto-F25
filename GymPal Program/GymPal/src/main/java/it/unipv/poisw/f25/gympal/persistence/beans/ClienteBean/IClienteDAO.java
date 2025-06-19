@@ -8,7 +8,7 @@ public interface IClienteDAO {
     List<Cliente> selectAll();
 
     //Recupera un singolo cliente basato sul suo codice fiscale
-    Cliente selectCliente(String cf);
+    Cliente selectCliente(Cliente cliente);
 
     //Inserisce un nuovo cliente nel database
     boolean insertCliente(Cliente cliente);
@@ -17,6 +17,6 @@ public interface IClienteDAO {
     boolean updateCliente(Cliente cliente);
 
     //Cancella un cliente dal database usando il suo codice fiscale
-    boolean deleteCliente(String cf);
+    boolean deleteCliente(Cliente cliente);
 
 }

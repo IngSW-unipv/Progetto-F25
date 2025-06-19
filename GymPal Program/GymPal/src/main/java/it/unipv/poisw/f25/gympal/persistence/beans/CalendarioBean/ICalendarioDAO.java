@@ -1,7 +1,5 @@
 package it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 public interface ICalendarioDAO {
@@ -13,15 +11,14 @@ public interface ICalendarioDAO {
     boolean updateEvento(Calendario evento);
 
     //Cancella un evento dal calendario
-    boolean deleteEvento(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine);
+    boolean deleteEvento(Calendario evento);
 
     //Recupera un singolo evento 
-    //Caalendario usa una chiave primaria composita (nomeEvento + dataEvento)
-    Calendario selectEvento(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine);
+    Calendario selectEvento(Calendario evento);
 
     //Recupera tutti gli eventi in una data specifica
-    List<Calendario> selectAllEventiByDate(LocalDate data);
+    List<Calendario> selectAllEventiByDate(Calendario evento);
 
     //Recupera tutti gli eventi in un intervallo di date (incluso)
-    List<Calendario> selectAllEventiByDateRange(LocalDate dataInizio, LocalDate dataFine);
+    List<Calendario> selectAllEventiByDateRange(Calendario eventoInizio, Calendario eventoFine);
 }
