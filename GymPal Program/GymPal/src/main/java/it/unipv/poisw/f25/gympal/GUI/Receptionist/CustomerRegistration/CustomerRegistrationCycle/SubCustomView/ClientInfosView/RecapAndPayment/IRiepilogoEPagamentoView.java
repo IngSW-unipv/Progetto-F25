@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
 
 public interface IRiepilogoEPagamentoView {
@@ -105,4 +105,9 @@ public interface IRiepilogoEPagamentoView {
 	public JPanel getMainPanel();
 	
 	//----------------------------------------------------------------
+	
+	public MetodoPagamento getMetodoPagamentoSelezionato();
+	
+	//----------------------------------------------------------------
+	
 }

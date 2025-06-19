@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.StrategieDiPagamento;
+package it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento;
 
 import java.time.LocalDate;
 import java.time.Period;

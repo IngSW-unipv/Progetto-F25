@@ -3,6 +3,9 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO;
 import java.time.LocalDate;
 import java.util.List;
 
+import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
+import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
+
 public class AbbonamentoDTO implements IRiepilogoDTO{
 	
     // Anagrafica
@@ -26,6 +29,12 @@ public class AbbonamentoDTO implements IRiepilogoDTO{
     
     private List<String> componentiAbbonamento;  // Es: ["Sala Pesi", "Personal Trainer", ecc.]
     private List<String> corsiSelezionati;     // Es: ["Yoga", "Zumba", ecc.]
+    
+    private MetodoPagamento metodoPagamento;
+    private DurataAbbonamento durataAbbonamento;
+    
+    private boolean scontoEta;
+    private boolean scontoOccasioni;
 
     
     // --- Getters & Setters -----------------------------------------
@@ -212,6 +221,78 @@ public class AbbonamentoDTO implements IRiepilogoDTO{
     public boolean getStatoPagamento() {
     	
     	return statoPagamento;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public MetodoPagamento getMetodoPagamento() {
+    	
+    	return metodoPagamento;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public void setMetodoPagamento(MetodoPagamento metodoPagamento) {
+    	
+    	this.metodoPagamento = metodoPagamento;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public DurataAbbonamento getDurataAbbonamento() {
+    	
+    	return durataAbbonamento;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public void setDurataAbbonamento(DurataAbbonamento durataAbbonamento) {
+    	
+    	this.durataAbbonamento = durataAbbonamento;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public boolean getScontoEta() {
+    	
+    	return scontoEta;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public void setScontoEta(boolean scontoEta) {
+    	
+    	this.scontoEta = scontoEta;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public boolean getScontoOccasioni() {
+    	
+    	return scontoOccasioni;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public void setScontoOccasioni(boolean scontoOccasioni) {
+    	
+    	this.scontoOccasioni = scontoOccasioni;
     	
     }
     

@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.CampoValidabile;
+package it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.CampoValidabile;
 
 import javax.swing.JTextField;
 

@@ -21,7 +21,8 @@ public class ReceptionistController implements ICustomerRegistrationViewHandler 
 
     //----------------------------------------------------------------
 
-    public ReceptionistController(IReceptionistDashboardView view, Receptionist receptionist) {
+    public ReceptionistController(IReceptionistDashboardView view, 
+    							  Receptionist receptionist) {
     	
         recDashView = view;
         this.receptionist = receptionist;
@@ -45,7 +46,8 @@ public class ReceptionistController implements ICustomerRegistrationViewHandler 
         																	  servizi.getCalcoloEtaService(),
         																	  servizi.getCampoValidabileFactory(),
         																	  servizi.getValidatoreCampi(),
-        																	  servizi.getControlloRequisiti());
+        																	  servizi.getControlloRequisiti(),
+        																	  servizi.getPrezzoFactory());
         
     }
 

@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.StrategieDiPagamento.StrategyUtilities;
+package it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities;
 
 public class KeysConversionUtility {
 	

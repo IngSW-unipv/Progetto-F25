@@ -1,24 +1,26 @@
-package it.unipv.poisw.f25.gympal.factories;
+package it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory;
 
 
 
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
-import it.unipv.poisw.f25.gympal.StrategieDiPagamento.IStrategieCalcoloPrezzo;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Properties;
 
-public class StrategieCalcoloPrezzoFactory {
+import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.IStrategieCalcoloPrezzo;
+import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
+
+public class StrategieCalcoloPrezzoFactory implements IStrategieCalcoloPrezzoFactory {
 	
     private static Properties strategie;
     private static Properties prezzi;
 
 	//----------------------------------------------------------------
     
-    static {
+    public StrategieCalcoloPrezzoFactory() {
     	
         try {
         	
@@ -52,16 +54,16 @@ public class StrategieCalcoloPrezzoFactory {
     
 	//----------------------------------------------------------------
     
-    public static IStrategieCalcoloPrezzo getStrategy(
-    		IRiepilogoDTO abbonamentoDTO,
-    	    boolean scontoEta,
-    	    boolean scontoOccasioni,
-    	    String durata // valori: "trimestrale", "semestrale", "annuale", oppure null
-    	) {
+    @Override
+    public IStrategieCalcoloPrezzo getStrategy(IRiepilogoDTO abbonamentoDTO) {
     	
     	    IStrategieCalcoloPrezzo strategiaBase;
 
     	    // Strategia base: età oppure standard
+    	    
+    	    boolean scontoEta = abbonamentoDTO.getScontoEta();
+    	    boolean scontoOccasioni = abbonamentoDTO.getScontoOccasioni();
+    	    DurataAbbonamento durata = abbonamentoDTO.getDurataAbbonamento();
     	    
     	    String chiave = "strategia.standard";
     	    
@@ -103,11 +105,11 @@ public class StrategieCalcoloPrezzoFactory {
 
     	    
     	    // Wrapper con strategia durata
-    	    if (durata != null && !durata.isEmpty()) {
+    	    if (durata != null) {
     	    	
     	        try {
     	        	
-    	            String durataKey = "strategia." + durata.toLowerCase(); // es: strategia.annuale
+    	            String durataKey = "strategia." + durata.name().toLowerCase(); // es: strategia.annuale
     	            
     	            String durataClassName = strategie.getProperty(durataKey);
     	            

@@ -1,15 +1,15 @@
-package it.unipv.poisw.f25.gympal.StrategieDiPagamento;
+package it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento;
 
 
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
 
-public class PrezzoNessunoStrategy implements IStrategieCalcoloPrezzo{
+public class PrezzoAnnualeStrategy implements IStrategieCalcoloPrezzo {
 	
 	private final IStrategieCalcoloPrezzo base;
 	
 	//----------------------------------------------------------------
 	
-	public PrezzoNessunoStrategy(IStrategieCalcoloPrezzo strategiaBase) {
+	public PrezzoAnnualeStrategy(IStrategieCalcoloPrezzo strategiaBase) {
 		
 		base = strategiaBase;
 		
@@ -20,8 +20,8 @@ public class PrezzoNessunoStrategy implements IStrategieCalcoloPrezzo{
 	@Override
 	public double calcolaPrezzo(IRiepilogoDTO abbonamentoDTO) {
 		
-		//Applica nessuno sconto
-		return base.calcolaPrezzo(abbonamentoDTO);
+		//Applica 15% di sconto
+		return base.calcolaPrezzo(abbonamentoDTO) * 0.85;
 		
 	}
 	

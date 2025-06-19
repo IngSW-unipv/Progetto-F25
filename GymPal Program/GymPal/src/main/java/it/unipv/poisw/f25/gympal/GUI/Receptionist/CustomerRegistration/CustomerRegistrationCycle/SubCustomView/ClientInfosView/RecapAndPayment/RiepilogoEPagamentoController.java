@@ -3,11 +3,11 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.Customer
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
+import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
-import it.unipv.poisw.f25.gympal.StrategieDiPagamento.IStrategieCalcoloPrezzo;
-import it.unipv.poisw.f25.gympal.factories.StrategieCalcoloPrezzoFactory;
 
 public class RiepilogoEPagamentoController {
     
@@ -52,7 +52,7 @@ public class RiepilogoEPagamentoController {
         /*Benché "onAnnulla" utilizzi la stessa callback di "onConferma" (per non duplicare
          *codice - visto che questa callback re-inizializza il ciclo) il listener associato 
          *al bottone "Annulla" non fa altro che eseguire la callback (inizializza un nuovo
-         *ciclo di registrazione), mentre il listener *associato a "Conferma" esegue operazioni
+         *ciclo di registrazione), mentre il listener associato a "Conferma" lancia operazioni
          *collegate al trasferimento dati verso DB, prima di inizializzare un nuovo ciclo di
          *registrazione.*/
         onAnnulla = onConfermaCallback;
@@ -63,86 +63,69 @@ public class RiepilogoEPagamentoController {
         
         aggiornaPrezzo();
 
-        impostaEventi();
+        
+        impostaEventoAvvioPagamento();
+        impostaEventoMetodoPagamento();
+        impostaEventoPopupMenu();
+        impostaEventiOpzioniSconto();
+        impostaEventoIndietro();
+        impostaEventoAnnulla();
+        impostaEventoConferma();
                 
         
     }
     
     //----------------------------------------------------------------    
 
-    private void impostaEventi() {
-        // Imposta listener usando i metodi dell'interfaccia
-        
-        riepilogoEPagamento.addIndietroListener(e -> onIndietro.run());
-        riepilogoEPagamento.addAnnullaListener(e -> onAnnulla.run());
-        
-        riepilogoEPagamento.addConfermaListener(e -> {
-            if(riepilogoEPagamento.isContantiSelected() ||
-               riepilogoEPagamento.isCartaSelected() ||
-               riepilogoEPagamento.isNoPagamentoSelected()) {
-                
-                int result = JOptionPane.showConfirmDialog(
-                        null, // Nessun componente genitore
-                        "Vuoi davvero confermare?", // Messaggio visualizzato
-                        "Conferma iscrizione", //Titolo pannello pop-up
-                        JOptionPane.YES_NO_OPTION //Opzioni presentate all'utente - SI : NO
-                );
-                
-                if (result == JOptionPane.YES_OPTION) {
-                    try {
-                    	
-                    	/*Bisogna dire al coordinatore che la fase di acquisizione
-                    	 *dati è terminata, pertanto bisogna inviare le informazioni
-                    	 *raccolte al service-layer*/
-                    	
-                        onConferma.run(); // Ritorno alla schermata iniziale e reset per un nuovo ciclo
+    private void impostaEventoConferma() {
+
+    	MetodoPagamento metodoPagamento = riepilogoEPagamento.getMetodoPagamentoSelezionato();
+
+    	if(metodoPagamento != MetodoPagamento.NESSUNO) {
+    		
+    	    int result = JOptionPane.showConfirmDialog(
+    	            null, // Nessun componente genitore
+    	            "Vuoi davvero confermare?", // Messaggio visualizzato
+    	            "Conferma iscrizione", // Titolo pannello pop-up
+    	            JOptionPane.YES_NO_OPTION); // Opzioni presentate all'utente - SI : NO
+
+    	    if(result == JOptionPane.YES_OPTION) {
+    	    	
+    	        try {
+    	        	
+    	        	/*Bisogna dire al coordinatore che la fase di acquisizione
+    	             *dati è terminata, pertanto bisogna inviare le informazioni
+    	             *raccolte al service-layer*/
+    	        	
+    	        	// Ritorno alla schermata iniziale e reset per un nuovo ciclo    	        	
+    	            onConferma.run();
+    	            
+    	        } catch(Exception ex) {
+    	        	
+    	            JOptionPane.showMessageDialog(null,
+    	                "Errore durante la conferma:\n" + ex.getMessage(),
+    	                "Errore",
+    	                JOptionPane.ERROR_MESSAGE);
+    	            
+    	        }
+    	    }
+    	    
+    	} else {
+    		
+    	    JOptionPane.showMessageDialog(null,
+    	        "Seleziona una modalità di pagamento prima di confermare",
+    	        "ATTENZIONE!",
+    	        JOptionPane.INFORMATION_MESSAGE);
+    	    
+    	}
+
+  
+    }
     
-                    } catch (Exception ex) {
-                        
-                        JOptionPane.showMessageDialog(
-                                null,
-                                "Errore durante la conferma:\n" + ex.getMessage(),
-                                "Errore",
-                                JOptionPane.ERROR_MESSAGE
-                        );
-                        
-                    }
-                }
-                
-            } else {
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Seleziona una modalità di pagamento prima di confermare",
-                        "ATTENZIONE!",
-                        JOptionPane.INFORMATION_MESSAGE
-                );                
-            }
-        });
-        
-        riepilogoEPagamento.addScontoSuBaseMesiListener(e -> riepilogoEPagamento.showPopupMenu());
-        
-        riepilogoEPagamento.addMensilitaListener(e -> {
-            // Aggiorna testo sconto in base alla mensilità selezionata
-            riepilogoEPagamento.setScontoSuBaseMesiText(riepilogoEPagamento.getDurataSelezionata());
-            aggiornaPrezzo();
-        });
-        
-        riepilogoEPagamento.addScontoEtaListener(e -> aggiornaPrezzo());
-        riepilogoEPagamento.addScontoOccasioniListener(e -> aggiornaPrezzo());
-        
-        riepilogoEPagamento.addMetodoPagamentoListener(e -> {
-        	
-            if(riepilogoEPagamento.isContantiSelected() || riepilogoEPagamento.isCartaSelected()) {
-            	
-                coordinator.acquisisciStatoPagamento(true);
-                
-            } else if (riepilogoEPagamento.isNoPagamentoSelected()) {
-            	
-                coordinator.acquisisciStatoPagamento(false);
-                
-            }
-        });
-        
+    //----------------------------------------------------------------
+    
+    private void impostaEventoAvvioPagamento() {
+    	
         riepilogoEPagamento.addAvvioPagamentoListener(e -> {
             /*Questa istruzione rintraccia il componente grafico principale, e lo assegna al
              *riferimento "framePadre"*/
@@ -153,48 +136,129 @@ public class RiepilogoEPagamentoController {
             SimulazioneOperazione simulazione = new SimulazioneOperazione(framePadre);
             simulazione.start();
         });
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    private void impostaEventoMetodoPagamento() {
+    	
+        riepilogoEPagamento.addMetodoPagamentoListener(e -> {
+        	
+        	/*E' lecito che il controllore conosca le enum - in quanto parti del mdoello
+        	 *di dominio, esse rappresentano un concetto stabile, e vengono usate per
+        	 *popolare o leggere parti del DTO.
+        	 *
+        	 *In quanto tipo immutabile, la enum è priva di logica, quindi non si porta
+        	 *dietro alcuna dipendenza pesante. 
+        	 *
+        	 *Questo controllore non contiene logica di business associata ai valori
+        	 *della enum, si limita ad assegnarli, passarli, o leggerli per decidere se
+        	 *ha senso proseguire con un'azione.*/
+        	
+        	MetodoPagamento metodoPagamento = MetodoPagamento.NESSUNO;
+        	
+            if(riepilogoEPagamento.isContantiSelected()) {
+            	
+            	metodoPagamento = MetodoPagamento.CONTANTI;
+                
+            } else if (riepilogoEPagamento.isCartaSelected()) {
+            	
+            	metodoPagamento = MetodoPagamento.CARTA;
+                
+            }
+            
+            coordinator.acquisisciMetodoPagamento(metodoPagamento);
+            
+        });    	
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    private void impostaEventoPopupMenu() {
+    	
+    	riepilogoEPagamento.addScontoSuBaseMesiListener(e -> riepilogoEPagamento.
+    														 showPopupMenu());
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    private void impostaEventiOpzioniSconto() {
+    	
+        riepilogoEPagamento.addMensilitaListener(e -> {
+            /* Aggiorna testo sconto ("Trimestrale", "Semestrale", ... ) in base alla
+             * mensilità selezionata, ed innesca un corrispondente ricalcolo del prezzo*/
+            riepilogoEPagamento.setScontoSuBaseMesiText(riepilogoEPagamento.getDurataSelezionata());
+            aggiornaScontiEDurata();
+            aggiornaPrezzo();
+        });
+        
+        riepilogoEPagamento.addScontoEtaListener(e -> {aggiornaScontiEDurata(); 
+        											   aggiornaPrezzo();});
+        
+        riepilogoEPagamento.addScontoOccasioniListener(e -> {aggiornaScontiEDurata(); 
+        													 aggiornaPrezzo();});
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    private void impostaEventoIndietro() {
+    	
+    	riepilogoEPagamento.addIndietroListener(e -> onIndietro.run());
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    private void impostaEventoAnnulla() {
+    	
+    	riepilogoEPagamento.addAnnullaListener(e -> onAnnulla.run());
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    private void aggiornaScontiEDurata() {
+    	
+    	String durataSelezionata = riepilogoEPagamento.getDurataSelezionata();
+    	DurataAbbonamento durataEnum;
+
+    	switch (durataSelezionata) {
+    	
+    	    case "Trimestrale":
+    	        durataEnum = DurataAbbonamento.TRIMESTRALE;
+    	        break;
+    	        
+    	    case "Semestrale":
+    	        durataEnum = DurataAbbonamento.SEMESTRALE;
+    	        break;
+    	        
+    	    case "Annuale":
+    	        durataEnum = DurataAbbonamento.ANNUALE;
+    	        break;
+    	        
+    	    default:
+    	        durataEnum = DurataAbbonamento.NESSUNO;
+    	        break;
+    	        
+    	}
+    	
+    	coordinator.acquisisciScontiEDurata(riepilogoEPagamento.isScontoEtaSelected(), 
+    										riepilogoEPagamento.isScontoOccasioniSelected(),
+    										durataEnum);
+    	
     }
     
     //----------------------------------------------------------------
     
     private void aggiornaPrezzo() {
-        
-        boolean scontoEta = riepilogoEPagamento.isScontoEtaSelected();
-        
-        boolean scontoOccasioni = riepilogoEPagamento.isScontoOccasioniSelected();
 
-        String durata = null;
         
-        String durataSelezionata = riepilogoEPagamento.getDurataSelezionata();
-        
-        if ("trimestrale".equalsIgnoreCase(durataSelezionata)) {
-        	
-            durata = "trimestrale";
-            
-        } else if ("semestrale".equalsIgnoreCase(durataSelezionata)) {
-        	
-            durata = "semestrale";
-            
-        } else if ("annuale".equalsIgnoreCase(durataSelezionata)) {
-        	
-            durata = "annuale";
-            
-        } else {
-        	
-            durata = null;
-            
-        }
-
-        IStrategieCalcoloPrezzo strategia = StrategieCalcoloPrezzoFactory.getStrategy(
-            abbonamentoDTO,
-            scontoEta,
-            scontoOccasioni,
-            durata
-        );
-
-        double totale = strategia.calcolaPrezzo(abbonamentoDTO);
-        
-        riepilogoEPagamento.setPrezzoTotale(totale);
+        riepilogoEPagamento.setPrezzoTotale(coordinator.
+        									getDiscountedPrice(abbonamentoDTO));
         
     }
 

@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.Dominio.ControlloRequisitiAnagrafica;
+package it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ControlloRequisitiAnagrafica;
 
 import java.time.LocalDate;
 

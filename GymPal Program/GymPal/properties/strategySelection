@@ -1,10 +1,10 @@
 # Strategie base legate all’età
-strategia.standard=it.unipv.poisw.f25.gympal.StrategieDiPagamento.PrezzoStandardStrategy
-strategia.under18=it.unipv.poisw.f25.gympal.StrategieDiPagamento.PrezzoUnderAgeStrategy
-strategia.over60=it.unipv.poisw.f25.gympal.StrategieDiPagamento.PrezzoAnzianiStrategy
+strategia.standard=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.PrezzoStandardStrategy
+strategia.under18=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.PrezzoUnderAgeStrategy
+strategia.over60=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.PrezzoAnzianiStrategy
 
 # Strategie legate alla durata
-strategia.trimestrale=it.unipv.poisw.f25.gympal.StrategieDiPagamento.PrezzoTrimestraleStrategy
-strategia.semestrale=it.unipv.poisw.f25.gympal.StrategieDiPagamento.PrezzoSemestraleStrategy
-strategia.annuale=it.unipv.poisw.f25.gympal.StrategieDiPagamento.PrezzoAnnualeStrategy
-strategia.nessuno=it.unipv.poisw.f25.gympal.StrategieDiPagamento.PrezzoNessunoStrategy
+strategia.trimestrale=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.PrezzoTrimestraleStrategy
+strategia.semestrale=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.PrezzoSemestraleStrategy
+strategia.annuale=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.PrezzoAnnualeStrategy
+strategia.nessuno=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.PrezzoNessunoStrategy

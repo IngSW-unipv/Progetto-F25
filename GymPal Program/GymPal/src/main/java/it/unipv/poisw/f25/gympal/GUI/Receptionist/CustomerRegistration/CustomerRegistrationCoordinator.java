@@ -3,10 +3,14 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration;
 import java.time.LocalDate;
 import java.util.List;
 
-import it.unipv.poisw.f25.gympal.Dominio.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
+import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.IStrategieCalcoloPrezzoFactory;
+import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.IStrategieCalcoloPrezzo;
+import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
+import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
+import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
+import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
+import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
-import it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
-import it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.ICustomerRegistrationViewHandler;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ISubscriptionCustomizationView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.SubscriptionCustomizationController;
@@ -19,6 +23,7 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerR
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment.RiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.AbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.CostruttoreDTOHelper;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
 
 public class CustomerRegistrationCoordinator implements IRegistrationCoordinator{
 
@@ -34,6 +39,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     private ICampoValidabileFactory campovalidabileFactory;
     private IValidatoreCampi validatoreCampi;
     private ICtrlReqAnagraficiService controlloRequisiti;
+    private IStrategieCalcoloPrezzoFactory prezzoFactory;
 
     private AbbonamentoDTO abbonamentoDTO;
     private CostruttoreDTOHelper costruttoreDTOHelper;
@@ -45,13 +51,16 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     									   ICalcoloEtaService etaService,
     									   ICampoValidabileFactory campovalidabileFactory,
     									   IValidatoreCampi validatoreCampi,
-    									   ICtrlReqAnagraficiService controlloRequisiti) {
+    									   ICtrlReqAnagraficiService controlloRequisiti,
+    									   IStrategieCalcoloPrezzoFactory prezzoFactory) {
         
     	this.viewHandler = viewHandler;
     	this.etaService = etaService;
     	this.campovalidabileFactory = campovalidabileFactory;
     	this.validatoreCampi = validatoreCampi;
     	this.controlloRequisiti = controlloRequisiti;
+    	this.prezzoFactory = prezzoFactory;
+    	
         inizializzaCicloRegistrazioneCliente();
                 
     }
@@ -177,12 +186,12 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     
     //----------------------------------------------------------------
     
-    @Override
+    /*@Override
     public void acquisisciStatoPagamento(boolean statoPagamento) {
     	
     	costruttoreDTOHelper.statoPagamento(statoPagamento);
     	
-    }
+    }*/
     
     //----------------------------------------------------------------
     
@@ -221,5 +230,37 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     }
     
    //----------------------------------------------------------------
+    
+    @Override
+    public double getDiscountedPrice(IRiepilogoDTO abbonamentoDTO) {
+
+    	
+    	IStrategieCalcoloPrezzo strategia = prezzoFactory.getStrategy(abbonamentoDTO);
+    	
+    	return strategia.calcolaPrezzo(abbonamentoDTO);
+    	
+    }
+    
+   //----------------------------------------------------------------
+    
+    @Override
+    public void acquisisciMetodoPagamento (MetodoPagamento metodoPagamento) {
+    	
+    	costruttoreDTOHelper.impostaMetodoPagamento(metodoPagamento);
+    	
+    }
+    
+   //----------------------------------------------------------------
+    
+    @Override
+    public void acquisisciScontiEDurata(boolean scontoEta, boolean scontoOccasioni,
+										DurataAbbonamento durataAbbonamento) {
+    	
+    	costruttoreDTOHelper.impostaScontiEDurata(scontoEta, scontoOccasioni,
+    											  durataAbbonamento);
+    	
+    }
+    
+    //----------------------------------------------------------------    
     
 }

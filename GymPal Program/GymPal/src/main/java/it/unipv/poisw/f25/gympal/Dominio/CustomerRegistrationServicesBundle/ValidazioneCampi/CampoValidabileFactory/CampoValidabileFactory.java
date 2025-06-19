@@ -1,10 +1,10 @@
-package it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.CampoValidabileFactory;
+package it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.CampoValidabileFactory;
 
 import javax.swing.JTextField;
 
+import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.CampoValidabile.CampoValidabile;
+import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.CampoValidabile.ICampoValidabile;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
-import it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.CampoValidabile.CampoValidabile;
-import it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.CampoValidabile.ICampoValidabile;
 
 public class CampoValidabileFactory implements ICampoValidabileFactory {
 	

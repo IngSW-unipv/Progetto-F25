@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +24,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.AbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
 
 public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagamentoView{
@@ -140,6 +139,8 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
         sceltaMesi.add(semestrale);
         sceltaMesi.add(annuale);
         sceltaMesi.add(nessuno);
+        
+        nessuno.setSelected(true);
         
         /*Il JPopupMenu non è un componente visivo fisso, come un JPanel o un JButton.
          *Esso è visualizzato in modo dinamico, su base temporanea, tramite invocazione del
@@ -449,5 +450,17 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	    }
 	    
 	//----------------------------------------------------------------
+	    
+	    @Override
+	    public MetodoPagamento getMetodoPagamentoSelezionato() {
+	    	
+	    	if(isContantiSelected()) {return MetodoPagamento.CONTANTI;}
+	    	else if(isCartaSelected()) {return MetodoPagamento.CARTA;}
+	    	else if(isNoPagamentoSelected()) {return MetodoPagamento.NESSUNO;}
+	    	else {return MetodoPagamento.NESSUNO;}
+	    	
+	    }
+	    
+	    
 	
 }

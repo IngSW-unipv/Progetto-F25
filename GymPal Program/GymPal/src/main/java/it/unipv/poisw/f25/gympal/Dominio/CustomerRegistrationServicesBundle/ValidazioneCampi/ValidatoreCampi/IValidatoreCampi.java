@@ -1,6 +1,6 @@
-package it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.ValidatoreCampi;
+package it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.ValidatoreCampi;
 
-import it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.CampoValidabile.ICampoValidabile;
+import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.CampoValidabile.ICampoValidabile;
 
 public interface IValidatoreCampi {
 	
