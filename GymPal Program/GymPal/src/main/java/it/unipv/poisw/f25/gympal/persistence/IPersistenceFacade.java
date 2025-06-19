@@ -8,7 +8,7 @@ import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
 //Interfaccia per accedere allo strato di persistenza
 public interface IPersistenceFacade {
 
-    //Metodi relativi al DAO Cliente
+    // Metodi relativi al DAO Cliente
  
 	//Recupera tutti i clienti dal database
     List<Cliente> selectAllClienti();
