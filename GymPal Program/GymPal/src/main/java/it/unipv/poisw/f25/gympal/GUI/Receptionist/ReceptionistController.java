@@ -1,8 +1,7 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist;
 import javax.swing.JPanel;
 
-import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.CalcoloEtaService;
-import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
+import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.DomainServicesBundle;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationView;
@@ -11,11 +10,13 @@ import it.unipv.poisw.f25.gympal.staff.Receptionist;
 public class ReceptionistController implements ICustomerRegistrationViewHandler {
 
     private final IReceptionistDashboardView recDashView;
+
     private Receptionist receptionist;
 
     private LogoutConfirmationView logoutView;
     private String schermataPreLogout;
 
+    private DomainServicesBundle servizi;
     private CustomerRegistrationCoordinator customerRegistrationCoordinator;
 
     //----------------------------------------------------------------
@@ -33,10 +34,18 @@ public class ReceptionistController implements ICustomerRegistrationViewHandler 
         
         /*Siccome "ReceptionistController" incarna il confine fra GUI e Dominio, è lecito
          *che esso istanzi oggetti concreti.*/
-        ICalcoloEtaService etaService = new CalcoloEtaService();
+
+        /*Al fine di alleggerire il codice, i servizi sono raggruppati in un apposito 
+         *bundle.*/
+        servizi = new DomainServicesBundle();
+        
         
         // Inizializza il coordinator passando this come handler
-        customerRegistrationCoordinator = new CustomerRegistrationCoordinator(this, etaService);
+        customerRegistrationCoordinator = new CustomerRegistrationCoordinator(this, 
+        																	  servizi.getCalcoloEtaService(),
+        																	  servizi.getCampoValidabileFactory(),
+        																	  servizi.getValidatoreCampi(),
+        																	  servizi.getControlloRequisiti());
         
     }
 

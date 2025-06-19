@@ -1,8 +1,9 @@
 package it.unipv.poisw.f25.gympal.GUI.LoginScreen;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.RegexCheck;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.CredentialsPOJO;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.RegexCheck;
 import it.unipv.poisw.f25.gympal.staff.Staff;
 
 public class LoginManager implements IRegexExpression {
@@ -27,12 +28,12 @@ public class LoginManager implements IRegexExpression {
 
     public Staff login(String nome, String cognome, String staffID) {
     	
-        RegexCheck reg = new RegexCheck();
+    	IRegexCheck reg = new RegexCheck();
         StaffFactory factory = new StaffFactory();
 
-        if (RegexCheck.check(nome, NAME_REGEXEXPRESSION)
-            && RegexCheck.check(cognome, SURNAME_REGEXEXPRESSION)
-            && RegexCheck.check(staffID, STAFF_ID_REGEXEXPRESSION)) {
+        if (reg.check(nome, NAME_REGEXEXPRESSION)
+            && reg.check(cognome, SURNAME_REGEXEXPRESSION)
+            && reg.check(staffID, STAFF_ID_REGEXEXPRESSION)) {
 
             CredentialsPOJO credentials = new CredentialsPOJO();
             credentials.setAllProperties(nome, cognome, staffID);

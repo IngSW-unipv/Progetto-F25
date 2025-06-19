@@ -1,6 +1,8 @@
-package it.unipv.poisw.f25.gympal.GUI.Utilities;
+package it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck;
 
-public class RegexCheck {
+import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
+
+public class RegexCheck implements IRegexCheck{
 	
 	public RegexCheck() {}
 	
@@ -13,7 +15,8 @@ public class RegexCheck {
 	 * Aggiornato il metodo 'check' a seguito di test, affinché sia flessibile rispetto
 	 * al tipo di regex usata, ed il controllo eseguito con essa.*/
 	
-	public static boolean check(String campo, String regex) {
+	@Override
+	public boolean check(String campo, String regex) {
 		
 	    if (campo == null) return false;
 
@@ -41,6 +44,7 @@ public class RegexCheck {
 	
 	//----------------------------------------------------------------
 	
+	@Override
 	public String retrieveSubString(String staffID) {
 		
 	    if (staffID == null || staffID.length() < 3) {

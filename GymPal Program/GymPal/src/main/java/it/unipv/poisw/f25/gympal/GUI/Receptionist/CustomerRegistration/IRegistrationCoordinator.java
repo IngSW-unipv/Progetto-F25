@@ -3,6 +3,10 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration;
 import java.time.LocalDate;
 import java.util.List;
 
+import it.unipv.poisw.f25.gympal.Dominio.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
+import it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
+import it.unipv.poisw.f25.gympal.Dominio.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
+
 public interface IRegistrationCoordinator {
 	
 	
@@ -25,6 +29,18 @@ public interface IRegistrationCoordinator {
 	//----------------------------------------------------------------
 	
 	public boolean isMinorenne(LocalDate dataNascita);
+	
+	//----------------------------------------------------------------
+	
+	public ICampoValidabileFactory getCampoValidabileFactory();
+	
+	//----------------------------------------------------------------
+	
+	public IValidatoreCampi getValidatoreCampi();
+	
+	//----------------------------------------------------------------
+	
+	public ICtrlReqAnagraficiService getCtrlReqAnagraficiService();
 	
 	//----------------------------------------------------------------
 

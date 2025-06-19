@@ -5,20 +5,25 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+
 import org.junit.Test;
 
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.RegexCheck;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.RegexCheck;
 
 
 public class RegexCheckTest {
+	
+
+	IRegexCheck reg =  new RegexCheck();
 	
     @Test
     public void testCheck_validStaffID() {
     	
         String validStaffID = "Rossi_Mario_DIP_1234IT";
         
-        assertTrue(RegexCheck.check(validStaffID, IRegexExpression.STAFF_ID_REGEXEXPRESSION));
+        assertTrue(reg.check(validStaffID, IRegexExpression.STAFF_ID_REGEXEXPRESSION));
     }
     
 	//----------------------------------------------------------------
@@ -30,7 +35,7 @@ public class RegexCheckTest {
     	
         String invalidStaffID = "rossi_mario_dip_1234it"; 
         
-        assertFalse(RegexCheck.check(invalidStaffID, IRegexExpression.STAFF_ID_REGEXEXPRESSION));
+        assertFalse(reg.check(invalidStaffID, IRegexExpression.STAFF_ID_REGEXEXPRESSION));
     }
     
 	//----------------------------------------------------------------
@@ -40,7 +45,7 @@ public class RegexCheckTest {
     	
         String name = "Jean-Pierre";
         
-        assertTrue(RegexCheck.check(name, IRegexExpression.NAME_REGEXEXPRESSION));
+        assertTrue(reg.check(name, IRegexExpression.NAME_REGEXEXPRESSION));
         
     }
     
@@ -51,7 +56,7 @@ public class RegexCheckTest {
     	
         String name = "Jean<Marie";
         
-        assertFalse(RegexCheck.check(name, IRegexExpression.NAME_REGEXEXPRESSION));
+        assertFalse(reg.check(name, IRegexExpression.NAME_REGEXEXPRESSION));
         
     }
     
@@ -112,7 +117,7 @@ public class RegexCheckTest {
     @Test
     public void testCheck_nullInput() {
     	
-        assertFalse(RegexCheck.check(null, IRegexExpression.NAME_REGEXEXPRESSION));
+        assertFalse(reg.check(null, IRegexExpression.NAME_REGEXEXPRESSION));
         
     }
     
@@ -123,7 +128,7 @@ public class RegexCheckTest {
     	
         String longInput = new String(new char[51]).replace('\0', 'A');
         
-        assertFalse(RegexCheck.check(longInput, IRegexExpression.NAME_REGEXEXPRESSION));
+        assertFalse(reg.check(longInput, IRegexExpression.NAME_REGEXEXPRESSION));
         
     }
     
@@ -136,7 +141,7 @@ public class RegexCheckTest {
 
         for (String name : validNames) {
             assertTrue("Expected valid name to pass: " + name,
-                       RegexCheck.check(name, IRegexExpression.NAME_REGEXEXPRESSION));
+                       reg.check(name, IRegexExpression.NAME_REGEXEXPRESSION));
             
         }
         
@@ -151,7 +156,7 @@ public class RegexCheckTest {
 
         for (String name : invalidNames) {
             assertFalse("Expected invalid name to fail: " + name,
-                        RegexCheck.check(name, IRegexExpression.NAME_REGEXEXPRESSION));
+                        reg.check(name, IRegexExpression.NAME_REGEXEXPRESSION));
             
         }
         
@@ -168,7 +173,7 @@ public class RegexCheckTest {
 
         for (String cf : validCf) {
             assertTrue("Codice Fiscale valido non riconosciuto: " + cf,
-                       RegexCheck.check(cf, IRegexExpression.CODICE_FISCALE));
+                       reg.check(cf, IRegexExpression.CODICE_FISCALE));
         }
     }
 
@@ -185,7 +190,7 @@ public class RegexCheckTest {
 
         for (String cf : invalidCf) {
             assertFalse("Codice Fiscale non valido riconosciuto: " + cf,
-                        RegexCheck.check(cf, IRegexExpression.CODICE_FISCALE));
+                        reg.check(cf, IRegexExpression.CODICE_FISCALE));
         }
     }
     
@@ -203,7 +208,7 @@ public class RegexCheckTest {
 
         for (String email : validEmails) {
             assertTrue("Email valida non riconosciuta: " + email,
-                    RegexCheck.check(email, IRegexExpression.EMAIL));
+                    reg.check(email, IRegexExpression.EMAIL));
         }
     }
     
@@ -225,7 +230,7 @@ public class RegexCheckTest {
 
         for (String email : invalidEmails) {
             assertFalse("Email non valida riconosciuta: " + email,
-                    RegexCheck.check(email, IRegexExpression.EMAIL));
+                    reg.check(email, IRegexExpression.EMAIL));
         }
     }
     
@@ -238,7 +243,7 @@ public class RegexCheckTest {
         String email = localPart + "@" + domain;
 
         assertTrue("Email con lunghezza massima non riconosciuta: " + email,
-                RegexCheck.check(email, IRegexExpression.EMAIL));
+                reg.check(email, IRegexExpression.EMAIL));
     }
     
 	//----------------------------------------------------------------
@@ -250,7 +255,7 @@ public class RegexCheckTest {
         String email = localPart + "@" + domain;
 
         assertFalse("Email con parte locale troppo lunga accettata: " + email,
-                RegexCheck.check(email, IRegexExpression.EMAIL));
+                reg.check(email, IRegexExpression.EMAIL));
     }
 
 	//----------------------------------------------------------------
@@ -302,22 +307,22 @@ public class RegexCheckTest {
         // Spazi all'inizio e alla fine - dovrebbe fallire se la regex non lo consente
         String emailWithLeadingTrailingSpaces = "  mario.rossi@example.com  ";
         assertFalse("Email con spazi iniziali/finali dovrebbe fallire",
-                    RegexCheck.check(emailWithLeadingTrailingSpaces, IRegexExpression.EMAIL));
+                    reg.check(emailWithLeadingTrailingSpaces, IRegexExpression.EMAIL));
         
         // Spazi all'interno del campo (non ammessi in email)
         String emailWithInternalSpaces = "mario. rossi@example.com";
         assertFalse("Email con spazi interni dovrebbe fallire",
-                    RegexCheck.check(emailWithInternalSpaces, IRegexExpression.EMAIL));
+                    reg.check(emailWithInternalSpaces, IRegexExpression.EMAIL));
 
         // Spazi nei nomi (se la regex NAME li consente, test che passano)
         String nameWithSpaces = "Anna Maria";
         assertTrue("Nome con spazi dovrebbe passare",
-                   RegexCheck.check(nameWithSpaces, IRegexExpression.NAME_REGEXEXPRESSION));
+                   reg.check(nameWithSpaces, IRegexExpression.NAME_REGEXEXPRESSION));
 
         // Spazi nei nomi con underscore o caratteri non ammessi - fallisce
         String invalidNameWithSpaces = "Anna Maria_";
         assertFalse("Nome con caratteri non ammessi dovrebbe fallire",
-                    RegexCheck.check(invalidNameWithSpaces, IRegexExpression.NAME_REGEXEXPRESSION));
+                    reg.check(invalidNameWithSpaces, IRegexExpression.NAME_REGEXEXPRESSION));
     }
 
 	//----------------------------------------------------------------
