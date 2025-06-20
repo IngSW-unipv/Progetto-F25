@@ -33,7 +33,7 @@ public class DataSynchronizer {
     //Metodo principale che gestisce la sincronizzazione
     public void synchronizeMySQLToH2OnStartup() {
         System.out.println("Tentativo di sincronizzazione dati da MySQL a H2");
-        // Tenta una connessione di prova per verificare lo stato del DB primario
+        //Tenta una connessione di prova per verificare lo stato del DB primario
         //Blocco try-wiith-resources chiude la connessione automaticamente
         try (Connection check = primaryFactory.createConnection()) {
             if (primaryFactory.isOpen(check)) {
@@ -54,6 +54,26 @@ public class DataSynchronizer {
                 		"INSERT INTO CALENDARIO (NOME_EVENTO, DATA_EVENTO, ORA_INIZIO, ORA_FINE, MESSAGGIO, DESTINATARIO_MESSAGGIO) VALUES (?, ?, ?, ?, ?, ?)", 
                 		new String[]{"NOME_EVENTO", "DATA_EVENTO", "ORA_INIZIO", "ORA_FINE", "MESSAGGIO", "DESTINATARIO_MESSAGGIO"});
                 
+                synchronizeTable("TURNI",
+                        "SELECT DATA, REC_MAT, REC_POM, PT_MAT, PT_POM FROM TURNI",
+                        "INSERT INTO TURNI (DATA, REC_MAT, REC_POM, PT_MAT, PT_POM) VALUES (?, ?, ?, ?, ?)",
+                        new String[]{"DATA", "REC_MAT", "REC_POM", "PT_MAT", "PT_POM"});
+                
+                synchronizeTable("SESSIONI_CORSI",
+                        "SELECT ID_SESSIONE, STAFF_ID, DATA, FASCIA_ORARIA, NUM_ISCRITTI FROM SESSIONI_CORSI",
+                        "INSERT INTO SESSIONI_CORSI (ID_SESSIONE, STAFF_ID, DATA, FASCIA_ORARIA, NUM_ISCRITTI) VALUES (?, ?, ?, ?, ?)",
+                        new String[]{"ID_SESSIONE", "STAFF_ID", "DATA", "FASCIA_ORARIA", "NUM_ISCRITTI"});
+
+                synchronizeTable("PARTECIPAZIONI_CORSI",
+                        "SELECT CF, ID_SESSIONE FROM PARTECIPAZIONI_CORSI",
+                        "INSERT INTO PARTECIPAZIONI_CORSI (CF, ID_SESSIONE) VALUES (?, ?)",
+                        new String[]{"CF", "ID_SESSIONE"});
+
+                synchronizeTable("DATE_SCONTI",
+                        "SELECT NOME_SCONTO, DATA_SCONTO, AMOUNT_SCONTO FROM DATE_SCONTI",
+                        "INSERT INTO DATE_SCONTI (NOME_SCONTO, DATA_SCONTO, AMOUNT_SCONTO) VALUES (?, ?, ?)",
+                        new String[]{"NOME_SCONTO", "DATA_SCONTO", "AMOUNT_SCONTO"});
+
                 //Aggiorno il timestamp dell'ultima sincronizzazione corretta
                 updateLastSyncTimestamp();
                 

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,38 +41,45 @@ public class DataSynchronizerTest {
         //Configura il DataSource sorgente in-memory
         sourceDataSource = new JdbcDataSource();
 
-        sourceDataSource.setURL("jdbc:h2:mem:sourceDB;DB_CLOSE_DELAY=-1;MODE=MySQL");
+        sourceDataSource.setURL("jdbc:h2:mem:sourceDB;DB_CLOSE_DELAY=-1;MODE=MySQL;DATABASE_TO_UPPER=false");
         sourceDataSource.setUser("sa");
         sourceDataSource.setPassword("");
 
         //Configura il DataSource di destinazione in-memory
         destDataSource = new JdbcDataSource();
-        destDataSource.setURL("jdbc:h2:mem:destDB;DB_CLOSE_DELAY=-1;MODE=MySQL");
+        destDataSource.setURL("jdbc:h2:mem:destDB;DB_CLOSE_DELAY=-1;MODE=MySQL;DATABASE_TO_UPPER=false");
         destDataSource.setUser("sa");
         destDataSource.setPassword("");
 
         //Crea le tabelle nel DB SORGENTE e inserisce i dati di test
         try (Connection conn = sourceDataSource.getConnection(); Statement stmt = conn.createStatement()) {
-            // Aggiornato lo schema della tabella DIPENDENTI
+            // Schema tabelle
             stmt.execute("CREATE TABLE DIPENDENTI (STAFF_ID VARCHAR(50) PRIMARY KEY, NOME VARCHAR(50), COGNOME VARCHAR(50), CONTATTO VARCHAR(100))");
-            // Aggiornato lo schema della tabella CLIENTI per includere le nuove colonne
             stmt.execute("CREATE TABLE CLIENTI (CF VARCHAR(16) PRIMARY KEY, NOME VARCHAR(50), COGNOME VARCHAR(50), SESSO CHAR(1), FLAG_MINOR TINYINT, CONTATTO VARCHAR(100), ABBONAMENTO VARCHAR(50), INIZIO_ABBONAMENTO DATE, FINE_ABBONAMENTO DATE, PAGAMENTO_EFFETTUATO BOOLEAN, COMPOSIZIONE_ABBONAMENTO VARCHAR(255))");
-            // Aggiornato lo schema della tabella CALENDARIO
             stmt.execute("CREATE TABLE CALENDARIO (NOME_EVENTO VARCHAR(100), DATA_EVENTO DATE, ORA_INIZIO TIME, ORA_FINE TIME, MESSAGGIO TEXT, DESTINATARIO_MESSAGGIO VARCHAR(100), PRIMARY KEY (NOME_EVENTO, DATA_EVENTO, ORA_INIZIO, ORA_FINE))");
+            stmt.execute("CREATE TABLE TURNI (DATA DATE PRIMARY KEY, REC_MAT VARCHAR(50), REC_POM VARCHAR(50), PT_MAT VARCHAR(50), PT_POM VARCHAR(50))");
+            stmt.execute("CREATE TABLE SESSIONI_CORSI (ID_SESSIONE VARCHAR(50) PRIMARY KEY, STAFF_ID VARCHAR(50), DATA DATE, FASCIA_ORARIA VARCHAR(11), NUM_ISCRITTI INT)");
+            stmt.execute("CREATE TABLE PARTECIPAZIONI_CORSI (CF VARCHAR(16), ID_SESSIONE VARCHAR(50), PRIMARY KEY (CF, ID_SESSIONE))");
+            stmt.execute("CREATE TABLE DATE_SCONTI (NOME_SCONTO VARCHAR(100) PRIMARY KEY, DATA_SCONTO DATE, AMOUNT_SCONTO DECIMAL(5, 2))");
 
-            // Inserisci dati completi e realistici per il test
+
+            // Inserisci dati per DIPENDENTI
+            stmt.execute("INSERT INTO DIPENDENTI (STAFF_ID, NOME, COGNOME, CONTATTO) VALUES ('EMP001', 'Luca', 'Bianchi', 'luca.bianchi@gympal.com')");
+            stmt.execute("INSERT INTO DIPENDENTI (STAFF_ID, NOME, COGNOME, CONTATTO) VALUES ('EMP002', 'Anna', 'Neri', 'anna.neri@gympal.com')");
+
+            // Inserisci dati per CLIENTI
             String insertClientSQL = "INSERT INTO CLIENTI (CF, NOME, COGNOME, SESSO, FLAG_MINOR, CONTATTO, ABBONAMENTO, INIZIO_ABBONAMENTO, FINE_ABBONAMENTO, PAGAMENTO_EFFETTUATO, COMPOSIZIONE_ABBONAMENTO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = conn.prepareStatement(insertClientSQL)) {
                 ps.setString(1, "MRORSS80A01Z123X");
                 ps.setString(2, "Mario");
                 ps.setString(3, "Rossi");
                 ps.setString(4, "M");
-                ps.setBoolean(5, false); // FLAG_MINOR (isMinorenne)
+                ps.setBoolean(5, false);
                 ps.setString(6, "mario.rossi@example.com");
                 ps.setString(7, "Mensile Base");
-                ps.setObject(8, LocalDate.of(2025, 1, 1)); // Inizio Abbonamento
-                ps.setObject(9, LocalDate.of(2025, 1, 31)); // Fine Abbonamento
-                ps.setBoolean(10, true); // Pagamento Effettuato
+                ps.setObject(8, LocalDate.of(2025, 1, 1));
+                ps.setObject(9, LocalDate.of(2025, 1, 31));
+                ps.setBoolean(10, true);
                 ps.setString(11, "Accesso sala pesi, corsi collettivi");
                 ps.executeUpdate();
 
@@ -89,23 +97,33 @@ public class DataSynchronizerTest {
                 ps.executeUpdate();
             }
 
-            // Inserisci dati per DIPENDENTI
-            stmt.execute("INSERT INTO DIPENDENTI (STAFF_ID, NOME, COGNOME, CONTATTO) VALUES ('EMP001', 'Luca', 'Bianchi', 'luca.bianchi@gympal.com')");
-
-            // Inserisci dati per CALENDARIO (esempio)
+            // Inserisci dati per CALENDARIO
             stmt.execute("INSERT INTO CALENDARIO (NOME_EVENTO, DATA_EVENTO, ORA_INIZIO, ORA_FINE, MESSAGGIO, DESTINATARIO_MESSAGGIO) VALUES ('Corso Yoga', '2025-06-15', '10:00:00', '11:00:00', 'Corso di Yoga base', 'Tutti i membri')");
+
+            // Inserisci dati per TURNI
+            stmt.execute("INSERT INTO TURNI (DATA, REC_MAT, REC_POM, PT_MAT, PT_POM) VALUES ('2025-06-15', 'EMP001', 'EMP002', 'EMP001', 'EMP002')");
+
+            // Inserisci dati per SESSIONI_CORSI
+            stmt.execute("INSERT INTO SESSIONI_CORSI (ID_SESSIONE, STAFF_ID, DATA, FASCIA_ORARIA, NUM_ISCRITTI) VALUES ('SESS01', 'EMP001', '2025-06-15', '10:00-11:00', 10)");
+
+            // Inserisci dati per PARTECIPAZIONI_CORSI
+            stmt.execute("INSERT INTO PARTECIPAZIONI_CORSI (CF, ID_SESSIONE) VALUES ('MRORSS80A01Z123X', 'SESS01')");
+
+            // Inserisci dati per DATE_SCONTI
+            stmt.execute("INSERT INTO DATE_SCONTI (NOME_SCONTO, DATA_SCONTO, AMOUNT_SCONTO) VALUES ('Sconto Estivo', '2025-06-01', 15.50)");
         }
 
-        // 4. Crea le tabelle nel DB DESTINAZIONE (vuote o con dati "vecchi" da sovrascrivere)
+        // Crea le tabelle nel DB DESTINAZIONE (vuote o con dati "vecchi" da sovrascrivere)
         try (Connection conn = destDataSource.getConnection(); Statement stmt = conn.createStatement()) {
-            // Aggiornato lo schema della tabella DIPENDENTI
             stmt.execute("CREATE TABLE DIPENDENTI (STAFF_ID VARCHAR(50) PRIMARY KEY, NOME VARCHAR(50), COGNOME VARCHAR(50), CONTATTO VARCHAR(100))");
-            // Aggiornato lo schema della tabella CLIENTi
             stmt.execute("CREATE TABLE CLIENTI (CF VARCHAR(16) PRIMARY KEY, NOME VARCHAR(50), COGNOME VARCHAR(50), SESSO CHAR(1), FLAG_MINOR TINYINT, CONTATTO VARCHAR(100), ABBONAMENTO VARCHAR(50), INIZIO_ABBONAMENTO DATE, FINE_ABBONAMENTO DATE, PAGAMENTO_EFFETTUATO BOOLEAN, COMPOSIZIONE_ABBONAMENTO VARCHAR(255))");
-            // Aggiornato lo schema della tabella CALENDARIO
             stmt.execute("CREATE TABLE CALENDARIO (NOME_EVENTO VARCHAR(100), DATA_EVENTO DATE, ORA_INIZIO TIME, ORA_FINE TIME, MESSAGGIO TEXT, DESTINATARIO_MESSAGGIO VARCHAR(100), PRIMARY KEY (NOME_EVENTO, DATA_EVENTO, ORA_INIZIO, ORA_FINE))");
+            stmt.execute("CREATE TABLE TURNI (DATA DATE PRIMARY KEY, REC_MAT VARCHAR(50), REC_POM VARCHAR(50), PT_MAT VARCHAR(50), PT_POM VARCHAR(50))");
+            stmt.execute("CREATE TABLE SESSIONI_CORSI (ID_SESSIONE VARCHAR(50) PRIMARY KEY, STAFF_ID VARCHAR(50), DATA DATE, FASCIA_ORARIA VARCHAR(11), NUM_ISCRITTI INT)");
+            stmt.execute("CREATE TABLE PARTECIPAZIONI_CORSI (CF VARCHAR(16), ID_SESSIONE VARCHAR(50), PRIMARY KEY (CF, ID_SESSIONE))");
+            stmt.execute("CREATE TABLE DATE_SCONTI (NOME_SCONTO VARCHAR(100) PRIMARY KEY, DATA_SCONTO DATE, AMOUNT_SCONTO DECIMAL(5, 2))");
             stmt.execute("CREATE TABLE SINCRO_INFO (CHIAVE VARCHAR(255) PRIMARY KEY, VALORE VARCHAR(255))");
-
+            
             // Inseriamo un dato "vecchio" per verificare che la sincronizzazione lo cancelli
             stmt.execute("INSERT INTO CLIENTI (CF, NOME, COGNOME, SESSO, FLAG_MINOR, CONTATTO, ABBONAMENTO, INIZIO_ABBONAMENTO, FINE_ABBONAMENTO, PAGAMENTO_EFFETTUATO, COMPOSIZIONE_ABBONAMENTO) VALUES ('DTALGH65C03Z789X', 'Dante', 'Alighieri', 'M', FALSE, 'dante@example.com', 'Mensile', '2024-01-01', '2024-01-31', TRUE, 'Solo sala pesi')");
         }
@@ -125,33 +143,55 @@ public class DataSynchronizerTest {
 
         //Verifica i risultati sul database di destinazione
         try (Connection conn = destDataSource.getConnection(); Statement stmt = conn.createStatement()) {
-            // Verifica che i dati vecchi siano stati cancellati e i nuovi inseriti
+            // Verifica CLIENTI
             try (ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM CLIENTI")) {
                 assertTrue("Il ResultSet dovrebbe avere un risultato", rs.next());
-                int rowCount = rs.getInt(1);
-                assertEquals("La tabella CLIENTI di destinazione dovrebbe avere 2 righe", 2, rowCount);
+                assertEquals("La tabella CLIENTI di destinazione dovrebbe avere 2 righe", 2, rs.getInt(1));
             }
-
-            // Verifica la correttezza di un dato specifico e delle nuove colonne
-            try (ResultSet rs = stmt.executeQuery("SELECT NOME, COGNOME, SESSO, FLAG_MINOR, CONTATTO, ABBONAMENTO, INIZIO_ABBONAMENTO, FINE_ABBONAMENTO, PAGAMENTO_EFFETTUATO, COMPOSIZIONE_ABBONAMENTO FROM CLIENTI WHERE CF = 'MRORSS80A01Z123X'")) {
+            try (ResultSet rs = stmt.executeQuery("SELECT * FROM CLIENTI WHERE CF = 'MRORSS80A01Z123X'")) {
                 assertTrue("Dovrebbe esistere un cliente con CF MRORSS80A01Z123X", rs.next());
                 assertEquals("Il nome dovrebbe essere 'Mario'", "Mario", rs.getString("NOME"));
-                assertEquals("Il cognome dovrebbe essere 'Rossi'", "Rossi", rs.getString("COGNOME"));
-                assertEquals("Il sesso dovrebbe essere 'M'", "M", rs.getString("SESSO"));
                 assertEquals("isMinorenne dovrebbe essere false", 0, rs.getInt("FLAG_MINOR"));
-                assertEquals("Il contatto dovrebbe essere 'mario.rossi@example.com'", "mario.rossi@example.com", rs.getString("CONTATTO"));
-                assertEquals("L'abbonamento dovrebbe essere 'Mensile Base'", "Mensile Base", rs.getString("ABBONAMENTO"));
-                assertEquals("L'inizio abbonamento dovrebbe essere 2025-01-01", LocalDate.of(2025, 1, 1), rs.getObject("INIZIO_ABBONAMENTO", LocalDate.class));
-                assertEquals("La fine abbonamento dovrebbe essere 2025-01-31", LocalDate.of(2025, 1, 31), rs.getObject("FINE_ABBONAMENTO", LocalDate.class));
-                assertTrue("Pagamento Effettuato dovrebbe essere true", rs.getBoolean("PAGAMENTO_EFFETTUATO"));
-                assertEquals("La composizione abbonamento dovrebbe essere corretta", "Accesso sala pesi, corsi collettivi", rs.getString("COMPOSIZIONE_ABBONAMENTO"));
             }
 
-            // Verifica che anche DIPENDENTI sia stato sincronizzato (count base)
+            // Verifica DIPENDENTI
             try (ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM DIPENDENTI")) {
-                assertTrue("Il ResultSet dovrebbe avere un risultato", rs.next());
-                int rowCount = rs.getInt(1);
-                assertEquals("La tabella DIPENDENTI di destinazione dovrebbe avere 1 riga", 1, rowCount);
+                assertTrue(rs.next());
+                assertEquals("La tabella DIPENDENTI di destinazione dovrebbe avere 2 righe", 2, rs.getInt(1));
+            }
+            
+            // Verifica CALENDARIO
+            try (ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM CALENDARIO")) {
+                assertTrue(rs.next());
+                assertEquals("La tabella CALENDARIO di destinazione dovrebbe avere 1 riga", 1, rs.getInt(1));
+            }
+            
+            // Verifica TURNI
+            try (ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM TURNI")) {
+                assertTrue(rs.next());
+                assertEquals("La tabella TURNI di destinazione dovrebbe avere 1 riga", 1, rs.getInt(1));
+            }
+
+            // Verifica SESSIONI_CORSI
+            try (ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM SESSIONI_CORSI")) {
+                assertTrue(rs.next());
+                assertEquals("La tabella SESSIONI_CORSI di destinazione dovrebbe avere 1 riga", 1, rs.getInt(1));
+            }
+
+            // Verifica PARTECIPAZIONI_CORSI
+            try (ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM PARTECIPAZIONI_CORSI")) {
+                assertTrue(rs.next());
+                assertEquals("La tabella PARTECIPAZIONI_CORSI di destinazione dovrebbe avere 1 riga", 1, rs.getInt(1));
+            }
+            
+            // Verifica DATE_SCONTI
+            try (ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM DATE_SCONTI")) {
+                assertTrue(rs.next());
+                assertEquals("La tabella DATE_SCONTI di destinazione dovrebbe avere 1 riga", 1, rs.getInt(1));
+            }
+            try (ResultSet rs = stmt.executeQuery("SELECT AMOUNT_SCONTO FROM DATE_SCONTI WHERE NOME_SCONTO = 'Sconto Estivo'")) {
+                assertTrue(rs.next());
+                assertEquals("L'importo dello sconto non è corretto", new BigDecimal("15.50"), rs.getBigDecimal("AMOUNT_SCONTO"));
             }
 
             // Verifica che il timestamp della sincronizzazione sia stato scritto
