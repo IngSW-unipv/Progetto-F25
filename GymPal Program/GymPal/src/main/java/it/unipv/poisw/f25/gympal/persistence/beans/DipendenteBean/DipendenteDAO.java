@@ -34,7 +34,8 @@ public class DipendenteDAO implements IDipendenteDAO {
             while (rs.next()) {
                 dipendenti.add(mapResultSetToDipendente(rs));
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
         }
         return dipendenti;
@@ -58,7 +59,8 @@ public class DipendenteDAO implements IDipendenteDAO {
                     result = mapResultSetToDipendente(rs);
                 }
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
         }
         return result;
@@ -85,7 +87,8 @@ public class DipendenteDAO implements IDipendenteDAO {
 
             return ps.executeUpdate() > 0;
             
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -112,7 +115,8 @@ public class DipendenteDAO implements IDipendenteDAO {
 
             return ps.executeUpdate() > 0;
             
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -135,7 +139,8 @@ public class DipendenteDAO implements IDipendenteDAO {
             ps.setString(1, dipendente.getStaffId());
             return ps.executeUpdate() > 0;
             
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
             return false;
         }

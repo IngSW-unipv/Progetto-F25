@@ -40,7 +40,8 @@ public class ClienteDAO implements IClienteDAO {
             while (rs.next()) {
                 clienti.add(mapResultSetToCliente(rs));
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
         }
         return clienti;
@@ -67,7 +68,8 @@ public class ClienteDAO implements IClienteDAO {
                     result = mapResultSetToCliente(rs);
                 }
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
         }
         return result;
@@ -104,7 +106,8 @@ public class ClienteDAO implements IClienteDAO {
 
             return ps.executeUpdate() > 0;
 
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -141,7 +144,8 @@ public class ClienteDAO implements IClienteDAO {
 
             return ps.executeUpdate() > 0;
 
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -164,7 +168,8 @@ public class ClienteDAO implements IClienteDAO {
             ps.setString(1, cliente.getCf());
             return ps.executeUpdate() > 0;
 
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
             return false;
         }

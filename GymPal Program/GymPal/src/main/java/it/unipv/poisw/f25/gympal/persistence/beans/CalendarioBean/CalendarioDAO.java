@@ -44,7 +44,8 @@ public class CalendarioDAO implements ICalendarioDAO {
             
             return ps.executeUpdate() > 0;
             
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -70,7 +71,8 @@ public class CalendarioDAO implements ICalendarioDAO {
             
             return ps.executeUpdate() > 0;
             
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -94,7 +96,8 @@ public class CalendarioDAO implements ICalendarioDAO {
             
             return ps.executeUpdate() > 0;
             
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -118,7 +121,8 @@ public class CalendarioDAO implements ICalendarioDAO {
                     result = mapResultSetToCalendario(rs);
                 }
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
         }
         return result;
@@ -139,7 +143,8 @@ public class CalendarioDAO implements ICalendarioDAO {
                     eventi.add(mapResultSetToCalendario(rs));
                 }
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
         }
         return eventi;
@@ -161,7 +166,8 @@ public class CalendarioDAO implements ICalendarioDAO {
                     eventi.add(mapResultSetToCalendario(rs));
                 }
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
         }
         return eventi;
