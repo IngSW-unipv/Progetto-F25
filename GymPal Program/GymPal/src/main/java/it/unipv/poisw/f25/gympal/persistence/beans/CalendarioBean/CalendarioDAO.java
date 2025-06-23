@@ -27,14 +27,17 @@ public class CalendarioDAO implements ICalendarioDAO {
     //Inserisce un nuovo evento nel calendario
     @Override
     public boolean insertEvento(Calendario evento) {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
-            return false;
-        }
+       
         String query = "INSERT INTO CALENDARIO (NOME_EVENTO, DATA_EVENTO, ORA_INIZIO, ORA_FINE, MESSAGGIO, DESTINATARIO_MESSAGGIO) VALUES (?, ?, ?, ?, ?, ?)";
         //Blocco try-with-resources, chiude in automatico la connessione e prepared statement alla fine del try
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
+                return false;
+            }
+        	
             ps.setString(1, evento.getNomeEvento());
             ps.setDate(2, Date.valueOf(evento.getDataEvento()));
             ps.setTime(3, Time.valueOf(evento.getOraInizio())); 
@@ -54,14 +57,17 @@ public class CalendarioDAO implements ICalendarioDAO {
     //Aggiorna un evento esistente
     @Override
     public boolean updateEvento(Calendario evento) {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile aggiornare i dati.");
-            return false;
-        }
+        
         String query = "UPDATE CALENDARIO SET MESSAGGIO = ?, DESTINATARIO_MESSAGGIO = ? WHERE NOME_EVENTO = ? AND DATA_EVENTO = ? AND ORA_INIZIO = ? AND ORA_FINE = ?";
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile aggiornare i dati.");
+                return false;
+            }
+        	
             ps.setString(1, evento.getMessaggio());
             ps.setString(2, evento.getDestinatarioMessaggio());
             ps.setString(3, evento.getNomeEvento());
@@ -81,14 +87,18 @@ public class CalendarioDAO implements ICalendarioDAO {
     //Cancella un evento dal calendario
     @Override
     public boolean deleteEvento(Calendario evento) {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
-            return false;
-        }
+        
         String query = "DELETE FROM CALENDARIO WHERE NOME_EVENTO = ? AND DATA_EVENTO = ? AND ORA_INIZIO = ? AND ORA_FINE = ?";
+       
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
+                return false;
+            }
+        	
             ps.setString(1, evento.getNomeEvento());
             ps.setDate(2, Date.valueOf(evento.getDataEvento()));
             ps.setTime(3, Time.valueOf(evento.getOraInizio()));
@@ -108,6 +118,7 @@ public class CalendarioDAO implements ICalendarioDAO {
     public Calendario selectEvento(Calendario evento) {
         Calendario result = null;
         String query = "SELECT * FROM CALENDARIO WHERE NOME_EVENTO = ? AND DATA_EVENTO = ? AND ORA_INIZIO = ? AND ORA_FINE = ?";
+        
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {

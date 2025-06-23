@@ -69,16 +69,17 @@ public class DipendenteDAO implements IDipendenteDAO {
     //Inserisce un nuovo dipendente nel database
 	@Override
     public boolean insertDipendente(Dipendente dipendente) {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
-            return false;
-        }
-
+        
         String query = "INSERT INTO DIPENDENTI (STAFF_ID, NOME, COGNOME, CONTATTO) VALUES (?, ?, ?, ?)";
         
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
+                return false;
+            }
 
             ps.setString(1, dipendente.getStaffId());
             ps.setString(2, dipendente.getNome());
@@ -97,16 +98,17 @@ public class DipendenteDAO implements IDipendenteDAO {
     //Aggiorna i dati di un dipendente esistente nel database
     @Override
     public boolean updateDipendente(Dipendente dipendente) {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile aggiornare i dati.");
-            return false;
-        }
 
         String query = "UPDATE DIPENDENTI SET NOME = ?, COGNOME = ?, CONTATTO = ? WHERE STAFF_ID = ?";
 
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile aggiornare i dati.");
+                return false;
+            }
 
             ps.setString(1, dipendente.getNome());
             ps.setString(2, dipendente.getCognome());
@@ -125,16 +127,17 @@ public class DipendenteDAO implements IDipendenteDAO {
     //Cancella un dipendente dal database usando il suo codice fiscale
     @Override
     public boolean deleteDipendente(Dipendente dipendente) {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
-            return false;
-        }
 
         String query = "DELETE FROM DIPENDENTI WHERE STAFF_ID = ?";
 
         //Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
+                return false;
+            }
 
             ps.setString(1, dipendente.getStaffId());
             return ps.executeUpdate() > 0;

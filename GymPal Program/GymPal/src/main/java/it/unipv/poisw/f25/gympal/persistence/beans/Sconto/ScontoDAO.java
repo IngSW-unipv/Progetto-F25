@@ -92,15 +92,16 @@ public class ScontoDAO implements IScontoDAO{
 	@Override
 	// Inserisce un nuovo sconto nel database 
 	public boolean insertSconto(Sconto sconto) {
-		if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
-            return false;
-        }
 		
 		String query = "INSERT INTO DATE_SCONTI (NOME_SCONTO, DATA_SCONTO, AMOUNT_SCONTO) VALUES (?, ?, ?)";
 		
 		try(Connection conn = connectionFactory.createConnection();
 			PreparedStatement ps = conn.prepareStatement(query)){
+			
+			if (connectionFactory.isReadOnlyMode()) {
+	            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
+	            return false;
+	        }
 			
 			ps.setString(1, sconto.getNomeSconto());
 			ps.setDate(2, Date.valueOf(sconto.getDataSconto()));
@@ -118,16 +119,17 @@ public class ScontoDAO implements IScontoDAO{
 	@Override
 	// Aggiorna i dati di uno sconto esistente nel database
 	public boolean updateSconto(Sconto sconto) {
-		if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
-            return false;
-        }
 		
 		String query = "UPDATE DATE_SCONTI SET DATA_SCONTO = ?, AMOUNT_SCONTO = ? WHERE NOME_SCONTO = ?";
 		
 		// Blocco try-with-resources
 		try(Connection conn = connectionFactory.createConnection();
 			PreparedStatement ps = conn.prepareStatement(query)){
+			
+			if (connectionFactory.isReadOnlyMode()) {
+	            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile aggiornare i dati.");
+	            return false;
+	        }
 			
 			ps.setDate(1, Date.valueOf(sconto.getDataSconto()));
 			ps.setBigDecimal(2, sconto.getAmountSconto());	
@@ -145,16 +147,17 @@ public class ScontoDAO implements IScontoDAO{
 	@Override
 	// Cancella uno sconto dal database 
 	public boolean deleteSconto(Sconto sconto) {
-		if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
-            return false;
-        }
 		
 		String query = "DELETE FROM DATE_SCONTI WHERE NOME_SCONTO = ?";
 		
 		// Blocco try-with-resources
 		try(Connection conn = connectionFactory.createConnection();
 			PreparedStatement ps = conn.prepareStatement(query)){
+			
+			if (connectionFactory.isReadOnlyMode()) {
+	            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
+	            return false;
+	        }
 			
 			ps.setString(1, sconto.getNomeSconto());
 			return ps.executeUpdate() > 0;
