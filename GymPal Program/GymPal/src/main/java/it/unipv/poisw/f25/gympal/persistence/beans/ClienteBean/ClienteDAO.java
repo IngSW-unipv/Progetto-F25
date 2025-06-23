@@ -78,11 +78,6 @@ public class ClienteDAO implements IClienteDAO {
     // Inserisce un nuovo cliente nel database
     @Override
     public boolean insertCliente(Cliente cliente) {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
-            return false;
-        }
-
         // Aggiorna la query INSERT per includere i nuovi campi
         String query = "INSERT INTO CLIENTI (CF, NOME, COGNOME, SESSO, FLAG_MINOR, CONTATTO, ABBONAMENTO, " +
                        "INIZIO_ABBONAMENTO, FINE_ABBONAMENTO, PAGAMENTO_EFFETTUATO, COMPOSIZIONE_ABBONAMENTO) " +
@@ -91,6 +86,11 @@ public class ClienteDAO implements IClienteDAO {
         // Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
+                return false;
+            }
 
             ps.setString(1, cliente.getCf());
             ps.setString(2, cliente.getNome());
@@ -116,10 +116,6 @@ public class ClienteDAO implements IClienteDAO {
     // Aggiorna i dati di un cliente esistente nel database
     @Override
     public boolean updateCliente(Cliente cliente) {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile aggiornare i dati.");
-            return false;
-        }
 
         // Aggiorna la query UPDATE per includere i nuovi campi
         String query = "UPDATE CLIENTI SET NOME = ?, COGNOME = ?, SESSO = ?, FLAG_MINOR = ?, CONTATTO = ?, " +
@@ -129,6 +125,11 @@ public class ClienteDAO implements IClienteDAO {
         // Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile aggiornare i dati.");
+                return false;
+            }
 
             ps.setString(1, cliente.getNome());
             ps.setString(2, cliente.getCognome());
@@ -154,16 +155,17 @@ public class ClienteDAO implements IClienteDAO {
     // Cancella un cliente dal database usando il suo codice fiscale
     @Override
     public boolean deleteCliente(Cliente cliente) {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
-            return false;
-        }
-
+        
         String query = "DELETE FROM CLIENTI WHERE CF = ?";
 
         // Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
+                return false;
+            }
 
             ps.setString(1, cliente.getCf());
             return ps.executeUpdate() > 0;

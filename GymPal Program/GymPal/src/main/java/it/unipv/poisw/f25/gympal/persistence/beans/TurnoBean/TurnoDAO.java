@@ -123,16 +123,17 @@ public class TurnoDAO implements ITurnoDAO {
     // Inserisce un nuovo turno nel database
     @Override
     public boolean insertTurno(Turno turno) {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
-            return false;
-        }
 
         String query = "INSERT INTO TURNI (DATA, REC_MAT, REC_POM, PT_MAT, PT_POM) VALUES (?, ?, ?, ?, ?)";
         
         // Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
+                return false;
+            }
 
             ps.setDate(1, Date.valueOf(turno.getData()));
             ps.setString(2, turno.getRecMat());
@@ -152,16 +153,17 @@ public class TurnoDAO implements ITurnoDAO {
     // Aggiorna i dati di un turno esistente nel database
     @Override
     public boolean updateTurno(Turno turno) {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile aggiornare i dati.");
-            return false;
-        }
         
         String query = "UPDATE TURNI SET REC_MAT = ?, REC_POM = ?, PT_MAT = ?, PT_POM = ? WHERE DATA = ?";
         
         // Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile aggiornare i dati.");
+                return false;
+            }
 
             ps.setString(1, turno.getRecMat());
             ps.setString(2, turno.getRecPom());
@@ -181,16 +183,17 @@ public class TurnoDAO implements ITurnoDAO {
     // Cancella un turno dal database usando la sua data
     @Override
     public boolean deleteTurno(Turno turno) {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
-            return false;
-        }
 
         String query = "DELETE FROM TURNI WHERE DATA = ?";
         
         // Blocco try-with-resources
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
+                return false;
+            }
 
             ps.setDate(1, Date.valueOf(turno.getData()));
             return ps.executeUpdate() > 0;
@@ -205,15 +208,16 @@ public class TurnoDAO implements ITurnoDAO {
     // Cancella tutti i turni antecedenti alla data attuale
     @Override
     public boolean deleteOldTurni() {
-        if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
-            return false;
-        }
         
         String query = "DELETE FROM TURNI WHERE DATA < ?";
         
         try (Connection conn = connectionFactory.createConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
+        	
+        	if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
+                return false;
+            }
             
             ps.setDate(1, Date.valueOf(LocalDate.now()));
             return ps.executeUpdate() > 0;

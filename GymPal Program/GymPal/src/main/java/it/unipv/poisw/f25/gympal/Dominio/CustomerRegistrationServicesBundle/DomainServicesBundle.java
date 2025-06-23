@@ -17,7 +17,7 @@ import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.RegexCheck;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.connection.IConnectionFactory;
-import it.unipv.poisw.f25.gympal.persistence.connection.MySQLConnectionFactory;
+import it.unipv.poisw.f25.gympal.persistence.setup.PersistenceManager;
 
 public class DomainServicesBundle {
 	
@@ -45,7 +45,7 @@ public class DomainServicesBundle {
         this.prezzoFactory = new StrategieCalcoloPrezzoFactory();
         
         
-        this.connectionFactory = MySQLConnectionFactory.getInstance();
+        this.connectionFactory = PersistenceManager.getConnectionFactory();
         this.facade = new PersistenceFacade(connectionFactory);
         this.veicoloDati = new CommitNewClientToDB(facade);
         

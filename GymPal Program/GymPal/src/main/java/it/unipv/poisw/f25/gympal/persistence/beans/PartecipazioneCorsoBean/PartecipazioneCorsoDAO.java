@@ -135,16 +135,17 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 	// Inserisce una nuova sessione nel database 
 	@Override
 	public boolean insertPartecipazioneCorso(PartecipazioneCorso partecipazione) {
-		if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
-            return false;
-        }
 		
 		String query = "INSERT INTO PARTECIPAZIONI_CORSI (CF, ID_SESSIONE) VALUES (?, ?)";
 		
 		// Blocco try-with-resources
 		try (Connection conn = connectionFactory.createConnection();
 			 PreparedStatement ps = conn.prepareStatement(query)) {
+			
+			if (connectionFactory.isReadOnlyMode()) {
+	            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
+	            return false;
+	        }
 			
 			ps.setString(1, partecipazione.getCf());
 			ps.setString(2, partecipazione.getSessioneId());
@@ -161,16 +162,17 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 	// Cancella una partecipazione dal database
 	@Override
 	public boolean deletePartecipazioneCorso(PartecipazioneCorso partecipazione) {
-		if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile cancellare i dati.");
-            return false;
-        }
 		
 		String query = "DELETE FROM PARTECIPAZIONI_CORSI WHERE CF = ? AND ID_SESSIONE = ?";
 		
 		// Blocco try-with-resources
 		try (Connection conn = connectionFactory.createConnection();
 			 PreparedStatement ps = conn.prepareStatement(query)) {
+			
+			if (connectionFactory.isReadOnlyMode()) {
+	            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile cancellare i dati.");
+	            return false;
+	        }
 			
 			ps.setString(1, partecipazione.getCf());
 			ps.setString(2, partecipazione.getSessioneId());
@@ -187,10 +189,6 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 	// Cancella tutte le partecipazione antecedenti alla data attuale
 	@Override
 	public boolean deleteOldPartecipazioni() {
-		if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile cancellare i dati.");
-            return false;
-        }
 		
 		// Cancella le partecipazioni il cui ID_SESSIONE corrisponde a una sessione con data passata
 		String query = "DELETE FROM PARTECIPAZIONI_CORSI WHERE ID_SESSIONE IN "
@@ -199,6 +197,11 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 		// Blocco try-with-resources
 		try (Connection conn = connectionFactory.createConnection();
 			 PreparedStatement ps = conn.prepareStatement(query)) {
+			
+			if (connectionFactory.isReadOnlyMode()) {
+	            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile cancellare i dati.");
+	            return false;
+	        }
 			
 			ps.setDate(1, Date.valueOf(LocalDate.now()));
 			return ps.executeUpdate() > 0;

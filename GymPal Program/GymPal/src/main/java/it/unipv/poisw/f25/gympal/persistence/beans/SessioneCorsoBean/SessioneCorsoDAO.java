@@ -231,16 +231,18 @@ public class SessioneCorsoDAO implements ISessioneCorsoDAO{
 	@Override
 	// Inserisce una nuova sessione nel database
 	public boolean insertSessioneCorso(SessioneCorso sessione) {
-		if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
-            return false;
-        }
+		
 		
 		String query = "INSERT INTO SESSIONI_CORSI (ID_SESSIONE, STAFF_ID, DATA, FASCIA_ORARIA, NUM_ISCRITTI) "
 	             + "VALUES (?, ?, ?, ?, ?)";
 		
 		try(Connection conn = connectionFactory.createConnection();
 			PreparedStatement ps = conn.prepareStatement(query)){
+			
+			if (connectionFactory.isReadOnlyMode()) {
+	            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
+	            return false;
+	        }
 			
 			ps.setString(1, sessione.getSessioneId());
 			ps.setString(2, sessione.getStaffId());
@@ -260,10 +262,6 @@ public class SessioneCorsoDAO implements ISessioneCorsoDAO{
 	@Override
 	// Aggiorna i dati di una sessione esistente nel database
 	public boolean updateSessioneCorso(SessioneCorso sessione) {
-		if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
-            return false;
-        }
 		
 		String query = "UPDATE SESSIONI_CORSI SET STAFF_ID = ?, DATA = ?, FASCIA_ORARIA = ?, NUM_ISCRITTI = ? "
 					 + "WHERE ID_SESSIONE = ?";
@@ -271,6 +269,11 @@ public class SessioneCorsoDAO implements ISessioneCorsoDAO{
 		// Blocco try-with-resources
 		try(Connection conn = connectionFactory.createConnection();
 			PreparedStatement ps = conn.prepareStatement(query)){
+			
+			if (connectionFactory.isReadOnlyMode()) {
+	            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile aggiornare i dati.");
+	            return false;
+	        }
 			
 			ps.setString(1, sessione.getStaffId());
 			ps.setDate(2, Date.valueOf(sessione.getData()));
@@ -290,16 +293,17 @@ public class SessioneCorsoDAO implements ISessioneCorsoDAO{
 	@Override
 	// Cancella una sessione dal database usando il suo ID
 	public boolean deleteSessioneCorso(SessioneCorso sessione) {
-		if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
-            return false;
-        }
 		
 		String query = "DELETE FROM SESSIONI_CORSI WHERE ID_SESSIONE = ?";
 		
 		// Blocco try-with-resources
 		try(Connection conn = connectionFactory.createConnection();
 			PreparedStatement ps = conn.prepareStatement(query)){
+			
+			if (connectionFactory.isReadOnlyMode()) {
+	            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
+	            return false;
+	        }
 			
 			ps.setString(1, sessione.getSessioneId());
 			return ps.executeUpdate() > 0;
@@ -314,16 +318,17 @@ public class SessioneCorsoDAO implements ISessioneCorsoDAO{
 	@Override
 	// Cancella tutte le sessioni antecedenti alla data attuale
 	public boolean deleteOldSessioni() {
-		if (connectionFactory.isReadOnlyMode()) {
-            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile inserire nuovi dati.");
-            return false;
-        }
 		
 		String query = "DELETE FROM SESSIONI_CORSI WHERE DATA < ?";
 		
 		// Blocco try-with-resources
 		try(Connection conn = connectionFactory.createConnection();
 			PreparedStatement ps = conn.prepareStatement(query)){
+			
+			if (connectionFactory.isReadOnlyMode()) {
+	            System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
+	            return false;
+	        }
 			
 			ps.setDate(1, Date.valueOf(LocalDate.now()));
 			return ps.executeUpdate() > 0;
