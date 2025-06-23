@@ -4,7 +4,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,22 +39,19 @@ public class ReceptionistDashboardView extends JFrame implements IReceptionistDa
         setTitle("Receptionist Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        int screenHeight = screenSize.height;
-        int screenWidth = screenSize.width;
-        setSize(screenWidth/2,screenHeight/2);
-        setLocation(screenWidth/4,screenHeight/4);
-        
         //----------------------------------------------------------------
         
         /*Costruzione pannello sinistro*/
         
         logOutButton = new JButton("Log Out");
         
-        registerNewClientButton = new JButton("Registra Nuovo Cliente");
         
-        modifySubscriptionButton = new JButton (" - Modifica - Rinnovo - Cancellazione - Abbonamento");
+        /*Impiegato codie html per spezzare le parole componenti i nomi dei bottoni,
+         *ed incolonnarle con allineamento centrale.
+         *La particella "<br>" spezza le parole, "<center>" definisce il loro allineamento.*/
+        registerNewClientButton = new JButton("<html><center>Registra<br>Nuovo Cliente</center></html>");
+        
+        modifySubscriptionButton = new JButton ("<html><center>Modifica<br>Rinnovo<br>Cancellazione<br>Abbonamento</center></html>");
         
         pannelloSinistro = new JPanel();
         
@@ -94,6 +90,8 @@ public class ReceptionistDashboardView extends JFrame implements IReceptionistDa
         
         pannelloDestro.add(schermata2, "SCHERMATA2");
         
+        pannelloDestro.setPreferredSize(new Dimension(1200, 800));
+        
         //----------------------------------------------------------------
         
         /*Sono costruiti il "pannelloSinistro" ed il "pannelloDestro", poi inseriti nello
@@ -110,6 +108,9 @@ public class ReceptionistDashboardView extends JFrame implements IReceptionistDa
         //----------------------------------------------------------------
         
         getContentPane().add(splitPane);
+        
+        pack();
+        setLocationRelativeTo(null);
         
     }
     

@@ -47,7 +47,8 @@ public class ReceptionistController implements ICustomerRegistrationViewHandler 
         																	  servizi.getCampoValidabileFactory(),
         																	  servizi.getValidatoreCampi(),
         																	  servizi.getControlloRequisiti(),
-        																	  servizi.getPrezzoFactory());
+        																	  servizi.getPrezzoFactory(),
+        																	  servizi.getVeicoloDati());
         
     }
 

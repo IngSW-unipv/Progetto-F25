@@ -8,6 +8,7 @@ import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamen
 import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
 import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
 import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ICommitNewClientToDB;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
@@ -40,6 +41,9 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     private IValidatoreCampi validatoreCampi;
     private ICtrlReqAnagraficiService controlloRequisiti;
     private IStrategieCalcoloPrezzoFactory prezzoFactory;
+    
+    private ICommitNewClientToDB veicoloDati;
+
 
     private AbbonamentoDTO abbonamentoDTO;
     private CostruttoreDTOHelper costruttoreDTOHelper;
@@ -52,7 +56,8 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     									   ICampoValidabileFactory campovalidabileFactory,
     									   IValidatoreCampi validatoreCampi,
     									   ICtrlReqAnagraficiService controlloRequisiti,
-    									   IStrategieCalcoloPrezzoFactory prezzoFactory) {
+    									   IStrategieCalcoloPrezzoFactory prezzoFactory,
+    									   ICommitNewClientToDB veicoloDati) {
         
     	this.viewHandler = viewHandler;
     	this.etaService = etaService;
@@ -60,6 +65,9 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     	this.validatoreCampi = validatoreCampi;
     	this.controlloRequisiti = controlloRequisiti;
     	this.prezzoFactory = prezzoFactory;
+    	
+    	this.veicoloDati = veicoloDati;
+
     	
         inizializzaCicloRegistrazioneCliente();
                 
@@ -132,9 +140,19 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
                     () -> {
                     	
                     	/*Qui è chiamato il metodo che passa i dati al service-layer*/
+                    	veicoloDati.transfer(abbonamentoDTO);
+                    	
                         inizializzaCicloRegistrazioneCliente();
                         viewHandler.mostraSchermata("SCHERMATA0");
-                    }, 
+                    },
+                    
+                    //On Annulla
+                    () -> {
+                    	
+                    	inizializzaCicloRegistrazioneCliente();
+                        viewHandler.mostraSchermata("SCHERMATA0");
+                    	
+                    },
                     
                     this
                 );

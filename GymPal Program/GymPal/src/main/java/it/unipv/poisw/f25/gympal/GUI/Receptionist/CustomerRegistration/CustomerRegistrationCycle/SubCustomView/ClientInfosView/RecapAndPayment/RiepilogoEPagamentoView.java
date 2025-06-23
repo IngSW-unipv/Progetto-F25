@@ -21,6 +21,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
@@ -76,16 +77,26 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	    mainUpperPanel = new JPanel(new GridLayout(0, 2, 10, 10));
 	    
 	    mainUpperPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+	    
+	    mainUpperPanel.setBorder(BorderFactory.createTitledBorder("Riepilogo Anagrafica:"));
 
 	    mainSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 	    
-	    mainSplitPanel.setTopComponent(mainUpperPanel);
+	    JPanel upperPanelContainer = new JPanel();
+	    upperPanelContainer.setLayout(new BorderLayout());
+
+
+	    upperPanelContainer.add(mainUpperPanel, BorderLayout.CENTER);
+
+	    mainSplitPanel.setTopComponent(upperPanelContainer);
 	    
 	    /*############################################################*/
 	    
         mainBottomLeftPanel = new JPanel(new BorderLayout(10, 10));
         
         mainBottomLeftPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        
+        mainBottomLeftPanel.setBorder(BorderFactory.createTitledBorder("Sezione pagamento:"));
         
         prezzoTotaleLabel = new JLabel("Totale: € 0.00", JLabel.CENTER);
         
@@ -123,6 +134,8 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
         
         mainBottomRightPanel.setLayout(new GridLayout(0, 1, 5, 5));
         
+        mainBottomRightPanel.setBorder(BorderFactory.createTitledBorder("Sezione sconti:"));
+        
         scontoEtaCheckBox = new JCheckBox("Applica sconto età");
         mainBottomRightPanel.add(scontoEtaCheckBox);
         
@@ -159,6 +172,17 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
         popupMenu.add(semestrale);
         popupMenu.add(annuale);
         popupMenu.add(nessuno);
+        
+        /*Aggiunto separatore e label*/
+        JSeparator separator = new JSeparator();
+        //In orizzontale, sottile.
+        separator.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1)); 
+        mainBottomRightPanel.add(separator);
+        
+        JLabel durataLabel = new JLabel("Sceglie durata abbonamento (applica sconto base): ");
+        durataLabel.setAlignmentX(CENTER_ALIGNMENT); 
+        mainBottomRightPanel.add(durataLabel);
+        ////////////////////////////////////////////
         
         scontoSuBaseMesi = new JButton("Numero mesi");
                 
@@ -418,6 +442,13 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	    public boolean isNoPagamentoSelected() {
 	        return noPagamento.isSelected();
 	    }
+	    
+	//----------------------------------------------------------------
+	    
+	    /*@Override
+	    public boolean isScontoMensilitaSelected() {
+	        return scontoMensilitaCheckBox.isSelected();
+	    }*/
 	    
 	//----------------------------------------------------------------
 

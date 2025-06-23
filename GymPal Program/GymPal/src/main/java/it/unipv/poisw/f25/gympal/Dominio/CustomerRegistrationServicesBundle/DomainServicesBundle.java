@@ -8,10 +8,16 @@ import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.Vali
 import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
 import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.ValidatoreCampi.ValidatoreCampi;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.CommitNewClientToDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ICommitNewClientToDB;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.CalcoloEtaService;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.RegexCheck;
+import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
+import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
+import it.unipv.poisw.f25.gympal.persistence.connection.IConnectionFactory;
+import it.unipv.poisw.f25.gympal.persistence.connection.MySQLConnectionFactory;
 
 public class DomainServicesBundle {
 	
@@ -21,6 +27,10 @@ public class DomainServicesBundle {
     private IValidatoreCampi validatoreCampi;
     private ICtrlReqAnagraficiService controlloRequisiti;
     private IStrategieCalcoloPrezzoFactory prezzoFactory;
+    
+    private ICommitNewClientToDB veicoloDati;
+    private IPersistenceFacade facade;
+    private IConnectionFactory connectionFactory;
     
     
 	//----------------------------------------------------------------
@@ -33,6 +43,12 @@ public class DomainServicesBundle {
         this.validatoreCampi = new ValidatoreCampi();
         this.controlloRequisiti = new CtrlReqAnagraficiService(calcoloEtaService);
         this.prezzoFactory = new StrategieCalcoloPrezzoFactory();
+        
+        
+        this.connectionFactory = MySQLConnectionFactory.getInstance();
+        this.facade = new PersistenceFacade(connectionFactory);
+        this.veicoloDati = new CommitNewClientToDB(facade);
+        
 
         
     }
@@ -82,6 +98,14 @@ public class DomainServicesBundle {
     public IStrategieCalcoloPrezzoFactory getPrezzoFactory() {
     	
     	return prezzoFactory;
+    	
+    }
+    
+   //----------------------------------------------------------------
+    
+    public ICommitNewClientToDB getVeicoloDati() {
+    	
+    	return veicoloDati;
     	
     }
     

@@ -26,40 +26,24 @@ public class RiepilogoEPagamentoController {
     									  IRiepilogoDTO abbonamentoDTO, 
                                           Runnable onIndietroCallback,
                                           Runnable onConfermaCallback,
+                                          Runnable onAnnullaCallback,
                                           IRegistrationCoordinator coordinator) {
         
-        //DEBUG
-        /*
-        System.out.println("DEBUG nel controller riepilogo - sezioni:");
-        if (abbonamentoDTO.getSezioniAbbonamento() != null) {
-            for (String s : abbonamentoDTO.getSezioniAbbonamento()) {
-                System.out.println(" - " + s);
-            }
-        }
-        System.out.println("DEBUG nel controller riepilogo - corsi:");
-        if (abbonamentoDTO.getCorsiSelezionati() != null) {
-            for (String c : abbonamentoDTO.getCorsiSelezionati()) {
-                System.out.println(" - " + c);
-            }
-        }*/
         
         
         riepilogoEPagamento = view;
         this.coordinator=coordinator;
         this.abbonamentoDTO = abbonamentoDTO;
+        
+        
         onIndietro = onIndietroCallback;
         onConferma = onConfermaCallback;
-        /*Benché "onAnnulla" utilizzi la stessa callback di "onConferma" (per non duplicare
-         *codice - visto che questa callback re-inizializza il ciclo) il listener associato 
-         *al bottone "Annulla" non fa altro che eseguire la callback (inizializza un nuovo
-         *ciclo di registrazione), mentre il listener associato a "Conferma" lancia operazioni
-         *collegate al trasferimento dati verso DB, prima di inizializzare un nuovo ciclo di
-         *registrazione.*/
-        onAnnulla = onConfermaCallback;
+        onAnnulla  = onAnnullaCallback;
         
         /*Inizializzazione della view "RiepilogoEPagamento" con i dati acquisiti durante la
          *procedura di iscrizione*/
         riepilogoEPagamento.setDatiAbbonamento(abbonamentoDTO);
+  
         
         aggiornaPrezzo();
 
@@ -76,50 +60,50 @@ public class RiepilogoEPagamentoController {
     }
     
     //----------------------------------------------------------------    
-
+   
     private void impostaEventoConferma() {
+    	
+        riepilogoEPagamento.addConfermaListener(e -> {
 
-    	MetodoPagamento metodoPagamento = riepilogoEPagamento.getMetodoPagamentoSelezionato();
+            MetodoPagamento metodoPagamento = riepilogoEPagamento.getMetodoPagamentoSelezionato();
 
-    	if(metodoPagamento != MetodoPagamento.NESSUNO) {
-    		
-    	    int result = JOptionPane.showConfirmDialog(
-    	            null, // Nessun componente genitore
-    	            "Vuoi davvero confermare?", // Messaggio visualizzato
-    	            "Conferma iscrizione", // Titolo pannello pop-up
-    	            JOptionPane.YES_NO_OPTION); // Opzioni presentate all'utente - SI : NO
+            if (metodoPagamento != MetodoPagamento.NESSUNO) {
 
-    	    if(result == JOptionPane.YES_OPTION) {
-    	    	
-    	        try {
-    	        	
-    	        	/*Bisogna dire al coordinatore che la fase di acquisizione
-    	             *dati è terminata, pertanto bisogna inviare le informazioni
-    	             *raccolte al service-layer*/
-    	        	
-    	        	// Ritorno alla schermata iniziale e reset per un nuovo ciclo    	        	
-    	            onConferma.run();
-    	            
-    	        } catch(Exception ex) {
-    	        	
-    	            JOptionPane.showMessageDialog(null,
-    	                "Errore durante la conferma:\n" + ex.getMessage(),
-    	                "Errore",
-    	                JOptionPane.ERROR_MESSAGE);
-    	            
-    	        }
-    	    }
-    	    
-    	} else {
-    		
-    	    JOptionPane.showMessageDialog(null,
-    	        "Seleziona una modalità di pagamento prima di confermare",
-    	        "ATTENZIONE!",
-    	        JOptionPane.INFORMATION_MESSAGE);
-    	    
-    	}
+                int result = JOptionPane.showConfirmDialog(
+                        null, // Nessun componente genitore
+                        "Vuoi davvero confermare?", // Messaggio visualizzato
+                        "Conferma iscrizione", // Titolo pannello pop-up
+                        JOptionPane.YES_NO_OPTION); // Opzioni presentate all'utente - SI : NO
 
-  
+                if (result == JOptionPane.YES_OPTION) {
+                    try {
+                    	
+        	        	/*Bisogna dire al coordinatore che la fase di acquisizione
+        	             *dati è terminata, pertanto bisogna inviare le informazioni
+        	             *raccolte al service-layer*/
+        	        	
+        	        	// Ritorno alla schermata iniziale e reset per un nuovo ciclo 
+                    	
+                        onConferma.run();
+                        
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null,
+                            "Errore durante la conferma:\n" + ex.getMessage(),
+                            "Errore",
+                            JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+            } else {
+            	
+                JOptionPane.showMessageDialog(null,
+                    "Seleziona una modalità di pagamento prima di confermare",
+                    "ATTENZIONE!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        });
+        
     }
     
     //----------------------------------------------------------------
