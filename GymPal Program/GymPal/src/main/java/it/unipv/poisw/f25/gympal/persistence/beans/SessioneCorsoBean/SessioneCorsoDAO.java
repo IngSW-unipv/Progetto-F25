@@ -301,7 +301,7 @@ public class SessioneCorsoDAO implements ISessioneCorsoDAO{
 		try(Connection conn = connectionFactory.createConnection();
 			PreparedStatement ps = conn.prepareStatement(query)){
 			
-			ps.setString(1, sessione.getSessioneId());;
+			ps.setString(1, sessione.getSessioneId());
 			return ps.executeUpdate() > 0;
 			
 		}

@@ -35,10 +35,11 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 			 Statement stmt = conn.createStatement();
 			 ResultSet rs = stmt.executeQuery(query)) {
 
-			while (rs.next()) {
+			 while (rs.next()) {
 				partecipazioni.add(mapResultSetToPartecipazioneCorso(rs));
 			}
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return partecipazioni;
@@ -54,14 +55,15 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 		try (Connection conn = connectionFactory.createConnection();
 			 PreparedStatement ps = conn.prepareStatement(query)) {
 			
-			ps.setString(1, partecipazione.getCf());
+			 ps.setString(1, partecipazione.getCf());
 			
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					partecipazioni.add(mapResultSetToPartecipazioneCorso(rs));
+			 try (ResultSet rs = ps.executeQuery()) {
+				 while (rs.next()) {
+					 partecipazioni.add(mapResultSetToPartecipazioneCorso(rs));
 				}
 			}
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return partecipazioni;
@@ -77,14 +79,15 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 		try (Connection conn = connectionFactory.createConnection();
 			 PreparedStatement ps = conn.prepareStatement(query)) {
 
-			ps.setString(1, partecipazione.getSessioneId());
+			 ps.setString(1, partecipazione.getSessioneId());
 
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					partecipazioni.add(mapResultSetToPartecipazioneCorso(rs));
+			 try (ResultSet rs = ps.executeQuery()) {
+				 while (rs.next()) {
+					 partecipazioni.add(mapResultSetToPartecipazioneCorso(rs));
 				}
 			}
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return partecipazioni;
@@ -95,6 +98,8 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 	public List<PartecipazioneCorso> selectAllPartecipazioniByCfAndRange(PartecipazioneCorso cf, PartecipazioneCorso inizio, PartecipazioneCorso fine) {
 		List<PartecipazioneCorso> partecipazioni = new ArrayList<>();
 		
+		//Crea un lista da SESSIONI_CORSI coon gli id sessioni compresi tra le date
+		//Dalla lista prende solo quelli col cf del cliente interessato
 		String query = "SELECT CF, ID_SESSIONE FROM PARTECIPAZIONI_CORSI " +
 					   "WHERE CF = ? AND ID_SESSIONE IN " +
 					   "(SELECT ID_SESSIONE FROM SESSIONI_CORSI WHERE DATA BETWEEN ? AND ?)";
@@ -119,7 +124,8 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 					partecipazioni.add(mapResultSetToPartecipazioneCorso(rs));
 				}
 			}
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return partecipazioni;
@@ -145,7 +151,8 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 			
 			return ps.executeUpdate() > 0;
 			
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -170,7 +177,8 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 			
 			return ps.executeUpdate() > 0;
 			
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -195,7 +203,8 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 			ps.setDate(1, Date.valueOf(LocalDate.now()));
 			return ps.executeUpdate() > 0;
 			
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -220,7 +229,8 @@ public class PartecipazioneCorsoDAO implements IPartecipazioneCorsoDAO {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyy");
 			// Esegue il parsing e restituisce l'oggetto LocalDate
 			return LocalDate.parse(dateSubstring, formatter);
-		} catch (DateTimeParseException e) {
+		} 
+		catch (DateTimeParseException e) {
 			System.err.println("Errore nel parsing della data dall'ID sessione: " + sessioneId);
 			e.printStackTrace();
 			return null;
