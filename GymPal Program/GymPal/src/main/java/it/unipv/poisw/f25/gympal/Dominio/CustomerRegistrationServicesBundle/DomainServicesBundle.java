@@ -16,8 +16,6 @@ import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.RegexCheck;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
-import it.unipv.poisw.f25.gympal.persistence.connection.IConnectionFactory;
-import it.unipv.poisw.f25.gympal.persistence.setup.PersistenceManager;
 
 public class DomainServicesBundle {
 	
@@ -30,7 +28,6 @@ public class DomainServicesBundle {
     
     private ICommitNewClientToDB veicoloDati;
     private IPersistenceFacade facade;
-    private IConnectionFactory connectionFactory;
     
     
 	//----------------------------------------------------------------
@@ -45,8 +42,8 @@ public class DomainServicesBundle {
         this.prezzoFactory = new StrategieCalcoloPrezzoFactory();
         
         
-        this.connectionFactory = PersistenceManager.getConnectionFactory();
-        this.facade = new PersistenceFacade(connectionFactory);
+        
+        this.facade = PersistenceFacade.getInstance();
         this.veicoloDati = new CommitNewClientToDB(facade);
         
 

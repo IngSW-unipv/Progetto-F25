@@ -5,34 +5,32 @@ import java.util.List;
 import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
 import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.CalendarioDAO;
 import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.ICalendarioDAO;
-
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.ClienteDAO;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.IClienteDAO;
-
 import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.Dipendente;
 import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.DipendenteDAO;
 import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.IDipendenteDAO;
-
+import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.IPartecipazioneCorsoDAO;
 import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.PartecipazioneCorso;
 import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.PartecipazioneCorsoDAO;
-import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.IPartecipazioneCorsoDAO;
-
+import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.IScontoDAO;
 import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.ScontoDAO;
-import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.IScontoDAO;
-
+import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.ISessioneCorsoDAO;
 import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCorso;
 import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCorsoDAO;
-import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.ISessioneCorsoDAO;
-
+import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.ITurnoDAO;
 import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
 import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.TurnoDAO;
-import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.ITurnoDAO;
-
 import it.unipv.poisw.f25.gympal.persistence.connection.IConnectionFactory;
+import it.unipv.poisw.f25.gympal.persistence.setup.PersistenceManager;
 
+//Implementazione del pattern Facade e Singleton per l'accesso allo strato di persistenza
 public class PersistenceFacade implements IPersistenceFacade {
+
+    
+    private static IPersistenceFacade instance;
 
     private final IClienteDAO clienteDAO;
     private final IDipendenteDAO dipendenteDAO;
@@ -42,7 +40,10 @@ public class PersistenceFacade implements IPersistenceFacade {
     private final ISessioneCorsoDAO sessioneCorsoDAO;
     private final ITurnoDAO turnoDAO;
 
-    public PersistenceFacade(IConnectionFactory connectionFactory) {
+    
+    private PersistenceFacade() {
+        IConnectionFactory connectionFactory = PersistenceManager.getConnectionFactory();
+        
         this.clienteDAO = new ClienteDAO(connectionFactory);
         this.dipendenteDAO = new DipendenteDAO(connectionFactory);
         this.calendarioDAO = new CalendarioDAO(connectionFactory);
@@ -52,7 +53,15 @@ public class PersistenceFacade implements IPersistenceFacade {
         this.turnoDAO = new TurnoDAO(connectionFactory);
     }
 
-    //Implementazione metodi Cliente
+    //Metodo statico per ottenere l'unica istanza della classe
+    public static IPersistenceFacade getInstance() {
+        if (instance == null) {
+            instance = new PersistenceFacade();
+        }
+        return instance;
+    }
+
+    //Metodi Cliente
     @Override
     public List<Cliente> selectAllClienti() {
         return clienteDAO.selectAll();
@@ -73,8 +82,9 @@ public class PersistenceFacade implements IPersistenceFacade {
     public boolean deleteCliente(Cliente cliente) {
         return clienteDAO.deleteCliente(cliente);
     }
+   
 
-    //Implementazione metodi Dipendente
+    //Metodi Dipendente
     @Override
     public List<Dipendente> selectAllDipendenti() {
         return dipendenteDAO.selectAll();
@@ -95,8 +105,9 @@ public class PersistenceFacade implements IPersistenceFacade {
     public boolean deleteDipendente(Dipendente dipendente) {
         return dipendenteDAO.deleteDipendente(dipendente);
     }
+    
 
-    //Implementazione metodi Calendario
+    //Metodi Calendario
     @Override
     public boolean insertEvento(Calendario evento) {
         return calendarioDAO.insertEvento(evento);
@@ -121,8 +132,9 @@ public class PersistenceFacade implements IPersistenceFacade {
     public List<Calendario> selectAllEventiByDateRange(Calendario eventoInizio, Calendario eventoFine) {
         return calendarioDAO.selectAllEventiByDateRange(eventoInizio, eventoFine);
     }
+    
 
-    //Implementazione metodi PartecipazioneCorso
+    //Metodi PartecipazioneCorso
     @Override
     public List<PartecipazioneCorso> selectAllPartecipazioni() {
         return partecipazioneCorsoDAO.selectAll();
@@ -151,8 +163,9 @@ public class PersistenceFacade implements IPersistenceFacade {
     public boolean deleteOldPartecipazioni() {
         return partecipazioneCorsoDAO.deleteOldPartecipazioni();
     }
+    
 
-    //Implementazione metodi Sconto
+    //Metodi Sconto
     @Override
     public List<Sconto> selectAllSconti() {
         return scontoDAO.selectAll();
@@ -177,8 +190,9 @@ public class PersistenceFacade implements IPersistenceFacade {
     public boolean deleteSconto(Sconto sconto) {
         return scontoDAO.deleteSconto(sconto);
     }
+    
 
-    //Implementazione metodi SessioneCorso
+    //Metodi SessioneCorso
     @Override
     public List<SessioneCorso> selectAllSessioniCorsi() {
         return sessioneCorsoDAO.selectAll();
@@ -227,8 +241,9 @@ public class PersistenceFacade implements IPersistenceFacade {
     public boolean deleteOldSessioni() {
         return sessioneCorsoDAO.deleteOldSessioni();
     }
+    
 
-    //Implementazione metodi Turno
+    //Metodi Turno
     @Override
     public List<Turno> selectAllTurni() {
         return turnoDAO.selectAll();
@@ -261,4 +276,5 @@ public class PersistenceFacade implements IPersistenceFacade {
     public boolean deleteOldTurni() {
         return turnoDAO.deleteOldTurni();
     }
+    
 }

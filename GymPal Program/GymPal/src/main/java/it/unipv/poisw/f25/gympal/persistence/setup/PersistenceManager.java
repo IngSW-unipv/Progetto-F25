@@ -27,8 +27,13 @@ public final class PersistenceManager {
         
         connectionFactory = factory;
     }
-
-    //Restituisce la connection factory configurata, pronta per essere usata dai DAO e altri componenti
+    
+    /* NOTA il metodo è destinato all'uso interno del livello di persistenza (es. inizializzare PersistenceFacade)
+     * Un uso improprio di questo metodo può portare a violazioni dell'architettura.
+     * La sua visibilità non è stata modificata in protected per evitare un refactor dei sotto-packages di Persistence 
+     * che avrebbe causato una diminuzione di comprensibilità del codice. 
+     */
+    //Restituisce la connection factory configurata
     public static IConnectionFactory getConnectionFactory() {
         if (connectionFactory == null) {
             throw new IllegalStateException("PersistenceManager non è stato inizializzato! Chiamare il metodo initialize() all'avvio dell'applicazione.");
