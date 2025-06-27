@@ -89,7 +89,7 @@ public class SubscriptionCustomizationController {
 						
 					} else {
 						
-						btn.setBackground(Color.RED);
+						btn.setBackground(Color.decode("#ffcccc"));
 						
 						view.getCorsiPanel().setVisible(false);
 

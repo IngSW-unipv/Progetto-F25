@@ -26,7 +26,7 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
 
 public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagamentoView{
 
@@ -58,7 +58,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	private JRadioButtonMenuItem trimestrale;
 	private JRadioButtonMenuItem semestrale;
 	private JRadioButtonMenuItem annuale;
-	private JRadioButtonMenuItem nessuno;
+	private JRadioButtonMenuItem mensile;
 	
 	private JPopupMenu popupMenu;
 	private ButtonGroup sceltaMesi;
@@ -96,9 +96,12 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
         
         mainBottomLeftPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         
-        mainBottomLeftPanel.setBorder(BorderFactory.createTitledBorder("Sezione pagamento:"));
+        mainBottomLeftPanel.setBorder(BorderFactory.createTitledBorder("Sezione pagamento:"
+        															   + " selezionare una opzione per"
+        															   + " sbloccare 'Conferma'"));
         
         prezzoTotaleLabel = new JLabel("Totale: € 0.00", JLabel.CENTER);
+        prezzoTotaleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         
         avvioPagamento = new JButton("Avvio Pagamento");
         
@@ -145,15 +148,15 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
         trimestrale = new JRadioButtonMenuItem("Trimestrale");
         semestrale = new JRadioButtonMenuItem("Semestrale");
         annuale = new JRadioButtonMenuItem("Annuale");
-        nessuno = new JRadioButtonMenuItem("Nessuno");
+        mensile = new JRadioButtonMenuItem("Mensile");
         
         sceltaMesi = new ButtonGroup();
+        sceltaMesi.add(mensile);
         sceltaMesi.add(trimestrale);
         sceltaMesi.add(semestrale);
         sceltaMesi.add(annuale);
-        sceltaMesi.add(nessuno);
-        
-        nessuno.setSelected(true);
+                
+        mensile.setSelected(true);
         
         /*Il JPopupMenu non è un componente visivo fisso, come un JPanel o un JButton.
          *Esso è visualizzato in modo dinamico, su base temporanea, tramite invocazione del
@@ -168,10 +171,10 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
          *ES: popupMenu.show(scontoSuBaseMesi, 0, 0); */
         
         popupMenu = new JPopupMenu();
+        popupMenu.add(mensile);
         popupMenu.add(trimestrale);
         popupMenu.add(semestrale);
         popupMenu.add(annuale);
-        popupMenu.add(nessuno);
         
         /*Aggiunto separatore e label*/
         JSeparator separator = new JSeparator();
@@ -187,9 +190,6 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
         scontoSuBaseMesi = new JButton("Numero mesi");
                 
         mainBottomRightPanel.add(scontoSuBaseMesi);
-
-        sceltaMesi = new ButtonGroup();
-        
         
 	    /*############################################################*/
 	    
@@ -213,7 +213,9 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	    
 	    indietroConfermaPanel = new JPanel();
 	    
-	    indietroConfermaPanel.setLayout(new BoxLayout(indietroConfermaPanel, BoxLayout.X_AXIS));
+	    indietroConfermaPanel.setLayout(new BoxLayout(indietroConfermaPanel, 
+	    												 BoxLayout.X_AXIS));
+	    
 	    
 	    indietro = new JButton ("Indietro");
 		indietro.setMaximumSize(new Dimension(80, 40));
@@ -294,7 +296,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	//----------------------------------------------------------------
 	
 	  @Override
-	  public void setDatiAbbonamento(IRiepilogoDTO abbDTO) {
+	  public void setDatiAbbonamento(IAbbonamentoDTO abbDTO) {
 
 	        mainUpperPanel.removeAll();
 
@@ -326,7 +328,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 
 	    @Override
 	    public void setPrezzoTotale(double prezzo) {
-	        prezzoTotaleLabel.setText(String.format("%.2f €", prezzo));
+	        prezzoTotaleLabel.setText(String.format("Totale: " + "%.2f €", prezzo));
 	    }
 	    
 	//----------------------------------------------------------------
@@ -364,7 +366,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	        trimestrale.addActionListener(listener);
 	        semestrale.addActionListener(listener);
 	        annuale.addActionListener(listener);
-	        nessuno.addActionListener(listener);
+	        mensile.addActionListener(listener);
 	    }
 	    
 	//----------------------------------------------------------------
@@ -418,7 +420,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	        if (trimestrale.isSelected()) return trimestrale.getText();
 	        if (semestrale.isSelected()) return semestrale.getText();
 	        if (annuale.isSelected()) return annuale.getText();
-	        if (nessuno.isSelected()) return nessuno.getText();
+	        if (mensile.isSelected()) return mensile.getText();
 	        return null;
 	    }
 	    
@@ -442,13 +444,6 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	    public boolean isNoPagamentoSelected() {
 	        return noPagamento.isSelected();
 	    }
-	    
-	//----------------------------------------------------------------
-	    
-	    /*@Override
-	    public boolean isScontoMensilitaSelected() {
-	        return scontoMensilitaCheckBox.isSelected();
-	    }*/
 	    
 	//----------------------------------------------------------------
 
@@ -488,10 +483,20 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	    	if(isContantiSelected()) {return MetodoPagamento.CONTANTI;}
 	    	else if(isCartaSelected()) {return MetodoPagamento.CARTA;}
 	    	else if(isNoPagamentoSelected()) {return MetodoPagamento.NESSUNO;}
-	    	else {return MetodoPagamento.NESSUNO;}
+	    	else {return null;}
 	    	
 	    }
+
+	//----------------------------------------------------------------
 	    
+	    @Override
+	    public void setConfermaEnabled(boolean enabled) {
+	    	
+	    	conferma.setEnabled(enabled);
+	    	
+	    }
+	 
+	//----------------------------------------------------------------
 	    
 	
 }

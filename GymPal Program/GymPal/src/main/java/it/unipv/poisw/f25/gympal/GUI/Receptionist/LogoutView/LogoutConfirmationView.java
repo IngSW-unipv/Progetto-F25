@@ -1,8 +1,10 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView;
 
-import javax.swing.*;
-
-import java.awt.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class LogoutConfirmationView extends JPanel implements ILogoutConfirmationView {
 

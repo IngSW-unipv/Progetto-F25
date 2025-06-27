@@ -5,12 +5,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
 
 public interface IRiepilogoEPagamentoView {
 	
 	/* Metodi per inizializzare la view con i dati dell'abbonamento */
-	public void setDatiAbbonamento(IRiepilogoDTO abbonamentoDTO);
+	public void setDatiAbbonamento(IAbbonamentoDTO abbonamentoDTO);
 	
 	//----------------------------------------------------------------
 	//----------------------------------------------------------------
@@ -107,6 +107,10 @@ public interface IRiepilogoEPagamentoView {
 	//----------------------------------------------------------------
 	
 	public MetodoPagamento getMetodoPagamentoSelezionato();
+	
+	//----------------------------------------------------------------
+	
+	public void setConfermaEnabled(boolean enabled);
 	
 	//----------------------------------------------------------------
 	

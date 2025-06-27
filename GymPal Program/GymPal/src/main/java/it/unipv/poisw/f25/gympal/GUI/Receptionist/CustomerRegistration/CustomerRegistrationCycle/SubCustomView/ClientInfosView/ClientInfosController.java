@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.CampoValidabile.ICampoValidabile;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabile.ICampoValidabile;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.ValidazioneCampo;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
@@ -58,7 +58,8 @@ public class ClientInfosController implements IRegexExpression {
     	/*Piccolo metodo di supporto sviluppato per rispettare il principio "DRY"
     	 *("Don't Repeat Yourself")*/
     	
-        ICampoValidabile campo = coordinator.getCampoValidabileFactory().creaCampoValidabile(field, regex);
+        ICampoValidabile campo = coordinator.getCampoValidabileFactory()
+        									.creaCampoValidabile(field, regex);
 
         ValidazioneCampo.applicaFeedbackSwing(campo);
         

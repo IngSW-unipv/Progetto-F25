@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.CalcoloEtaService;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 
 public class DTOtoCliente implements IDTOtoCliente{
@@ -23,7 +23,7 @@ public class DTOtoCliente implements IDTOtoCliente{
     //----------------------------------------------------------------
 	
 	@Override
-	public Cliente extractAndInsert(IRiepilogoDTO abbDTO) {
+	public Cliente extractAndInsert(IAbbonamentoDTO abbDTO) {
 		
 		ICalcoloEtaService calcoloEta = new CalcoloEtaService();
 		

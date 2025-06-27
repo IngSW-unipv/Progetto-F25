@@ -6,7 +6,7 @@ import java.util.List;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 
-public class AbbonamentoDTO implements IRiepilogoDTO{
+public class AbbonamentoDTO implements IAbbonamentoDTO{
 	
     // Anagrafica
 	

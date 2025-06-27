@@ -5,14 +5,14 @@ import java.util.List;
 
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.IStrategieCalcoloPrezzoFactory;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.IStrategieCalcoloPrezzo;
-import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
-import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
-import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ICommitNewClientToDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.AddClient.ICommitNewClientToDB;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.ICustomerRegistrationViewHandler;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.IReceptionistController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ISubscriptionCustomizationView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.SubscriptionCustomizationController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.SubscriptionCustomizationView;
@@ -24,11 +24,11 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerR
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment.RiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.AbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.CostruttoreDTOHelper;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
 
 public class CustomerRegistrationCoordinator implements IRegistrationCoordinator{
 
-    private ICustomerRegistrationViewHandler viewHandler;
+    private IReceptionistController viewHandler;
 
     /*Viste*/
     private ISubscriptionCustomizationView subView;
@@ -51,7 +51,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     //----------------------------------------------------------------
 
 
-    public CustomerRegistrationCoordinator(ICustomerRegistrationViewHandler viewHandler,
+    public CustomerRegistrationCoordinator(IReceptionistController viewHandler,
     									   ICalcoloEtaService etaService,
     									   ICampoValidabileFactory campovalidabileFactory,
     									   IValidatoreCampi validatoreCampi,
@@ -96,10 +96,13 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
         viewHandler.registraSchermata("SUB_VIEW", subView.getMainPanel());
 
         new SubscriptionCustomizationController(
+        		
             subView,
             
+            //OnAvanti
             () -> viewHandler.mostraSchermata("INFOS_VIEW"),
             
+            //OnAnnulla
             () -> {
                 inizializzaCicloRegistrazioneCliente();
                 viewHandler.mostraSchermata("SCHERMATA0");
@@ -131,8 +134,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
 
                 new RiepilogoEPagamentoController(
                     riepilogoEPagamento,
-                    abbonamentoDTO,
-                    
+                                        
                     //On Indietro
                     () -> viewHandler.mostraSchermata("INFOS_VIEW"),
                     
@@ -204,15 +206,6 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     
     //----------------------------------------------------------------
     
-    /*@Override
-    public void acquisisciStatoPagamento(boolean statoPagamento) {
-    	
-    	costruttoreDTOHelper.statoPagamento(statoPagamento);
-    	
-    }*/
-    
-    //----------------------------------------------------------------
-    
     @Override
     public boolean isMinorenne(LocalDate dataNascita) {
     	
@@ -250,7 +243,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
    //----------------------------------------------------------------
     
     @Override
-    public double getDiscountedPrice(IRiepilogoDTO abbonamentoDTO) {
+    public double getDiscountedPrice(IAbbonamentoDTO abbonamentoDTO) {
 
     	
     	IStrategieCalcoloPrezzo strategia = prezzoFactory.getStrategy(abbonamentoDTO);
@@ -280,5 +273,14 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     }
     
     //----------------------------------------------------------------    
+    
+    @Override
+    public IAbbonamentoDTO getAbbonamentoDTO() {
+    	
+    	return abbonamentoDTO;
+    	
+    }
+    
+    //---------------------------------------------------------------- 
     
 }

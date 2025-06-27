@@ -17,7 +17,7 @@ import javax.swing.SpinnerDateModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.EtichettaPiuCampoFactory;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampoFactory;
 
 public class ClientInfosView extends JPanel implements IClientInfosView{
 
@@ -51,7 +51,7 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 	private ButtonGroup permessoGenitori;
 	
 	private JSplitPane mainSplitPanel;
-	private JSplitPane informazioniUtenteSplitPanel;
+	private JSplitPane userInfoSplitPanel;
 	private JPanel avantiIndietroPanel;
 	
 	/*Questa etichetta non è locale, come le altre, perché deve sparire/apparire a seconda
@@ -143,6 +143,7 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 		upperPanel.add(Box.createVerticalGlue());
 		
 		JLabel titleLabel = new JLabel("-=Compila il Form con i dati del cliente=-");
+		
 		titleLabel.setAlignmentX(CENTER_ALIGNMENT);
 		upperPanel.add(titleLabel);
 		upperPanel.add(Box.createVerticalStrut(30));
@@ -216,19 +217,19 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 		
 		/*############################################################*/
 		
-		informazioniUtenteSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		userInfoSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		
-		informazioniUtenteSplitPanel.setTopComponent(upperPanel);
-		informazioniUtenteSplitPanel.setBottomComponent(bottomPanel);
+		userInfoSplitPanel.setTopComponent(upperPanel);
+		userInfoSplitPanel.setBottomComponent(bottomPanel);
 		
 		SwingUtilities.invokeLater(() -> {
 			
 			
-			informazioniUtenteSplitPanel.setDividerLocation(0.75); 
+			userInfoSplitPanel.setDividerLocation(0.75); 
 		    
 		});
 		
-		informazioniUtenteSplitPanel.setEnabled(false);
+		userInfoSplitPanel.setEnabled(false);
 		
 		/*############################################################*/
 		
@@ -257,7 +258,7 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 		
 		mainSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		
-		mainSplitPanel.setTopComponent(informazioniUtenteSplitPanel);
+		mainSplitPanel.setTopComponent(userInfoSplitPanel);
 		mainSplitPanel.setBottomComponent(avantiIndietroPanel);
 		
 		SwingUtilities.invokeLater(() -> {
@@ -277,117 +278,172 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 	
 	//----------------------------------------------------------------
 	
+	@Override
 	public JTextField getNome() {
+		
 		return nome;
+		
 	}
 
 	//----------------------------------------------------------------
-
+	
+	@Override
 	public JTextField getCognome() {
+		
 		return cognome;
+		
 	}
 
 
 	//----------------------------------------------------------------
 
+	@Override
 	public JTextField getCodiceFiscale() {
+		
 		return codiceFiscale;
+		
 	}
 
 	//----------------------------------------------------------------
 	
+	@Override
 	public JTextField getContatto() {
+		
 		return contatto;
+		
 	}
 	
 	//----------------------------------------------------------------
 
+	@Override
 	public JSpinner getDateSpinner() {
+		
 		return dateSpinner;
+		
 	}
 
 	//----------------------------------------------------------------
 
+	@Override
 	public JRadioButton getMaschio() {
+		
 		return maschio;
+		
 	}
 
 	//----------------------------------------------------------------
 
+	@Override
 	public JRadioButton getFemmina() {
+		
 		return femmina;
+		
 	}
 
 	//----------------------------------------------------------------
 
+	@Override
 	public JRadioButton getCertIdoneitàSi() {
+		
 		return certIdoneitàSi;
+		
 	}
 	
 	//----------------------------------------------------------------
 
+	@Override
 	public JRadioButton getCertIdoneitàNo() {
+		
 		return certIdoneitàNo;
+		
 	}
 	
 	//----------------------------------------------------------------
 
+	@Override
 	public JRadioButton getPermessoGenitoriSi() {
+		
 		return permessoGenitoriSi;
+		
 	}
 
 	//----------------------------------------------------------------
 
+	@Override
 	public JRadioButton getPermessoGenitoriNo() {
+		
 		return permessoGenitoriNo;
+		
 	}
 
 	//----------------------------------------------------------------
 
+	@Override
 	public JButton getAvantiButton() {
+		
 		return avanti;
+		
 	}
 
 	//----------------------------------------------------------------
 
+	@Override
 	public JButton getIndietroButton() {
+		
 		return indietro;
+		
 	}
 
 	//----------------------------------------------------------------
 	
+	@Override
 	public JButton getAnnullaButton() {
+		
 		
 		return annulla;
 		
+		
 	}
 	
 	//----------------------------------------------------------------
 
+	@Override
 	public JSplitPane getMainSplitPanel() {
+		
 		return mainSplitPanel;
+		
 	}
 	
 	//----------------------------------------------------------------
 
+	@Override
 	public JSplitPane getInformazioniUtenteSplitPanel() {
-		return informazioniUtenteSplitPanel;
+		
+		return userInfoSplitPanel;
+		
 	}
 
 	//----------------------------------------------------------------
 
+	@Override
 	public JPanel getAvantiIndietroPanel() {
+		
 		return avantiIndietroPanel;
+		
 	}
 
 	//---------------------------------------------------------------- 
 	
+	@Override
 	public JLabel getPermessoGenitoriLabel () {
+		
 		return permesso;
+		
 	}
 	
 	//----------------------------------------------------------------
 	
+	@Override
 	public JButton getAcquisisciPermesso() {
 		
 		return acquisisciPermesso;
@@ -398,7 +454,9 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 	
 	@Override
 	public JPanel getMainPanel() {
-	    return this; // se la classe estende JPanel o JFrame
+		
+	    return this; 
+	    
 	}
 	
 	//----------------------------------------------------------------

@@ -1,23 +1,35 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist;
 import javax.swing.JPanel;
 
-import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.DomainServicesBundle;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.RegistrationServicesBundle;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneAbbonamento.GestioneServicesBundle;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.CommonServicesBundle;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCoordinator;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.GestioneAbbCoordinator;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.IGestioneAbbCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationView;
 import it.unipv.poisw.f25.gympal.staff.Receptionist;
 
-public class ReceptionistController implements ICustomerRegistrationViewHandler {
-
-    private final IReceptionistDashboardView recDashView;
+public class ReceptionistController implements IReceptionistController {
 
     private Receptionist receptionist;
-
-    private LogoutConfirmationView logoutView;
     private String schermataPreLogout;
+	
+	/*Viste*/
+    private final IReceptionistDashboardView recDashView;
+    private LogoutConfirmationView logoutView;
 
-    private DomainServicesBundle servizi;
-    private CustomerRegistrationCoordinator customerRegistrationCoordinator;
+
+    /*Servizi*/
+    private RegistrationServicesBundle serviziReg;
+    private GestioneServicesBundle serviziGes;
+    private CommonServicesBundle serviziComuni;
+    
+    /*Coordinatori GUI*/
+    private IRegistrationCoordinator customerRegistrationCoordinator;
+    private IGestioneAbbCoordinator gestoreAbb;
 
     //----------------------------------------------------------------
 
@@ -36,19 +48,31 @@ public class ReceptionistController implements ICustomerRegistrationViewHandler 
         /*Siccome "ReceptionistController" incarna il confine fra GUI e Dominio, è lecito
          *che esso istanzi oggetti concreti.*/
 
-        /*Al fine di alleggerire il codice, i servizi sono raggruppati in un apposito 
+        /*Al fine di alleggerire il codice, i serviziReg sono raggruppati in un apposito 
          *bundle.*/
-        servizi = new DomainServicesBundle();
+        serviziReg = new RegistrationServicesBundle();
+        serviziGes = new GestioneServicesBundle();
+        serviziComuni = new CommonServicesBundle();
         
         
-        // Inizializza il coordinator passando this come handler
+        // Inizializza il coordinator passando 'this' come handler.
+        /*In quanto oggetto concreto, è meglio che il bundle rimanga nel controllore,
+         *che fa da punto dicontatto fra GUI e dominio, per scongiurare un forte accop-
+         *piamento fra il coordinatore GUI ed una struttura concreta (il bundle).*/
         customerRegistrationCoordinator = new CustomerRegistrationCoordinator(this, 
-        																	  servizi.getCalcoloEtaService(),
-        																	  servizi.getCampoValidabileFactory(),
-        																	  servizi.getValidatoreCampi(),
-        																	  servizi.getControlloRequisiti(),
-        																	  servizi.getPrezzoFactory(),
-        																	  servizi.getVeicoloDati());
+        																	  serviziReg.getCalcoloEtaService(),
+        																	  serviziComuni.getCampoValidabileFactory(),
+        																	  serviziReg.getValidatoreCampi(),
+        																	  serviziReg.getControlloRequisiti(),
+        																	  serviziReg.getPrezzoFactory(),
+        																	  serviziReg.getVeicoloDati());
+        
+        
+        gestoreAbb = new GestioneAbbCoordinator(this,
+        									    serviziComuni.getCampoValidabileFactory(),
+        									    serviziComuni.getValidatoreCampi(),
+        									    serviziGes.getVeicoloDati(),
+        									    serviziGes.getHeadHunter());
         
     }
 
@@ -68,19 +92,21 @@ public class ReceptionistController implements ICustomerRegistrationViewHandler 
 
         recDashView.aggiungiComando("REGISTER", () -> mostraSchermata("SUB_VIEW"));
 
-        recDashView.aggiungiComando("MODIFY", () -> mostraSchermata("SCHERMATA2"));
+        recDashView.aggiungiComando("MODIFY", () -> mostraSchermata("LOAD_CLIENT"));
 
         recDashView.aggiungiComando("LOGOUT", () -> {
+        	
             System.out.println("schermataPreLogout = " + schermataPreLogout);
-            new LogoutConfirmationController(logoutView, (ReceptionistDashboardView) recDashView, schermataPreLogout);
-            recDashView.mostraSchermata("LOGOUT_VIEW"); // non aggiorna schermataPreLogout
+            new LogoutConfirmationController(logoutView, recDashView, schermataPreLogout);
+            recDashView.mostraSchermata("LOGOUT_VIEW"); 
+            
         });
         
     }
 
     //----------------------------------------------------------------
 
-    // Implementazione dell’interfaccia ICustomerRegistrationViewHandler
+    // Implementazione dell’interfaccia IReceptionistController
 
     @Override
     public void registraSchermata(String nomeSchermata, JPanel view) {

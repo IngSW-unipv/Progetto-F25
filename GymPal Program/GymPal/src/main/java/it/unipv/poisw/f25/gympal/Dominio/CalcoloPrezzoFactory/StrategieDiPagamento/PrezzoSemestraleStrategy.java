@@ -1,6 +1,6 @@
 package it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
 
 public class PrezzoSemestraleStrategy implements IStrategieCalcoloPrezzo{
 	
@@ -17,7 +17,7 @@ public class PrezzoSemestraleStrategy implements IStrategieCalcoloPrezzo{
 	//----------------------------------------------------------------
 	
 	@Override
-	public double calcolaPrezzo(IRiepilogoDTO abbonamentoDTO) {
+	public double calcolaPrezzo(IAbbonamentoDTO abbonamentoDTO) {
 		
 		//Applica 10% di sconto
 		return base.calcolaPrezzo(abbonamentoDTO) * 0.90;

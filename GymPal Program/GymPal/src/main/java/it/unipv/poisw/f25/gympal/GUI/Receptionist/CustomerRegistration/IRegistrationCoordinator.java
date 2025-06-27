@@ -3,12 +3,12 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration;
 import java.time.LocalDate;
 import java.util.List;
 
-import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
-import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
-import it.unipv.poisw.f25.gympal.Dominio.CustomerRegistrationServicesBundle.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
 
 public interface IRegistrationCoordinator {
 	
@@ -47,7 +47,7 @@ public interface IRegistrationCoordinator {
 	
 	//----------------------------------------------------------------
 	
-	public double getDiscountedPrice(IRiepilogoDTO abbonamentoDTO);
+	public double getDiscountedPrice(IAbbonamentoDTO abbonamentoDTO);
 	
 	//----------------------------------------------------------------
 	
@@ -57,6 +57,10 @@ public interface IRegistrationCoordinator {
 	
 	public void acquisisciScontiEDurata(boolean scontoEta, boolean scontoOccasioni,
 										DurataAbbonamento durataAbbonamento);
+	
+	//----------------------------------------------------------------
+	
+	public IAbbonamentoDTO getAbbonamentoDTO();
 	
 	//----------------------------------------------------------------
 

@@ -21,6 +21,9 @@ public class CalcolaFineAbbonamento {
 	
     static {
     	
+        CALCOLOFINEABBONAMENTO.put(DurataAbbonamento.MENSILE, 
+										d -> d.plusMonths(1));
+    	
         CALCOLOFINEABBONAMENTO.put(DurataAbbonamento.TRIMESTRALE, 
         								d -> d.plusMonths(3));
         

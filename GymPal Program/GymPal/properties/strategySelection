@@ -7,4 +7,4 @@ strategia.over60=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.Strategi
 strategia.trimestrale=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.PrezzoTrimestraleStrategy
 strategia.semestrale=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.PrezzoSemestraleStrategy
 strategia.annuale=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.PrezzoAnnualeStrategy
-strategia.nessuno=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.PrezzoNessunoStrategy
+strategia.mensile=it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.PrezzoNessunoStrategy

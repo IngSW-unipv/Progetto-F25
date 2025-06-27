@@ -51,14 +51,6 @@ public class CostruttoreDTOHelper {
 	
 	//----------------------------------------------------------------
 	
-	/*public void statoPagamento(boolean statoPagamento) {
-		
-		abbDTO.setStatoPagamento(statoPagamento);
-		
-	}*/
-	
-	//----------------------------------------------------------------
-	
 	public void impostaScontiEDurata(boolean scontoEta, boolean scontoOccasioni,
 								     DurataAbbonamento durataAbbonamento) {
 		
@@ -70,11 +62,11 @@ public class CostruttoreDTOHelper {
 	
 	//----------------------------------------------------------------
 	
+	/*Strutturando così questo metodo, lo stato di pagamento è derivato in automati-
+	 *co, riduncendo il rischio di commettere errori e/o duplicare codice.*/	
 	public void impostaMetodoPagamento(MetodoPagamento metodoPagamento) {
 		
-		/*Strutturando così questo metodo, lo stato di pagamento è derivato in automati-
-		 *co, riduncendo il rischio di commettere errori e/o duplicare codice.*/
-		
+	
 		abbDTO.setMetodoPagamento(metodoPagamento);
 		
 		/*Fra le parentesi tonde: se "metodoPagamento" è diverso da "NESSUNO", allora

@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
 
 public class RiepilogoEPagamentoController {
@@ -14,7 +14,7 @@ public class RiepilogoEPagamentoController {
     private IRiepilogoEPagamentoView riepilogoEPagamento;
     private IRegistrationCoordinator coordinator;
     
-    private IRiepilogoDTO abbonamentoDTO;
+    private IAbbonamentoDTO abbonamentoDTO;
     
     private Runnable onIndietro;
     private Runnable onConferma;
@@ -23,8 +23,7 @@ public class RiepilogoEPagamentoController {
     //----------------------------------------------------------------
     
     public RiepilogoEPagamentoController (IRiepilogoEPagamentoView view, 
-    									  IRiepilogoDTO abbonamentoDTO, 
-                                          Runnable onIndietroCallback,
+    									  Runnable onIndietroCallback,
                                           Runnable onConfermaCallback,
                                           Runnable onAnnullaCallback,
                                           IRegistrationCoordinator coordinator) {
@@ -33,7 +32,7 @@ public class RiepilogoEPagamentoController {
         
         riepilogoEPagamento = view;
         this.coordinator=coordinator;
-        this.abbonamentoDTO = abbonamentoDTO;
+        this.abbonamentoDTO = coordinator.getAbbonamentoDTO();
         
         
         onIndietro = onIndietroCallback;
@@ -43,6 +42,10 @@ public class RiepilogoEPagamentoController {
         /*Inizializzazione della view "RiepilogoEPagamento" con i dati acquisiti durante la
          *procedura di iscrizione*/
         riepilogoEPagamento.setDatiAbbonamento(abbonamentoDTO);
+        
+        /*Tasto "Conferma" disabilitato fintanto che una opzione di pagamento non è
+         *selezionata.*/
+        riepilogoEPagamento.setConfermaEnabled(false);
   
         
         aggiornaPrezzo();
@@ -65,42 +68,32 @@ public class RiepilogoEPagamentoController {
     	
         riepilogoEPagamento.addConfermaListener(e -> {
 
-            MetodoPagamento metodoPagamento = riepilogoEPagamento.getMetodoPagamentoSelezionato();
+                 
 
-            if (metodoPagamento != MetodoPagamento.NESSUNO) {
-
-                int result = JOptionPane.showConfirmDialog(
+        int result = JOptionPane.showConfirmDialog(
                         null, // Nessun componente genitore
                         "Vuoi davvero confermare?", // Messaggio visualizzato
                         "Conferma iscrizione", // Titolo pannello pop-up
                         JOptionPane.YES_NO_OPTION); // Opzioni presentate all'utente - SI : NO
 
-                if (result == JOptionPane.YES_OPTION) {
-                    try {
-                    	
-        	        	/*Bisogna dire al coordinatore che la fase di acquisizione
-        	             *dati è terminata, pertanto bisogna inviare le informazioni
-        	             *raccolte al service-layer*/
+        if (result == JOptionPane.YES_OPTION) {
+        	
+                try {
         	        	
-        	        	// Ritorno alla schermata iniziale e reset per un nuovo ciclo 
-                    	
-                        onConferma.run();
+        	        // Ritorno alla schermata iniziale e reset per un nuovo ciclo 
+            		onConferma.run();
                         
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null,
+                 } catch (Exception ex) {
+            	 
+                        JOptionPane.showMessageDialog(
+                        	null,
                             "Errore durante la conferma:\n" + ex.getMessage(),
                             "Errore",
                             JOptionPane.ERROR_MESSAGE);
-                    }
-                }
+                 }
+                    
+             }
 
-            } else {
-            	
-                JOptionPane.showMessageDialog(null,
-                    "Seleziona una modalità di pagamento prima di confermare",
-                    "ATTENZIONE!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            }
 
         });
         
@@ -140,21 +133,20 @@ public class RiepilogoEPagamentoController {
         	 *della enum, si limita ad assegnarli, passarli, o leggerli per decidere se
         	 *ha senso proseguire con un'azione.*/
         	
-        	MetodoPagamento metodoPagamento = MetodoPagamento.NESSUNO;
-        	
-            if(riepilogoEPagamento.isContantiSelected()) {
+        	MetodoPagamento metodoPagamento = riepilogoEPagamento.getMetodoPagamentoSelezionato();
+            
+            if (metodoPagamento != null) {
             	
-            	metodoPagamento = MetodoPagamento.CONTANTI;
+                coordinator.acquisisciMetodoPagamento(metodoPagamento);
                 
-            } else if (riepilogoEPagamento.isCartaSelected()) {
+                riepilogoEPagamento.setConfermaEnabled(true);
+                
+            } else {
             	
-            	metodoPagamento = MetodoPagamento.CARTA;
-                
+                riepilogoEPagamento.setConfermaEnabled(false);
             }
             
-            coordinator.acquisisciMetodoPagamento(metodoPagamento);
-            
-        });    	
+        }); 	
     	
     }
     
@@ -211,6 +203,10 @@ public class RiepilogoEPagamentoController {
     	DurataAbbonamento durataEnum;
 
     	switch (durataSelezionata) {
+    	
+	    	case "Mensile":
+	    		durataEnum = DurataAbbonamento.MENSILE;
+	    		break;
     	
     	    case "Trimestrale":
     	        durataEnum = DurataAbbonamento.TRIMESTRALE;

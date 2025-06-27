@@ -8,6 +8,6 @@ public enum DurataAbbonamento {
 	 *
 	 *In tal modo è rafforzata la separazione fra strato di dominio e strato GUI, ed in
 	 *più, la logica di dominio è isolata da quella di visualizzazione.*/
-	TRIMESTRALE, SEMESTRALE, ANNUALE, NESSUNO
+	MENSILE, TRIMESTRALE, SEMESTRALE, ANNUALE, NESSUNO
 
 }

@@ -11,7 +11,7 @@ import java.util.Properties;
 
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.IStrategieCalcoloPrezzo;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IRiepilogoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
 
 public class StrategieCalcoloPrezzoFactory implements IStrategieCalcoloPrezzoFactory {
 	
@@ -55,7 +55,7 @@ public class StrategieCalcoloPrezzoFactory implements IStrategieCalcoloPrezzoFac
 	//----------------------------------------------------------------
     
     @Override
-    public IStrategieCalcoloPrezzo getStrategy(IRiepilogoDTO abbonamentoDTO) {
+    public IStrategieCalcoloPrezzo getStrategy(IAbbonamentoDTO abbonamentoDTO) {
     	
     	    IStrategieCalcoloPrezzo strategiaBase;
 
