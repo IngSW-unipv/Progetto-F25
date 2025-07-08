@@ -13,7 +13,7 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.Utente
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.IRecuperoDatiView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.RecuperoDatiController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.RecuperoDatiView;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.EliminazioneCliente.EliminaProfiloControllore;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.EliminazioneCliente.EliminaProfiloController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.EliminazioneCliente.EliminaProfiloView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.EliminazioneCliente.IEliminaProfiloView;
 
@@ -57,6 +57,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator {
     //----------------------------------------------------------------
 	
 	private void inizializzaCicloGestione() {
+		
 		
 		utenteAbbDTO = new UtenteAbbDTO();
 		costruttoreDTOHelper = new DTOHandlerHelper(utenteAbbDTO);
@@ -113,7 +114,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator {
 		
 		viewHandler.registraSchermata("ELIMINA_CLIENT", eliminazioneDati.getMainPanel());
 		
-		new EliminaProfiloControllore(eliminazioneDati, 
+		new EliminaProfiloController(eliminazioneDati, 
 				
 									  //onAnnulla
 									  () -> {
@@ -138,11 +139,19 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator {
 										    
 										    if (esito) {
 										    	
-										        JOptionPane.showMessageDialog(null, "Eliminazione avvenuta con successo.", "Successo", JOptionPane.INFORMATION_MESSAGE);
+										        JOptionPane.showMessageDialog(
+										        		null, 
+										        		"Eliminazione avvenuta con successo.",
+										        		"Successo", 
+										        		JOptionPane.INFORMATION_MESSAGE);
 										        
 										    } else {
 										    	
-										        JOptionPane.showMessageDialog(null, "Errore durante l'eliminazione del profilo.", "Errore", JOptionPane.ERROR_MESSAGE);
+										        JOptionPane.showMessageDialog(
+										        		null, 
+										        		"Errore durante l'eliminazione del profilo.", 
+										        		"Errore", 
+										        		JOptionPane.ERROR_MESSAGE);
 										        
 										    }
 										  
@@ -193,5 +202,6 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator {
     }
     
     //----------------------------------------------------------------
+    
 
 }

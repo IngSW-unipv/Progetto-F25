@@ -33,7 +33,11 @@ public class RetrieveClientFromDB implements IRetrieveClientFromDB {
 			
 			mapper.extractAndUpdateDTO(facade.selectCliente(cliente), abbDTO);
 			
-			System.out.println(abbDTO.getNome() + " " + abbDTO.getCognome());
+			System.out.println(abbDTO.getNome() + " " + abbDTO.getCognome()
+							   + " " + abbDTO.getDataNascita());
+			
+			System.out.println("Componenti abbonamento: " + abbDTO.getSezioniAbbonamento());
+			System.out.println("Corsi selezionati: " + abbDTO.getCorsiSelezionati());
 		
 		} catch (Exception e) {
 			

@@ -37,7 +37,7 @@ public class DTOtoCliente implements IDTOtoCliente{
 									calcolaFineAbbonamento(giornoRegistrazione, 
 												abbDTO.getDurataAbbonamento());
 		
-		String listsContent = ListsContentToString.
+		String listsContent = ListsToStringCodec.
 							  condensaAbbonamento(abbDTO.getSezioniAbbonamento(),
 									  			   abbDTO.getCorsiSelezionati());
 		

@@ -1,8 +1,13 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO;
 
 import java.time.LocalDate;
+import java.util.List;
 
-public class UtenteAbbDTO implements IUtenteAbbDTO{
+import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
+import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
+import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
+
+public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo{
 
 	private String cf;
 	private String nome;
@@ -10,11 +15,19 @@ public class UtenteAbbDTO implements IUtenteAbbDTO{
 	private String sesso;
 	private boolean isMinorenne;
 	private String contatto;
-	private String abbonamento;
+	private DurataAbbonamento abbonamento;
 	private LocalDate inizioAbbonamento;      
 	private LocalDate fineAbbonamento;        
 	private boolean pagamentoEffettuato; 
 	private String composizioneAbbonamento;
+	
+	private LocalDate dataNascita;
+    private List<String> componentiAbbonamento;
+    private List<String> corsiSelezionati;
+    
+    private MetodoPagamento metodoPagamento;
+    private boolean scontoEta;
+    private boolean scontoOccasioni;
 	    
     // --- Getters & Setters -----------------------------------------
 	
@@ -127,7 +140,7 @@ public class UtenteAbbDTO implements IUtenteAbbDTO{
     //----------------------------------------------------------------
 	
 	@Override
-	public String getAbbonamento() {
+	public DurataAbbonamento getDurataAbbonamento() {
 		
 		return abbonamento;
 		
@@ -136,7 +149,7 @@ public class UtenteAbbDTO implements IUtenteAbbDTO{
     //----------------------------------------------------------------
 	
 	@Override
-	public void setAbbonamento(String abbonamento) {
+	public void setAbbonamento(DurataAbbonamento abbonamento) {
 		
 		this.abbonamento = abbonamento;
 		
@@ -215,5 +228,112 @@ public class UtenteAbbDTO implements IUtenteAbbDTO{
 	}
 	
     //----------------------------------------------------------------	
+	
+    @Override
+    public LocalDate getDataNascita() {
+    	
+        return dataNascita;
+        
+    }
+    
+    //----------------------------------------------------------------
+
+    public void setDataNascita(LocalDate dataNascita) {
+    	
+        this.dataNascita = dataNascita;
+        
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public List<String> getSezioniAbbonamento() {
+    	
+        return componentiAbbonamento;
+        
+    }
+    
+    //----------------------------------------------------------------
+
+    @Override
+    public void setSezioniAbbonamento(List<String> sezioniAbbonamento) {
+    	
+        this.componentiAbbonamento = sezioniAbbonamento;
+        
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public List<String> getCorsiSelezionati() {
+    	
+        return corsiSelezionati;
+        
+    }
+    
+    //----------------------------------------------------------------
+
+    @Override
+    public void setCorsiSelezionati(List<String> corsiSelezionati) {
+    	
+        this.corsiSelezionati = corsiSelezionati;
+    
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public MetodoPagamento getMetodoPagamento() {
+    	
+    	return metodoPagamento;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public void setMetodoPagamento(MetodoPagamento metodoPagamento) {
+    	
+    	this.metodoPagamento = metodoPagamento;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public boolean getScontoEta() {
+    	
+    	return scontoEta;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    
+    public void setScontoEta(boolean scontoEta) {
+    	
+    	this.scontoEta = scontoEta;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public boolean getScontoOccasioni() {
+    	
+    	return scontoOccasioni;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    
+    public void setScontoOccasioni(boolean scontoOccasioni) {
+    	
+    	this.scontoOccasioni = scontoOccasioni;
+    	
+    }
+    
+    //----------------------------------------------------------------
 
 }

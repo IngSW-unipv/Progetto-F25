@@ -3,6 +3,7 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.Customer
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
@@ -238,7 +239,7 @@ public class RiepilogoEPagamentoController {
 
         
         riepilogoEPagamento.setPrezzoTotale(coordinator.
-        									getDiscountedPrice(abbonamentoDTO));
+        									getDiscountedPrice((ICalcolaPrezzo)abbonamentoDTO));
         
     }
 

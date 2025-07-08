@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.IGestioneAbbCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.IUtenteAbbDTO;
 
-public class EliminaProfiloControllore {
+public class EliminaProfiloController {
 	
 	/*Vista*/
 	IEliminaProfiloView eliminaView;
@@ -24,7 +24,7 @@ public class EliminaProfiloControllore {
 	
 	//----------------------------------------------------------------
 	
-	public EliminaProfiloControllore(IEliminaProfiloView eliminaView,
+	public EliminaProfiloController(IEliminaProfiloView eliminaView,
 									 Runnable onAnnulla,
 									 Runnable onIndietro,
 									 Runnable onConferma,

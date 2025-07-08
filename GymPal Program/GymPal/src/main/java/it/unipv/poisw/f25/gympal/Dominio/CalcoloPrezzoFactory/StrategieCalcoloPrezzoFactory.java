@@ -10,8 +10,8 @@ import java.time.Period;
 import java.util.Properties;
 
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.IStrategieCalcoloPrezzo;
+import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
 
 public class StrategieCalcoloPrezzoFactory implements IStrategieCalcoloPrezzoFactory {
 	
@@ -55,7 +55,7 @@ public class StrategieCalcoloPrezzoFactory implements IStrategieCalcoloPrezzoFac
 	//----------------------------------------------------------------
     
     @Override
-    public IStrategieCalcoloPrezzo getStrategy(IAbbonamentoDTO abbonamentoDTO) {
+    public IStrategieCalcoloPrezzo getStrategy(ICalcolaPrezzo abbonamentoDTO) {
     	
     	    IStrategieCalcoloPrezzo strategiaBase;
 

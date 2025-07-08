@@ -1,6 +1,6 @@
 package it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
 
 public class PrezzoTrimestraleStrategy implements IStrategieCalcoloPrezzo{
 
@@ -18,7 +18,7 @@ public class PrezzoTrimestraleStrategy implements IStrategieCalcoloPrezzo{
 	//----------------------------------------------------------------
 	
 	@Override
-	public double calcolaPrezzo(IAbbonamentoDTO abbonamentoDTO) {
+	public double calcolaPrezzo(ICalcolaPrezzo abbonamentoDTO) {
 		
 		/*La chiamata "base.calcolaPrezzo()" restituisce il prezzo di base (che può essere
 		 *quello standard, oppure un prezzo mediato dalle strategie basate su età), cui è

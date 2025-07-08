@@ -1,6 +1,10 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
+import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 
 public interface IUtenteAbbDTO {
 	
@@ -52,11 +56,11 @@ public interface IUtenteAbbDTO {
 	
     //----------------------------------------------------------------
 	
-	public String getAbbonamento();
+	public DurataAbbonamento getDurataAbbonamento();
 	
     //----------------------------------------------------------------
 	
-	public void setAbbonamento(String abbonamento);
+	public void setAbbonamento(DurataAbbonamento abbonamento);
 	
     //----------------------------------------------------------------
 	
@@ -91,5 +95,37 @@ public interface IUtenteAbbDTO {
 	public void setComposizioneAbbonamento(String composizioneAbbonamento);
 	
     //----------------------------------------------------------------	
+	
+	public LocalDate getDataNascita();
+	
+    //----------------------------------------------------------------
+	
+	public void setDataNascita(LocalDate dataNascita);
+	
+    //----------------------------------------------------------------
+	
+	public List<String> getSezioniAbbonamento();
 
+    //----------------------------------------------------------------
+	
+	public void setSezioniAbbonamento(List<String> sezioniAbbonamento);
+	
+    //----------------------------------------------------------------
+	
+	public List<String> getCorsiSelezionati();
+	
+    //----------------------------------------------------------------
+	
+	public void setCorsiSelezionati(List<String> corsiSelezionati);
+	
+    //----------------------------------------------------------------
+	
+	public MetodoPagamento getMetodoPagamento();
+	
+    //----------------------------------------------------------------
+	
+	public void setMetodoPagamento(MetodoPagamento metodoPagamento);
+	
+    //----------------------------------------------------------------
+	
 }

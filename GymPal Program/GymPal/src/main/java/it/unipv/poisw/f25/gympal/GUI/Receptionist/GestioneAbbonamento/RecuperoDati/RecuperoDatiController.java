@@ -82,7 +82,7 @@ public class RecuperoDatiController {
 			recuperoDati.getCognomeLabel().setText("Cognome cliente: " + abbDTO.getCognome());
 			recuperoDati.getContattoLabel().setText("Contatto cliente: " + abbDTO.getContatto());
 			recuperoDati.getSessoLabel().setText("Sesso cliente: " + abbDTO.getSesso());
-			recuperoDati.getDurataAbbonamentoLabel().setText("Durata Abbonamento: " + abbDTO.getAbbonamento());
+			recuperoDati.getDurataAbbonamentoLabel().setText("Durata Abbonamento: " + abbDTO.getDurataAbbonamento());
 			recuperoDati.getInizioAbbLabel().setText("Data inizio abbonamento: " + abbDTO.getInizioAbbonamento());
 			recuperoDati.getFineAbbLabel().setText("Data fine abbonamento: " + abbDTO.getFineAbbonamento());
 			////////////////////

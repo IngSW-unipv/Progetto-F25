@@ -5,6 +5,7 @@ import java.util.List;
 
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.IStrategieCalcoloPrezzoFactory;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.IStrategieCalcoloPrezzo;
+import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.AddClient.ICommitNewClientToDB;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
@@ -243,7 +244,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
    //----------------------------------------------------------------
     
     @Override
-    public double getDiscountedPrice(IAbbonamentoDTO abbonamentoDTO) {
+    public double getDiscountedPrice(ICalcolaPrezzo abbonamentoDTO) {
 
     	
     	IStrategieCalcoloPrezzo strategia = prezzoFactory.getStrategy(abbonamentoDTO);

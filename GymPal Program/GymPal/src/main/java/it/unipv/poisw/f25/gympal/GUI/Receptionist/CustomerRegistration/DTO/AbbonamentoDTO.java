@@ -3,10 +3,11 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO;
 import java.time.LocalDate;
 import java.util.List;
 
+import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 
-public class AbbonamentoDTO implements IAbbonamentoDTO{
+public class AbbonamentoDTO implements IAbbonamentoDTO, ICalcolaPrezzo{
 	
     // Anagrafica
 	
