@@ -32,16 +32,18 @@ public class RecuperoDatiController {
 						   		  Runnable onAnnulla,
 								  Runnable onElimina, 
 								  Runnable onEstrai,
+								  Runnable onRinnova,
 								  IGestioneAbbCoordinator coordinator){
 		
 		this.recuperoDati = recuperoDati;
 		this.coordinator = coordinator;
 		
-		this.abbDTO = coordinator.getUtenteAbbDTO();
+		this.abbDTO = (IUtenteAbbDTO)coordinator.getDTO();
 		
 		this.onAnnulla = onAnnulla;
 		this.onElimina = onElimina;
 		this.onEstrai = onEstrai;
+		this.onRinnova = onRinnova;
 		
 		recuperoDati.setEliminaEnabled(false);
 		recuperoDati.setModificaEnabled(false);
@@ -51,6 +53,7 @@ public class RecuperoDatiController {
 		impostaEventoElimina();
 		impostaEventoEstrazione();
 		impostaEventiTextFields();
+		impostaEventoRinnova();
 		
 	}
 	
@@ -77,14 +80,7 @@ public class RecuperoDatiController {
 			onEstrai.run();
 			
 			/////////////////////
-			recuperoDati.getCfLabel().setText("Codice fiscale cliente: " + abbDTO.getCf());
-			recuperoDati.getNomeLabel().setText("Nome cliente: " + abbDTO.getNome());
-			recuperoDati.getCognomeLabel().setText("Cognome cliente: " + abbDTO.getCognome());
-			recuperoDati.getContattoLabel().setText("Contatto cliente: " + abbDTO.getContatto());
-			recuperoDati.getSessoLabel().setText("Sesso cliente: " + abbDTO.getSesso());
-			recuperoDati.getDurataAbbonamentoLabel().setText("Durata Abbonamento: " + abbDTO.getDurataAbbonamento());
-			recuperoDati.getInizioAbbLabel().setText("Data inizio abbonamento: " + abbDTO.getInizioAbbonamento());
-			recuperoDati.getFineAbbLabel().setText("Data fine abbonamento: " + abbDTO.getFineAbbonamento());
+			setLabels();
 			////////////////////
 			
 			recuperoDati.setEliminaEnabled(true);
@@ -127,6 +123,33 @@ public class RecuperoDatiController {
     															IRegexExpression.CODICE_FISCALE));
 
 
+    }
+    
+	//----------------------------------------------------------------
+    
+    private void impostaEventoRinnova() {
+    	
+		recuperoDati.getRinnovaButton().addActionListener(e -> {
+            
+            onRinnova.run();
+            
+        });
+    	
+    }
+    
+	//----------------------------------------------------------------
+    
+    private void setLabels() {
+    	
+		recuperoDati.getCfLabel().setText("Codice fiscale cliente: " + abbDTO.getCodiceFiscale());
+		recuperoDati.getNomeLabel().setText("Nome cliente: " + abbDTO.getNome());
+		recuperoDati.getCognomeLabel().setText("Cognome cliente: " + abbDTO.getCognome());
+		recuperoDati.getContattoLabel().setText("Contatto cliente: " + abbDTO.getContatto());
+		recuperoDati.getSessoLabel().setText("Sesso cliente: " + abbDTO.getSesso());
+		recuperoDati.getDurataAbbonamentoLabel().setText("Durata Abbonamento: " + abbDTO.getDurataAbbonamento());
+		recuperoDati.getInizioAbbLabel().setText("Data inizio abbonamento: " + abbDTO.getInizioAbbonamento());
+		recuperoDati.getFineAbbLabel().setText("Data fine abbonamento: " + abbDTO.getFineAbbonamento());
+    	
     }
     
 	//----------------------------------------------------------------

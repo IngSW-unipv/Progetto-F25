@@ -8,11 +8,11 @@ import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 
 public interface IUtenteAbbDTO {
 	
-	public String getCf();
+	public String getCodiceFiscale();
 	
     //----------------------------------------------------------------
 	
-	public void setCf(String cf);
+	public void setCodiceFiscale(String cf);
 	
     //----------------------------------------------------------------
 	
@@ -60,7 +60,7 @@ public interface IUtenteAbbDTO {
 	
     //----------------------------------------------------------------
 	
-	public void setAbbonamento(DurataAbbonamento abbonamento);
+	public void setDurataAbbonamento(DurataAbbonamento abbonamento);
 	
     //----------------------------------------------------------------
 	
@@ -125,6 +125,22 @@ public interface IUtenteAbbDTO {
     //----------------------------------------------------------------
 	
 	public void setMetodoPagamento(MetodoPagamento metodoPagamento);
+	
+    //----------------------------------------------------------------
+	
+	public void setStatoPagamento(boolean pagamento);
+	
+    //----------------------------------------------------------------
+	
+	public boolean getStatoPagamento();
+	
+    //----------------------------------------------------------------
+	
+	public boolean getCertificatoIdoneita();
+	
+    //----------------------------------------------------------------
+	
+	public boolean getPermessoGenitori();
 	
     //----------------------------------------------------------------
 	

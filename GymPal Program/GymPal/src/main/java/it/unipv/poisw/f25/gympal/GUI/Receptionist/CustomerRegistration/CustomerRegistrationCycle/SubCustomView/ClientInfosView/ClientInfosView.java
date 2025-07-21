@@ -1,8 +1,6 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView;
 
 
-import java.awt.Dimension;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -18,6 +16,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampoFactory;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
 
 public class ClientInfosView extends JPanel implements IClientInfosView{
 
@@ -58,10 +57,14 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 	 *dell'età del cliente*/
 	private JLabel permesso;
 	
+	private final IDynamicButtonSizeSetter buttonSizeSetter;
+	
         
    //----------------------------------------------------------------
 		
-	public ClientInfosView () {
+	public ClientInfosView (IDynamicButtonSizeSetter setter) {
+		
+		buttonSizeSetter = setter;
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(new EmptyBorder(10, 5, 10, 5));
@@ -238,13 +241,10 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 		avantiIndietroPanel.setLayout(new BoxLayout(avantiIndietroPanel, BoxLayout.X_AXIS));
 
 		avanti = new JButton ("Avanti");
-		avanti.setMaximumSize(new Dimension(80, 40)); 
-		
 		indietro = new JButton ("Indietro");
-		indietro.setMaximumSize(new Dimension(80, 40)); 
-		
 		annulla = new JButton ("Annulla");
-		annulla.setMaximumSize(new Dimension(80, 40));
+		
+		buttonSizeSetter.uniformButtonSize(avanti, indietro, annulla);
 		
 		avantiIndietroPanel.add(Box.createHorizontalGlue());
 		avantiIndietroPanel.add(annulla);

@@ -3,7 +3,9 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,34 +38,48 @@ public class ReceptionistDashboardView extends JFrame implements IReceptionistDa
     
     public ReceptionistDashboardView () {
     	
+    	    	
         setTitle("Receptionist Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //----------------------------------------------------------------
         
-        /*Costruzione pannello sinistro*/
-        
+        /* Costruzione pannello sinistro */
+
         logOutButton = new JButton("Log Out");
-        
-        
-        /*Impiegato codie html per spezzare le parole componenti i nomi dei bottoni,
-         *ed incolonnarle con allineamento centrale.
-         *La particella "<br>" spezza le parole, "<center>" definisce il loro allineamento.*/
+
+        /* Impiegato codice html per spezzare le parole componenti i nomi dei bottoni,
+         * ed incolonnarle con allineamento centrale.
+         * La particella "<br>" spezza le parole, "<center>" definisce il loro allineamento. */
         registerNewClientButton = new JButton("<html><center>Registra<br>Nuovo Cliente</center></html>");
-        
-        modifySubscriptionButton = new JButton ("<html><center>Modifica<br>Rinnovo<br>Cancellazione<br>Abbonamento</center></html>");
-        
+
+        modifySubscriptionButton = new JButton("<html><center>Modifica<br>Rinnovo<br>Cancellazione<br>Abbonamento</center></html>");
+
         pannelloSinistro = new JPanel();
-        
-        pannelloSinistro.setLayout(new GridLayout(3, 1, 10, 10));
-        
+
+        /*Scelto "GridBagLayout" anziché "GridLayout" siccome quest'ultimo soffre di
+         *problemi di scaling su schermi ad alti DPI, come quelli dei portatili*/
+        pannelloSinistro.setLayout(new GridBagLayout());
+
         pannelloSinistro.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(10, 0, 10, 0); // Spazio verticale tra i bottoni
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0; // Ogni bottone prende 1/3 dello spazio verticale
+
+        gbc.gridy = 0;
+        pannelloSinistro.add(registerNewClientButton, gbc);
+
+        gbc.gridy = 1;
+        pannelloSinistro.add(modifySubscriptionButton, gbc);
+
+        gbc.gridy = 2;
+        pannelloSinistro.add(logOutButton, gbc);
         
-        pannelloSinistro.add(registerNewClientButton);
-        
-        pannelloSinistro.add(modifySubscriptionButton);
-        
-        pannelloSinistro.add(logOutButton);
+        pannelloSinistro.setPreferredSize(new Dimension(200, 1300));
         
         //----------------------------------------------------------------
     	
@@ -90,7 +106,7 @@ public class ReceptionistDashboardView extends JFrame implements IReceptionistDa
         
         pannelloDestro.add(schermata2, "SCHERMATA2");
         
-        pannelloDestro.setPreferredSize(new Dimension(1200, 800));
+        pannelloDestro.setPreferredSize(new Dimension(2000, 1300));
         
         //----------------------------------------------------------------
         

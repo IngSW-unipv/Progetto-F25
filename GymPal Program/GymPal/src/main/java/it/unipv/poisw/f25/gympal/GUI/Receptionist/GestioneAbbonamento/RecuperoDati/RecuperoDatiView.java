@@ -1,7 +1,5 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati;
 
-import java.awt.Dimension;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -13,6 +11,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampoFactory;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
 
 public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
 
@@ -41,9 +40,13 @@ public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
 	
 	private JPanel navigationPanel;
 	
+	private final IDynamicButtonSizeSetter buttonSizeSetter;
+	
 	//----------------------------------------------------------------
 	
-	public RecuperoDatiView () {
+	public RecuperoDatiView (IDynamicButtonSizeSetter setter) {
+		
+		buttonSizeSetter = setter;
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(new EmptyBorder(10, 5, 10, 5));
@@ -93,7 +96,7 @@ public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
 		upperPanel.setLayout(new BoxLayout(upperPanel, BoxLayout.Y_AXIS));
 		
 		estrai = new JButton ("Estrai Dati");
-		estrai.setMaximumSize(new Dimension(120, 40));
+		buttonSizeSetter.uniformButtonSize(estrai);
 
 		upperPanel.add(Box.createVerticalGlue());
 		
@@ -170,16 +173,11 @@ public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
 		navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
 		
 		rinnova = new JButton ("Rinnova");
-		rinnova.setMaximumSize(new Dimension(80, 40)); 
-		
 		modifica = new JButton ("Modifica");
-		modifica.setMaximumSize(new Dimension(80, 40)); 
-		
 		elimina = new JButton ("Elimina");
-		elimina.setMaximumSize(new Dimension(80, 40));
-		
 		annulla = new JButton ("Annulla");
-		annulla.setMaximumSize(new Dimension(80, 40));
+		
+		buttonSizeSetter.uniformButtonSize(rinnova, modifica, elimina, annulla);
 		
 		navigationPanel.add(Box.createHorizontalGlue());
 		navigationPanel.add(annulla);

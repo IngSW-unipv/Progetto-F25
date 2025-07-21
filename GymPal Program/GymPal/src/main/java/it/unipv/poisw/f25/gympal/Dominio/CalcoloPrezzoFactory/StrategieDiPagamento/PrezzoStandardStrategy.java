@@ -24,11 +24,11 @@ public class PrezzoStandardStrategy implements IStrategieCalcoloPrezzo{
     public double calcolaPrezzo(ICalcolaPrezzo abbonamentoDTO) {
     	
         /*System.out.println("DEBUG nella strategia - componentiAbbonamento:");
-        for (String s : abbonamento.getSezioniAbbonamento()) {
+        for (String s : abbonamentoDTO.getSezioniAbbonamento()) {
             System.out.println(" - " + s);
         }
         System.out.println("DEBUG nella strategia - corsiSelezionati:");
-        for (String s : abbonamento.getCorsiSelezionati()) {
+        for (String s : abbonamentoDTO.getCorsiSelezionati()) {
             System.out.println(" - " + s);
         }*/
     	
@@ -57,7 +57,9 @@ public class PrezzoStandardStrategy implements IStrategieCalcoloPrezzo{
             
             String prezzo = prezzi.getProperty("componenti." + componenteKey, "0");
             
+            //////////////////
             //System.out.println(" - " + componente + " (chiave: 'componenti." + componenteKey + "'): " + prezzo);
+            //////////////////            
             
             /*Questa istruzione converte il valore ottenuto pocanzi da "String" a "Double", ed 
              *esegue la somma*/
@@ -68,9 +70,17 @@ public class PrezzoStandardStrategy implements IStrategieCalcoloPrezzo{
         
         for (String corso : abbonamentoDTO.getCorsiSelezionati()) {
         	
+
+        	/*Quest istruzione assicura che la stringa 'corso' sia capitalizzata nel
+        	 *giusto modo, soprattutto se tratta da DB.*/
+        	corso = corso.substring(0, 1).toUpperCase() 
+				    + corso.substring(1).toLowerCase();
+        	
             String prezzo = prezzi.getProperty("corsi." + corso, "0");
             
+            ////////////////////
             //System.out.println(" - " + corso + ": " + prezzo);
+            ////////////////////
             
             totale += Double.parseDouble(prezzo);
         }

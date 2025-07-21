@@ -86,8 +86,7 @@ public class DashboardDispatcherFactory {
     	 * "ReceptionistDashboardAvviabile" implementa "IDashboardAvviabile", dunque è
     	 * del tipo corretto*/
     	
-        mappa.put(Receptionist.class, staff -> new ReceptionistDashboardAvviabile(
-        		 (Receptionist) staff));
+        mappa.put(Receptionist.class, staff -> new ReceptionistDashboardAvviabile());
         // mappa.put(Admin.class, staff -> new AdminDashboardAvviabile((Admin) staff));
         
     }

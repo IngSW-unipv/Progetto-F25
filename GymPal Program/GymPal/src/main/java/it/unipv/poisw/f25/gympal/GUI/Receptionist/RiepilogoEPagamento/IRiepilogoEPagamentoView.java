@@ -1,16 +1,16 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment;
+package it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento;
 
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 
 public interface IRiepilogoEPagamentoView {
 	
 	/* Metodi per inizializzare la view con i dati dell'abbonamento */
-	public void setDatiAbbonamento(IAbbonamentoDTO abbonamentoDTO);
+	public void setDatiAbbonamento(IDatiCliente abbonamentoDTO);
 	
 	//----------------------------------------------------------------
 	//----------------------------------------------------------------

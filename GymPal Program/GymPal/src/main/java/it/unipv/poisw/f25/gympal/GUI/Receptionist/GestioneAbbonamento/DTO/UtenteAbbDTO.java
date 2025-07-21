@@ -6,8 +6,9 @@ import java.util.List;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 
-public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo{
+public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente{
 
 	private String cf;
 	private String nome;
@@ -21,6 +22,9 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo{
 	private boolean pagamentoEffettuato; 
 	private String composizioneAbbonamento;
 	
+    private boolean certificatoIdoneita = true;
+    private boolean permessoGenitori = true;
+	
 	private LocalDate dataNascita;
     private List<String> componentiAbbonamento;
     private List<String> corsiSelezionati;
@@ -28,11 +32,12 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo{
     private MetodoPagamento metodoPagamento;
     private boolean scontoEta;
     private boolean scontoOccasioni;
+    private boolean statoPagamento;
 	    
     // --- Getters & Setters -----------------------------------------
 	
 	@Override
-	public String getCf() {
+	public String getCodiceFiscale() {
 		
 		return cf;
 		
@@ -41,7 +46,7 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo{
     //----------------------------------------------------------------
 
 	@Override
-	public void setCf(String cf) {
+	public void setCodiceFiscale(String cf) {
 		
 		this.cf = cf;
 		
@@ -149,7 +154,7 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo{
     //----------------------------------------------------------------
 	
 	@Override
-	public void setAbbonamento(DurataAbbonamento abbonamento) {
+	public void setDurataAbbonamento(DurataAbbonamento abbonamento) {
 		
 		this.abbonamento = abbonamento;
 		
@@ -332,6 +337,42 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo{
     	
     	this.scontoOccasioni = scontoOccasioni;
     	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public void setStatoPagamento(boolean pagamento) {
+    	
+    	statoPagamento = pagamento;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public boolean getStatoPagamento() {
+    	
+    	return statoPagamento;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public boolean getCertificatoIdoneita() {
+    	
+        return certificatoIdoneita;
+        
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public boolean getPermessoGenitori() {
+    	
+        return permessoGenitori;
+        
     }
     
     //----------------------------------------------------------------

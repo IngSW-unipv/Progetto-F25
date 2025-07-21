@@ -20,14 +20,16 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerR
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.IClientInfosView;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment.IRiepilogoEPagamentoView;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment.RiepilogoEPagamentoController;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment.RiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.AbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.CostruttoreDTOHelper;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.IRiepilogoEPagamentoView;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoController;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoView;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.ICoordinator;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 
-public class CustomerRegistrationCoordinator implements IRegistrationCoordinator{
+public class CustomerRegistrationCoordinator implements IRegistrationCoordinator, ICoordinator{
 
     private IReceptionistController viewHandler;
 
@@ -92,7 +94,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
 
     private void setupSubscriptionCustomization() {
     	
-        subView = new SubscriptionCustomizationView();
+        subView = new SubscriptionCustomizationView(new DynamicButtonSizeSetter());
         
         viewHandler.registraSchermata("SUB_VIEW", subView.getMainPanel());
 
@@ -118,7 +120,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
 
     private void setupClientInfos() {
     	
-        clientInfosView = new ClientInfosView();
+        clientInfosView = new ClientInfosView(new DynamicButtonSizeSetter());
         
         viewHandler.registraSchermata("INFOS_VIEW", clientInfosView.getMainPanel());
 
@@ -131,7 +133,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
                     viewHandler.registraSchermata("RECAP_PAYMENT", riepilogoEPagamento.getMainPanel());
                 }
 
-                riepilogoEPagamento = new RiepilogoEPagamentoView();
+                riepilogoEPagamento = new RiepilogoEPagamentoView(new DynamicButtonSizeSetter());
 
                 new RiepilogoEPagamentoController(
                     riepilogoEPagamento,
@@ -276,7 +278,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     //----------------------------------------------------------------    
     
     @Override
-    public IAbbonamentoDTO getAbbonamentoDTO() {
+    public IDatiCliente getDTO() {
     	
     	return abbonamentoDTO;
     	

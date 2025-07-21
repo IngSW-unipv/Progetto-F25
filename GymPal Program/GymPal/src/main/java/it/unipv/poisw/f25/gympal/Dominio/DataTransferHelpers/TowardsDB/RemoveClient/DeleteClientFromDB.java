@@ -23,7 +23,7 @@ public class DeleteClientFromDB implements IDeleteClientFromDB{
 		
 		Cliente cliente = new Cliente();
 		
-		cliente.setCf(abbDTO.getCf());
+		cliente.setCf(abbDTO.getCodiceFiscale());
 		
 		return facade.deleteCliente(cliente);
 		

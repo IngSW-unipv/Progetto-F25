@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment;
+package it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -6,16 +6,16 @@ import javax.swing.JOptionPane;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.ICoordinator;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
 
 public class RiepilogoEPagamentoController {
     
     private IRiepilogoEPagamentoView riepilogoEPagamento;
-    private IRegistrationCoordinator coordinator;
+    private ICoordinator coordinator;
     
-    private IAbbonamentoDTO abbonamentoDTO;
+    private IDatiCliente abbonamentoDTO;
     
     private Runnable onIndietro;
     private Runnable onConferma;
@@ -27,13 +27,13 @@ public class RiepilogoEPagamentoController {
     									  Runnable onIndietroCallback,
                                           Runnable onConfermaCallback,
                                           Runnable onAnnullaCallback,
-                                          IRegistrationCoordinator coordinator) {
+                                          ICoordinator coordinator) {
         
         
         
         riepilogoEPagamento = view;
-        this.coordinator=coordinator;
-        this.abbonamentoDTO = coordinator.getAbbonamentoDTO();
+        this.coordinator= coordinator;
+        this.abbonamentoDTO = coordinator.getDTO();
         
         
         onIndietro = onIndietroCallback;

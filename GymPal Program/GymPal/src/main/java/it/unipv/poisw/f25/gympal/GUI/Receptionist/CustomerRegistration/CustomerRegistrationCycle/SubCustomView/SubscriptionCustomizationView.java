@@ -17,6 +17,8 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+
 public class SubscriptionCustomizationView extends JPanel implements ISubscriptionCustomizationView {
 
 	private static final long serialVersionUID = 1L;
@@ -38,10 +40,14 @@ public class SubscriptionCustomizationView extends JPanel implements ISubscripti
 	
 	private JButton avanti;
 	private JButton annulla;
+	
+	private final IDynamicButtonSizeSetter buttonSizeSetter;
 
 	//----------------------------------------------------------------
 
-	public SubscriptionCustomizationView () {
+	public SubscriptionCustomizationView (IDynamicButtonSizeSetter setter) {
+		
+		buttonSizeSetter = setter;
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(new EmptyBorder(10, 5, 10, 5));
@@ -123,9 +129,8 @@ public class SubscriptionCustomizationView extends JPanel implements ISubscripti
 		JPanel bottomPanel = new JPanel();
 		
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
-
-		avanti.setMaximumSize(new Dimension(80, 40)); 
-		annulla.setMaximumSize(new Dimension(80, 40));
+		
+		buttonSizeSetter.uniformButtonSize(avanti, annulla);
 
 		bottomPanel.add(Box.createHorizontalGlue());
 		bottomPanel.add(annulla);

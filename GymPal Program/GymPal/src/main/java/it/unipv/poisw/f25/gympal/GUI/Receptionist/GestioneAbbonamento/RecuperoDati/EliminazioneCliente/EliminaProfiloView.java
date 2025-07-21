@@ -1,7 +1,5 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.EliminazioneCliente;
 
-import java.awt.Dimension;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -10,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
 
 public class EliminaProfiloView extends JPanel implements IEliminaProfiloView {
 
@@ -26,9 +26,13 @@ public class EliminaProfiloView extends JPanel implements IEliminaProfiloView {
 	
 	private JPanel navigationPanel;
 	
+	private final IDynamicButtonSizeSetter buttonSizeSetter;
+	
 	//----------------------------------------------------------------
 	
-	public EliminaProfiloView(){
+	public EliminaProfiloView(IDynamicButtonSizeSetter setter){
+		
+		buttonSizeSetter = setter;
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(new EmptyBorder(10, 5, 10, 5));
@@ -51,7 +55,7 @@ public class EliminaProfiloView extends JPanel implements IEliminaProfiloView {
 		upperPanel.setLayout(new BoxLayout(upperPanel, BoxLayout.Y_AXIS));
 		
 		conferma = new JButton ("Conferma");
-		conferma.setMaximumSize(new Dimension(120, 40));
+		buttonSizeSetter.uniformButtonSize(conferma);
 
 		upperPanel.add(Box.createVerticalGlue());
 		
@@ -81,10 +85,9 @@ public class EliminaProfiloView extends JPanel implements IEliminaProfiloView {
 		navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
 		
 		annulla = new JButton ("Annulla");
-		annulla.setMaximumSize(new Dimension(80, 40));
-		
 		indietro = new JButton ("Indietro");
-		indietro.setMaximumSize(new Dimension(80, 40));
+		
+		buttonSizeSetter.uniformButtonSize(indietro, annulla);
 		
 		navigationPanel.add(Box.createHorizontalGlue());
 		navigationPanel.add(annulla);

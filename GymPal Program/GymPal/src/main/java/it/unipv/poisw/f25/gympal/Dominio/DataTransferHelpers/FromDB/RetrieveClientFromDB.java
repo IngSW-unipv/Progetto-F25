@@ -29,7 +29,7 @@ public class RetrieveClientFromDB implements IRetrieveClientFromDB {
 		
 			Cliente cliente = new Cliente();
 			
-			cliente.setCf(abbDTO.getCf());
+			cliente.setCf(abbDTO.getCodiceFiscale());
 			
 			mapper.extractAndUpdateDTO(facade.selectCliente(cliente), abbDTO);
 			

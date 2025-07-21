@@ -36,7 +36,7 @@ public class EliminaProfiloController {
 		this.onIndietro = onIndietro;
 		this.onConferma = onConferma;
 		
-		this.abbDTO = coordinator.getUtenteAbbDTO();
+		this.abbDTO = (IUtenteAbbDTO)coordinator.getDTO();
 		
 		impostaEventoAnulla();
 		impostaEventoIndietro();
@@ -110,7 +110,7 @@ public class EliminaProfiloController {
     
     private void impostaLabel() {
     	
-    	eliminaView.getCfLabel().setText("Codice fiscale cliente: " + abbDTO.getCf());
+    	eliminaView.getCfLabel().setText("Codice fiscale cliente: " + abbDTO.getCodiceFiscale());
     	
     };
     

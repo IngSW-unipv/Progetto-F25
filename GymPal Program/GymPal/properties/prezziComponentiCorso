@@ -2,7 +2,7 @@
 componenti.Allenamento_mirato_con_personal_trainer=50.0
 componenti.Sala_allenamento_a_corpo_libero=20.0
 componenti.Sala_pesi=25.0
-componenti.Sala_corsi=30.0
+componenti.Sala_corsi=0.0
 
 # Prezzi per i corsi individuali (visibili solo se "Sala corsi" è selezionata)
 corsi.Crossfit=15.0

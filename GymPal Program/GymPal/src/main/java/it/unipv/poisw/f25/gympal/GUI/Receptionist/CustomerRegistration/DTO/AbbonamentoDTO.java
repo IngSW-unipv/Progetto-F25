@@ -6,8 +6,9 @@ import java.util.List;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 
-public class AbbonamentoDTO implements IAbbonamentoDTO, ICalcolaPrezzo{
+public class AbbonamentoDTO implements IAbbonamentoDTO, ICalcolaPrezzo, IDatiCliente{
 	
     // Anagrafica
 	

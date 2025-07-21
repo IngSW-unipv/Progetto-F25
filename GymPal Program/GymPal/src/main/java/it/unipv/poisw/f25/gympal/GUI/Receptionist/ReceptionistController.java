@@ -14,8 +14,7 @@ import it.unipv.poisw.f25.gympal.staff.Receptionist;
 
 public class ReceptionistController implements IReceptionistController {
 
-    private Receptionist receptionist;
-    private String schermataPreLogout;
+    private String schermataPreLogout = "SCHERMATA0";
 	
 	/*Viste*/
     private final IReceptionistDashboardView recDashView;
@@ -33,11 +32,9 @@ public class ReceptionistController implements IReceptionistController {
 
     //----------------------------------------------------------------
 
-    public ReceptionistController(IReceptionistDashboardView view, 
-    							  Receptionist receptionist) {
+    public ReceptionistController(IReceptionistDashboardView view) {
     	
         recDashView = view;
-        this.receptionist = receptionist;
 
         registraAzioniPulsanti();
         inizializzaSchermateStatiche();
@@ -64,7 +61,7 @@ public class ReceptionistController implements IReceptionistController {
         																	  serviziComuni.getCampoValidabileFactory(),
         																	  serviziReg.getValidatoreCampi(),
         																	  serviziReg.getControlloRequisiti(),
-        																	  serviziReg.getPrezzoFactory(),
+        																	  serviziComuni.getPrezzoFactory(),
         																	  serviziReg.getVeicoloDati());
         
         
@@ -72,7 +69,8 @@ public class ReceptionistController implements IReceptionistController {
         									    serviziComuni.getCampoValidabileFactory(),
         									    serviziComuni.getValidatoreCampi(),
         									    serviziGes.getVeicoloDati(),
-        									    serviziGes.getHeadHunter());
+        									    serviziGes.getHeadHunter(),
+        									    serviziComuni.getPrezzoFactory());
         
     }
 

@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.RecapAndPayment;
+package it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -26,7 +26,8 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
 
 public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagamentoView{
 
@@ -66,9 +67,13 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	
 	private JLabel prezzoTotaleLabel;
 	
+	private final IDynamicButtonSizeSetter buttonSizeSetter;
+	
     //----------------------------------------------------------------
 	
-	public RiepilogoEPagamentoView() {
+	public RiepilogoEPagamentoView(IDynamicButtonSizeSetter setter) {
+		
+		buttonSizeSetter = setter;
 		
 	    setLayout(new BorderLayout());
 	    
@@ -218,13 +223,10 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	    
 	    
 	    indietro = new JButton ("Indietro");
-		indietro.setMaximumSize(new Dimension(80, 40));
-		
 		conferma = new JButton ("Conferma");
-		conferma.setMaximumSize(new Dimension(80, 40));
-		
 		annulla = new JButton ("Annulla");
-		annulla.setMaximumSize(new Dimension(80, 40));
+		
+		buttonSizeSetter.uniformButtonSize(indietro, conferma, annulla);
 		
 		indietroConfermaPanel.add(Box.createHorizontalGlue());
 		indietroConfermaPanel.add(annulla);
@@ -296,7 +298,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	//----------------------------------------------------------------
 	
 	  @Override
-	  public void setDatiAbbonamento(IAbbonamentoDTO abbDTO) {
+	  public void setDatiAbbonamento(IDatiCliente abbDTO) {
 
 	        mainUpperPanel.removeAll();
 

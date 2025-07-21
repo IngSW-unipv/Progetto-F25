@@ -29,12 +29,12 @@ public class ClientToDTO implements IClientToDTO{
 				
 			    DurataAbbonamento durata = DurataAbbonamento.valueOf(cliente.getAbbonamento()
 			    															.toUpperCase());
-			    abbDTO.setAbbonamento(durata);
+			    abbDTO.setDurataAbbonamento(durata);
 			    
 			} catch (IllegalArgumentException | NullPointerException e) {
 				
 			    System.out.println("Errore: valore non valido per DurataAbbonamento: " + cliente.getAbbonamento());
-			    abbDTO.setAbbonamento(DurataAbbonamento.NESSUNO);
+			    abbDTO.setDurataAbbonamento(DurataAbbonamento.NESSUNO);
 			    
 			}
 		    
@@ -42,7 +42,7 @@ public class ClientToDTO implements IClientToDTO{
 			abbDTO.setFineAbbonamento(cliente.getFineAbbonamento());
 			abbDTO.setPagamentoEffettuato(cliente.getPagamentoEffettuato());
 			abbDTO.setComposizioneAbbonamento(cliente.getComposizioneAbbonamento());
-			abbDTO.setDataNascita(BDayFromCf.estraiDataNascita(abbDTO.getCf()));
+			abbDTO.setDataNascita(BDayFromCf.estraiDataNascita(abbDTO.getCodiceFiscale()));
 			
 			abbDTO.setSezioniAbbonamento(new ArrayList<>());
 			abbDTO.setCorsiSelezionati(new ArrayList<>());
@@ -59,7 +59,7 @@ public class ClientToDTO implements IClientToDTO{
 			abbDTO.setSesso("n/a");
 			abbDTO.setMinorenne(false);
 			abbDTO.setContatto("n/a");
-			abbDTO.setAbbonamento(DurataAbbonamento.NESSUNO);
+			abbDTO.setDurataAbbonamento(DurataAbbonamento.NESSUNO);
 			abbDTO.setInizioAbbonamento(LocalDate.of(1, 1, 1));
 			abbDTO.setFineAbbonamento(LocalDate.of(1, 1, 1));
 			abbDTO.setPagamentoEffettuato(false);
