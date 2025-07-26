@@ -2,20 +2,23 @@ package it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.Exchange
 
 import java.time.LocalDate;
 
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ExchangeUtilities.Codecs.IListsToStringCodec;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.CalcoloEtaService;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 
 public class DTOtoCliente implements IDTOtoCliente{
 	
 	private LocalDate giornoRegistrazione;
+	private IListsToStringCodec codec;
 	
     //----------------------------------------------------------------
 
-	public DTOtoCliente(LocalDate giornoRegistrazione) {
+	public DTOtoCliente(LocalDate giornoRegistrazione, IListsToStringCodec codec) {
 		
 		this.giornoRegistrazione = giornoRegistrazione;
+		this.codec = codec;
 	
 		
 	}
@@ -23,7 +26,7 @@ public class DTOtoCliente implements IDTOtoCliente{
     //----------------------------------------------------------------
 	
 	@Override
-	public Cliente extractAndInsert(IAbbonamentoDTO abbDTO) {
+	public Cliente extractAndInsert(IDatiCliente abbDTO) {
 		
 		ICalcoloEtaService calcoloEta = new CalcoloEtaService();
 		
@@ -37,7 +40,7 @@ public class DTOtoCliente implements IDTOtoCliente{
 									calcolaFineAbbonamento(giornoRegistrazione, 
 												abbDTO.getDurataAbbonamento());
 		
-		String listsContent = ListsToStringCodec.
+		String listsContent = codec.
 							  condensaAbbonamento(abbDTO.getSezioniAbbonamento(),
 									  			   abbDTO.getCorsiSelezionati());
 		

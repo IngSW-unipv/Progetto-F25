@@ -3,14 +3,22 @@ package it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.FromDB.ExchangeUti
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ExchangeUtilities.ListsToStringCodec;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ExchangeUtilities.Codecs.IListsToStringCodec;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.IUtenteAbbDTO;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 
 public class ClientToDTO implements IClientToDTO{
 	
-	public ClientToDTO() {}
+	private IListsToStringCodec codec;
+	
+    //----------------------------------------------------------------
+	
+	public ClientToDTO(IListsToStringCodec codec) {
+		
+		this.codec = codec;
+		
+	}
 	
     //----------------------------------------------------------------
 	
@@ -46,9 +54,9 @@ public class ClientToDTO implements IClientToDTO{
 			
 			abbDTO.setSezioniAbbonamento(new ArrayList<>());
 			abbDTO.setCorsiSelezionati(new ArrayList<>());
-			ListsToStringCodec.espandiAbbonamento(cliente.getComposizioneAbbonamento(), 
-												  abbDTO.getSezioniAbbonamento(),
-												  abbDTO.getCorsiSelezionati());
+			codec.espandiAbbonamento(cliente.getComposizioneAbbonamento(), 
+									 abbDTO.getSezioniAbbonamento(),
+									 abbDTO.getCorsiSelezionati());
 			
 			return true;
 		
@@ -68,9 +76,9 @@ public class ClientToDTO implements IClientToDTO{
 			
 			abbDTO.setSezioniAbbonamento(new ArrayList<>());
 			abbDTO.setCorsiSelezionati(new ArrayList<>());
-			ListsToStringCodec.espandiAbbonamento(abbDTO.getComposizioneAbbonamento(), 
-												  abbDTO.getSezioniAbbonamento(),
-												  abbDTO.getCorsiSelezionati());
+			codec.espandiAbbonamento(abbDTO.getComposizioneAbbonamento(), 
+									 abbDTO.getSezioniAbbonamento(),
+									 abbDTO.getCorsiSelezionati());
 			
 			return false;
 			

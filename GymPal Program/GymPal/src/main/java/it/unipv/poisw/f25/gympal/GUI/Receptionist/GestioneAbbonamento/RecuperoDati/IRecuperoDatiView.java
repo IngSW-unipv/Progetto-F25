@@ -1,6 +1,7 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati;
 
-import javax.swing.JButton;
+import java.awt.event.ActionListener;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -43,23 +44,23 @@ public interface IRecuperoDatiView {
 	
 	//----------------------------------------------------------------
 	
-	public JButton getEstraiButton();
+	public void addEstraiListenr(ActionListener listener);
 	
 	//----------------------------------------------------------------
 	
-	public JButton getAnnullaButton();
+	public void addAnnullaListener(ActionListener listener);
 	
 	//----------------------------------------------------------------
 	
-	public JButton getRinnovaButton();
+	public void addRinnovaListenr(ActionListener listener);
 	
 	//----------------------------------------------------------------
 	
-	public JButton getModificaButton();
+	public void addModificaListenr(ActionListener listener);
 	
 	//----------------------------------------------------------------
 	
-	public JButton getEliminaButton();
+	public void addEliminaListener(ActionListener listener);
 	
 	//----------------------------------------------------------------
 	

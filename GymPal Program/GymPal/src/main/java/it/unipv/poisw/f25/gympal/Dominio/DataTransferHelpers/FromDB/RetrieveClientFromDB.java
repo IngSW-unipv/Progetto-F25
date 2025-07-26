@@ -2,6 +2,7 @@ package it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.FromDB;
 
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.FromDB.ExchangeUtilities.ClientToDTO;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.FromDB.ExchangeUtilities.IClientToDTO;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ExchangeUtilities.Codecs.ListsToStringCodec;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.IUtenteAbbDTO;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
@@ -16,14 +17,14 @@ public class RetrieveClientFromDB implements IRetrieveClientFromDB {
 	public RetrieveClientFromDB(IPersistenceFacade facade) {
 		
 		this.facade = facade;
-		this.mapper = new ClientToDTO();
+		this.mapper = new ClientToDTO(new ListsToStringCodec());
 		
 	}
 	
     //----------------------------------------------------------------
 	
 	@Override
-	public void transfer(IUtenteAbbDTO abbDTO) {
+	public void retrieve(IUtenteAbbDTO abbDTO) {
 		
 		try {
 		
@@ -47,9 +48,6 @@ public class RetrieveClientFromDB implements IRetrieveClientFromDB {
 		}
 		
 	}
-	
-    //----------------------------------------------------------------
-	
 	
     //----------------------------------------------------------------
 	

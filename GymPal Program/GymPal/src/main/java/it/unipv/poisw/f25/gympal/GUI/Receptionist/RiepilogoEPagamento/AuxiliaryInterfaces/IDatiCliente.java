@@ -3,6 +3,8 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.Auxiliary
 import java.time.LocalDate;
 import java.util.List;
 
+import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
+
 public interface IDatiCliente {
 	
 	/*Contratto per i DTO che devono essere passati alla schermata di riepilogo e paga-
@@ -45,6 +47,14 @@ public interface IDatiCliente {
     //----------------------------------------------------------------
 	
 	public List<String> getCorsiSelezionati();
+	
+    //----------------------------------------------------------------
+	
+	public DurataAbbonamento getDurataAbbonamento();
+	
+    //----------------------------------------------------------------
+	
+	public boolean getStatoPagamento();
 	
     //----------------------------------------------------------------
 

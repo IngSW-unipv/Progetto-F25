@@ -10,7 +10,6 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.GestioneAb
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.IGestioneAbbCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationView;
-import it.unipv.poisw.f25.gympal.staff.Receptionist;
 
 public class ReceptionistController implements IReceptionistController {
 
@@ -32,7 +31,10 @@ public class ReceptionistController implements IReceptionistController {
 
     //----------------------------------------------------------------
 
-    public ReceptionistController(IReceptionistDashboardView view) {
+    public ReceptionistController(IReceptionistDashboardView view,
+            					  RegistrationServicesBundle serviziReg,
+            					  GestioneServicesBundle serviziGes,
+            					  CommonServicesBundle serviziComuni) {
     	
         recDashView = view;
 
@@ -47,9 +49,9 @@ public class ReceptionistController implements IReceptionistController {
 
         /*Al fine di alleggerire il codice, i serviziReg sono raggruppati in un apposito 
          *bundle.*/
-        serviziReg = new RegistrationServicesBundle();
-        serviziGes = new GestioneServicesBundle();
-        serviziComuni = new CommonServicesBundle();
+        this.serviziReg = serviziReg;
+        this.serviziGes = serviziGes;
+        this.serviziComuni = serviziComuni;
         
         
         // Inizializza il coordinator passando 'this' come handler.
@@ -57,20 +59,21 @@ public class ReceptionistController implements IReceptionistController {
          *che fa da punto dicontatto fra GUI e dominio, per scongiurare un forte accop-
          *piamento fra il coordinatore GUI ed una struttura concreta (il bundle).*/
         customerRegistrationCoordinator = new CustomerRegistrationCoordinator(this, 
-        																	  serviziReg.getCalcoloEtaService(),
-        																	  serviziComuni.getCampoValidabileFactory(),
-        																	  serviziReg.getValidatoreCampi(),
-        																	  serviziReg.getControlloRequisiti(),
-        																	  serviziComuni.getPrezzoFactory(),
-        																	  serviziReg.getVeicoloDati());
+        																	  this.serviziReg.getCalcoloEtaService(),
+        																	  this.serviziComuni.getCampoValidabileFactory(),
+        																	  this.serviziReg.getValidatoreCampi(),
+        																	  this.serviziReg.getControlloRequisiti(),
+        																	  this.serviziComuni.getPrezzoFactory(),
+        																	  this.serviziReg.getVeicoloDati());
         
         
         gestoreAbb = new GestioneAbbCoordinator(this,
-        									    serviziComuni.getCampoValidabileFactory(),
-        									    serviziComuni.getValidatoreCampi(),
-        									    serviziGes.getVeicoloDati(),
-        									    serviziGes.getHeadHunter(),
-        									    serviziComuni.getPrezzoFactory());
+								        		this.serviziComuni.getCampoValidabileFactory(),
+								        		this.serviziComuni.getValidatoreCampi(),
+								        		this.serviziGes.getVeicoloDati(),
+								        		this.serviziGes.getHeadHunter(),
+								        		this.serviziComuni.getPrezzoFactory(),
+								        		this.serviziGes.getUpdater());
         
     }
 

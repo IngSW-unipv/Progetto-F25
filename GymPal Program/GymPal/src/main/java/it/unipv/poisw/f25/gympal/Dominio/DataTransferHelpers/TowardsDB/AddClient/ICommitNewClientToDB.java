@@ -4,6 +4,6 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbo
 
 public interface ICommitNewClientToDB {
 
-	public void transfer(IAbbonamentoDTO abbDTO);
+	public void commit(IAbbonamentoDTO abbDTO);
 	
 }

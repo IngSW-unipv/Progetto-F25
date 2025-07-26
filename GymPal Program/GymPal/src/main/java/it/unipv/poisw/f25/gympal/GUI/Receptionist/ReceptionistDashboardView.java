@@ -98,13 +98,13 @@ public class ReceptionistDashboardView extends JFrame implements IReceptionistDa
         
         //JPanel schermata1 = creaSchermata("Sei nella schermata 1", Color.CYAN);
         
-        JPanel schermata2 = creaSchermata("Sei nella schermata 2", Color.PINK);
+        //JPanel schermata2 = creaSchermata("Sei nella schermata 2", Color.PINK);
   
         pannelloDestro.add(schermata0, "SCHERMATA0"); //Schermata di benvenuto
         
         //pannelloDestro.add(schermata1, "SCHERMATA1");
         
-        pannelloDestro.add(schermata2, "SCHERMATA2");
+        //pannelloDestro.add(schermata2, "SCHERMATA2");
         
         pannelloDestro.setPreferredSize(new Dimension(2000, 1300));
         
@@ -145,8 +145,8 @@ public class ReceptionistDashboardView extends JFrame implements IReceptionistDa
     
     //----------------------------------------------------------------    
 
-    /* Implementazione metodo dell’interfaccia: associa una Runnable a
-     * un comando e al bottone relativo */
+    /* Implementazione metodo dell’interfaccia: associa una Runnable ad
+     * un comando ed al bottone relativo */
     @Override
     public void aggiungiComando(String nomeComando, Runnable azione) {
     	

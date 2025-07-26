@@ -2,6 +2,7 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.Customer
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,8 @@ public class SubscriptionCustomizationView extends JPanel implements ISubscripti
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(new EmptyBorder(10, 5, 10, 5));
+		
+		/*############################################################*/
 
 		JLabel messageLabel = new JLabel("-=Componi l'abbonamento=-");
 		messageLabel.setAlignmentX(CENTER_ALIGNMENT);
@@ -68,14 +71,20 @@ public class SubscriptionCustomizationView extends JPanel implements ISubscripti
 		
 		avanti = new JButton("Avanti");
 		annulla = new JButton("Annulla");
+		
+		/*############################################################*/
 
 		corsiPanel = new JPanel();
 		corsiPanel.setLayout(new BoxLayout(corsiPanel, BoxLayout.Y_AXIS));
 		
 		corsiPanel.add(cB1);
+		corsiPanel.add(Box.createVerticalStrut(10));
 		corsiPanel.add(cB2);
+		corsiPanel.add(Box.createVerticalStrut(10));
 		corsiPanel.add(cB3);
+		corsiPanel.add(Box.createVerticalStrut(10));
 		corsiPanel.add(cB4);
+		corsiPanel.add(Box.createVerticalStrut(10));
 		corsiPanel.add(cB5);
 		
 		corsiPanel.setVisible(false);
@@ -97,7 +106,7 @@ public class SubscriptionCustomizationView extends JPanel implements ISubscripti
 			btn.setFocusPainted(true);
 			btn.setAlignmentX(CENTER_ALIGNMENT);
 			btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-			add(Box.createVerticalStrut(10));
+			
 		}
 
 		/*############################################################*/
@@ -126,21 +135,21 @@ public class SubscriptionCustomizationView extends JPanel implements ISubscripti
 		/*Non è possibile utilizzare "GridLayout()" - questo UImanager non rispetta il metodo
 		 *"setMaximumSize()" - ecco allora che la scelta ricade su "BoxLayout()"*/
 		
-		JPanel bottomPanel = new JPanel();
+		JPanel navigationPanel = new JPanel();
 		
-		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
+		navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
 		
 		buttonSizeSetter.uniformButtonSize(avanti, annulla);
 
-		bottomPanel.add(Box.createHorizontalGlue());
-		bottomPanel.add(annulla);
-		bottomPanel.add(Box.createHorizontalStrut(200));
-		bottomPanel.add(avanti);
-		bottomPanel.add(Box.createHorizontalGlue());
+		navigationPanel.add(Box.createHorizontalGlue());
+		navigationPanel.add(annulla);
+		navigationPanel.add(Box.createHorizontalStrut(200));
+		navigationPanel.add(avanti);
+		navigationPanel.add(Box.createHorizontalGlue());
 		
 		/*############################################################*/
 		
-		splitPaneFather = new JSplitPane(JSplitPane.VERTICAL_SPLIT, splitPaneChild, bottomPanel);
+		splitPaneFather = new JSplitPane(JSplitPane.VERTICAL_SPLIT, splitPaneChild, navigationPanel);
 		
 		
 		/*E' necessario utilizzare "invokeLater": se si imposta "setDividerLocation()" prima che
@@ -217,26 +226,28 @@ public class SubscriptionCustomizationView extends JPanel implements ISubscripti
 	//----------------------------------------------------------------
 	
 	@Override
-	public JButton getAvantiButton() {
+	public void addAvantiListener(ActionListener listener) {
 		
-		return avanti;
+		avanti.addActionListener(listener);
 		
 	}
 	
 	//----------------------------------------------------------------
 	
-	@Override
-	public JButton getAnnullaButton() {
-		
-		return annulla;
-		
-	}
+    @Override
+    public void addAnnullaListener(ActionListener listener) {
+    	
+        annulla.addActionListener(listener);
+        
+    }
 	
 	//----------------------------------------------------------------
 	
 	@Override
 	public JPanel getMainPanel() {
-	    return this;  // dato che la view estende JPanel
+		
+	    return this;
+	    
 	}
 	
 	//----------------------------------------------------------------

@@ -51,11 +51,7 @@ public class EliminaProfiloController {
 	
 	private void impostaEventoAnulla() {
 		
-		eliminaView.getAnnullaButton().addActionListener(e -> {
-            
-            onAnnulla.run();
-            
-        });
+		eliminaView.addAnnullaListener(e -> {onAnnulla.run();});
 		
 	}
 	
@@ -63,11 +59,7 @@ public class EliminaProfiloController {
 	
 	private void impostaEventoIndietro() {
 		
-		eliminaView.getIndietroButton().addActionListener(e -> {
-            
-            onIndietro.run();
-            
-        });
+		eliminaView.addIndietroListener(e -> {onIndietro.run();});
 		
 	}
 	
@@ -75,7 +67,7 @@ public class EliminaProfiloController {
 	
 	private void impostaEventoConferma() {
 		
-		eliminaView.getConfermaButton().addActionListener(e -> {
+		eliminaView.addConfermaListener(e -> {
 			
 	        int result = JOptionPane.showConfirmDialog(
                     null, 

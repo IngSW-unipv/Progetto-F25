@@ -84,7 +84,7 @@ public class ClientInfosController implements IRegexExpression {
     
     private void impostaControlloEta () {
         
-        clientInfos.getDateSpinner().addChangeListener(e -> {
+        clientInfos.addDateSpinnerListener(e -> {
             
             Date dataDiNascita = (Date) clientInfos.getDateSpinner().getValue();
             
@@ -94,17 +94,12 @@ public class ClientInfosController implements IRegexExpression {
             
             if (coordinator.isMinorenne(nascita)) {
                 
-                clientInfos.getPermessoGenitoriSi().setVisible(true);
-                clientInfos.getPermessoGenitoriNo().setVisible(true);
-                clientInfos.getPermessoGenitoriLabel().setVisible(true);
-                clientInfos.getAcquisisciPermesso().setVisible(true);
+                clientInfos.setBtnsVisibility(true);
                 
             } else {
                 
-                clientInfos.getPermessoGenitoriSi().setVisible(false);
-                clientInfos.getPermessoGenitoriNo().setVisible(false);
-                clientInfos.getPermessoGenitoriLabel().setVisible(false);
-                clientInfos.getAcquisisciPermesso().setVisible(false);
+                clientInfos.setBtnsVisibility(false);
+
             }
             
             // "clientInfos" è il componente genitore, quindi ricalcola il layout
@@ -112,14 +107,14 @@ public class ClientInfosController implements IRegexExpression {
             clientInfos.getMainSplitPanel().repaint();
             
         });
-
         
     }
     
     //----------------------------------------------------------------
     
     private void impostaEventoAvanti() {
-        clientInfos.getAvantiButton().addActionListener(e -> {
+    	
+        clientInfos.addAvantiListener(e -> {
         	
         	Date dataDiNascita = (Date) clientInfos.getDateSpinner().getValue();
             LocalDate nascita = dataDiNascita.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -171,11 +166,7 @@ public class ClientInfosController implements IRegexExpression {
     
     private void impostaEventoIndietro() {
         
-        clientInfos.getIndietroButton().addActionListener(e -> {
-            
-            onIndietro.run();
-            
-        });
+        clientInfos.addIndietroListener(e -> {onIndietro.run();});
         
     }
     
@@ -183,11 +174,7 @@ public class ClientInfosController implements IRegexExpression {
     
     private void impostaEventoAnulla() {
         
-        clientInfos.getAnnullaButton().addActionListener(e -> {
-            
-            onAnnulla.run();
-            
-        });
+        clientInfos.addAnnullaListener(e -> {onAnnulla.run();});
         
     }
     
@@ -195,7 +182,7 @@ public class ClientInfosController implements IRegexExpression {
     
     private void impostaEventoAcquisisciPermesso() {
         
-        clientInfos.getAcquisisciPermesso().addActionListener(e -> {
+        clientInfos.addAcquisisciPermessoListener(e -> {
             
             JFrame framePadre = (JFrame) javax.swing.SwingUtilities.getWindowAncestor((java.awt.Component) e.getSource());
 
@@ -204,6 +191,8 @@ public class ClientInfosController implements IRegexExpression {
             
         });
         
-    }    
+    }   
+    
+    //----------------------------------------------------------------
     
 }

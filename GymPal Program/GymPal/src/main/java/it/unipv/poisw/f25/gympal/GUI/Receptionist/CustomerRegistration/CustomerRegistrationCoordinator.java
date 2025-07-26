@@ -44,7 +44,6 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     private IValidatoreCampi validatoreCampi;
     private ICtrlReqAnagraficiService controlloRequisiti;
     private IStrategieCalcoloPrezzoFactory prezzoFactory;
-    
     private ICommitNewClientToDB veicoloDati;
 
 
@@ -129,9 +128,9 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
 
             // Callback onAvanti
             () -> {
-                if (riepilogoEPagamento != null) {
+                /*if (riepilogoEPagamento != null) {
                     viewHandler.registraSchermata("RECAP_PAYMENT", riepilogoEPagamento.getMainPanel());
-                }
+                }*/
 
                 riepilogoEPagamento = new RiepilogoEPagamentoView(new DynamicButtonSizeSetter());
 
@@ -145,7 +144,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
                     () -> {
                     	
                     	/*Qui è chiamato il metodo che passa i dati al service-layer*/
-                    	veicoloDati.transfer(abbonamentoDTO);
+                    	veicoloDati.commit(abbonamentoDTO);
                     	
                         inizializzaCicloRegistrazioneCliente();
                         viewHandler.mostraSchermata("SCHERMATA0");
@@ -184,7 +183,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     
     @Override
     public void acquisisciComponentiAbbonamento(List<String> sezioniSelezionate,
-			List<String> corsiSelezionati) {
+												List<String> corsiSelezionati) {
     	
     	
     	costruttoreDTOHelper.composizioneAbbonamento(sezioniSelezionate, corsiSelezionati);

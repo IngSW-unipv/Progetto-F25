@@ -1,6 +1,8 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView;
 
 
+import java.awt.event.ActionListener;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -14,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeListener;
 
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampoFactory;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
@@ -316,12 +319,21 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 	//----------------------------------------------------------------
 
 	@Override
+	public void addDateSpinnerListener(ChangeListener listener) {
+		
+		dateSpinner.addChangeListener(listener);
+		
+	}
+
+	//----------------------------------------------------------------
+	
+	@Override
 	public JSpinner getDateSpinner() {
 		
 		return dateSpinner;
 		
 	}
-
+	
 	//----------------------------------------------------------------
 
 	@Override
@@ -379,31 +391,29 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 	//----------------------------------------------------------------
 
 	@Override
-	public JButton getAvantiButton() {
+	public void addAvantiListener(ActionListener listener) {
 		
-		return avanti;
+		avanti.addActionListener(listener);
 		
 	}
 
 	//----------------------------------------------------------------
 
-	@Override
-	public JButton getIndietroButton() {
-		
-		return indietro;
-		
-	}
+    @Override
+    public void addIndietroListener(ActionListener listener) {
+    	
+        indietro.addActionListener(listener);
+        
+    }
 
 	//----------------------------------------------------------------
 	
-	@Override
-	public JButton getAnnullaButton() {
-		
-		
-		return annulla;
-		
-		
-	}
+    @Override
+    public void addAnnullaListener(ActionListener listener) {
+    	
+        annulla.addActionListener(listener);
+        
+    }
 	
 	//----------------------------------------------------------------
 
@@ -444,9 +454,9 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 	//----------------------------------------------------------------
 	
 	@Override
-	public JButton getAcquisisciPermesso() {
+	public void addAcquisisciPermessoListener(ActionListener listener) {
 		
-		return acquisisciPermesso;
+		acquisisciPermesso.addActionListener(listener);
 		
 	}
 	
@@ -457,6 +467,18 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 		
 	    return this; 
 	    
+	}
+	
+	//----------------------------------------------------------------
+	
+	@Override
+	public void setBtnsVisibility(boolean flag) {
+		
+		permessoGenitoriSi.setVisible(flag);
+		permessoGenitoriNo.setVisible(flag);
+		permesso.setVisible(flag);
+		acquisisciPermesso.setVisible(flag);
+		
 	}
 	
 	//----------------------------------------------------------------

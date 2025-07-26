@@ -1,5 +1,7 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -295,45 +297,45 @@ public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
 	//----------------------------------------------------------------
 	
 	@Override
-	public JButton getEstraiButton() {
+	public void addEstraiListenr(ActionListener listener) {
 		
-		return estrai;
+		estrai.addActionListener(listener);
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+    @Override
+    public void addAnnullaListener(ActionListener listener) {
+    	
+        annulla.addActionListener(listener);
+        
+    }
+	
+	//----------------------------------------------------------------
+	
+	@Override
+	public void addRinnovaListenr(ActionListener listener) {
+		
+		rinnova.addActionListener(listener);
 		
 	}
 	
 	//----------------------------------------------------------------
 	
 	@Override
-	public JButton getAnnullaButton() {
+	public void addModificaListenr(ActionListener listener) {
 		
-		return annulla;
-		
-	}
-	
-	//----------------------------------------------------------------
-	
-	@Override
-	public JButton getRinnovaButton() {
-		
-		return rinnova;
+		modifica.addActionListener(listener);
 		
 	}
 	
 	//----------------------------------------------------------------
 	
 	@Override
-	public JButton getModificaButton() {
+	public void addEliminaListener(ActionListener listener) {
 		
-		return modifica;
-		
-	}
-	
-	//----------------------------------------------------------------
-	
-	@Override
-	public JButton getEliminaButton() {
-		
-		return elimina;
+		elimina.addActionListener(listener);
 		
 	}
 	

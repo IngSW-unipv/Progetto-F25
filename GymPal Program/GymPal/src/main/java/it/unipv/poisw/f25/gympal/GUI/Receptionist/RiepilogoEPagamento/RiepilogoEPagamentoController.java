@@ -39,19 +39,14 @@ public class RiepilogoEPagamentoController {
         onIndietro = onIndietroCallback;
         onConferma = onConfermaCallback;
         onAnnulla  = onAnnullaCallback;
-        
-        /*Inizializzazione della view "RiepilogoEPagamento" con i dati acquisiti durante la
-         *procedura di iscrizione*/
-        riepilogoEPagamento.setDatiAbbonamento(abbonamentoDTO);
-        
-        /*Tasto "Conferma" disabilitato fintanto che una opzione di pagamento non è
-         *selezionata.*/
-        riepilogoEPagamento.setConfermaEnabled(false);
-  
-        
-        aggiornaPrezzo();
 
+
+        viewInit();
+    	impostaMensPreEsist();
+    	
+        aggiornaPrezzo();
         
+        /*Inizializzazione listeners*/
         impostaEventoAvvioPagamento();
         impostaEventoMetodoPagamento();
         impostaEventoPopupMenu();
@@ -165,11 +160,13 @@ public class RiepilogoEPagamentoController {
     private void impostaEventiOpzioniSconto() {
     	
         riepilogoEPagamento.addMensilitaListener(e -> {
+        	
             /* Aggiorna testo sconto ("Trimestrale", "Semestrale", ... ) in base alla
              * mensilità selezionata, ed innesca un corrispondente ricalcolo del prezzo*/
             riepilogoEPagamento.setScontoSuBaseMesiText(riepilogoEPagamento.getDurataSelezionata());
             aggiornaScontiEDurata();
             aggiornaPrezzo();
+            
         });
         
         riepilogoEPagamento.addScontoEtaListener(e -> {aggiornaScontiEDurata(); 
@@ -243,6 +240,32 @@ public class RiepilogoEPagamentoController {
         
     }
 
+    //----------------------------------------------------------------
+    
+    private void impostaMensPreEsist() {
+    	
+    	if(abbonamentoDTO.getDurataAbbonamento() != null) {
+    		
+    		riepilogoEPagamento.setScontoSuBaseMesiText(abbonamentoDTO.getDurataAbbonamento().toString());
+    		
+    	}
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    private void viewInit() {
+    	
+        /*Inizializzazione della view "RiepilogoEPagamento" con i dati acquisiti durante la
+         *procedura di iscrizione*/
+        riepilogoEPagamento.setDatiAbbonamento(abbonamentoDTO);
+        
+        /*Tasto "Conferma" disabilitato fintanto che una opzione di pagamento non è
+         *selezionata.*/
+        riepilogoEPagamento.setConfermaEnabled(false);
+    	
+    }
+    
     //----------------------------------------------------------------
     
 }

@@ -41,7 +41,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	private JSplitPane mainBottomSplitPanel;
 	
 	private JSplitPane secondSplitPanel; //Il pannello superiore coincide con "mainSplitPanel"
-	private JPanel indietroConfermaPanel; //Qui finisce il pannello con il bottone "Intrietro"
+	private JPanel navigationPanel; //Qui finisce il pannello con il bottone "Intrietro"
 	
 	private JCheckBox scontoEtaCheckBox;
 	private JCheckBox scontoOccasioniCheckBox;
@@ -216,9 +216,9 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
         
 	    /*############################################################*/
 	    
-	    indietroConfermaPanel = new JPanel();
+	    navigationPanel = new JPanel();
 	    
-	    indietroConfermaPanel.setLayout(new BoxLayout(indietroConfermaPanel, 
+	    navigationPanel.setLayout(new BoxLayout(navigationPanel, 
 	    												 BoxLayout.X_AXIS));
 	    
 	    
@@ -228,13 +228,13 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 		
 		buttonSizeSetter.uniformButtonSize(indietro, conferma, annulla);
 		
-		indietroConfermaPanel.add(Box.createHorizontalGlue());
-		indietroConfermaPanel.add(annulla);
-		indietroConfermaPanel.add(Box.createHorizontalStrut(100));
-		indietroConfermaPanel.add(indietro);
-		indietroConfermaPanel.add(Box.createHorizontalStrut(100));
-		indietroConfermaPanel.add(conferma);
-		indietroConfermaPanel.add(Box.createHorizontalGlue());
+		navigationPanel.add(Box.createHorizontalGlue());
+		navigationPanel.add(annulla);
+		navigationPanel.add(Box.createHorizontalStrut(100));
+		navigationPanel.add(indietro);
+		navigationPanel.add(Box.createHorizontalStrut(100));
+		navigationPanel.add(conferma);
+		navigationPanel.add(Box.createHorizontalGlue());
 	    
 	    /*############################################################*/
 	    
@@ -242,7 +242,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	    
 	    secondSplitPanel.setTopComponent(mainSplitPanel);
 	    
-	    secondSplitPanel.setBottomComponent(indietroConfermaPanel);
+	    secondSplitPanel.setBottomComponent(navigationPanel);
 	    
 		SwingUtilities.invokeLater(() -> {
 			

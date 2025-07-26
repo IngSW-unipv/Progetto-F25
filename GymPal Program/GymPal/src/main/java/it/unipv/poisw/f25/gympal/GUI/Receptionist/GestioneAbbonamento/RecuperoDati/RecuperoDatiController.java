@@ -33,6 +33,7 @@ public class RecuperoDatiController {
 								  Runnable onElimina, 
 								  Runnable onEstrai,
 								  Runnable onRinnova,
+								  Runnable onModifica,
 								  IGestioneAbbCoordinator coordinator){
 		
 		this.recuperoDati = recuperoDati;
@@ -44,16 +45,18 @@ public class RecuperoDatiController {
 		this.onElimina = onElimina;
 		this.onEstrai = onEstrai;
 		this.onRinnova = onRinnova;
+		this.onModifica = onModifica;
 		
-		recuperoDati.setEliminaEnabled(false);
-		recuperoDati.setModificaEnabled(false);
-		recuperoDati.setRinnovaEnabled(false);
 		
+		viewInit();
+		
+		/*Inizializzazione listeners*/
 		impostaEventoAnulla();
 		impostaEventoElimina();
 		impostaEventoEstrazione();
 		impostaEventiTextFields();
 		impostaEventoRinnova();
+		impostaEventoModifica();
 		
 	}
 	
@@ -61,11 +64,7 @@ public class RecuperoDatiController {
 	
 	private void impostaEventoAnulla() {
 		
-		recuperoDati.getAnnullaButton().addActionListener(e -> {
-            
-            onAnnulla.run();
-            
-        });
+		recuperoDati.addAnnullaListener(e -> {onAnnulla.run();});
 		
 	}
 	
@@ -73,15 +72,13 @@ public class RecuperoDatiController {
 	
 	private void impostaEventoEstrazione() {
 		
-		recuperoDati.getEstraiButton().addActionListener(e -> {
+		recuperoDati.addEstraiListenr(e -> {
             
 			coordinator.acquisisciCfCliente(recuperoDati.getCodiceFiscale().getText().trim());
 			
 			onEstrai.run();
-			
-			/////////////////////
+
 			setLabels();
-			////////////////////
 			
 			recuperoDati.setEliminaEnabled(true);
 			recuperoDati.setModificaEnabled(true);
@@ -95,11 +92,7 @@ public class RecuperoDatiController {
 	
 	private void impostaEventoElimina() {
 		
-		recuperoDati.getEliminaButton().addActionListener(e -> {
-            
-            onElimina.run();
-            
-        });
+		recuperoDati.addEliminaListener(e -> {onElimina.run();});
 		
 	}
 	
@@ -122,18 +115,21 @@ public class RecuperoDatiController {
     	coordinator.getValidatoreCampi().registra(registraCampo(recuperoDati.getCodiceFiscale(), 
     															IRegexExpression.CODICE_FISCALE));
 
-
     }
     
 	//----------------------------------------------------------------
     
     private void impostaEventoRinnova() {
     	
-		recuperoDati.getRinnovaButton().addActionListener(e -> {
-            
-            onRinnova.run();
-            
-        });
+		recuperoDati.addRinnovaListenr(e -> {onRinnova.run();});
+    	
+    }
+    
+	//----------------------------------------------------------------
+    
+    private void impostaEventoModifica() {
+    	
+		recuperoDati.addModificaListenr(e -> {onModifica.run();});
     	
     }
     
@@ -150,6 +146,16 @@ public class RecuperoDatiController {
 		recuperoDati.getInizioAbbLabel().setText("Data inizio abbonamento: " + abbDTO.getInizioAbbonamento());
 		recuperoDati.getFineAbbLabel().setText("Data fine abbonamento: " + abbDTO.getFineAbbonamento());
     	
+    }
+    
+	//----------------------------------------------------------------
+    
+    private void viewInit() {
+    	
+		recuperoDati.setEliminaEnabled(false);
+		recuperoDati.setModificaEnabled(false);
+		recuperoDati.setRinnovaEnabled(false);
+		
     }
     
 	//----------------------------------------------------------------

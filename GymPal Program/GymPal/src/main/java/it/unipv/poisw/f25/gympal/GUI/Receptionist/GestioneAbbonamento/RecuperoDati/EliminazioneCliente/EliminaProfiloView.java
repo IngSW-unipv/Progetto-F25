@@ -1,5 +1,7 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.EliminazioneCliente;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -120,27 +122,27 @@ public class EliminaProfiloView extends JPanel implements IEliminaProfiloView {
 	//----------------------------------------------------------------
 	
 	@Override
-	public JButton getConfermaButton() {
+	public void addConfermaListener(ActionListener listener) {
 		
-		return conferma;
-		
-	}
-	
-	//----------------------------------------------------------------
-	
-	@Override
-	public JButton getAnnullaButton() {
-		
-		return annulla;
+		conferma.addActionListener(listener);
 		
 	}
 	
 	//----------------------------------------------------------------
 	
 	@Override
-	public JButton getIndietroButton() {
+	public void addAnnullaListener(ActionListener listener) {
 		
-		return indietro;
+		annulla.addActionListener(listener);
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	@Override
+	public void addIndietroListener(ActionListener listener) {
+		
+		indietro.addActionListener(listener);
 		
 	}
 	

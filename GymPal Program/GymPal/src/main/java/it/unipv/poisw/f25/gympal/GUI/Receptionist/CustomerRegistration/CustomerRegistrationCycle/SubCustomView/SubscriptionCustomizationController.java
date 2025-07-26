@@ -47,6 +47,7 @@ public class SubscriptionCustomizationController {
 		onAvanti = onAvantiCallback;
 		onAnulla = onAnnullaCallback;
 		
+		/*Inizializzazione listeners*/
 		impostaEventiToggleBtns();
 		impostaEventiCheckBox();
 		impostaEventoAvanti();
@@ -74,7 +75,7 @@ public class SubscriptionCustomizationController {
 					
 					if (btn.isSelected()) {
 						
-						btn.setBackground(Color.GREEN);
+						btn.setBackground(Color.decode("#b2fab4"));
 						
 						view.getCorsiPanel().setVisible(true);
 
@@ -85,8 +86,7 @@ public class SubscriptionCustomizationController {
 							
 						});
 
-						//Aggiungi logica che collega bottone a dominio
-						
+
 					} else {
 						
 						btn.setBackground(Color.decode("#ffcccc"));
@@ -98,8 +98,7 @@ public class SubscriptionCustomizationController {
 							view.getSplitPaneChild().setDividerLocation(1.0); // Divider tutto in alto
 							
 						});
-						
-						//Aggiungi logica che collega bottone a dominio
+
 						
 					}
 
@@ -117,19 +116,20 @@ public class SubscriptionCustomizationController {
 					if (btn.isSelected()) {
 						
 						btn.setBackground(Color.decode("#b2fab4")); // Modifica colore quando selezionato
-						
-						//Aggiungi logica che collega bottone a dominio
+
 						
 					} else {
 						
 						btn.setBackground(Color.decode("#ffcccc")); // Modifica colore quando non selezionato
-						
-						//Aggiungi logica che collega bottone a dominio
+
 					}
 					
 				});
+				
 			}
+			
 		}
+		
 	}
 	
 	//----------------------------------------------------------------
@@ -145,15 +145,10 @@ public class SubscriptionCustomizationController {
 	            if (btn.isSelected()) {
 	            	
 	                btn.setBackground(Color.decode("#b2fab4"));
-	                
-	              //Aggiungi logica che collega bottone a dominio
-	                
-	                
+     	                
 	            } else {
 	            	
 	                btn.setBackground(Color.decode("#ffcccc"));
-	                
-	              //Aggiungi logica che collega bottone a dominio
 	                
 	            }
 	            
@@ -170,7 +165,7 @@ public class SubscriptionCustomizationController {
 		//Alla pressione di 'Avanti' devono essere salvate le selezioni, da qualche parte nel dominio
 				
 				
-		view.getAvantiButton().addActionListener(e -> {
+		view.addAvantiListener(e -> {
 			
 		    if (!verificaSelezione(view.getBottoniToggle())) {
 		    	
@@ -230,11 +225,7 @@ public class SubscriptionCustomizationController {
 	
 	private void impostaEventoAnulla() {
 		
-		view.getAnnullaButton().addActionListener(e -> {
-			
-			onAnulla.run();
-			
-		});
+		view.addAnnullaListener(e -> {onAnulla.run();});
 		
 	}
 	

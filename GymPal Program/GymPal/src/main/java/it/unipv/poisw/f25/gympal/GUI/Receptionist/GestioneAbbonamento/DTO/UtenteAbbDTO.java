@@ -29,6 +29,11 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente
     private List<String> componentiAbbonamento;
     private List<String> corsiSelezionati;
     
+    /*Ad uso di Reset*////////
+    private List<String> componentiAbbonamentoOriginali;
+    private List<String> corsiSelezionatiOriginali;
+    //////////////////////////
+    
     private MetodoPagamento metodoPagamento;
     private boolean scontoEta;
     private boolean scontoOccasioni;
@@ -265,6 +270,12 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente
     	
         this.componentiAbbonamento = sezioniAbbonamento;
         
+        if (componentiAbbonamentoOriginali == null) {
+        	
+            componentiAbbonamentoOriginali = sezioniAbbonamento;
+            
+        }
+        
     }
     
     //----------------------------------------------------------------
@@ -282,6 +293,12 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente
     public void setCorsiSelezionati(List<String> corsiSelezionati) {
     	
         this.corsiSelezionati = corsiSelezionati;
+        
+        if (corsiSelezionatiOriginali == null) {
+        	
+            corsiSelezionatiOriginali = corsiSelezionati;
+            
+        }
     
     }
     
@@ -372,6 +389,21 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente
     public boolean getPermessoGenitori() {
     	
         return permessoGenitori;
+        
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public void ripristinaStatoIniziale() {
+    	
+        if (componentiAbbonamentoOriginali != null) {
+            componentiAbbonamento = componentiAbbonamentoOriginali;
+        }
+        
+        if (corsiSelezionatiOriginali != null) {
+            corsiSelezionati = corsiSelezionatiOriginali;
+        }
         
     }
     

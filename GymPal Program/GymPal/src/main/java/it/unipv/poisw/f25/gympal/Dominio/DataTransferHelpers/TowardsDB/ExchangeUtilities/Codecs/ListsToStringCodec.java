@@ -1,11 +1,11 @@
-package it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ExchangeUtilities;
+package it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ExchangeUtilities.Codecs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListsToStringCodec {
+public class ListsToStringCodec implements IListsToStringCodec{
 	
 	/*E' scelto di usare una mappa (al posto di uno switch-case) perché più facile da
 	 *mantenere ed estendere*/
@@ -33,8 +33,9 @@ public class ListsToStringCodec {
 	
     //----------------------------------------------------------------
 	
-	public static String condensaAbbonamento(List<String> componentiAbbonamento,
-									  		 List<String> corsiSelezionati) {
+	@Override
+	public String condensaAbbonamento(List<String> componentiAbbonamento,
+									  List<String> corsiSelezionati) {
 		
 		List<String> risultato = new ArrayList<>();
 		
@@ -61,9 +62,10 @@ public class ListsToStringCodec {
 	
     //----------------------------------------------------------------
 	
-	public static void espandiAbbonamento(String composizioneAbbonamento,
-										  List<String> componentiAbbonamento,
-										  List<String> corsiSelezionati) {
+	@Override
+	public void espandiAbbonamento(String composizioneAbbonamento,
+								   List<String> componentiAbbonamento,
+								   List<String> corsiSelezionati) {
 		
 		if(componentiAbbonamento == null) {
 			

@@ -4,6 +4,6 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.IUtent
 
 public interface IRetrieveClientFromDB {
 	
-	public void transfer(IUtenteAbbDTO abbDTO);
+	public void retrieve(IUtenteAbbDTO abbDTO);
 
 }

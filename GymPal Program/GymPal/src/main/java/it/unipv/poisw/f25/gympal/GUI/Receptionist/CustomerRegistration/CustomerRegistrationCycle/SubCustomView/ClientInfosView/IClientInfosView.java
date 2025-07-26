@@ -1,7 +1,15 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView;
 
 
-import javax.swing.*;
+import java.awt.event.ActionListener;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeListener;
 
 public interface IClientInfosView {
     
@@ -24,6 +32,10 @@ public interface IClientInfosView {
     //----------------------------------------------------------------
     
     public JSpinner getDateSpinner();
+    
+    //----------------------------------------------------------------
+    
+    public void addDateSpinnerListener(ChangeListener listener);
     
     //----------------------------------------------------------------
     
@@ -51,15 +63,15 @@ public interface IClientInfosView {
     
     //----------------------------------------------------------------
     
-    public JButton getAvantiButton();
+    public void addAvantiListener(ActionListener listener);
     
     //----------------------------------------------------------------
     
-    public JButton getIndietroButton();
+    public void addIndietroListener(ActionListener listener);
     
     //----------------------------------------------------------------
     
-    public JButton getAnnullaButton();
+    public void addAnnullaListener(ActionListener listener);
     
     //----------------------------------------------------------------
     
@@ -79,11 +91,15 @@ public interface IClientInfosView {
     
     //----------------------------------------------------------------
     
-    public JButton getAcquisisciPermesso();
+    public void addAcquisisciPermessoListener(ActionListener listener);
     
     //----------------------------------------------------------------
     
     public JPanel getMainPanel();
+    
+    //----------------------------------------------------------------
+    
+    public void setBtnsVisibility(boolean flag);
     
     //----------------------------------------------------------------
 
