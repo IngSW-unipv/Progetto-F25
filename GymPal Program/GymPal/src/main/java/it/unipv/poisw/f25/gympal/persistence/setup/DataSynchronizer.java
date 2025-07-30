@@ -108,12 +108,19 @@ public class DataSynchronizer {
                     new String[]{"NOME_SCONTO", "DATA_SCONTO", "AMOUNT_SCONTO"}
                 ));
                 
+                // Mappatura per la tabella APPUNTAMENTI_PT
+                tablesInfo.put("APPUNTAMENTI_PT", new TableSyncInfo(
+                    "SELECT CF, STAFF_ID, DATA, FASCIA_ORARIA FROM APPUNTAMENTI_PT",
+                    "INSERT INTO APPUNTAMENTI_PT (CF, STAFF_ID, DATA, FASCIA_ORARIA) VALUES (?, ?, ?, ?)",
+                    new String[]{"CF", "STAFF_ID", "DATA", "FASCIA_ORARIA"}
+                ));
+                
                 // Definizione dell'ordine di esecuzione, necessario per evitare errori dovuti ai vincoli tra chiavi primarie e esterne
                 // Ordine di cancellazione
-                List<String> deletionOrder = Arrays.asList("PARTECIPAZIONI_CORSI", "TURNI", "SESSIONI_CORSI", "CLIENTI", "DIPENDENTI", "CALENDARIO", "DATE_SCONTI");
+                List<String> deletionOrder = Arrays.asList("APPUNTAMENTI_PT", "PARTECIPAZIONI_CORSI", "TURNI", "SESSIONI_CORSI", "CLIENTI", "DIPENDENTI", "CALENDARIO", "DATE_SCONTI");
                 
                 // Ordine di inserimento
-                List<String> insertionOrder = Arrays.asList("DIPENDENTI", "CLIENTI", "CALENDARIO", "DATE_SCONTI", "SESSIONI_CORSI", "TURNI", "PARTECIPAZIONI_CORSI");
+                List<String> insertionOrder = Arrays.asList("DIPENDENTI", "CLIENTI", "CALENDARIO", "DATE_SCONTI", "SESSIONI_CORSI", "TURNI", "PARTECIPAZIONI_CORSI", "APPUNTAMENTI_PT");
 
                 // Svuotaamento tabelle
                 clearAllTables(deletionOrder);

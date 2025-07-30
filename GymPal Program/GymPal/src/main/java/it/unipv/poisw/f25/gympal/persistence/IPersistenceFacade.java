@@ -7,6 +7,7 @@ import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.Parte
 import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCorso;
 import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
+import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
 import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
 
 //Interfaccia per accedere allo strato di persistenza
@@ -185,4 +186,32 @@ public interface IPersistenceFacade {
     
     // Cancella tutti i turni antecedenti alla data attuale
     boolean deleteOldTurni();
+    
+    
+    
+    //Metodi relativi al DAO AppuntamentoPT
+    
+    // Inserisce un nuovo appuntamento nel database
+    boolean insertAppuntamento(AppuntamentoPT appuntamento);
+
+    // Cancella un appuntamento dal database
+    boolean deleteAppuntamento(AppuntamentoPT appuntamento);
+
+    // Recupera un singolo appuntamento
+    AppuntamentoPT findAppuntamento(AppuntamentoPT appuntamento);
+
+    // Recupera tutti gli appuntamenti dal database
+    List<AppuntamentoPT> selectAllAppuntamenti();
+
+    // Recupera tutti gli appuntamenti di un cliente
+    List<AppuntamentoPT> selectAllAppuntamentiByCf(AppuntamentoPT appuntamento);
+    
+    // Recupera tutti gli appuntamenti di un personal trainer
+    List<AppuntamentoPT> selectAllAppuntamentiByStaffId(AppuntamentoPT appuntamento);
+
+    // Recupera tutti gli appuntamenti in una data specifica
+    List<AppuntamentoPT> selectAllAppuntamentiByDate(AppuntamentoPT appuntamento);
+    
+    // Cancella tutti gli appuntamenti antecedenti alla data attuale
+ 	boolean deleteOldAppuntamenti();
 }

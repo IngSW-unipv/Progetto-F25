@@ -2,6 +2,9 @@ package it.unipv.poisw.f25.gympal.persistence;
 
 import java.util.List;
 
+import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
+import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPTDAO;
+import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.IAppuntamentoPTDAO;
 import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
 import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.CalendarioDAO;
 import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.ICalendarioDAO;
@@ -39,6 +42,7 @@ public class PersistenceFacade implements IPersistenceFacade {
     private final IScontoDAO scontoDAO;
     private final ISessioneCorsoDAO sessioneCorsoDAO;
     private final ITurnoDAO turnoDAO;
+    private final IAppuntamentoPTDAO appuntamentoPTDAO;
 
     
     private PersistenceFacade() {
@@ -51,6 +55,7 @@ public class PersistenceFacade implements IPersistenceFacade {
         this.scontoDAO = new ScontoDAO(connectionFactory);
         this.sessioneCorsoDAO = new SessioneCorsoDAO(connectionFactory);
         this.turnoDAO = new TurnoDAO(connectionFactory);
+        this.appuntamentoPTDAO = new AppuntamentoPTDAO(connectionFactory);
     }
 
     //Metodo statico per ottenere l'unica istanza della classe
@@ -276,5 +281,38 @@ public class PersistenceFacade implements IPersistenceFacade {
     public boolean deleteOldTurni() {
         return turnoDAO.deleteOldTurni();
     }
-    
+
+    //Metodi AppuntamentoPT
+    @Override
+    public boolean insertAppuntamento(AppuntamentoPT appuntamento) {
+        return appuntamentoPTDAO.insertAppuntamento(appuntamento);
+    }
+    @Override
+    public boolean deleteAppuntamento(AppuntamentoPT appuntamento) {
+        return appuntamentoPTDAO.deleteAppuntamento(appuntamento);
+    }
+    @Override
+    public AppuntamentoPT findAppuntamento(AppuntamentoPT appuntamento) {
+        return appuntamentoPTDAO.findAppuntamento(appuntamento);
+    }
+    @Override
+    public List<AppuntamentoPT> selectAllAppuntamenti() {
+        return appuntamentoPTDAO.selectAll();
+    }
+    @Override
+    public List<AppuntamentoPT> selectAllAppuntamentiByCf(AppuntamentoPT appuntamento) {
+        return appuntamentoPTDAO.selectAllAppuntamentiByCf(appuntamento);
+    }
+    @Override
+    public List<AppuntamentoPT> selectAllAppuntamentiByStaffId(AppuntamentoPT appuntamento) {
+        return appuntamentoPTDAO.selectAllAppuntamentiByStaffId(appuntamento);
+    }
+    @Override
+    public List<AppuntamentoPT> selectAllAppuntamentiByDate(AppuntamentoPT appuntamento) {
+        return appuntamentoPTDAO.selectAllAppuntamentiByDate(appuntamento);
+    }
+    @Override
+    public boolean deleteOldAppuntamenti() {
+        return appuntamentoPTDAO.deleteOldAppuntamenti();
+    }
 }

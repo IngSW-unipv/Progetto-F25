@@ -11,7 +11,8 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginController;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginView;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.FontSetter.*;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.FontSetter.FontSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.FontSetter.IFontSetter;
 import it.unipv.poisw.f25.gympal.persistence.setup.PersistenceManager;
 
 public class GymPalApp {
