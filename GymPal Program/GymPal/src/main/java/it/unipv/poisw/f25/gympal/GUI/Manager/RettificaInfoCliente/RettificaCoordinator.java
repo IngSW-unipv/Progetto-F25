@@ -24,7 +24,7 @@ public class RettificaCoordinator implements IRettificaCoordinator{
 	
 	/*Controllore*/
 	private IManagerController viewHandler;
-	
+
 	/*DTO e Inizializzatore*/
     private MasterDTO abbDTO;
     private DTOHandlerRettifica costruttoreDTOHelper;
