@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ExchangeUtilities.DTOtoCliente;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ExchangeUtilities.IDTOtoCliente;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ExchangeUtilities.Codecs.ListsToStringCodec;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
@@ -21,7 +20,6 @@ public class CommitNewClientToDB implements ICommitNewClientToDB {
 	
 	public CommitNewClientToDB(IPersistenceFacade facade) {
 		
-		mapper = new DTOtoCliente(LocalDate.now(), new ListsToStringCodec());
 		this.facade = facade;
 		
 	}
@@ -29,20 +27,25 @@ public class CommitNewClientToDB implements ICommitNewClientToDB {
     //----------------------------------------------------------------
 	
 	@Override
-	public void commit(IAbbonamentoDTO abbDTO) {
+	public boolean commit(IDatiCliente abbDTO) {
 			
 		try {
 			
+			mapper = new DTOtoCliente(LocalDate.now(), new ListsToStringCodec());
+			
 			boolean result;
 			
-			Cliente cliente = mapper.extractAndInsert((IDatiCliente)abbDTO);
+			Cliente cliente = mapper.extractAndInsert(abbDTO);
 			
 			result = facade.insertCliente(cliente);
 			
 			System.out.println("Transferimento avvenuto: " + result);
 			
+			return result;
+			
 		}catch (Exception e) {
 	        
+			e.printStackTrace();
 	        System.err.println("Errore durante la registrazione del cliente: " + e.getMessage());
 	        throw new RuntimeException("Errore nella scrittura del cliente nel DB", e);
 	        
@@ -51,5 +54,33 @@ public class CommitNewClientToDB implements ICommitNewClientToDB {
 	}
 	
     //----------------------------------------------------------------
+	
+	@Override
+	public boolean commit(IDatiCliente abbDTO, LocalDate giornoRegistrazione) {
+			
+		try {
+			
+			mapper = new DTOtoCliente(giornoRegistrazione, new ListsToStringCodec());
+			
+			boolean result;
+			
+			Cliente cliente = mapper.extractAndInsert(abbDTO);
+			
+			result = facade.insertCliente(cliente);
+			System.out.println("Risultato insertCliente(): " + result);
+			
+			return result;
+			
+		}catch (Exception e) {
+	        
+			e.printStackTrace();
+	        System.err.println("Errore durante la registrazione del cliente: " + e.getMessage());
+	        throw new RuntimeException("Errore nella scrittura del cliente nel DB", e);
+	        
+	    }
+		
+	}
+	
+	//----------------------------------------------------------------
 
 }

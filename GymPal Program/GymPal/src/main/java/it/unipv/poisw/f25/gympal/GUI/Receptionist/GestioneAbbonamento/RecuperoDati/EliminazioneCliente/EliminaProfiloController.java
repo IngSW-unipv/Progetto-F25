@@ -3,7 +3,6 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoD
 import javax.swing.JOptionPane;
 
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.IGestioneAbbCoordinator;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.IUtenteAbbDTO;
 
 public class EliminaProfiloController {
 	
@@ -17,10 +16,7 @@ public class EliminaProfiloController {
 	private Runnable onAnnulla;
 	private Runnable onIndietro;
 	private Runnable onConferma;
-	
-	/*DTO*/
-	private IUtenteAbbDTO abbDTO;
-	
+
 	
 	//----------------------------------------------------------------
 	
@@ -31,12 +27,11 @@ public class EliminaProfiloController {
 									 IGestioneAbbCoordinator coordinator) {
 		
 		this.eliminaView = eliminaView;
+		this.coordinator = coordinator;
 		
 		this.onAnnulla = onAnnulla;
 		this.onIndietro = onIndietro;
 		this.onConferma = onConferma;
-		
-		this.abbDTO = (IUtenteAbbDTO)coordinator.getDTO();
 		
 		impostaEventoAnulla();
 		impostaEventoIndietro();
@@ -102,7 +97,7 @@ public class EliminaProfiloController {
     
     private void impostaLabel() {
     	
-    	eliminaView.getCfLabel().setText("Codice fiscale cliente: " + abbDTO.getCodiceFiscale());
+    	eliminaView.getCfLabel().setText("Codice fiscale cliente: " + coordinator.getDTO().getCodiceFiscale());
     	
     };
     

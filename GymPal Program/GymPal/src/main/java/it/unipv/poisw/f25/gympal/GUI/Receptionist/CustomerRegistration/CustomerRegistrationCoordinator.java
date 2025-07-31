@@ -3,6 +3,8 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.IStrategieCalcoloPrezzoFactory;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.IStrategieCalcoloPrezzo;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
@@ -20,14 +22,15 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerR
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.IClientInfosView;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.AbbonamentoDTO;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.CostruttoreDTOHelper;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.DTOHandlerRegistrazione;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.IRiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.ICoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DTOBuilder.MasterDTO;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.EtichettaPiuCampoFactory;
 
 public class CustomerRegistrationCoordinator implements IRegistrationCoordinator, ICoordinator{
 
@@ -47,8 +50,8 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     private ICommitNewClientToDB veicoloDati;
 
 
-    private AbbonamentoDTO abbonamentoDTO;
-    private CostruttoreDTOHelper costruttoreDTOHelper;
+    private MasterDTO abbDTO;
+    private DTOHandlerRegistrazione costruttoreDTOHelper;
     
     //----------------------------------------------------------------
 
@@ -79,9 +82,9 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
 
     public void inizializzaCicloRegistrazioneCliente() {
     	
-        abbonamentoDTO = new AbbonamentoDTO();
+        abbDTO = new MasterDTO();
         
-    	costruttoreDTOHelper = new CostruttoreDTOHelper(abbonamentoDTO);
+    	costruttoreDTOHelper = new DTOHandlerRegistrazione(abbDTO);
         
         setupSubscriptionCustomization();
         
@@ -119,7 +122,8 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
 
     private void setupClientInfos() {
     	
-        clientInfosView = new ClientInfosView(new DynamicButtonSizeSetter());
+        clientInfosView = new ClientInfosView(new DynamicButtonSizeSetter(),
+        									  new EtichettaPiuCampoFactory());
         
         viewHandler.registraSchermata("INFOS_VIEW", clientInfosView.getMainPanel());
 
@@ -144,10 +148,22 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
                     () -> {
                     	
                     	/*Qui è chiamato il metodo che passa i dati al service-layer*/
-                    	veicoloDati.commit(abbonamentoDTO);
+                    	if (veicoloDati.commit(abbDTO)) {
+    						
+    					    JOptionPane.showMessageDialog(null, "Registrazione effettuata con successo!",
+    					    							  "Successo", JOptionPane.INFORMATION_MESSAGE);
+                            inizializzaCicloRegistrazioneCliente();
+                            viewHandler.mostraSchermata("SCHERMATA0");
+    	                    
+    					} else {
+    						
+    					    JOptionPane.showMessageDialog(null, "Errore durante salvataggio dati.",
+    					    							  "Errore", JOptionPane.ERROR_MESSAGE);
+    					    
+    					}
                     	
-                        inizializzaCicloRegistrazioneCliente();
-                        viewHandler.mostraSchermata("SCHERMATA0");
+                    	
+
                     },
                     
                     //On Annulla
@@ -279,7 +295,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     @Override
     public IDatiCliente getDTO() {
     	
-    	return abbonamentoDTO;
+    	return abbDTO;
     	
     }
     

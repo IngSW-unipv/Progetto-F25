@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ExchangeUtilities.Codecs.IListsToStringCodec;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.IUtenteAbbDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 
 public class ClientToDTO implements IClientToDTO{
@@ -23,7 +23,7 @@ public class ClientToDTO implements IClientToDTO{
     //----------------------------------------------------------------
 	
 	@Override
-	public boolean extractAndUpdateDTO (Cliente cliente, IUtenteAbbDTO abbDTO) {
+	public boolean extractAndUpdateDTO (Cliente cliente, IDatiCliente abbDTO) {
 
 		if(cliente != null) {
 		
@@ -48,7 +48,7 @@ public class ClientToDTO implements IClientToDTO{
 		    
 			abbDTO.setInizioAbbonamento(cliente.getInizioAbbonamento());
 			abbDTO.setFineAbbonamento(cliente.getFineAbbonamento());
-			abbDTO.setPagamentoEffettuato(cliente.getPagamentoEffettuato());
+			abbDTO.setStatoPagamento(cliente.getPagamentoEffettuato());
 			abbDTO.setComposizioneAbbonamento(cliente.getComposizioneAbbonamento());
 			abbDTO.setDataNascita(BDayFromCf.estraiDataNascita(abbDTO.getCodiceFiscale()));
 			
@@ -70,7 +70,7 @@ public class ClientToDTO implements IClientToDTO{
 			abbDTO.setDurataAbbonamento(DurataAbbonamento.NESSUNO);
 			abbDTO.setInizioAbbonamento(LocalDate.of(1, 1, 1));
 			abbDTO.setFineAbbonamento(LocalDate.of(1, 1, 1));
-			abbDTO.setPagamentoEffettuato(false);
+			abbDTO.setStatoPagamento(false);
 			abbDTO.setComposizioneAbbonamento("n/a");
 			abbDTO.setDataNascita(LocalDate.of(1, 1, 1));
 			

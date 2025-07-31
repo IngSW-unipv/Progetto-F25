@@ -5,7 +5,6 @@ import javax.swing.JTextField;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabile.ICampoValidabile;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.ValidazioneCampo;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.IGestioneAbbCoordinator;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.IUtenteAbbDTO;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
 
 public class RecuperoDatiController {
@@ -23,9 +22,6 @@ public class RecuperoDatiController {
 	private Runnable onElimina;
 	private Runnable onEstrai;
 	
-	/*DTO*/
-	private IUtenteAbbDTO abbDTO;
-	
 	//----------------------------------------------------------------
 	
 	public RecuperoDatiController(IRecuperoDatiView recuperoDati,
@@ -38,8 +34,6 @@ public class RecuperoDatiController {
 		
 		this.recuperoDati = recuperoDati;
 		this.coordinator = coordinator;
-		
-		this.abbDTO = (IUtenteAbbDTO)coordinator.getDTO();
 		
 		this.onAnnulla = onAnnulla;
 		this.onElimina = onElimina;
@@ -75,8 +69,9 @@ public class RecuperoDatiController {
 		recuperoDati.addEstraiListenr(e -> {
             
 			coordinator.acquisisciCfCliente(recuperoDati.getCodiceFiscale().getText().trim());
-			
+
 			onEstrai.run();
+
 
 			setLabels();
 			
@@ -137,14 +132,14 @@ public class RecuperoDatiController {
     
     private void setLabels() {
     	
-		recuperoDati.getCfLabel().setText("Codice fiscale cliente: " + abbDTO.getCodiceFiscale());
-		recuperoDati.getNomeLabel().setText("Nome cliente: " + abbDTO.getNome());
-		recuperoDati.getCognomeLabel().setText("Cognome cliente: " + abbDTO.getCognome());
-		recuperoDati.getContattoLabel().setText("Contatto cliente: " + abbDTO.getContatto());
-		recuperoDati.getSessoLabel().setText("Sesso cliente: " + abbDTO.getSesso());
-		recuperoDati.getDurataAbbonamentoLabel().setText("Durata Abbonamento: " + abbDTO.getDurataAbbonamento());
-		recuperoDati.getInizioAbbLabel().setText("Data inizio abbonamento: " + abbDTO.getInizioAbbonamento());
-		recuperoDati.getFineAbbLabel().setText("Data fine abbonamento: " + abbDTO.getFineAbbonamento());
+		recuperoDati.getCfLabel().setText("Codice fiscale cliente: " + coordinator.getDTO().getCodiceFiscale());
+		recuperoDati.getNomeLabel().setText("Nome cliente: " + coordinator.getDTO().getNome());
+		recuperoDati.getCognomeLabel().setText("Cognome cliente: " + coordinator.getDTO().getCognome());
+		recuperoDati.getContattoLabel().setText("Contatto cliente: " + coordinator.getDTO().getContatto());
+		recuperoDati.getSessoLabel().setText("Sesso cliente: " + coordinator.getDTO().getSesso());
+		recuperoDati.getDurataAbbonamentoLabel().setText("Durata Abbonamento: " + coordinator.getDTO().getDurataAbbonamento());
+		recuperoDati.getInizioAbbLabel().setText("Data inizio abbonamento: " + coordinator.getDTO().getInizioAbbonamento());
+		recuperoDati.getFineAbbLabel().setText("Data fine abbonamento: " + coordinator.getDTO().getFineAbbonamento());
     	
     }
     

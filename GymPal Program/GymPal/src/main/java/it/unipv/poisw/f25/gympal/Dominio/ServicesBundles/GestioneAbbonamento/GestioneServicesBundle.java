@@ -1,7 +1,5 @@
 package it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneAbbonamento;
 
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.FromDB.IRetrieveClientFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.FromDB.RetrieveClientFromDB;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.RemoveClient.DeleteClientFromDB;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.RemoveClient.IDeleteClientFromDB;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.UpdateClient.IUpdateClientInsideDB;
@@ -12,7 +10,7 @@ import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
 public class GestioneServicesBundle {
 	
     private IPersistenceFacade facade;
-    private IRetrieveClientFromDB veicoloDati;
+    //private IRetrieveClientFromDB veicoloDati;
     private IDeleteClientFromDB headHunter;
     private IUpdateClientInsideDB updateClient;
     
@@ -21,7 +19,7 @@ public class GestioneServicesBundle {
     public GestioneServicesBundle(){
         
         this.facade = PersistenceFacade.getInstance();
-        this.veicoloDati = new RetrieveClientFromDB(facade);
+        //this.veicoloDati = new RetrieveClientFromDB(facade);
         this.headHunter = new DeleteClientFromDB(facade);
         this.updateClient = new UpdateClientInsideDB(facade);
     	
@@ -29,11 +27,11 @@ public class GestioneServicesBundle {
     
 	//----------------------------------------------------------------
     
-    public IRetrieveClientFromDB getVeicoloDati() {
+    /*public IRetrieveClientFromDB getVeicoloDati() {
     	
     	return veicoloDati;
     	
-    }
+    }*/
     
    //----------------------------------------------------------------
     

@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO;
+package it.unipv.poisw.f25.gympal.GUI.Utilities.DTOBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -8,8 +8,8 @@ import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 
-public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente{
-
+public class MasterDTO implements IDatiCliente, ICalcolaPrezzo{
+	
 	private String cf;
 	private String nome;
 	private String cognome;
@@ -17,16 +17,15 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente
 	private boolean isMinorenne;
 	private String contatto;
 	private DurataAbbonamento abbonamento;
+	private LocalDate dataNascita;
 	private LocalDate inizioAbbonamento;      
 	private LocalDate fineAbbonamento;        
-	private boolean pagamentoEffettuato; 
 	private String composizioneAbbonamento;
 	
     private boolean certificatoIdoneita = true;
     private boolean permessoGenitori = true;
 	
-	private LocalDate dataNascita;
-    private List<String> componentiAbbonamento;
+	private List<String> componentiAbbonamento;
     private List<String> corsiSelezionati;
     
     /*Ad uso di Reset*////////
@@ -204,24 +203,6 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente
     //----------------------------------------------------------------
 	
 	@Override
-	public boolean isPagamentoEffettuato() {
-		
-		return pagamentoEffettuato;
-		
-	}
-	
-    //----------------------------------------------------------------
-	
-	@Override
-	public void setPagamentoEffettuato(boolean pagamentoEffettuato) {
-		
-		this.pagamentoEffettuato = pagamentoEffettuato;
-		
-	}
-	
-    //----------------------------------------------------------------
-	
-	@Override
 	public String getComposizioneAbbonamento() {
 		
 		return composizioneAbbonamento;
@@ -331,7 +312,7 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente
     
     //----------------------------------------------------------------
     
-    
+    @Override
     public void setScontoEta(boolean scontoEta) {
     	
     	this.scontoEta = scontoEta;
@@ -349,7 +330,7 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente
     
     //----------------------------------------------------------------
     
-    
+    @Override
     public void setScontoOccasioni(boolean scontoOccasioni) {
     	
     	this.scontoOccasioni = scontoOccasioni;
@@ -385,6 +366,15 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente
     
     //----------------------------------------------------------------
     
+	@Override
+	public void setCertificatoIdoneita(boolean certificatoIdoneita) {
+		
+		this.certificatoIdoneita = certificatoIdoneita;
+		
+	}
+	
+    //----------------------------------------------------------------
+    
     @Override
     public boolean getPermessoGenitori() {
     	
@@ -392,6 +382,15 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente
         
     }
     
+    //----------------------------------------------------------------
+    
+	@Override
+	public void setPermessoGenitori(Boolean permessoGenitori) {
+		
+		this.permessoGenitori = permessoGenitori;
+		
+	}
+	
     //----------------------------------------------------------------
     
     @Override
@@ -405,6 +404,35 @@ public class UtenteAbbDTO implements IUtenteAbbDTO, ICalcolaPrezzo, IDatiCliente
             corsiSelezionati = corsiSelezionatiOriginali;
         }
         
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public String toString() {
+        return "MasterDTO {" +
+                "\n  cf='" + cf + '\'' +
+                ",\n  nome='" + nome + '\'' +
+                ",\n  cognome='" + cognome + '\'' +
+                ",\n  sesso='" + sesso + '\'' +
+                ",\n  isMinorenne=" + isMinorenne +
+                ",\n  contatto='" + contatto + '\'' +
+                ",\n  abbonamento=" + abbonamento +
+                ",\n  dataNascita=" + dataNascita +
+                ",\n  inizioAbbonamento=" + inizioAbbonamento +
+                ",\n  fineAbbonamento=" + fineAbbonamento +
+                ",\n  composizioneAbbonamento='" + composizioneAbbonamento + '\'' +
+                ",\n  certificatoIdoneita=" + certificatoIdoneita +
+                ",\n  permessoGenitori=" + permessoGenitori +
+                ",\n  componentiAbbonamento=" + componentiAbbonamento +
+                ",\n  corsiSelezionati=" + corsiSelezionati +
+                ",\n  componentiAbbonamentoOriginali=" + componentiAbbonamentoOriginali +
+                ",\n  corsiSelezionatiOriginali=" + corsiSelezionatiOriginali +
+                ",\n  metodoPagamento=" + metodoPagamento +
+                ",\n  scontoEta=" + scontoEta +
+                ",\n  scontoOccasioni=" + scontoOccasioni +
+                ",\n  statoPagamento=" + statoPagamento +
+                "\n}";
     }
     
     //----------------------------------------------------------------

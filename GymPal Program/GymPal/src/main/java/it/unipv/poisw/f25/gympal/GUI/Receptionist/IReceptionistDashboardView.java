@@ -18,10 +18,5 @@ public interface IReceptionistDashboardView {
 	
 	//----------------------------------------------------------------
     
-    /* Dispose della finestra */
-	public void dispose();
-	
-	//----------------------------------------------------------------
-    
 }
 

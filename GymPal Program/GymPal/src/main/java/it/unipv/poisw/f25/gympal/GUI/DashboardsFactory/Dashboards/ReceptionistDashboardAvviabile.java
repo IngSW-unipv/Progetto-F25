@@ -11,6 +11,8 @@ public class ReceptionistDashboardAvviabile implements IDashboardAvviabile{
 	
 	
     public ReceptionistDashboardAvviabile() {}
+    
+    //----------------------------------------------------------------
 
     @Override
     public void avvia() {
@@ -23,5 +25,7 @@ public class ReceptionistDashboardAvviabile implements IDashboardAvviabile{
         recDashView.setVisible(true);
         
     }
+    
+    //----------------------------------------------------------------
 
 }

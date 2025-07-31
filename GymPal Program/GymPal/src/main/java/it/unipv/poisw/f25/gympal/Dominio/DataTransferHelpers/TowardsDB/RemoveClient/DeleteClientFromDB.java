@@ -1,6 +1,6 @@
 package it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.RemoveClient;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.IUtenteAbbDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 
@@ -19,7 +19,7 @@ public class DeleteClientFromDB implements IDeleteClientFromDB{
     //----------------------------------------------------------------
 	
 	@Override
-	public boolean huntAndKill(IUtenteAbbDTO abbDTO){
+	public boolean huntAndKill(IDatiCliente abbDTO){
 		
 		Cliente cliente = new Cliente();
 		

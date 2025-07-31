@@ -12,8 +12,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampoFactory;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.IEtichettaPiuCampoFactory;
 
 public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
 
@@ -43,12 +43,15 @@ public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
 	private JPanel navigationPanel;
 	
 	private final IDynamicButtonSizeSetter buttonSizeSetter;
+	private final IEtichettaPiuCampoFactory campoEtichettato;
 	
 	//----------------------------------------------------------------
 	
-	public RecuperoDatiView (IDynamicButtonSizeSetter setter) {
+	public RecuperoDatiView (IDynamicButtonSizeSetter setter,
+							 IEtichettaPiuCampoFactory campoEtichettato) {
 		
 		buttonSizeSetter = setter;
+		this.campoEtichettato = campoEtichettato;
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(new EmptyBorder(10, 5, 10, 5));
@@ -110,7 +113,7 @@ public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
 		upperPanel.add(titleLabel);
 		upperPanel.add(Box.createVerticalStrut(30));
 		
-		upperPanel.add(EtichettaPiuCampoFactory.creaCampoEtichettato("CF: ", codiceFiscale));
+		upperPanel.add(this.campoEtichettato.creaCampoEtichettato("CF: ", codiceFiscale));
 		upperPanel.add(Box.createVerticalStrut(10));
 		
 		upperPanel.add(estrai);

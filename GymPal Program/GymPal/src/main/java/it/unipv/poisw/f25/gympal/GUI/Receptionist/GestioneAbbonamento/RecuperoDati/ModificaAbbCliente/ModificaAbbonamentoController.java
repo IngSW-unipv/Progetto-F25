@@ -10,8 +10,6 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.IGestioneAbbCoordinator;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.IUtenteAbbDTO;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 
 public class ModificaAbbonamentoController {
 	
@@ -26,9 +24,6 @@ public class ModificaAbbonamentoController {
 	private Runnable onIndietro;
 	private Runnable onAvanti;
 	
-	/*DTO*/
-	private IUtenteAbbDTO abbDTO;
-	
 	//----------------------------------------------------------------
 	
 	public ModificaAbbonamentoController(IModificaAbbonamentoView modAbbView,
@@ -39,9 +34,7 @@ public class ModificaAbbonamentoController {
 		
 		this.modAbbView = modAbbView;
 		this.coordinator = coordinator;
-		
-		this.abbDTO = (IUtenteAbbDTO)coordinator.getDTO();
-		
+						
 		this.onAnnulla = onAnnulla;
 		this.onIndietro = onIndietro;
 		this.onAvanti = onAvanti;
@@ -181,7 +174,7 @@ public class ModificaAbbonamentoController {
 		modAbbView.addConfermaListener(e -> {
             
 			aggiornaDTO();
-			modAbbView.setLists((IDatiCliente)abbDTO);
+			modAbbView.setLists(coordinator.getDTO());
             
         });
 		
@@ -193,8 +186,8 @@ public class ModificaAbbonamentoController {
 		
 		modAbbView.addResettaListener(e -> {
             
-			abbDTO.ripristinaStatoIniziale();
-			modAbbView.setLists((IDatiCliente)abbDTO);
+			coordinator.getDTO().ripristinaStatoIniziale();
+			modAbbView.setLists(coordinator.getDTO());
 			
         });
 		
@@ -248,7 +241,7 @@ public class ModificaAbbonamentoController {
 	
 	//----------------------------------------------------------------
 	
-	private void viewInit() {modAbbView.setLists((IDatiCliente)abbDTO);}
+	private void viewInit() {modAbbView.setLists(coordinator.getDTO());}
 	
 	//----------------------------------------------------------------
 	

@@ -5,14 +5,15 @@ import java.util.List;
 
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 
-public class CostruttoreDTOHelper {
+public class DTOHandlerRegistrazione {
 	
-	private AbbonamentoDTO abbDTO;
+	private IDatiCliente abbDTO;
 	
 	//----------------------------------------------------------------
 	
-	public CostruttoreDTOHelper (AbbonamentoDTO abbDTO) {
+	public DTOHandlerRegistrazione (IDatiCliente abbDTO) {
 		
 		this.abbDTO = abbDTO;
 		

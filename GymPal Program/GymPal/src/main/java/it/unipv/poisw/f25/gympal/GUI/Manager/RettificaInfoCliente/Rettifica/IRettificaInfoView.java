@@ -1,90 +1,90 @@
-package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO;
+package it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.Rettifica;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.awt.event.ActionListener;
 
-import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
-import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeListener;
 
-public interface IAbbonamentoDTO {
+public interface IRettificaInfoView {
 	
-    //----------------------------------------------------------------
+	public JTextField getCodiceFiscale();
 	
-	public String getNome();
+	//----------------------------------------------------------------
 	
-    //----------------------------------------------------------------
+	public JTextField getNome();
+	
+	//----------------------------------------------------------------
+	
+	public JTextField getCognome();
+	
+	//----------------------------------------------------------------
+	
+	public JTextField getCfAnagrafico();
+	
+	//----------------------------------------------------------------
+	
+	public JTextField getContatto();
+	
+	//----------------------------------------------------------------
+	
+	public void addDateSpinnerListener(ChangeListener listener);
+	
+	//----------------------------------------------------------------
+	
+	public JSpinner getDateSpinner();
+	
+	//----------------------------------------------------------------
+	
+	public JRadioButton getMaschio();
+	
+	//----------------------------------------------------------------
+	
+	public JRadioButton getFemmina();
+	
+	//----------------------------------------------------------------
+	
+	public void addEstraiListenr(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
+	public void addEliminaListener(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
+	public void addSaveModsListener(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
+	public void addInsDataListener(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
+	public void addAnnullaListener(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
+	public void addAvantiListener(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
+	public JPanel getMainPanel();
+	
+	//----------------------------------------------------------------
 
-	public String getCognome();
+	public void setEliminaEnabled(boolean enabled);
 	
 	//----------------------------------------------------------------
 	
-	public String getCodiceFiscale();
+	public void setSaveModsEnabled(boolean enabled);
 	
 	//----------------------------------------------------------------
 	
-	public LocalDate getDataNascita();
+	public void setInsDataEnabled(boolean enabled);
 	
 	//----------------------------------------------------------------
 	
-	public String getSesso();
 	
-	//----------------------------------------------------------------
-	
-	public boolean getCertificatoIdoneita();
-	
-	//----------------------------------------------------------------
-	
-	public boolean getPermessoGenitori();
-	
-	//----------------------------------------------------------------
-	
-	public List<String> getSezioniAbbonamento();
-	
-	//----------------------------------------------------------------
-	
-	public List<String> getCorsiSelezionati();
-	
-	//----------------------------------------------------------------
-	
-	public String getContatto();
-	
-	//----------------------------------------------------------------
-	
-	public boolean getStatoPagamento();
-	
-	//----------------------------------------------------------------
-	
-	public MetodoPagamento getMetodoPagamento();
-	
-	//----------------------------------------------------------------
-	
-	public void setMetodoPagamento(MetodoPagamento metodoPagamento);
-	
-	//----------------------------------------------------------------
-	
-	public DurataAbbonamento getDurataAbbonamento();
-	
-	//----------------------------------------------------------------
-	
-	public void setDurataAbbonamento(DurataAbbonamento durataAbbonamento);
-	
-	//----------------------------------------------------------------
-	
-	public boolean getScontoEta();
-	
-	//----------------------------------------------------------------
-	
-	public void setScontoEta(boolean scontoEta);
-	
-	//----------------------------------------------------------------
-	
-	public boolean getScontoOccasioni();
-	
-	//----------------------------------------------------------------
-	
-	public void setScontoOccasioni(boolean scontoOccasioni);
-	
-	//----------------------------------------------------------------
-	
-
 }

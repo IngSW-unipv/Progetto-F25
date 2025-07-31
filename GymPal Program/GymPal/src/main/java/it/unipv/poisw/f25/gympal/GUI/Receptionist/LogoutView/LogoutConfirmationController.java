@@ -4,21 +4,21 @@ import java.awt.event.ActionListener;
 
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginController;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginView;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.IReceptionistDashboardView;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
 
 public class LogoutConfirmationController {
     
     private ILogoutConfirmationView view;
-    private IReceptionistDashboardView mainView;
+    private IDashboard mainView;
     private String schermataPrecedente;
 
     //----------------------------------------------------------------
 
-    public LogoutConfirmationController(ILogoutConfirmationView logoutView, IReceptionistDashboardView recDashView,
+    public LogoutConfirmationController(ILogoutConfirmationView logoutView, IDashboard mainView,
             String schermataPrecedente) {
         
         this.view = logoutView;
-        this.mainView = recDashView;
+        this.mainView = mainView;
         this.schermataPrecedente = schermataPrecedente;
         
         /* Rimozione vecchi listener dai pulsanti per evitare duplicazioni
@@ -40,12 +40,12 @@ public class LogoutConfirmationController {
             new LoginController(loginView);
             loginView.setVisible(true);
             
-            mainView.dispose(); // chiude la finestra dashboard
+            this.mainView.dispose(); // chiude la finestra dashboard
         });
         
         view.getCancelButton().addActionListener(e -> {
             // Torna alla schermata precedente nella dashboard
-            mainView.mostraSchermata(this.schermataPrecedente);
+            this.mainView.mostraSchermata(this.schermataPrecedente);
         });
         
     }

@@ -17,7 +17,7 @@ public class ListsToStringCodec implements IListsToStringCodec{
 	
 	static {
 		
-		MAPPATURACOMPONENTI.put("Sala Pesi", "S.PESI");
+		MAPPATURACOMPONENTI.put("Sala pesi", "S.PESI");
 		MAPPATURACOMPONENTI.put("Sala allenamento a corpo libero", "S.CORPO");
 		MAPPATURACOMPONENTI.put("Allenamento mirato con personal trainer", "A.PTRAINER");
 		
@@ -54,7 +54,6 @@ public class ListsToStringCodec implements IListsToStringCodec{
 			risultato.add(corso.toUpperCase());
 			
 		}
-		
 		
 		return String.join("_", risultato);
 		

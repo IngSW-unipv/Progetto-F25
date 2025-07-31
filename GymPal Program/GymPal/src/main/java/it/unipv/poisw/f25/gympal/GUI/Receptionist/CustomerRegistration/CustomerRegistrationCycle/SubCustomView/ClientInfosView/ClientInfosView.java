@@ -18,8 +18,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeListener;
 
-import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampoFactory;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.IEtichettaPiuCampoFactory;
 
 public class ClientInfosView extends JPanel implements IClientInfosView{
 
@@ -61,13 +61,16 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 	private JLabel permesso;
 	
 	private final IDynamicButtonSizeSetter buttonSizeSetter;
+	private final IEtichettaPiuCampoFactory campoEtichettato;
 	
         
    //----------------------------------------------------------------
 		
-	public ClientInfosView (IDynamicButtonSizeSetter setter) {
+	public ClientInfosView (IDynamicButtonSizeSetter setter,
+							IEtichettaPiuCampoFactory campoEtichettato) {
 		
 		buttonSizeSetter = setter;
+		this.campoEtichettato = campoEtichettato;
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(new EmptyBorder(10, 5, 10, 5));
@@ -83,7 +86,7 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 		
 		/*############################################################*/
 		
-		//Questa istruzione crea un modello epr la data
+		//Questa istruzione crea un modello per la data
 		SpinnerDateModel model = new SpinnerDateModel();
 		
 		//Lo "Spinner" è creato usando il modello dell'istruzione precedente
@@ -124,11 +127,11 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 		
 		/*############################################################*/
 		
-		nome.setAlignmentX(CENTER_ALIGNMENT);
+		/*nome.setAlignmentX(CENTER_ALIGNMENT);
 		cognome.setAlignmentX(CENTER_ALIGNMENT);
 		codiceFiscale.setAlignmentX(CENTER_ALIGNMENT);
 		dateSpinner.setAlignmentX(CENTER_ALIGNMENT);
-		contatto.setAlignmentX(CENTER_ALIGNMENT);
+		contatto.setAlignmentX(CENTER_ALIGNMENT);*/
 		
 		maschio.setAlignmentX(CENTER_ALIGNMENT);
 		femmina.setAlignmentX(CENTER_ALIGNMENT);
@@ -154,19 +157,19 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 		upperPanel.add(titleLabel);
 		upperPanel.add(Box.createVerticalStrut(30));
 		
-		upperPanel.add(EtichettaPiuCampoFactory.creaCampoEtichettato("Nome: ", nome));
+		upperPanel.add(this.campoEtichettato.creaCampoEtichettato("Nome: ", nome));
 		upperPanel.add(Box.createVerticalStrut(10));
 		
-		upperPanel.add(EtichettaPiuCampoFactory.creaCampoEtichettato("Cognome: ", cognome));
+		upperPanel.add(this.campoEtichettato.creaCampoEtichettato("Cognome: ", cognome));
 		upperPanel.add(Box.createVerticalStrut(10));
 		
-		upperPanel.add(EtichettaPiuCampoFactory.creaCampoEtichettato("Data di nascita (dd/MM/aa): ", dateSpinner));
+		upperPanel.add(this.campoEtichettato.creaCampoEtichettato("Data di nascita (dd/MM/aa): ", dateSpinner));
 		upperPanel.add(Box.createVerticalStrut(10));
 		
-		upperPanel.add(EtichettaPiuCampoFactory.creaCampoEtichettato("Codice Fiscale: ", codiceFiscale));
+		upperPanel.add(this.campoEtichettato.creaCampoEtichettato("Codice Fiscale: ", codiceFiscale));
 		upperPanel.add(Box.createVerticalStrut(10));
 		
-		upperPanel.add(EtichettaPiuCampoFactory.creaCampoEtichettato("Contatto cliente (email): ", contatto));
+		upperPanel.add(this.campoEtichettato.creaCampoEtichettato("Contatto cliente (email): ", contatto));
 		upperPanel.add(Box.createVerticalStrut(10));
 		
 		

@@ -10,6 +10,7 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.GestioneAb
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.IGestioneAbbCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationView;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
 
 public class ReceptionistController implements IReceptionistController {
 
@@ -22,7 +23,6 @@ public class ReceptionistController implements IReceptionistController {
 
     /*Servizi*/
     private RegistrationServicesBundle serviziReg;
-    private GestioneServicesBundle serviziGes;
     private CommonServicesBundle serviziComuni;
     
     /*Coordinatori GUI*/
@@ -50,7 +50,6 @@ public class ReceptionistController implements IReceptionistController {
         /*Al fine di alleggerire il codice, i serviziReg sono raggruppati in un apposito 
          *bundle.*/
         this.serviziReg = serviziReg;
-        this.serviziGes = serviziGes;
         this.serviziComuni = serviziComuni;
         
         
@@ -64,16 +63,16 @@ public class ReceptionistController implements IReceptionistController {
         																	  this.serviziReg.getValidatoreCampi(),
         																	  this.serviziReg.getControlloRequisiti(),
         																	  this.serviziComuni.getPrezzoFactory(),
-        																	  this.serviziReg.getVeicoloDati());
+        																	  this.serviziComuni.getImmettiDati());
         
         
         gestoreAbb = new GestioneAbbCoordinator(this,
 								        		this.serviziComuni.getCampoValidabileFactory(),
 								        		this.serviziComuni.getValidatoreCampi(),
-								        		this.serviziGes.getVeicoloDati(),
-								        		this.serviziGes.getHeadHunter(),
+								        		this.serviziComuni.getRecuperaDati(),
+								        		this.serviziComuni.getHeadHunter(),
 								        		this.serviziComuni.getPrezzoFactory(),
-								        		this.serviziGes.getUpdater());
+								        		this.serviziComuni.getUpdater());
         
     }
 
@@ -98,7 +97,7 @@ public class ReceptionistController implements IReceptionistController {
         recDashView.aggiungiComando("LOGOUT", () -> {
         	
             System.out.println("schermataPreLogout = " + schermataPreLogout);
-            new LogoutConfirmationController(logoutView, recDashView, schermataPreLogout);
+            new LogoutConfirmationController(logoutView, (IDashboard)recDashView, schermataPreLogout);
             recDashView.mostraSchermata("LOGOUT_VIEW"); 
             
         });

@@ -1,9 +1,16 @@
 package it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.AddClient;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.IAbbonamentoDTO;
+import java.time.LocalDate;
+
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 
 public interface ICommitNewClientToDB {
 
-	public void commit(IAbbonamentoDTO abbDTO);
+	public boolean commit(IDatiCliente abbDTO);
 	
+	//----------------------------------------------------------------
+	
+	public boolean commit(IDatiCliente abbDTO, LocalDate giornoRegistrazione);
+	
+	//----------------------------------------------------------------
 }

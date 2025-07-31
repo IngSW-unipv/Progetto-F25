@@ -1,9 +1,17 @@
 package it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.UpdateClient;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.IUtenteAbbDTO;
+import java.time.LocalDate;
+
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 
 public interface IUpdateClientInsideDB {
 	
-	public boolean update(IUtenteAbbDTO abbDTO);
+	public boolean update(IDatiCliente abbDTO);
+	
+	//----------------------------------------------------------------
+	
+	public boolean update(IDatiCliente abbDTO, LocalDate giornoRegistrazione);
+	
+	//----------------------------------------------------------------
 
 }

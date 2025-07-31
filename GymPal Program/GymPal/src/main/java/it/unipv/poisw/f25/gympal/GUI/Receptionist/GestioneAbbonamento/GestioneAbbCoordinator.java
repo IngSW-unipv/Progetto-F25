@@ -15,8 +15,7 @@ import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.IReceptionistController;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.DTOHandlerHelper;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.UtenteAbbDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.DTOHandlerGestione;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.IRecuperoDatiView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.RecuperoDatiController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.RecuperoDatiView;
@@ -31,7 +30,9 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoE
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.ICoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DTOBuilder.MasterDTO;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.EtichettaPiuCampoFactory;
 
 public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordinator{
 	
@@ -53,8 +54,8 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
     private IUpdateClientInsideDB updateClient;
     
     
-    private UtenteAbbDTO utenteAbbDTO;
-    private DTOHandlerHelper costruttoreDTOHelper;
+    private MasterDTO abbDTO;
+    private DTOHandlerGestione costruttoreDTOHelper;
 	
     //----------------------------------------------------------------
 	
@@ -83,8 +84,8 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 	private void inizializzaCicloGestione() {
 		
 		
-		utenteAbbDTO = new UtenteAbbDTO();
-		costruttoreDTOHelper = new DTOHandlerHelper(utenteAbbDTO);
+		abbDTO = new MasterDTO();
+		costruttoreDTOHelper = new DTOHandlerGestione(abbDTO);
 		
 		setupRecuperoDati();
 		
@@ -94,7 +95,8 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 	
 	private void setupRecuperoDati() {
 		
-		recuperoDati = new RecuperoDatiView (new DynamicButtonSizeSetter());
+		recuperoDati = new RecuperoDatiView (new DynamicButtonSizeSetter(),
+											 new EtichettaPiuCampoFactory());
 		
 		viewHandler.registraSchermata("LOAD_CLIENT", recuperoDati.getMainPanel());
 		
@@ -113,6 +115,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 				
 				() -> {
 					
+					//System.out.println("PRE ELIMINAZIONE: " + abbDTO.getCodiceFiscale());
 					setupEliminaProfiloCliente();
 					viewHandler.mostraSchermata("ELIMINA_CLIENT");
 					
@@ -121,7 +124,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 				//OnEstrai
 				() -> {
 					
-					veicoloDati.retrieve(utenteAbbDTO);
+					veicoloDati.retrieve(abbDTO);
 					
 					
 				},
@@ -147,7 +150,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 	                    () -> {
 	                    	
 	                    	/*Qui è chiamato il metodo che passa i dati al service-layer*/
-	                    	updateClient.update(utenteAbbDTO);
+	                    	updateClient.update(abbDTO);
 	                    	
 	                    	inizializzaCicloGestione();
 	                        viewHandler.mostraSchermata("SCHERMATA0");
@@ -210,7 +213,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 									  () -> {
 										  
 										  	
-										    boolean esito = headHunter.huntAndKill(utenteAbbDTO);
+										    boolean esito = headHunter.huntAndKill(abbDTO);
 										    
 										    if (esito) {
 										    	
@@ -280,7 +283,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 	                    () -> {
 	                    	
 	                    	/*Qui è chiamato il metodo che passa i dati al service-layer*/
-	                    	updateClient.update(utenteAbbDTO);
+	                    	updateClient.update(abbDTO);
 	                    	
 	                    	inizializzaCicloGestione();
 	                        viewHandler.mostraSchermata("SCHERMATA0");
@@ -339,7 +342,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
     @Override
     public IDatiCliente getDTO() {
     	
-    	return utenteAbbDTO;
+    	return abbDTO;
     	
     }
     

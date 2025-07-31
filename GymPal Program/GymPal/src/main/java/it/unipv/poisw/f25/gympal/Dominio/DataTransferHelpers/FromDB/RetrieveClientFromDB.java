@@ -3,7 +3,7 @@ package it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.FromDB;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.FromDB.ExchangeUtilities.ClientToDTO;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.FromDB.ExchangeUtilities.IClientToDTO;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.ExchangeUtilities.Codecs.ListsToStringCodec;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.IUtenteAbbDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 
@@ -24,7 +24,7 @@ public class RetrieveClientFromDB implements IRetrieveClientFromDB {
     //----------------------------------------------------------------
 	
 	@Override
-	public void retrieve(IUtenteAbbDTO abbDTO) {
+	public void retrieve(IDatiCliente abbDTO) {
 		
 		try {
 		
@@ -33,12 +33,6 @@ public class RetrieveClientFromDB implements IRetrieveClientFromDB {
 			cliente.setCf(abbDTO.getCodiceFiscale());
 			
 			mapper.extractAndUpdateDTO(facade.selectCliente(cliente), abbDTO);
-			
-			System.out.println(abbDTO.getNome() + " " + abbDTO.getCognome()
-							   + " " + abbDTO.getDataNascita());
-			
-			System.out.println("Componenti abbonamento: " + abbDTO.getSezioniAbbonamento());
-			System.out.println("Corsi selezionati: " + abbDTO.getCorsiSelezionati());
 		
 		} catch (Exception e) {
 			

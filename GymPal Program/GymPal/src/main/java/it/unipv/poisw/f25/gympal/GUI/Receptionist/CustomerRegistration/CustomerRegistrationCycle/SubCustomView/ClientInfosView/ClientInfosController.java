@@ -17,11 +17,13 @@ import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
 
 public class ClientInfosController implements IRegexExpression {
 
+	/*Vista*/
     private IClientInfosView clientInfos;
+    
+    /*Coordinatore*/
     private IRegistrationCoordinator coordinator;
 
-
-    
+    /*CallBacks*/
     private Runnable onAvanti;
     private Runnable onIndietro;
     private Runnable onAnnulla;
@@ -70,13 +72,17 @@ public class ClientInfosController implements IRegexExpression {
     
     private void impostaEventiTextFields() {
 
-    	coordinator.getValidatoreCampi().registra(registraCampo(clientInfos.getNome(), IRegexExpression.NAME_REGEXEXPRESSION));
+    	coordinator.getValidatoreCampi().registra(registraCampo(clientInfos.getNome(),
+    											  IRegexExpression.NAME_REGEXEXPRESSION));
 
-    	coordinator.getValidatoreCampi().registra(registraCampo(clientInfos.getCognome(), IRegexExpression.SURNAME_REGEXEXPRESSION));
+    	coordinator.getValidatoreCampi().registra(registraCampo(clientInfos.getCognome(),
+    											  IRegexExpression.SURNAME_REGEXEXPRESSION));
 
-    	coordinator.getValidatoreCampi().registra(registraCampo(clientInfos.getCodiceFiscale(), IRegexExpression.CODICE_FISCALE));
+    	coordinator.getValidatoreCampi().registra(registraCampo(clientInfos.getCodiceFiscale(),
+    											  IRegexExpression.CODICE_FISCALE));
     	
-    	coordinator.getValidatoreCampi().registra(registraCampo(clientInfos.getContatto(), IRegexExpression.EMAIL));
+    	coordinator.getValidatoreCampi().registra(registraCampo(clientInfos.getContatto(),
+    											  IRegexExpression.EMAIL));
 
     }
     
@@ -121,6 +127,7 @@ public class ClientInfosController implements IRegexExpression {
 
         	/*Riferito al contenuto dei "JTextField"*/
             boolean validitaCampi = coordinator.getValidatoreCampi().tuttiValidi();
+            System.out.println("ValiditaCampi: " + validitaCampi);
 
             /*Il metodo "richiediCertificato()" restituisce sempre 'true', di default,
              *dunque, causa negazione, la prima parte dell'equazione booleana è sempre
@@ -129,10 +136,13 @@ public class ClientInfosController implements IRegexExpression {
             boolean certificatoOk = !coordinator.getCtrlReqAnagraficiService().richiediCertificato() ||
             						 clientInfos.getCertIdoneitàSi().isSelected();
             
+            System.out.println("CertificatoOk: " + certificatoOk);
+            
             /*Se non è richiesto il permesso (cliente maggiorenne), allora tutto ok.
 			  Se è richiesto (cliente minorenne), è controllato che sia selezionato "Sì"*/
             boolean permessoGenitoriOK = !coordinator.getCtrlReqAnagraficiService().richiediPermessoGenitori(nascita) ||
             							  clientInfos.getPermessoGenitoriSi().isSelected();
+            System.out.println("PermessoGenitoriOk: " + permessoGenitoriOK);
 
             if (validitaCampi && certificatoOk && permessoGenitoriOK) {
 

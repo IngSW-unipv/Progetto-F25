@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.ManagerDashboardAvviabile;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.ReceptionistDashboardAvviabile;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.CommonInterface.IDashboardAvviabile;
+import it.unipv.poisw.f25.gympal.staff.Manager;
 import it.unipv.poisw.f25.gympal.staff.Receptionist;
 import it.unipv.poisw.f25.gympal.staff.Staff;
 
@@ -21,7 +23,7 @@ import it.unipv.poisw.f25.gympal.staff.Staff;
 
 public class DashboardDispatcherFactory {
 	
-	/*Questa istruzione dichiara e inizializza una mappa statica che associa:
+	/*Questa istruzione dichiara ed inizializza una mappa statica che associa:
 
 	  - un tipo (classe) che estende Staff
 
@@ -68,7 +70,7 @@ public class DashboardDispatcherFactory {
 
 	  - Separare la logica di inizializzazione dalla logica operativa (getDashboardPer)
 
-      - Rendere il codice leggibile e ordinato
+      - Codice leggibile ed ordinato
       
       - Elimina il rischio di eseguire più volte l'inizializzazione della mappa*/
     
@@ -87,7 +89,8 @@ public class DashboardDispatcherFactory {
     	 * del tipo corretto*/
     	
         mappa.put(Receptionist.class, staff -> new ReceptionistDashboardAvviabile());
-        // mappa.put(Admin.class, staff -> new AdminDashboardAvviabile((Admin) staff));
+        mappa.put(Manager.class, staff -> new ManagerDashboardAvviabile());
+        /*Una terza entry per Dipendente, in futuro*/
         
     }
     
