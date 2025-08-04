@@ -2,14 +2,16 @@ package it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali;
 
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.IStrategieCalcoloPrezzoFactory;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieCalcoloPrezzoFactory;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.FromDB.IRetrieveClientFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.FromDB.RetrieveClientFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.AddClient.CommitNewClientToDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.AddClient.ICommitNewClientToDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.RemoveClient.DeleteClientFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.RemoveClient.IDeleteClientFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.UpdateClient.IUpdateClientInsideDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.UpdateClient.UpdateClientInsideDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveClient.IRetrieveClientFromDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveClient.RetrieveClientFromDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveOccasionsDiscounts.IRetrieveDiscountsFromDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveOccasionsDiscounts.RetrieveDiscountsFromDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.AddClient.CommitNewClientToDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.AddClient.ICommitNewClientToDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.RemoveClient.DeleteClientFromDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.RemoveClient.IDeleteClientFromDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.UpdateClient.IUpdateClientInsideDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.UpdateClient.UpdateClientInsideDB;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.CampoValidabileFactory;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
@@ -31,25 +33,27 @@ public class CommonServicesBundle {
     private IDeleteClientFromDB headHunter;
     private IUpdateClientInsideDB updateClient;
     private ICommitNewClientToDB immettiDati;
+    private IRetrieveDiscountsFromDB getDiscounts;
 
     
 	//----------------------------------------------------------------
     
     public CommonServicesBundle(){
     	
-    	this.facade = PersistenceFacade.getInstance();
+    	facade = PersistenceFacade.getInstance();
     	
     	/*Servizi Dominio*/
-        this.regexChecker = new RegexCheck();
-        this.campoValidabileFactory = new CampoValidabileFactory(regexChecker);
-        this.validatoreCampi = new ValidatoreCampi();
-        this.prezzoFactory = new StrategieCalcoloPrezzoFactory();
+        regexChecker = new RegexCheck();
+        campoValidabileFactory = new CampoValidabileFactory(regexChecker);
+        validatoreCampi = new ValidatoreCampi();
+        prezzoFactory = new StrategieCalcoloPrezzoFactory();
         
         /*Servizi DB*/
-        this.recuperaDati = new RetrieveClientFromDB(facade);
-        this.headHunter = new DeleteClientFromDB(facade);
-        this.updateClient = new UpdateClientInsideDB(facade);
-        this.immettiDati = new CommitNewClientToDB(facade);
+        recuperaDati = new RetrieveClientFromDB(facade);
+        headHunter = new DeleteClientFromDB(facade);
+        updateClient = new UpdateClientInsideDB(facade);
+        immettiDati = new CommitNewClientToDB(facade);
+        getDiscounts = new RetrieveDiscountsFromDB(facade);
     	
     }
     
@@ -114,6 +118,14 @@ public class CommonServicesBundle {
     public ICommitNewClientToDB getImmettiDati() {
     	
     	return immettiDati;
+    	
+    }
+    
+   //----------------------------------------------------------------
+    
+    public IRetrieveDiscountsFromDB getDiscounts() {
+    	
+    	return getDiscounts;
     	
     }
     

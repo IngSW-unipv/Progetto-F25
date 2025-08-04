@@ -20,7 +20,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
 
 public class ModificaAbbonamentoView extends JPanel implements IModificaAbbonamentoView {
@@ -235,7 +234,7 @@ public class ModificaAbbonamentoView extends JPanel implements IModificaAbboname
 	
 	//----------------------------------------------------------------
 	
-	private void labeledList (JPanel panel, String label, List<String> campoDTO ) {
+	private void makeLabeledList (JPanel panel, String label, List<String> campoDTO ) {
 		
 		panel.add(new JLabel (label));
 		panel.add(Box.createVerticalStrut(30));
@@ -278,15 +277,15 @@ public class ModificaAbbonamentoView extends JPanel implements IModificaAbboname
 	//----------------------------------------------------------------
 	
 	@Override
-	public void setLists(IDatiCliente abbDTO) {
+	public void setLists(List<String> sezioniAbbonamento, 
+						 List<String> corsiSelezionati) {
 		
 		listsPanel.removeAll();
 		
-		labeledList(listsPanel, "Componenti abbonamento selezionate: ", 
-				    abbDTO.getSezioniAbbonamento());
+		makeLabeledList(listsPanel, "Componenti abbonamento selezionate: ", 
+						sezioniAbbonamento);
 		
-		labeledList(listsPanel, "Corsi selezionati: ", 
-			    	abbDTO.getCorsiSelezionati());
+		makeLabeledList(listsPanel, "Corsi selezionati: ",corsiSelezionati);
 		
 		revalidate();
         repaint();

@@ -1,9 +1,5 @@
 package it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.Rettifica;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.ZoneId;
-
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -27,7 +23,10 @@ public class RettificaInfoController {
 	Runnable onSaveMods;
 	Runnable onInsData;
 	Runnable onAnnulla;
-	//Runnable onAvanti;
+	Runnable onAvanti;
+	
+	/*Flusso*/
+	private StatoFlussoRettifica statoCorrente = StatoFlussoRettifica.INIZIALE;
 	
 	//----------------------------------------------------------------
 	
@@ -37,6 +36,7 @@ public class RettificaInfoController {
 								   Runnable onSaveMods,
 								   Runnable onInsData,
 								   Runnable onAnnulla,
+								   Runnable onAvanti,
 								   IRettificaCoordinator coordinator) {
 		
 		this.rettInfo = rettInfo;
@@ -46,10 +46,12 @@ public class RettificaInfoController {
 		this.onSaveMods = onSaveMods;
 		this.onInsData = onInsData;
 		this.onAnnulla = onAnnulla;
+		this.onAvanti = onAvanti;
 		
 		this.coordinator = coordinator;
 		
 		impostaEventoAnulla();
+		impostaEventoAvanti();
 		impostaEventoEstrazione();
 		impostaEventiTextFields();
 		impostaEventoElimina();
@@ -69,6 +71,14 @@ public class RettificaInfoController {
 	
 	//----------------------------------------------------------------
 	
+	public void impostaEventoAvanti() {
+		
+		rettInfo.addAvantiListener(e -> {onAvanti.run();});
+		
+	}
+	
+	//----------------------------------------------------------------
+	
 	private void impostaEventoEstrazione() {
 		
 		rettInfo.addEstraiListenr(e -> {
@@ -76,41 +86,14 @@ public class RettificaInfoController {
 			coordinator.acquisisciCfCliente(rettInfo.getCodiceFiscale().getText().trim());
 
 			onEstrai.run();
-
-			setInfos();
 			
-			rettInfo.setEliminaEnabled(true);
-			rettInfo.setSaveModsEnabled(true);
+			statoCorrente = StatoFlussoRettifica.CLIENTE_ESTRATTO;
+			aggiornaEditabilitaCampi();
 			
         });
 		
 	}
 	
-	//----------------------------------------------------------------
-	
-    private void setInfos() {
-    	
-    	rettInfo.getNome().setText(coordinator.getDTO().getNome());
-    	rettInfo.getCognome().setText(coordinator.getDTO().getCognome());
-    	rettInfo.getContatto().setText(coordinator.getDTO().getContatto());
-    	rettInfo.getCfAnagrafico().setText(coordinator.getDTO().getCodiceFiscale());
-    	
-    	LocalDate date = coordinator.getDTO().getDataNascita();
-    	Date convertedDate = java.sql.Date.valueOf(date);
-    	rettInfo.getDateSpinner().setValue(convertedDate);
-    	
-    	if(coordinator.getDTO().getSesso().equals("M")) {
-    		
-    		rettInfo.getMaschio().setSelected(true);
-    		
-    	} else {
-    		
-    		rettInfo.getFemmina().setSelected(true);
-    		
-    	}
-    	
-    }
-    
 	//----------------------------------------------------------------
     
     private ICampoValidabile registraCampo(JTextField field, String regex) {
@@ -158,10 +141,9 @@ public class RettificaInfoController {
 	        
 	        if (result == JOptionPane.YES_OPTION) {
             
-                rettInfo.getCfAnagrafico().setEditable(true);
-                rettInfo.setInsDataEnabled(true);
-                rettInfo.setSaveModsEnabled(false);
-	        	
+	            statoCorrente = StatoFlussoRettifica.CLIENTE_ELIMINATO;
+	            aggiornaEditabilitaCampi();
+                	        	
                 try {
 
         	        onElimina.run();
@@ -185,38 +167,13 @@ public class RettificaInfoController {
     
     private void impostaEventoSaveMods() {
     	
-    	rettInfo.addSaveModsListener(e -> {
-    		
-    		boolean validitaCampi = coordinator.getValidatoreCampi().tuttiValidi();
-            System.out.println("ValiditaCampi: " + validitaCampi);
-    		
-            java.util.Date utilDate = (java.util.Date) rettInfo.
-            						   				   getDateSpinner().getValue();
-            LocalDate nascita = utilDate.toInstant().
-            					atZone(ZoneId.systemDefault()).toLocalDate();
-            
-                        
-            if(validitaCampi) {
-            
-	    		String sesso = rettInfo.getMaschio().isSelected() ? "Maschio" : "Femmina";
-	    		
-	    		coordinator.aggiornaDatiAnagrafici(rettInfo.getNome().getText().trim(), 
-	    										   rettInfo.getCognome().getText().trim(), 
-	    										   rettInfo.getContatto().getText().trim(), 
-	    										   sesso,nascita);
-	    			    			    		
-	    		onSaveMods.run();
-    		
-            
-            } else {
-
-                JOptionPane.showMessageDialog(rettInfo.getMainPanel(),
-                    "Per favore, compila correttamente tutti i campi (Verde = OK) "
-                    + "- per completare la procedura ",
-                    "Errore", JOptionPane.ERROR_MESSAGE);
-            }   		
-    	
-    	});
+	    	rettInfo.addSaveModsListener(e -> eseguiSeCampiValidi(() -> {
+	        	
+	            coordinator.aggiornaDatiAnagrafici(rettInfo.getDatiClienteRaw());
+	            onSaveMods.run();
+	            
+	        })
+	    );
     	
     }
     
@@ -224,43 +181,65 @@ public class RettificaInfoController {
     
     private void impostaEventoInsData() {
     	
-    	rettInfo.addInsDataListener(e -> {
-    		
-    		boolean validitaCampi = coordinator.getValidatoreCampi().tuttiValidi();
-            System.out.println("ValiditaCampi: " + validitaCampi);
-    		
-            java.util.Date utilDate = (java.util.Date) rettInfo.
-            						   				   getDateSpinner().getValue();
-            LocalDate nascita = utilDate.toInstant().
-            					atZone(ZoneId.systemDefault()).toLocalDate();
-            
-                        
-            if(validitaCampi) {
-            
-	    		String sesso = rettInfo.getMaschio().isSelected() ? "Maschio" : "Femmina";
-	    		
-	    		coordinator.acquisisciDatiAnagrafici(rettInfo.getNome().getText().trim(), 
-	    										     rettInfo.getCognome().getText().trim(),
-	    										     rettInfo.getCfAnagrafico().getText().trim(),
-	    										     rettInfo.getContatto().getText().trim(), 
-	    										     sesso,nascita);
-	    			    			    		
-	    		onInsData.run();
-    		
-            
-            } else {
-
-                JOptionPane.showMessageDialog(rettInfo.getMainPanel(),
-                    "Per favore, compila correttamente tutti i campi (Verde = OK) "
-                    + "- per completare la procedura ",
-                    "Errore", JOptionPane.ERROR_MESSAGE);
-            }   		
-    	
-    	});
-    	
+        rettInfo.addInsDataListener(e -> eseguiSeCampiValidi(() -> {
+        	
+                coordinator.acquisisciDatiAnagrafici(rettInfo.getDatiClienteRaw());
+                onInsData.run();
+                
+            })
+        );
     }
     
     //----------------------------------------------------------------
+    
+    private void eseguiSeCampiValidi(Runnable eseguiAzione) {
+    	
+        boolean validitaCampi = coordinator.getValidatoreCampi().tuttiValidi();
+        System.out.println("ValiditaCampi: " + validitaCampi);
+
+        if (validitaCampi) {
+        	
+            eseguiAzione.run();
+            
+        } else {
+        	
+            JOptionPane.showMessageDialog(
+                rettInfo.getMainPanel(),
+                "Per favore, compila correttamente tutti i campi (Verde = OK) "
+                + "- per completare la procedura ",
+                "Errore", JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+    
+    //----------------------------------------------------------------
+    
+    private void aggiornaEditabilitaCampi() {
+    	
+        switch (statoCorrente) {
+        
+            case CLIENTE_ESTRATTO:
+                rettInfo.getCfAnagrafico().setEditable(false);
+                rettInfo.setInsDataEnabled(false);
+                break;
+                
+            case CLIENTE_ELIMINATO:
+                rettInfo.getCfAnagrafico().setEditable(true);
+                rettInfo.setInsDataEnabled(true);
+                rettInfo.setSaveModsEnabled(false);
+                break;
+                
+            default:
+                rettInfo.getCfAnagrafico().setEditable(true);
+                rettInfo.setInsDataEnabled(false);
+                break;
+                
+        }
+        
+    }
+    
+    //----------------------------------------------------------------
+
 
 	
 }

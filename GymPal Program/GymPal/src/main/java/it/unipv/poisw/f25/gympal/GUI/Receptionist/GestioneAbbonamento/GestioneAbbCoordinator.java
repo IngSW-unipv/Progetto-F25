@@ -6,14 +6,15 @@ import javax.swing.JOptionPane;
 
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.IStrategieCalcoloPrezzoFactory;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.IStrategieCalcoloPrezzo;
-import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.FromDB.IRetrieveClientFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.RemoveClient.IDeleteClientFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.UpdateClient.IUpdateClientInsideDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveClient.IRetrieveClientFromDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveOccasionsDiscounts.IRetrieveDiscountsFromDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.RemoveClient.IDeleteClientFromDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.UpdateClient.IUpdateClientInsideDB;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
+import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.MasterDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.IReceptionistController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.DTOHandlerGestione;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.IRecuperoDatiView;
@@ -25,16 +26,17 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDa
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.ModificaAbbCliente.IModificaAbbonamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.ModificaAbbCliente.ModificaAbbonamentoController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.ModificaAbbCliente.ModificaAbbonamentoView;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.ModAbbContract.IModAbbContract;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.IRiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.ICoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.DTOBuilder.MasterDTO;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.EtichettaPiuCampoFactory;
+import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 
-public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordinator{
+public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordinator, IModAbbContract{
 	
 	private String schermataPreRinnovo;
 	private IReceptionistController viewHandler;
@@ -48,11 +50,11 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
     /*Servizi*/
     private ICampoValidabileFactory campoValidabileFactory;
     private IValidatoreCampi validatoreCampi;
-    private IRetrieveClientFromDB veicoloDati;
-    private IDeleteClientFromDB headHunter;
+    private IRetrieveClientFromDB retrieveDBData;
+    private IDeleteClientFromDB removeDBData;
     private IStrategieCalcoloPrezzoFactory prezzoFactory;
-    private IUpdateClientInsideDB updateClient;
-    
+    private IUpdateClientInsideDB updateDBData;
+    private IRetrieveDiscountsFromDB getDiscounts;
     
     private MasterDTO abbDTO;
     private DTOHandlerGestione costruttoreDTOHelper;
@@ -65,16 +67,20 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 								  IRetrieveClientFromDB veicoloDati,
 								  IDeleteClientFromDB headHunter,
 								  IStrategieCalcoloPrezzoFactory prezzoFactory,
-								  IUpdateClientInsideDB updateClient) {
+								  IUpdateClientInsideDB updateClient,
+								  IRetrieveDiscountsFromDB getDiscounts) {
 		
+		/*Servizi*/
 		this.viewHandler = viewHandler;
     	this.campoValidabileFactory = campovalidabileFactory;
     	this.validatoreCampi = validatoreCampi;
-    	this.veicoloDati = veicoloDati;
-    	this.headHunter = headHunter;
+    	this.retrieveDBData = veicoloDati;
+    	this.removeDBData = headHunter;
     	this.prezzoFactory = prezzoFactory;
-    	this.updateClient = updateClient;
+    	this.updateDBData = updateClient;
+    	this.getDiscounts = getDiscounts;
 		
+    	/*Navigazione GUI*/
 		inizializzaCicloGestione();
 		
 	}
@@ -124,7 +130,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 				//OnEstrai
 				() -> {
 					
-					veicoloDati.retrieve(abbDTO);
+					retrieveDBData.retrieve(abbDTO);
 					
 					
 				},
@@ -150,7 +156,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 	                    () -> {
 	                    	
 	                    	/*Qui è chiamato il metodo che passa i dati al service-layer*/
-	                    	updateClient.update(abbDTO);
+	                    	updateDBData.update(abbDTO);
 	                    	
 	                    	inizializzaCicloGestione();
 	                        viewHandler.mostraSchermata("SCHERMATA0");
@@ -213,7 +219,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 									  () -> {
 										  
 										  	
-										    boolean esito = headHunter.huntAndKill(abbDTO);
+										    boolean esito = removeDBData.huntAndKill(abbDTO);
 										    
 										    if (esito) {
 										    	
@@ -283,7 +289,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 	                    () -> {
 	                    	
 	                    	/*Qui è chiamato il metodo che passa i dati al service-layer*/
-	                    	updateClient.update(abbDTO);
+	                    	updateDBData.update(abbDTO);
 	                    	
 	                    	inizializzaCicloGestione();
 	                        viewHandler.mostraSchermata("SCHERMATA0");
@@ -340,15 +346,6 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
     //----------------------------------------------------------------
     
     @Override
-    public IDatiCliente getDTO() {
-    	
-    	return abbDTO;
-    	
-    }
-    
-    //----------------------------------------------------------------
-    
-    @Override
     public void acquisisciMetodoPagamento (MetodoPagamento metodoPagamento) {
     	
     	costruttoreDTOHelper.impostaMetodoPagamento(metodoPagamento);
@@ -357,19 +354,50 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
     
    //----------------------------------------------------------------
     
+    
     @Override
-    public void acquisisciScontiEDurata(boolean scontoEta, boolean scontoOccasioni,
-			DurataAbbonamento durataAbbonamento) {
-
-    	costruttoreDTOHelper.impostaScontiEDurata(scontoEta, scontoOccasioni,
-					  							  durataAbbonamento);
-
-	}
+    public void acquisisciScontoEta(boolean scontoEta) {
+    	
+    	costruttoreDTOHelper.impostaScontoEta(scontoEta);
+    	
+    }
+    
+    @Override
+    public void acquisisciScontoOccasioni(boolean scontoOccasioni) {
+    	
+    	costruttoreDTOHelper.impostaScontoOccasioni(scontoOccasioni);
+    	
+    }
+    
+    @Override
+    public void acquisisciDurataAbbonamento(DurataAbbonamento durataAbbonamento) {
+    	
+    	costruttoreDTOHelper.impostaDurataAbbonamento(durataAbbonamento);
+    	
+    }
 	
 	//---------------------------------------------------------------- 
     
     @Override
-    public double getDiscountedPrice(ICalcolaPrezzo abbDTO) {
+    public void acquisisciScontiOccasioneSelezionati(List<Sconto> scontiOccasioneSelezionati) {
+    	
+    	costruttoreDTOHelper.inizializzaListaScontiOccasione(scontiOccasioneSelezionati);
+    	
+    }
+    
+    //---------------------------------------------------------------- 
+    
+    @Override
+    public IRetrieveDiscountsFromDB getScontiOccasioni() {
+    	
+    	return getDiscounts;
+    	
+    }
+    
+   //----------------------------------------------------------------
+    
+    @Override
+    public double getDiscountedPrice() {
 
     	
     	IStrategieCalcoloPrezzo strategia = prezzoFactory.getStrategy(abbDTO);
@@ -388,6 +416,52 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
     	costruttoreDTOHelper.composizioneAbbonamento(sezioniSelezionate, corsiSelezionati);
     	
     }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public String esponiDurataAbbonamento() {
+    	
+    	return abbDTO.getDurataAbbonamento().toString();
+    	
+    }
+    
+    //---------------------------------------------------------------- 
+    
+    @Override
+    public IDatiCliente getDTO() {
+    	
+    	return abbDTO;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public List<String> retrieveSezioniAbbonamento(){
+    	
+    	return costruttoreDTOHelper.getSezioniAbbonamento();
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public List<String> retrieveCorsiSelezionati(){
+    	
+    	return costruttoreDTOHelper.getCorsiSelezionati();
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public void annullaModsCompAbbonamento() {
+    	
+    	costruttoreDTOHelper.ripristinaListe();
+    	
+    }
+    
     
     //----------------------------------------------------------------
     

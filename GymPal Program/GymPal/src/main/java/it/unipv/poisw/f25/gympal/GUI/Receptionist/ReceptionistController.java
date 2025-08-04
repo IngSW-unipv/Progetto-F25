@@ -2,7 +2,6 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist;
 import javax.swing.JPanel;
 
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.RegistrationServicesBundle;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneAbbonamento.GestioneServicesBundle;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.CommonServicesBundle;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
@@ -17,7 +16,7 @@ public class ReceptionistController implements IReceptionistController {
     private String schermataPreLogout = "SCHERMATA0";
 	
 	/*Viste*/
-    private final IReceptionistDashboardView recDashView;
+    private final IDashboard recDashView;
     private LogoutConfirmationView logoutView;
 
 
@@ -31,9 +30,8 @@ public class ReceptionistController implements IReceptionistController {
 
     //----------------------------------------------------------------
 
-    public ReceptionistController(IReceptionistDashboardView view,
+    public ReceptionistController(IDashboard view,
             					  RegistrationServicesBundle serviziReg,
-            					  GestioneServicesBundle serviziGes,
             					  CommonServicesBundle serviziComuni) {
     	
         recDashView = view;
@@ -63,7 +61,8 @@ public class ReceptionistController implements IReceptionistController {
         																	  this.serviziReg.getValidatoreCampi(),
         																	  this.serviziReg.getControlloRequisiti(),
         																	  this.serviziComuni.getPrezzoFactory(),
-        																	  this.serviziComuni.getImmettiDati());
+        																	  this.serviziComuni.getImmettiDati(),
+        																	  this.serviziComuni.getDiscounts());
         
         
         gestoreAbb = new GestioneAbbCoordinator(this,
@@ -72,7 +71,8 @@ public class ReceptionistController implements IReceptionistController {
 								        		this.serviziComuni.getRecuperaDati(),
 								        		this.serviziComuni.getHeadHunter(),
 								        		this.serviziComuni.getPrezzoFactory(),
-								        		this.serviziComuni.getUpdater());
+								        		this.serviziComuni.getUpdater(),
+								        		this.serviziComuni.getDiscounts());
         
     }
 

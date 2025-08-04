@@ -1,9 +1,10 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist;
 
+import javax.swing.JPanel;
 
 public interface IReceptionistDashboardView {
 	
-    /* Registra un'azione associata a un comando identificato da nomeComando */
+    /* Registra un'azione associata ad un comando identificato da nomeComando */
 	public void aggiungiComando(String nomeComando, Runnable azione);
 	
 	//----------------------------------------------------------------
@@ -14,7 +15,7 @@ public interface IReceptionistDashboardView {
 	//----------------------------------------------------------------
 
     /* Registra una nuova schermata (opzionale, se usi schermate dinamiche) */
-	public void registraSchermata(String nome, javax.swing.JPanel schermata);
+	public void registraSchermata(String nome, JPanel schermata);
 	
 	//----------------------------------------------------------------
     

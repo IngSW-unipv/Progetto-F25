@@ -5,6 +5,7 @@ import java.util.List;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 
 public class DTOHandlerGestione {
 	
@@ -39,13 +40,30 @@ public class DTOHandlerGestione {
 
 	//----------------------------------------------------------------
 	
-	public void impostaScontiEDurata(boolean scontoEta, boolean scontoOccasioni,
-		     						 DurataAbbonamento durataAbbonamento) {
-
+	public void impostaScontoEta(boolean scontoEta) {
+		
 		abbDTO.setScontoEta(scontoEta);
-		abbDTO.setScontoOccasioni(scontoOccasioni);
-		abbDTO.setDurataAbbonamento(durataAbbonamento);
+		
+	}
 	
+	public void impostaScontoOccasioni(boolean scontoOccasioni) {
+		
+		abbDTO.setScontoOccasioni(scontoOccasioni);
+		
+	}
+	
+	public void impostaDurataAbbonamento(DurataAbbonamento durataAbbonamento) {
+		
+		abbDTO.setDurataAbbonamento(durataAbbonamento);
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public void inizializzaListaScontiOccasione(List<Sconto> scontiOccasioneSelezionati) {
+		
+		abbDTO.setScontiOccasioneSelezionati(scontiOccasioneSelezionati);
+		
 	}
 	
 	//----------------------------------------------------------------
@@ -58,6 +76,32 @@ public class DTOHandlerGestione {
 		abbDTO.setStatoPagamento(metodoPagamento != MetodoPagamento.NESSUNO);
 		
 	}
+	
+	//----------------------------------------------------------------
+	
+	public List<String> getSezioniAbbonamento(){
+		
+		return abbDTO.getSezioniAbbonamento();
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public List<String> getCorsiSelezionati(){
+		
+		return abbDTO.getCorsiSelezionati();
+		
+	}
+	
+	
+	//----------------------------------------------------------------
+	
+	public void ripristinaListe() {
+		
+		abbDTO.ripristinaStatoIniziale();
+		
+	}
+	
 	
 	//----------------------------------------------------------------
 

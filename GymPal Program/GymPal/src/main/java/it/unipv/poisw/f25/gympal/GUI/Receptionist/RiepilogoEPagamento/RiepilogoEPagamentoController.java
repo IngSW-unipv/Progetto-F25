@@ -1,21 +1,24 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
+import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.IDatiClienteReadOnly;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.ICoordinator;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.Popups.PopupScontiOccasione;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
+import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 
 public class RiepilogoEPagamentoController {
     
     private IRiepilogoEPagamentoView riepilogoEPagamento;
     private ICoordinator coordinator;
-    
-    private IDatiCliente abbonamentoDTO;
     
     private Runnable onIndietro;
     private Runnable onConferma;
@@ -33,8 +36,6 @@ public class RiepilogoEPagamentoController {
         
         riepilogoEPagamento = view;
         this.coordinator= coordinator;
-        this.abbonamentoDTO = coordinator.getDTO();
-        
         
         onIndietro = onIndietroCallback;
         onConferma = onConfermaCallback;
@@ -102,7 +103,8 @@ public class RiepilogoEPagamentoController {
         riepilogoEPagamento.addAvvioPagamentoListener(e -> {
             /*Questa istruzione rintraccia il componente grafico principale, e lo assegna al
              *riferimento "framePadre"*/
-            JFrame framePadre = (JFrame) javax.swing.SwingUtilities.getWindowAncestor((java.awt.Component) e.getSource());
+            JFrame framePadre = (JFrame) javax.swing.SwingUtilities.
+            					getWindowAncestor((java.awt.Component) e.getSource());
             
             /*Il popup con la barra di caricamento è creato ed ancorato al frame ricavato 
              *dall'istruzione precedente*/
@@ -172,8 +174,47 @@ public class RiepilogoEPagamentoController {
         riepilogoEPagamento.addScontoEtaListener(e -> {aggiornaScontiEDurata(); 
         											   aggiornaPrezzo();});
         
-        riepilogoEPagamento.addScontoOccasioniListener(e -> {aggiornaScontiEDurata(); 
-        													 aggiornaPrezzo();});
+        riepilogoEPagamento.addScontoOccasioniCheckboxListener(e -> {
+        	
+            boolean scontoOccasioni = riepilogoEPagamento.isScontoOccasioniSelected();
+            
+            riepilogoEPagamento.setScontoOccasioniButtonEnabled(scontoOccasioni);
+            
+            if (!scontoOccasioni) {
+            	
+                coordinator.acquisisciScontiOccasioneSelezionati(Collections.emptyList());
+                
+            }
+            
+            aggiornaPrezzo();
+            
+        });
+        
+        riepilogoEPagamento.addScontoOccasioniListener(e -> {
+        	
+            if (!riepilogoEPagamento.isScontoOccasioniSelected()) {return;}
+        	
+        	List<Sconto> sconti = coordinator.getScontiOccasioni().
+        									  retrieveAllDiscounts();
+        	
+            SwingUtilities.invokeLater(() -> {
+                new PopupScontiOccasione(sconti, scontiSelezionati -> {
+                    
+                    coordinator.acquisisciScontiOccasioneSelezionati(scontiSelezionati); 
+                    aggiornaPrezzo(); 
+
+                });
+                
+                
+            });
+            
+        	aggiornaScontiEDurata(); 
+        	aggiornaPrezzo();
+        
+        
+        });
+        
+        
     	
     }
     
@@ -224,9 +265,10 @@ public class RiepilogoEPagamentoController {
     	        
     	}
     	
-    	coordinator.acquisisciScontiEDurata(riepilogoEPagamento.isScontoEtaSelected(), 
-    										riepilogoEPagamento.isScontoOccasioniSelected(),
-    										durataEnum);
+	
+    	coordinator.acquisisciScontoEta(riepilogoEPagamento.isScontoEtaSelected());
+    	coordinator.acquisisciScontoOccasioni(riepilogoEPagamento.isScontoOccasioniSelected());
+    	coordinator.acquisisciDurataAbbonamento(durataEnum);
     	
     }
     
@@ -236,7 +278,7 @@ public class RiepilogoEPagamentoController {
 
         
         riepilogoEPagamento.setPrezzoTotale(coordinator.
-        									getDiscountedPrice((ICalcolaPrezzo)abbonamentoDTO));
+        									getDiscountedPrice());
         
     }
 
@@ -244,9 +286,10 @@ public class RiepilogoEPagamentoController {
     
     private void impostaMensPreEsist() {
     	
-    	if(abbonamentoDTO.getDurataAbbonamento() != null) {
+    	if(coordinator.getDTO().getDurataAbbonamento() != null) {
     		
-    		riepilogoEPagamento.setScontoSuBaseMesiText(abbonamentoDTO.getDurataAbbonamento().toString());
+    		riepilogoEPagamento.setScontoSuBaseMesiText(coordinator.
+    													esponiDurataAbbonamento());
     		
     	}
     	
@@ -258,7 +301,8 @@ public class RiepilogoEPagamentoController {
     	
         /*Inizializzazione della view "RiepilogoEPagamento" con i dati acquisiti durante la
          *procedura di iscrizione*/
-        riepilogoEPagamento.setDatiAbbonamento(abbonamentoDTO);
+        riepilogoEPagamento.setDatiAbbonamento((IDatiClienteReadOnly) 
+        										coordinator.getDTO());
         
         /*Tasto "Conferma" disabilitato fintanto che una opzione di pagamento non è
          *selezionata.*/

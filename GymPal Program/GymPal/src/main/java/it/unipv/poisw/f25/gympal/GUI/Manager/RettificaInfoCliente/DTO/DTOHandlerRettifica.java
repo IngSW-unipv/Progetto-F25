@@ -1,8 +1,9 @@
 package it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.DTO;
 
-import java.time.LocalDate;
+import java.util.List;
 
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DataFerry.RawClientData;
 
 public class DTOHandlerRettifica {
 	
@@ -18,31 +19,28 @@ public class DTOHandlerRettifica {
 	
 	//----------------------------------------------------------------
 	
-	public void impostaDatiAnagrafici(String nome, String cognome, String codiceFiscale,
-									  String contatto, String sesso,
-									  LocalDate dataNascita) {
+	public void impostaDatiAnagrafici(RawClientData raw) {
 
-		abbDTO.setNome(nome);
-		abbDTO.setCognome(cognome);
-		abbDTO.setCodiceFiscale(codiceFiscale);
-		abbDTO.setContatto(contatto);
-		abbDTO.setSesso(sesso);
+		abbDTO.setNome(raw.nome);
+		abbDTO.setCognome(raw.cognome);
+		abbDTO.setCodiceFiscale(raw.codiceFiscale);
+		abbDTO.setContatto(raw.contatto);
+		abbDTO.setSesso(raw.sesso);
 		
-		abbDTO.setDataNascita(dataNascita);
+		abbDTO.setDataNascita(raw.dataNascita);
 
 	}
 	
 	//----------------------------------------------------------------
 	
-	public void aggiornaDatiAnagrafici(String nome, String cognome,String contatto, 
-									   String sesso,LocalDate dataNascita) {
+	public void aggiornaDatiAnagrafici(RawClientData raw) {
 		
-		abbDTO.setNome(nome);
-		abbDTO.setCognome(cognome);
-		abbDTO.setContatto(contatto);
-		abbDTO.setSesso(sesso);
+		abbDTO.setNome(raw.nome);
+		abbDTO.setCognome(raw.cognome);
+		abbDTO.setContatto(raw.contatto);
+		abbDTO.setSesso(raw.sesso);
 		
-		abbDTO.setDataNascita(dataNascita);
+		abbDTO.setDataNascita(raw.dataNascita);
 		
 	}
 	
@@ -53,6 +51,43 @@ public class DTOHandlerRettifica {
 		abbDTO.setCodiceFiscale(cf);
 				
 	}
+	
+	//----------------------------------------------------------------
+	
+	public void composizioneAbbonamento(List<String> sezioniSelezionate,
+									    List<String> corsiSelezionati) {
+
+
+		abbDTO.setSezioniAbbonamento(sezioniSelezionate);
+		abbDTO.setCorsiSelezionati(corsiSelezionati);		
+	
+	}
+
+	//----------------------------------------------------------------
+	
+	public List<String> getSezioniAbbonamento(){
+		
+		return abbDTO.getSezioniAbbonamento();
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	public List<String> getCorsiSelezionati(){
+		
+		return abbDTO.getCorsiSelezionati();
+		
+	}
+	
+	
+	//----------------------------------------------------------------
+	
+	public void ripristinaListe() {
+		
+		abbDTO.ripristinaStatoIniziale();
+		
+	}
+	
 	
 	//----------------------------------------------------------------
 

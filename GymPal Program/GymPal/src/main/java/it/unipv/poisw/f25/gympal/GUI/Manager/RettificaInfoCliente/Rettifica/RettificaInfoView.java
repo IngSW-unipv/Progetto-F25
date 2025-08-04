@@ -1,6 +1,9 @@
 package it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.Rettifica;
 
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -17,6 +20,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeListener;
 
+import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.IDatiClienteReadOnly;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DataFerry.RawClientData;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.IEtichettaPiuCampoFactory;
 
@@ -319,6 +324,51 @@ public class RettificaInfoView extends JPanel implements IRettificaInfoView{
 	}
 	
 	//----------------------------------------------------------------
+	
+	@Override
+	public void setTextFieldsContent(IDatiClienteReadOnly abbDTO) {
+		
+		nome.setText(abbDTO.getNome());
+		cognome.setText(abbDTO.getCognome());
+		contatto.setText(abbDTO.getContatto());
+		cfAnagrafico.setText(abbDTO.getCodiceFiscale());
+		
+		LocalDate date = abbDTO.getDataNascita();
+    	Date convertedDate = java.sql.Date.valueOf(date);
+    	dateSpinner.setValue(convertedDate);
+		
+    	if("M".equals(abbDTO.getSesso())) {
+    		
+    		maschio.setSelected(true);
+    		
+    	} else {
+    		
+    		femmina.setSelected(true);
+    		
+    	}
+    	
+	}
+	
+	//----------------------------------------------------------------
+	
+	@Override
+	public RawClientData getDatiClienteRaw() {
+		
+	    String name = nome.getText();
+	    String surname = cognome.getText();
+	    String fiscalCode = cfAnagrafico.getText(); //codiceFiscale.getText();
+	    String contact = contatto.getText();
+	    String sesso = maschio.isSelected() ? "M" : "F";
+	    java.util.Date utilDate = (java.util.Date) dateSpinner.getValue();
+	    LocalDate dataNascita = utilDate.toInstant()
+	                                    .atZone(ZoneId.systemDefault())
+	                                    .toLocalDate();
+
+	    return new RawClientData(name, surname, fiscalCode, 
+	    						 contact, sesso, dataNascita);
+	}
+	
+	//----------------------------------------------------------------
 
 	@Override
 	public JTextField getCodiceFiscale() {
@@ -366,19 +416,19 @@ public class RettificaInfoView extends JPanel implements IRettificaInfoView{
 	//----------------------------------------------------------------
 	
 	@Override
-	public void addDateSpinnerListener(ChangeListener listener) {
-		
-		dateSpinner.addChangeListener(listener);
-		
-	}
-	
-	@Override
 	public JSpinner getDateSpinner() {
 		
 		return dateSpinner;
 		
 	}
 	
+	@Override
+	public void addDateSpinnerListener(ChangeListener listener) {
+		
+		dateSpinner.addChangeListener(listener);
+		
+	}
+
 	//----------------------------------------------------------------
 	
 	@Override

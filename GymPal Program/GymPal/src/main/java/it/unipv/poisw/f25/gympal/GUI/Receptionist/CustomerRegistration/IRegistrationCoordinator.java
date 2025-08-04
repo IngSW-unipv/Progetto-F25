@@ -3,8 +3,6 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration;
 import java.time.LocalDate;
 import java.util.List;
 
-import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
-import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
@@ -28,10 +26,6 @@ public interface IRegistrationCoordinator {
 	
 	//----------------------------------------------------------------
 	
-	//public void acquisisciStatoPagamento(boolean statoPagamento);
-	
-	//----------------------------------------------------------------
-	
 	public boolean isMinorenne(LocalDate dataNascita);
 	
 	//----------------------------------------------------------------
@@ -48,16 +42,7 @@ public interface IRegistrationCoordinator {
 	
 	//----------------------------------------------------------------
 	
-	public double getDiscountedPrice(ICalcolaPrezzo abbonamentoDTO);
-	
-	//----------------------------------------------------------------
-	
 	public void acquisisciMetodoPagamento (MetodoPagamento metodoPagamento);
-	
-	//----------------------------------------------------------------
-	
-	public void acquisisciScontiEDurata(boolean scontoEta, boolean scontoOccasioni,
-										DurataAbbonamento durataAbbonamento);
 	
 	//----------------------------------------------------------------
 	

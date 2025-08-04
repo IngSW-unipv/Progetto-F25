@@ -10,6 +10,7 @@ import java.time.Period;
 import java.util.Properties;
 
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.IStrategieCalcoloPrezzo;
+import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.ScontiOccasioneStrategy;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 
@@ -55,21 +56,21 @@ public class StrategieCalcoloPrezzoFactory implements IStrategieCalcoloPrezzoFac
 	//----------------------------------------------------------------
     
     @Override
-    public IStrategieCalcoloPrezzo getStrategy(ICalcolaPrezzo abbonamentoDTO) {
+    public IStrategieCalcoloPrezzo getStrategy(ICalcolaPrezzo abbDTO) {
     	
     	    IStrategieCalcoloPrezzo strategiaBase;
 
     	    // Strategia base: età oppure standard
     	    
-    	    boolean scontoEta = abbonamentoDTO.getScontoEta();
-    	    boolean scontoOccasioni = abbonamentoDTO.getScontoOccasioni();
-    	    DurataAbbonamento durata = abbonamentoDTO.getDurataAbbonamento();
+    	    boolean scontoEta = abbDTO.getScontoEta();
+    	    //boolean scontoOccasioni = abbDTO.getScontoOccasioni();
+    	    DurataAbbonamento durata = abbDTO.getDurataAbbonamento();
     	    
     	    String chiave = "strategia.standard";
     	    
-    	    int eta = abbonamentoDTO.getDataNascita() != null
+    	    int eta = abbDTO.getDataNascita() != null
     	    		
-    	        ? Period.between(abbonamentoDTO.getDataNascita(), LocalDate.now()).getYears()
+    	        ? Period.between(abbDTO.getDataNascita(), LocalDate.now()).getYears()
     	        : -1;
 
     	    //Se scatta la "if", la variabile "chiave" è sovrascritta
@@ -98,10 +99,13 @@ public class StrategieCalcoloPrezzoFactory implements IStrategieCalcoloPrezzoFac
     	        
     	    }
 
-    	    /* Wrapper con strategia occasioni (basato su reflection, come il resto)
-    	    if (scontoOccasioni) {
-    	        strategiaBase = ... Lasciato in sospeso, per ora
-    	    }*/
+    	   // Wrapper con strategia occasioni
+    	   if (abbDTO.getScontiOccasioneSelezionati() != null 
+    	            && !abbDTO.getScontiOccasioneSelezionati().isEmpty()) {
+    	        
+    	        strategiaBase = new ScontiOccasioneStrategy(strategiaBase);
+    	        
+    	    }
 
     	    
     	    // Wrapper con strategia durata

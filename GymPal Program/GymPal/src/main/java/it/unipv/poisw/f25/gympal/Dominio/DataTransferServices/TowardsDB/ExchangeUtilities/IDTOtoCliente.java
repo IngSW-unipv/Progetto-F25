@@ -1,0 +1,10 @@
+package it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.ExchangeUtilities;
+
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
+
+public interface IDTOtoCliente {
+	
+	public Cliente extractAndInsert(IDatiCliente abbDTO);
+
+}

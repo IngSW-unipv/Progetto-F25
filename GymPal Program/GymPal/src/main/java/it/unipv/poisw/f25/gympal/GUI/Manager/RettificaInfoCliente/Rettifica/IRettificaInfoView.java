@@ -8,6 +8,9 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeListener;
 
+import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.IDatiClienteReadOnly;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DataFerry.RawClientData;
+
 public interface IRettificaInfoView {
 	
 	public JTextField getCodiceFiscale();
@@ -83,6 +86,14 @@ public interface IRettificaInfoView {
 	//----------------------------------------------------------------
 	
 	public void setInsDataEnabled(boolean enabled);
+	
+	//----------------------------------------------------------------
+	
+	public void setTextFieldsContent(IDatiClienteReadOnly abbDTO);
+	
+	//----------------------------------------------------------------
+	
+	public RawClientData getDatiClienteRaw();
 	
 	//----------------------------------------------------------------
 	

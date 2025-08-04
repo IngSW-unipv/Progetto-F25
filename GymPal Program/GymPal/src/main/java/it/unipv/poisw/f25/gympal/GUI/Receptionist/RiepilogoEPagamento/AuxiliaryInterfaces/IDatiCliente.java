@@ -5,6 +5,7 @@ import java.util.List;
 
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
+import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 
 public interface IDatiCliente {
 	
@@ -126,6 +127,10 @@ public interface IDatiCliente {
 	public void ripristinaStatoIniziale();
 	
     //----------------------------------------------------------------	
+	
+	public void setScontiOccasioneSelezionati(List<Sconto> scontiOccasioneSelezionati);
+    
+	//----------------------------------------------------------------
 	
 
 }

@@ -14,7 +14,7 @@ public class ManagerController implements IManagerController{
 	private String schermataPreLogout = "SCHERMATA0";
 	
 	/*Viste*/
-    private final IManagerDashboardView manDashView;
+    private final IDashboard manDashView;
     private LogoutConfirmationView logoutView;
     
     /*Servizi*/
@@ -25,7 +25,7 @@ public class ManagerController implements IManagerController{
     
     //----------------------------------------------------------------
     
-    public ManagerController(IManagerDashboardView view,
+    public ManagerController(IDashboard view,
     						 CommonServicesBundle serviziComuni) {
     	
     	/*Dashboard*/

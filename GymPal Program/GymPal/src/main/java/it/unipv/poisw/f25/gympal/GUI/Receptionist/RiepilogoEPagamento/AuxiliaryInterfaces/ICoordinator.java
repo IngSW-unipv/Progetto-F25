@@ -1,8 +1,11 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces;
 
-import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
+import java.util.List;
+
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveOccasionsDiscounts.IRetrieveDiscountsFromDB;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
+import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 
 public interface ICoordinator {
 	
@@ -15,13 +18,28 @@ public interface ICoordinator {
 	public void acquisisciMetodoPagamento (MetodoPagamento metodoPagamento);
 	
     //----------------------------------------------------------------
-	
-    public void acquisisciScontiEDurata(boolean scontoEta, boolean scontoOccasioni,
-										DurataAbbonamento durataAbbonamento);
+    
+    public void acquisisciScontoEta(boolean scontoEta);
+    
+    public void acquisisciScontoOccasioni(boolean scontoOccasioni);
+    
+    public void acquisisciDurataAbbonamento(DurataAbbonamento durataAbbonamento);
     
     //----------------------------------------------------------------
     
-    public double getDiscountedPrice(ICalcolaPrezzo abbonamentoDTO);
+    public void acquisisciScontiOccasioneSelezionati(List<Sconto> scontiOccasioneSelezionati);
+    
+    //----------------------------------------------------------------
+    
+    public double getDiscountedPrice();
+    
+    //----------------------------------------------------------------
+    
+    public IRetrieveDiscountsFromDB getScontiOccasioni();
+    
+    //----------------------------------------------------------------
+    
+    public String esponiDurataAbbonamento();
     
     //----------------------------------------------------------------
 

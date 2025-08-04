@@ -9,7 +9,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.IGestioneAbbCoordinator;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.ModAbbContract.IModAbbContract;
 
 public class ModificaAbbonamentoController {
 	
@@ -17,7 +17,7 @@ public class ModificaAbbonamentoController {
 	private IModificaAbbonamentoView modAbbView;
 	
 	/*Coordinatore*/
-	IGestioneAbbCoordinator coordinator;
+	IModAbbContract coordinator;
 	
 	/*CallBacks*/
 	private Runnable onAnnulla;
@@ -30,7 +30,7 @@ public class ModificaAbbonamentoController {
 										 Runnable onAnnulla,
 										 Runnable onIndietro,
 										 Runnable onAvanti,
-										 IGestioneAbbCoordinator coordinator) {
+										 IModAbbContract coordinator) {
 		
 		this.modAbbView = modAbbView;
 		this.coordinator = coordinator;
@@ -174,7 +174,8 @@ public class ModificaAbbonamentoController {
 		modAbbView.addConfermaListener(e -> {
             
 			aggiornaDTO();
-			modAbbView.setLists(coordinator.getDTO());
+			modAbbView.setLists(coordinator.retrieveSezioniAbbonamento(),
+								coordinator.retrieveCorsiSelezionati());
             
         });
 		
@@ -186,8 +187,9 @@ public class ModificaAbbonamentoController {
 		
 		modAbbView.addResettaListener(e -> {
             
-			coordinator.getDTO().ripristinaStatoIniziale();
-			modAbbView.setLists(coordinator.getDTO());
+			coordinator.annullaModsCompAbbonamento();
+			modAbbView.setLists(coordinator.retrieveSezioniAbbonamento(),
+								coordinator.retrieveCorsiSelezionati());
 			
         });
 		
@@ -241,7 +243,8 @@ public class ModificaAbbonamentoController {
 	
 	//----------------------------------------------------------------
 	
-	private void viewInit() {modAbbView.setLists(coordinator.getDTO());}
+	private void viewInit() {modAbbView.setLists(coordinator.retrieveSezioniAbbonamento(),
+												 coordinator.retrieveCorsiSelezionati());}
 	
 	//----------------------------------------------------------------
 	

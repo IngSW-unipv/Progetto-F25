@@ -26,7 +26,7 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.IDatiClienteReadOnly;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
 
 public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagamentoView{
@@ -34,17 +34,17 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	private static final long serialVersionUID = 1L;
 	
 	private JSplitPane mainSplitPanel;
+	private JSplitPane mainBottomSplitPanel;
+	private JSplitPane secondSplitPanel; //Il pannello superiore coincide con "mainSplitPanel"
+	
 	private JPanel mainUpperPanel;
 	private JPanel mainBottomLeftPanel; //Qui finisce il riepilogo
 	private JPanel mainBottomRightPanel; //Opzioni per la factory che calcola i prezzi
-	
-	private JSplitPane mainBottomSplitPanel;
-	
-	private JSplitPane secondSplitPanel; //Il pannello superiore coincide con "mainSplitPanel"
 	private JPanel navigationPanel; //Qui finisce il pannello con il bottone "Intrietro"
 	
 	private JCheckBox scontoEtaCheckBox;
 	private JCheckBox scontoOccasioniCheckBox;
+	private JButton scontoOccasioniBtn;
 	
 	private JRadioButton carta;
 	private JRadioButton contanti;
@@ -147,8 +147,23 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
         scontoEtaCheckBox = new JCheckBox("Applica sconto età");
         mainBottomRightPanel.add(scontoEtaCheckBox);
         
+        JPanel scontoOccasioniPanel = new JPanel();
+        scontoOccasioniPanel.setLayout(new BoxLayout(scontoOccasioniPanel,
+        								   BoxLayout.Y_AXIS));
+        
         scontoOccasioniCheckBox = new JCheckBox("Applica sconto occasioni");
-        mainBottomRightPanel.add(scontoOccasioniCheckBox);
+        //mainBottomRightPanel.add(scontoOccasioniCheckBox);
+        
+        scontoOccasioniBtn = new JButton("Seleziona sconto occasioni");
+        scontoOccasioniBtn.setEnabled(false);
+        buttonSizeSetter.uniformButtonSize(scontoOccasioniBtn);
+        //mainBottomRightPanel.add(scontoOccasioniBtn);
+        
+        scontoOccasioniPanel.add(scontoOccasioniCheckBox);
+        scontoOccasioniPanel.add(Box.createVerticalStrut(10));
+        scontoOccasioniPanel.add(scontoOccasioniBtn);
+
+        mainBottomRightPanel.add(scontoOccasioniPanel);
         
         trimestrale = new JRadioButtonMenuItem("Trimestrale");
         semestrale = new JRadioButtonMenuItem("Semestrale");
@@ -298,7 +313,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	//----------------------------------------------------------------
 	
 	  @Override
-	  public void setDatiAbbonamento(IDatiCliente abbDTO) {
+	  public void setDatiAbbonamento(IDatiClienteReadOnly abbDTO) {
 
 	        mainUpperPanel.removeAll();
 
@@ -330,135 +345,189 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 
 	    @Override
 	    public void setPrezzoTotale(double prezzo) {
+	    	
 	        prezzoTotaleLabel.setText(String.format("Totale: " + "%.2f €", prezzo));
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public void addIndietroListener(ActionListener listener) {
+	    	
 	        indietro.addActionListener(listener);
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public void addAnnullaListener(ActionListener listener) {
+	    	
 	        annulla.addActionListener(listener);
+	        
 	    }
 
 	//----------------------------------------------------------------
 	    
 	    @Override
 	    public void addConfermaListener(ActionListener listener) {
+	    	
 	        conferma.addActionListener(listener);
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public void addScontoSuBaseMesiListener(ActionListener listener) {
+	    	
 	        scontoSuBaseMesi.addActionListener(listener);
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public void addMensilitaListener(ActionListener listener) {
+	    	
 	        trimestrale.addActionListener(listener);
 	        semestrale.addActionListener(listener);
 	        annuale.addActionListener(listener);
 	        mensile.addActionListener(listener);
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public void addScontoEtaListener(ActionListener listener) {
+	    	
 	        scontoEtaCheckBox.addActionListener(listener);
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public void addScontoOccasioniListener(ActionListener listener) {
-	        scontoOccasioniCheckBox.addActionListener(listener);
+	    	
+	        scontoOccasioniBtn.addActionListener(listener);
+	        
+	    }
+	    
+	//----------------------------------------------------------------
+	    
+	    @Override
+	    public void addScontoOccasioniCheckboxListener(ActionListener listener) {
+	    	
+	    	scontoOccasioniCheckBox.addActionListener(listener);
+	    	
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public void addMetodoPagamentoListener(ActionListener listener) {
+	    	
 	        contanti.addActionListener(listener);
 	        carta.addActionListener(listener);
 	        noPagamento.addActionListener(listener);
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public void addAvvioPagamentoListener(ActionListener listener) {
+	    	
 	        avvioPagamento.addActionListener(listener);
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public boolean isScontoEtaSelected() {
+	    	
 	        return scontoEtaCheckBox.isSelected();
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public boolean isScontoOccasioniSelected() {
-	        return scontoOccasioniCheckBox.isSelected();
+	    	
+	    	return scontoOccasioniCheckBox.isSelected();
+	        
+	    }
+	    
+	//----------------------------------------------------------------
+	    
+	    @Override
+	    public void setScontoOccasioniButtonEnabled(boolean enabled) {
+	    	
+	        scontoOccasioniBtn.setEnabled(enabled);
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public String getDurataSelezionata() {
+	    	
 	        if (trimestrale.isSelected()) return trimestrale.getText();
 	        if (semestrale.isSelected()) return semestrale.getText();
 	        if (annuale.isSelected()) return annuale.getText();
 	        if (mensile.isSelected()) return mensile.getText();
 	        return null;
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public boolean isContantiSelected() {
+	    	
 	        return contanti.isSelected();
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public boolean isCartaSelected() {
+	    	
 	        return carta.isSelected();
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public boolean isNoPagamentoSelected() {
+	    	
 	        return noPagamento.isSelected();
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public String getScontoSuBaseMesiText() {
+	    	
 	        return scontoSuBaseMesi.getText();
+	        
 	    }
 	    
 	//----------------------------------------------------------------
 
 	    @Override
 	    public void setScontoSuBaseMesiText(String text) {
+	    	
 	        scontoSuBaseMesi.setText(text);
+	        
 	    }
 	    
 	//----------------------------------------------------------------

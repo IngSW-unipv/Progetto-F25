@@ -19,7 +19,7 @@ import javax.swing.JSplitPane;
 
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
 
-public class ReceptionistDashboardView extends JFrame implements IReceptionistDashboardView, IDashboard {
+public class ReceptionistDashboardView extends JFrame implements IDashboard {
 
     private static final long serialVersionUID = 1L;
 	

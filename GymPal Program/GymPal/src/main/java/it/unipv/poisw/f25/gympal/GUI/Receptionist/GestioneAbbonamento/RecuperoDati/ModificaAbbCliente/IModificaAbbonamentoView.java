@@ -8,8 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
-
 public interface IModificaAbbonamentoView {
 	
 	public List<JToggleButton> getBottoniToggle();
@@ -20,7 +18,8 @@ public interface IModificaAbbonamentoView {
 	
 	//----------------------------------------------------------------
 
-	public void setLists(IDatiCliente abbDTO);
+	public void setLists(List<String> sezioniAbbonamento, 
+			 			 List<String> corsiSelezionati);
 	
 	//----------------------------------------------------------------
 	

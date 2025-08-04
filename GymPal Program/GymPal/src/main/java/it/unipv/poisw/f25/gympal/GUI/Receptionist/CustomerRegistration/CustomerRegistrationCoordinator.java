@@ -7,14 +7,15 @@ import javax.swing.JOptionPane;
 
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.IStrategieCalcoloPrezzoFactory;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.IStrategieCalcoloPrezzo;
-import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.StrategyUtilities.ICalcolaPrezzo;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferHelpers.TowardsDB.AddClient.ICommitNewClientToDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveOccasionsDiscounts.IRetrieveDiscountsFromDB;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.AddClient.ICommitNewClientToDB;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
+import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.MasterDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.IReceptionistController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ISubscriptionCustomizationView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.SubscriptionCustomizationController;
@@ -28,9 +29,9 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoE
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.ICoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.DTOBuilder.MasterDTO;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.EtichettaPiuCampoFactory;
+import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 
 public class CustomerRegistrationCoordinator implements IRegistrationCoordinator, ICoordinator{
 
@@ -47,7 +48,8 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     private IValidatoreCampi validatoreCampi;
     private ICtrlReqAnagraficiService controlloRequisiti;
     private IStrategieCalcoloPrezzoFactory prezzoFactory;
-    private ICommitNewClientToDB veicoloDati;
+    private ICommitNewClientToDB commitDataToDB;
+    private IRetrieveDiscountsFromDB getDiscounts;
 
 
     private MasterDTO abbDTO;
@@ -62,25 +64,27 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     									   IValidatoreCampi validatoreCampi,
     									   ICtrlReqAnagraficiService controlloRequisiti,
     									   IStrategieCalcoloPrezzoFactory prezzoFactory,
-    									   ICommitNewClientToDB veicoloDati) {
+    									   ICommitNewClientToDB veicoloDati,
+    									   IRetrieveDiscountsFromDB getDiscounts) {
         
+    	/*Servizi*/
     	this.viewHandler = viewHandler;
     	this.etaService = etaService;
     	this.campovalidabileFactory = campovalidabileFactory;
     	this.validatoreCampi = validatoreCampi;
     	this.controlloRequisiti = controlloRequisiti;
     	this.prezzoFactory = prezzoFactory;
-    	
-    	this.veicoloDati = veicoloDati;
+    	this.getDiscounts = getDiscounts;
+    	this.commitDataToDB = veicoloDati;
 
-    	
+    	/*Navigazione GUI*/
         inizializzaCicloRegistrazioneCliente();
                 
     }
     
     //----------------------------------------------------------------
 
-    public void inizializzaCicloRegistrazioneCliente() {
+    private void inizializzaCicloRegistrazioneCliente() {
     	
         abbDTO = new MasterDTO();
         
@@ -148,7 +152,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
                     () -> {
                     	
                     	/*Qui è chiamato il metodo che passa i dati al service-layer*/
-                    	if (veicoloDati.commit(abbDTO)) {
+                    	if (commitDataToDB.commit(abbDTO)) {
     						
     					    JOptionPane.showMessageDialog(null, "Registrazione effettuata con successo!",
     					    							  "Successo", JOptionPane.INFORMATION_MESSAGE);
@@ -261,12 +265,21 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
    //----------------------------------------------------------------
     
     @Override
-    public double getDiscountedPrice(ICalcolaPrezzo abbonamentoDTO) {
+    public IRetrieveDiscountsFromDB getScontiOccasioni() {
+    	
+    	return getDiscounts;
+    	
+    }
+    
+   //----------------------------------------------------------------
+    
+    @Override
+    public double getDiscountedPrice() {
 
     	
-    	IStrategieCalcoloPrezzo strategia = prezzoFactory.getStrategy(abbonamentoDTO);
+    	IStrategieCalcoloPrezzo strategia = prezzoFactory.getStrategy(abbDTO);
     	
-    	return strategia.calcolaPrezzo(abbonamentoDTO);
+    	return strategia.calcolaPrezzo(abbDTO);
     	
     }
     
@@ -281,16 +294,47 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     
    //----------------------------------------------------------------
     
+    
     @Override
-    public void acquisisciScontiEDurata(boolean scontoEta, boolean scontoOccasioni,
-										DurataAbbonamento durataAbbonamento) {
+    public void acquisisciScontoEta(boolean scontoEta) {
     	
-    	costruttoreDTOHelper.impostaScontiEDurata(scontoEta, scontoOccasioni,
-    											  durataAbbonamento);
+    	costruttoreDTOHelper.impostaScontoEta(scontoEta);
     	
     }
     
-    //----------------------------------------------------------------    
+    @Override
+    public void acquisisciScontoOccasioni(boolean scontoOccasioni) {
+    	
+    	costruttoreDTOHelper.impostaScontoOccasioni(scontoOccasioni);
+    	
+    }
+    
+    @Override
+    public void acquisisciDurataAbbonamento(DurataAbbonamento durataAbbonamento) {
+    	
+    	costruttoreDTOHelper.impostaDurataAbbonamento(durataAbbonamento);
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    @Override
+    public void acquisisciScontiOccasioneSelezionati(List<Sconto> scontiOccasioneSelezionati) {
+    	
+    	costruttoreDTOHelper.inizializzaListaScontiOccasione(scontiOccasioneSelezionati);
+    	
+    }
+    
+    //---------------------------------------------------------------- 
+    
+    @Override
+    public String esponiDurataAbbonamento() {
+    	
+    	return abbDTO.getDurataAbbonamento().toString();
+    	
+    }
+    
+    //---------------------------------------------------------------- 
     
     @Override
     public IDatiCliente getDTO() {

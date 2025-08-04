@@ -4,30 +4,39 @@ import java.time.LocalDate;
 import java.util.List;
 
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
+import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 
 public interface ICalcolaPrezzo {
 	
-    boolean getScontoEta();
+	public boolean getScontoEta();
     
 	//----------------------------------------------------------------
     
-    boolean getScontoOccasioni();
+    public boolean getScontoOccasioni();
     
 	//----------------------------------------------------------------
     
-    DurataAbbonamento getDurataAbbonamento();
+    public DurataAbbonamento getDurataAbbonamento();
     
 	//----------------------------------------------------------------
     
-    LocalDate getDataNascita();
+    public LocalDate getDataNascita();
     
 	//----------------------------------------------------------------
     
-    List<String> getSezioniAbbonamento();
+    public List<String> getSezioniAbbonamento();
     
 	//----------------------------------------------------------------
     
-    List<String> getCorsiSelezionati();
+    public List<String> getCorsiSelezionati();
+    
+	//----------------------------------------------------------------
+    
+    public List<Sconto> getScontiOccasioneSelezionati();
+    
+	//----------------------------------------------------------------
+    
+    //public void setScontiOccasioneSelezionati(List<Sconto> scontiOccasioneSelezionati);
     
 	//----------------------------------------------------------------
 

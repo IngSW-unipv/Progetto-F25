@@ -5,12 +5,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.IDatiClienteReadOnly;
 
 public interface IRiepilogoEPagamentoView {
 	
 	/* Metodi per inizializzare la view con i dati dell'abbonamento */
-	public void setDatiAbbonamento(IDatiCliente abbonamentoDTO);
+	public void setDatiAbbonamento(IDatiClienteReadOnly abbonamentoDTO);
 	
 	//----------------------------------------------------------------
 	//----------------------------------------------------------------
@@ -56,6 +56,10 @@ public interface IRiepilogoEPagamentoView {
 	
 	//----------------------------------------------------------------
 	
+	public void addScontoOccasioniCheckboxListener(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
 	public void addAvvioPagamentoListener(ActionListener listener);
 	
 	//----------------------------------------------------------------
@@ -68,6 +72,10 @@ public interface IRiepilogoEPagamentoView {
 	//----------------------------------------------------------------
 	
 	public boolean isScontoOccasioniSelected();
+	
+	//----------------------------------------------------------------
+	
+	public void setScontoOccasioniButtonEnabled(boolean enabled);
 	
 	//----------------------------------------------------------------
 	
@@ -88,8 +96,6 @@ public interface IRiepilogoEPagamentoView {
 	//----------------------------------------------------------------
 	
 	public String getScontoSuBaseMesiText();
-	
-	//----------------------------------------------------------------
 	
 	public void setScontoSuBaseMesiText(String text);
 	
