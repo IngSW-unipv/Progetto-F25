@@ -12,9 +12,11 @@ import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.DatiNon
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
+import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.PartecipazioneCorso;
 import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCorso;
+import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
 
 public class CalendarioService implements ICalendarioService {
 	
@@ -70,6 +72,12 @@ public class CalendarioService implements ICalendarioService {
     //Annulla la prenotazione di un cliente a una sessione di un corso
     public boolean annullaPrenotazioneCorso(String cfCliente, String idSessione) {
         return persistence.deletePartecipazioneCorso(new PartecipazioneCorso(cfCliente, idSessione));
+    }
+    
+    @Override
+    //Cancella le prenotazioni più vecchie della  data corrente
+    public boolean pulisciPrenotazioniVecchie() {
+    	return persistence.deleteOldPartecipazioni();
     }
 
     @Override
@@ -203,6 +211,11 @@ public class CalendarioService implements ICalendarioService {
     public boolean annullaLezionePT(String cf, String staffId, LocalDate data, String fasciaOraria) {
         return persistence.deleteAppuntamento(new AppuntamentoPT(cf, staffId, data, fasciaOraria));
     }
+    
+    //Cancella le lezioni più vecchie della data corrente
+    public boolean pulisciLezioniVecchie() {
+    	return persistence.deleteOldAppuntamenti();
+    }
 
     @Override
     //Trova tutte le lezioni PT prenotate da un cliente
@@ -219,7 +232,135 @@ public class CalendarioService implements ICalendarioService {
         filtro.setStaffId(staffId);
         return persistence.selectAllAppuntamentiByStaffId(filtro);
     }
+    
+    // Gestione Sessioni Corso - Lato Staff
 
+    @Override
+    //Crea una sessione per un corso
+    public boolean creaSessioneCorso(String idSessione, String staffId, LocalDate data, String fasciaOraria) {
+        SessioneCorso nuovaSessione = new SessioneCorso(idSessione, staffId, data, fasciaOraria, 0);
+        return persistence.insertSessioneCorso(nuovaSessione);
+    }
+
+    @Override
+    //Modifica una sessione per un corso
+    public boolean modificaSessioneCorso(String idSessione, String nuovoStaffId, LocalDate nuovaData, String nuovaFasciaOraria) {
+        //Recupera la sessione esistente per non perdere il numero di iscritti
+        SessioneCorso sessioneEsistenteFiltro = new SessioneCorso();
+        sessioneEsistenteFiltro.setSessioneId(idSessione);
+        SessioneCorso sessioneEsistente = persistence.selectSessioneCorso(sessioneEsistenteFiltro);
+
+        if (sessioneEsistente == null) {
+            return false; // La sessione da modificare non esiste
+        }
+
+        int numIscrittiAttuali = sessioneEsistente.getNumIscritti();
+
+        SessioneCorso sessioneDaModificare = new SessioneCorso(idSessione, nuovoStaffId, nuovaData, nuovaFasciaOraria, numIscrittiAttuali);
+        return persistence.updateSessioneCorso(sessioneDaModificare);
+    }
+
+    @Override
+    //Elimina una sessione per un corso
+    public boolean cancellaSessioneCorso(String idSessione) {
+        SessioneCorso sessioneDaCancellare = new SessioneCorso();
+        sessioneDaCancellare.setSessioneId(idSessione);
+        return persistence.deleteSessioneCorso(sessioneDaCancellare);
+    }
+    
+    //Elimina le sessioni più vecchie della data corrente
+    public boolean pulisciSessioniVecchie() {
+    	return persistence.deleteOldSessioni();
+    }
+
+
+    // Gestione Turni Staff
+
+    @Override
+    //Crea un turno
+    public boolean creaTurno(LocalDate data, String recMat, String recPom, String ptMat, String ptPom) {
+        Turno nuovoTurno = new Turno(data, recMat, recPom, ptMat, ptPom);
+        return persistence.insertTurno(nuovoTurno);
+    }
+
+    @Override
+    //Modifica un turno
+    public boolean modificaTurno(LocalDate data, String recMat, String recPom, String ptMat, String ptPom) {
+        Turno turnoDaModificare = new Turno(data, recMat, recPom, ptMat, ptPom);
+        return persistence.updateTurno(turnoDaModificare);
+    }
+
+    @Override
+    //Elimina un turno
+    public boolean cancellaTurno(LocalDate data) {
+        Turno turnoDaCancellare = new Turno();
+        turnoDaCancellare.setData(data);
+        return persistence.deleteTurno(turnoDaCancellare);
+    }
+
+    @Override
+    //Trova tutti i turni in un range di date
+    public List<Turno> findTurniByRange(LocalDate dataInizio, LocalDate dataFine) {
+        Turno inizio = new Turno();
+        inizio.setData(dataInizio);
+        Turno fine = new Turno();
+        fine.setData(dataFine);
+        return persistence.selectAllTurniByRange(inizio, fine);
+    }
+
+    @Override
+    //Cancella i turni di lavoro più vecchi della  data corrente
+    public boolean pulisciTurniVecchi() {
+        return persistence.deleteOldTurni();
+    }
+
+
+    // Gestione Eventi Generici del Calendario (Manutenzione, Eventi, etc.)
+
+    @Override
+    //Crea un evento nel Calendario
+    public boolean creaEventoCalendario(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine, String messaggio, String destinatario) {
+        Calendario nuovoEvento = new Calendario(nomeEvento, dataEvento, oraInizio, oraFine, messaggio, destinatario);
+        return persistence.insertEvento(nuovoEvento);
+    }
+
+    @Override
+    //Modifica un evento nel Calendario
+    public boolean modificaEventoCalendario(String nomeEventoOriginale, LocalDate dataEventoOriginale, LocalTime oraInizioOriginale, LocalTime oraFineOriginale, String nuovoNomeEvento, LocalDate nuovaData, LocalTime nuovaOraInizio, LocalTime nuovaOraFine, String nuovoMessaggio, String nuovoDestinatario) {
+        //La modifica richiede una cancellazione e un nuovo inserimento
+        Calendario eventoOriginale = new Calendario(nomeEventoOriginale, dataEventoOriginale, oraInizioOriginale, oraFineOriginale, "", "");
+        boolean eliminato = persistence.deleteEvento(eventoOriginale);
+
+        if (eliminato) {
+            Calendario eventoNuovo = new Calendario(nuovoNomeEvento, nuovaData, nuovaOraInizio, nuovaOraFine, nuovoMessaggio, nuovoDestinatario);
+            return persistence.insertEvento(eventoNuovo);
+        }
+        return false;
+    }
+
+    @Override
+    //Cancella un evento nel Calendario
+    public boolean cancellaEventoCalendario(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine) {
+        Calendario eventoDaCancellare = new Calendario(nomeEvento, dataEvento, oraInizio, oraFine, "", "");
+        return persistence.deleteEvento(eventoDaCancellare);
+    }
+
+    @Override
+    //Cancella gli eventi più vecchi della data corrente
+    public boolean pulisciEventiVecchi() {
+        return persistence.deleteOldEventi();
+    }
+    
+    
+    @Override
+    //Metodo che raccoglie tutti i metodi che puliscono il database da dati vecchi
+    public boolean pulisciDatiObsoleti() {
+        return pulisciPrenotazioniVecchie() &&
+               pulisciLezioniVecchie() &&
+               pulisciSessioniVecchie() &&
+               pulisciTurniVecchi() &&
+               pulisciEventiVecchi();
+    }
 
     //Metodi helper
     
@@ -230,7 +371,7 @@ public class CalendarioService implements ICalendarioService {
         }
     }
     
-    //Controlla che il cliente non abbia corsi o appuntamenti con PT nella data e ffascia oraria forniita
+    //Controlla che il cliente non abbia corsi o appuntamenti con PT nella data e ffascia oraria fornita
     
     private boolean hasTimeConflict(String cfCliente, LocalDate data, String fasciaOraria) {
         LocalTime[] nuovaFascia = parseFasciaOraria(fasciaOraria);

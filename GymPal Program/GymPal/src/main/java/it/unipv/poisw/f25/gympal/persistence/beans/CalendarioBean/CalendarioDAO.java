@@ -112,6 +112,30 @@ public class CalendarioDAO implements ICalendarioDAO {
             return false;
         }
     }
+    
+    //Cancella tutti gli eventi antecedenti alla data attuale
+    @Override
+    public boolean deleteOldEventi() {
+        String query = "DELETE FROM CALENDARIO WHERE DATA_EVENTO < ?";
+        //Blocco try-with-resources
+        try (Connection conn = connectionFactory.createConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            
+            if (connectionFactory.isReadOnlyMode()) {
+                System.err.println("AVVISO: Il sistema è in modalità di sola lettura. Impossibile eliminare i dati.");
+                return false;
+            }
+            
+            // Imposta la data a quella di oggi
+            ps.setDate(1, Date.valueOf(LocalDate.now()));
+            
+            return ps.executeUpdate() > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     //Recupera un singolo evento
     @Override

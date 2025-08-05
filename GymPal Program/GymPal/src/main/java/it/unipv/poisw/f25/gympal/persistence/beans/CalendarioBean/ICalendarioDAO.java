@@ -12,6 +12,9 @@ public interface ICalendarioDAO {
 
     //Cancella un evento dal calendario
     boolean deleteEvento(Calendario evento);
+    
+    //Cancella tutti gli eventi antecedenti alla data attuale
+    boolean deleteOldEventi();
 
     //Recupera un singolo evento 
     Calendario selectEvento(Calendario evento);

@@ -1,6 +1,7 @@
 package it.unipv.poisw.f25.gympal.Dominio.CalendarioService;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ClienteNonAbbonatoException;
@@ -10,6 +11,7 @@ import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.Appuntamen
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.PartecipazioneCorso;
 import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCorso;
+import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
 
 
 /*
@@ -27,6 +29,9 @@ public interface ICalendarioService {
 
     //Annulla la prenotazione di un cliente a una sessione di un corso 
     boolean annullaPrenotazioneCorso(String cfCliente, String idSessione);
+    
+    //Cancella le prenotazioni più vecchie della  data corrente
+    boolean pulisciPrenotazioniVecchie();
 
     //Trova tutte le sessioni di corso disponibili (con posti liberi)
     List<SessioneCorso> findSessioniDisponibili();
@@ -59,10 +64,67 @@ public interface ICalendarioService {
     //Annulla una lezione individuale con un Personal Trainer
     boolean annullaLezionePT(String cf, String staffId, LocalDate data, String fasciaOraria);
     
+	//Cancella le lezioni più vecchie della data corrente
+    boolean pulisciLezioniVecchie();
+    
     //Trova tutte le lezioni PT prenotate da un cliente
     List<AppuntamentoPT> findLezioniPTByCliente(String cf);
 
     //Trova tutte le lezioni PT in agenda per un personal trainer
     List<AppuntamentoPT> findLezioniPTByTrainer(String staffId);
+    
+    
+    
+    // Gestione Sessioni Corso - Lato Staff
+    
+    //Crea una sessione per un corso
+    boolean creaSessioneCorso(String idSessione, String staffId, LocalDate data, String fasciaOraria);
+    
+    //Modifica una sessione per un corso
+    boolean modificaSessioneCorso(String idSessione, String nuovoStaffId, LocalDate nuovaData, String nuovaFasciaOraria);
+    
+    //Elimina una sessione per un corso
+    boolean cancellaSessioneCorso(String idSessione);
+    
+    //Elimina le sessioni più vecchie della data corrente
+    boolean pulisciSessioniVecchie();
+    
+
+    // Gestione Turni Staff
+
+    //Crea un turno
+    boolean creaTurno(LocalDate data, String recMat, String recPom, String ptMat, String ptPom);
+    
+    //Modifica un turno
+    boolean modificaTurno(LocalDate data, String recMat, String recPom, String ptMat, String ptPom);
+    
+    //Elimina un turno
+    boolean cancellaTurno(LocalDate data);
+    
+    //Trova tutti i turni in un range di date
+    List<Turno> findTurniByRange(LocalDate dataInizio, LocalDate dataFine);
+    
+    //Cancella i turni di lavoro più vecchi della  data corrente
+    boolean pulisciTurniVecchi();
+    
+    
+
+    // Gestione Eventi Generici del Calendario (Manutenzione, Eventi, etc.)
+    
+    //Crea un evento nel Calendario
+    boolean creaEventoCalendario(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine, String messaggio, String destinatario);
+    
+    //Modifica un evento nel Calendario
+    boolean modificaEventoCalendario(String nomeEventoOriginale, LocalDate dataEventoOriginale, LocalTime oraInizioOriginale, LocalTime oraFineOriginale, String nuovoNomeEvento, LocalDate nuovaData, LocalTime nuovaOraInizio, LocalTime nuovaOraFine, String nuovoMessaggio, String nuovoDestinatario);
+    
+    //Elimina un evento nel Calendario
+    boolean cancellaEventoCalendario(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine);
+
+    //Cancella gli eventi generici del calendario più vecchi della  data corrente
+    boolean pulisciEventiVecchi();
+    
+    
+    //Metodo che raccoglie tutti i metodi che puliscono il database da dati vecchi
+    boolean pulisciDatiObsoleti();
 }
 

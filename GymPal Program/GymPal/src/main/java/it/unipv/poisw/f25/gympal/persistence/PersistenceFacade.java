@@ -126,6 +126,10 @@ public class PersistenceFacade implements IPersistenceFacade {
         return calendarioDAO.deleteEvento(evento);
     }
     @Override
+    public boolean deleteOldEventi() {
+        return calendarioDAO.deleteOldEventi();
+    }
+    @Override
     public Calendario selectEvento(Calendario evento) {
         return calendarioDAO.selectEvento(evento);
     }
