@@ -7,7 +7,7 @@ public interface IDipendenteDAO {
 	//Recupera tutti i dipendenti dal database
     List<Dipendente> selectAll();
     
-    //Recupera un singolo dipendente basato sul suo codice fiscale    
+    //Recupera un singolo dipendente basato sul suo Id  
     Dipendente selectDipendente(Dipendente dipendente);
 
     //Inserisce un nuovo dipendente nel database
@@ -16,6 +16,6 @@ public interface IDipendenteDAO {
     //Aggiorna i dati di un dipendente esistente nel database
     boolean updateDipendente(Dipendente dipendente);
 
-    //Cancella un dipendente dal database usando il suo codice fiscale
+    //Cancella un dipendente dal database usando il suo Id
     boolean deleteDipendente(Dipendente dipendente);
 }

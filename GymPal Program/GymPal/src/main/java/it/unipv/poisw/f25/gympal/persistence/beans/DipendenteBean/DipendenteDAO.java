@@ -41,7 +41,7 @@ public class DipendenteDAO implements IDipendenteDAO {
         return dipendenti;
     }
 
-	//Recupera un singolo dipendente basato sul suo codice fiscale 
+	//Recupera un singolo dipendente basato sul suo Id
 	@Override
     public Dipendente selectDipendente(Dipendente dipendente) {
         Dipendente result = null;
@@ -124,7 +124,7 @@ public class DipendenteDAO implements IDipendenteDAO {
         }
     }
 
-    //Cancella un dipendente dal database usando il suo codice fiscale
+    //Cancella un dipendente dal database usando il suo Id
     @Override
     public boolean deleteDipendente(Dipendente dipendente) {
 

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ClienteNonAbbonatoException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ConflittoOrarioException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.DatiNonTrovatiException;
+import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.SessionePienaException;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
@@ -22,6 +23,7 @@ public class CalendarioService implements ICalendarioService {
 	
 	//PersistenceFacade per interagire col db
     private IPersistenceFacade persistence;
+    private final int MAX_ISCRITTI_CORSO = 25;
 
     public CalendarioService() {
         this.persistence = PersistenceFacade.getInstance();
@@ -32,7 +34,7 @@ public class CalendarioService implements ICalendarioService {
     @Override
     //Iscrive un cliente a una specifica sessione di un corso
     public void prenotaSessioneCorso(String cfCliente, String idSessione)
-            throws ClienteNonAbbonatoException, ConflittoOrarioException, DatiNonTrovatiException {
+            throws ClienteNonAbbonatoException, ConflittoOrarioException, DatiNonTrovatiException, SessionePienaException {
         
         //Recupera i dati del cliente 
         Cliente clienteFiltro = new Cliente();
@@ -61,17 +63,32 @@ public class CalendarioService implements ICalendarioService {
         if (hasTimeConflict(cfCliente, sessione.getData(), sessione.getFasciaOraria())) {
             throw new ConflittoOrarioException("Il cliente ha già un altro impegno in questa fascia oraria.");
         }
+        
+        //Controlla che il numero di iscritti sia inferiore a 25
+        if (sessione.getNumIscritti() >= MAX_ISCRITTI_CORSO) {
+            throw new SessionePienaException("La sessione del corso è al completo. Numero massimo di iscritti raggiunto.");
+        }
 
         //Se tutti i controlli sono superati, inserisci la partecipazione
         PartecipazioneCorso nuovaPartecipazione = new PartecipazioneCorso(cfCliente, idSessione);
         persistence.insertPartecipazioneCorso(nuovaPartecipazione);
+        // Incremento il numero di iscritti e aggiorna la sessione nel database
+        sessione.setNumIscritti(sessione.getNumIscritti() + 1);
+        persistence.updateSessioneCorso(sessione);
     }
     
     
     @Override
     //Annulla la prenotazione di un cliente a una sessione di un corso
     public boolean annullaPrenotazioneCorso(String cfCliente, String idSessione) {
-        return persistence.deletePartecipazioneCorso(new PartecipazioneCorso(cfCliente, idSessione));
+    	//Decrementa il numero di iscritti e aggiorna la sessione nel database
+    	SessioneCorso sessioneFiltro = new SessioneCorso();
+        sessioneFiltro.setSessioneId(idSessione);
+        SessioneCorso sessione = persistence.selectSessioneCorso(sessioneFiltro);
+    	sessione.setNumIscritti(sessione.getNumIscritti() - 1);
+        persistence.updateSessioneCorso(sessione);
+        
+    	return persistence.deletePartecipazioneCorso(new PartecipazioneCorso(cfCliente, idSessione));
     }
     
     @Override

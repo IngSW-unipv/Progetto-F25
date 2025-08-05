@@ -7,6 +7,7 @@ import java.util.List;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ClienteNonAbbonatoException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ConflittoOrarioException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.DatiNonTrovatiException;
+import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.SessionePienaException;
 import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.PartecipazioneCorso;
@@ -25,7 +26,7 @@ public interface ICalendarioService {
     //Gestione Corsi di Gruppo 
 
     //Iscrive un cliente a una specifica sessione di un corso
-    void prenotaSessioneCorso(String cfCliente, String idSessione) throws  ClienteNonAbbonatoException, ConflittoOrarioException, DatiNonTrovatiException;
+    void prenotaSessioneCorso(String cfCliente, String idSessione) throws  ClienteNonAbbonatoException, ConflittoOrarioException, DatiNonTrovatiException, SessionePienaException;
 
     //Annulla la prenotazione di un cliente a una sessione di un corso 
     boolean annullaPrenotazioneCorso(String cfCliente, String idSessione);
