@@ -1,3 +1,5 @@
+//PRIMARY KEY = staffId
+
 package it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean;
 
 import java.util.List;

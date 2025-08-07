@@ -1,3 +1,5 @@
+//PRIMARY KEY = cf, sessioneId
+
 package it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean;
 
 public class PartecipazioneCorso {

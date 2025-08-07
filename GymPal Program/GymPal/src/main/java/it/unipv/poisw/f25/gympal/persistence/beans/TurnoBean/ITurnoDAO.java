@@ -1,3 +1,5 @@
+//PRIMARY KEY = data
+
 package it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean;
 
 import java.util.List;

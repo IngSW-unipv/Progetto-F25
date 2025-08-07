@@ -354,6 +354,35 @@ public class CalendarioService implements ICalendarioService {
         }
         return false;
     }
+    
+    @Override
+    //Trova un singolo evento
+    public Calendario findEvento(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine) {
+        Calendario eventoFiltro = new Calendario();
+        eventoFiltro.setNomeEvento(nomeEvento);
+        eventoFiltro.setDataEvento(dataEvento);
+        eventoFiltro.setOraInizio(oraInizio);
+        eventoFiltro.setOraFine(oraFine);
+        return persistence.selectEvento(eventoFiltro);
+    }
+
+    @Override
+    //Trova tutti gli eventi in una data specifica
+    public List<Calendario> findEventiByDate(LocalDate data) {
+        Calendario eventoFiltro = new Calendario();
+        eventoFiltro.setDataEvento(data);
+        return persistence.selectAllEventiByDate(eventoFiltro);
+    }
+
+    @Override
+    //Trova tutti gli eventi in un intervallo di date
+    public List<Calendario> findEventiByRange(LocalDate dataInizio, LocalDate dataFine) {
+        Calendario eventoInizio = new Calendario();
+        eventoInizio.setDataEvento(dataInizio);
+        Calendario eventoFineFiltro = new Calendario();
+        eventoFineFiltro.setDataEvento(dataFine);
+        return persistence.selectAllEventiByDateRange(eventoInizio, eventoFineFiltro);
+    }
 
     @Override
     //Cancella un evento nel Calendario

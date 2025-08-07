@@ -1,3 +1,5 @@
+//PRIMARY KEY = cf, sessioneId
+
 package it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean;
 
 import java.sql.Connection;

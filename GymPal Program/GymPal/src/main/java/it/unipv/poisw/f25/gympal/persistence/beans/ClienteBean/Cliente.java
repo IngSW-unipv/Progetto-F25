@@ -1,3 +1,5 @@
+//PRIMARY KEY = cf
+
 package it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean;
 
 import java.time.LocalDate;

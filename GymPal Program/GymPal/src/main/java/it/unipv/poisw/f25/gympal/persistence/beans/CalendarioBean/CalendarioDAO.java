@@ -1,3 +1,5 @@
+//PRIMARY KEY = nomeEvento, dataEvento, oraInizio, oraFine
+
 package it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean;
 
 import java.sql.Connection;

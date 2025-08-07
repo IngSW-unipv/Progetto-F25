@@ -1,3 +1,5 @@
+//PRIMARY KEY = nomeSconto
+
 package it.unipv.poisw.f25.gympal.persistence.beans.Sconto;
 
 import java.util.List;

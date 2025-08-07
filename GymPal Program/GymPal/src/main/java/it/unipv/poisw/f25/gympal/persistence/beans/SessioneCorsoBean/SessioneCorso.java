@@ -1,3 +1,5 @@
+//PRIMARY KEY = sessioneId
+
 package it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean;
 
 import java.time.LocalDate;

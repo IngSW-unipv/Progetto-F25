@@ -1,3 +1,5 @@
+//PRIMARY KEY = cf, staffId, data, fasciaOraria
+
 package it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean;
 
 import java.time.LocalDate;

@@ -9,6 +9,7 @@ import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.Conflit
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.DatiNonTrovatiException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.SessionePienaException;
 import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
+import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.PartecipazioneCorso;
 import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCorso;
@@ -117,6 +118,15 @@ public interface ICalendarioService {
     
     //Modifica un evento nel Calendario
     boolean modificaEventoCalendario(String nomeEventoOriginale, LocalDate dataEventoOriginale, LocalTime oraInizioOriginale, LocalTime oraFineOriginale, String nuovoNomeEvento, LocalDate nuovaData, LocalTime nuovaOraInizio, LocalTime nuovaOraFine, String nuovoMessaggio, String nuovoDestinatario);
+    
+    //Trova un singolo evento
+    Calendario findEvento(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine);
+    
+    //Trova tutti gli eventi in una data specifica
+    List<Calendario> findEventiByDate(LocalDate data);
+    
+    //Trova tutti gli eventi in un intervallo di date
+    List<Calendario> findEventiByRange(LocalDate dataInizio, LocalDate dataFine);
     
     //Elimina un evento nel Calendario
     boolean cancellaEventoCalendario(String nomeEvento, LocalDate dataEvento, LocalTime oraInizio, LocalTime oraFine);
