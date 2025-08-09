@@ -33,6 +33,7 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
     private JButton logOutButton;
     private JButton registerNewClientButton;
     private JButton modifySubscriptionButton;
+    private JButton corsiEdAppuntamentiButton;
     
     private JSplitPane splitPane;
 
@@ -59,6 +60,10 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
         registerNewClientButton = new JButton("<html><center>Registra<br>Nuovo Cliente</center></html>");
 
         modifySubscriptionButton = new JButton("<html><center>Modifica<br>Rinnovo<br>Cancellazione<br>Abbonamento</center></html>");
+        
+        corsiEdAppuntamentiButton = new JButton("<html><center>Gestione calendario<br>"
+							        		  + "partecipazione corsi<br>"
+							        		  + "ed<br>appuntamenti PT</html>");
 
         pannelloSinistro = new JPanel();
 
@@ -80,8 +85,11 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
 
         gbc.gridy = 1;
         pannelloSinistro.add(modifySubscriptionButton, gbc);
-
+        
         gbc.gridy = 2;
+        pannelloSinistro.add(corsiEdAppuntamentiButton, gbc);
+
+        gbc.gridy = 3;
         pannelloSinistro.add(logOutButton, gbc);
         
         pannelloSinistro.setPreferredSize(new Dimension(200, 1300));
@@ -163,6 +171,10 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
                 bottone = modifySubscriptionButton;
                 break;
                 
+            case "CALENDAR":
+                bottone = corsiEdAppuntamentiButton;
+                break;
+                
             case "LOGOUT":
                 bottone = logOutButton;
                 break;
@@ -206,6 +218,15 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
         super.dispose();
     }
     
-    //----------------------------------------------------------------  
+    //---------------------------------------------------------------- 
+    
+    @Override
+    public JFrame getMainFrame() {
+    	
+    	return this;
+    	
+    }
+    
+    //---------------------------------------------------------------- 
     
 }

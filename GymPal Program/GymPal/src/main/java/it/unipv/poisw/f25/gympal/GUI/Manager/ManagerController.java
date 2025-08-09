@@ -37,15 +37,6 @@ public class ManagerController implements IManagerController{
     	/**/
         registraAzioniPulsanti();
         inizializzaSchermateStatiche();
-        
-        /*Coordinatori*/
-        rettCoord = new RettificaCoordinator(this,
-        			this.serviziComuni.getCampoValidabileFactory(),
-        			this.serviziComuni.getValidatoreCampi(),
-        			this.serviziComuni.getRecuperaDati(),
-        			this.serviziComuni.getHeadHunter(),
-        			this.serviziComuni.getUpdater(),
-        			this.serviziComuni.getImmettiDati());
     	
     }
     
@@ -64,7 +55,10 @@ public class ManagerController implements IManagerController{
 
     	/*manDashView.aggiungiComando("REGISTER", () -> mostraSchermata("SUB_VIEW"));*/
 
-    	manDashView.aggiungiComando("RETTIFICA", () -> mostraSchermata("RETT_INFO"));
+    	manDashView.aggiungiComando("RETTIFICA", () -> {
+    		
+    		mostraRettificaAbbonamentoSeNonInizializzato();
+    		mostraSchermata("RETT_INFO");});
 
     	manDashView.aggiungiComando("LOGOUT", () -> {
         	
@@ -93,6 +87,24 @@ public class ManagerController implements IManagerController{
         
     }
 
+    //----------------------------------------------------------------
+    /*PER "LAZY INITIALIZATION"*/
+    private void mostraRettificaAbbonamentoSeNonInizializzato() {
+    	
+    	if(rettCoord == null) {
+    		
+    		rettCoord = new RettificaCoordinator(this,
+												 this.serviziComuni.getCampoValidabileFactory(),
+												 this.serviziComuni.getValidatoreCampi(),
+												 this.serviziComuni.getRecuperaDati(),
+												 this.serviziComuni.getHeadHunter(),
+												 this.serviziComuni.getUpdater(),
+												 this.serviziComuni.getImmettiDati());
+    		
+    	}
+    	
+    }
+    
     //----------------------------------------------------------------
 
 }

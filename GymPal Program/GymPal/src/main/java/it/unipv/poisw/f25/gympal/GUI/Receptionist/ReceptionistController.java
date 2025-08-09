@@ -1,12 +1,16 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.RegistrationServicesBundle;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneCalendario.CalendarServicesBundle;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.CommonServicesBundle;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.GestioneAbbCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.IGestioneAbbCoordinator;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.GestioneCalendarioCoordinator;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.ICoordinatoreCalendario;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationView;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
@@ -23,56 +27,37 @@ public class ReceptionistController implements IReceptionistController {
     /*Servizi*/
     private RegistrationServicesBundle serviziReg;
     private CommonServicesBundle serviziComuni;
+    private CalendarServicesBundle serviziCalendario;
     
     /*Coordinatori GUI*/
     private IRegistrationCoordinator customerRegistrationCoordinator;
     private IGestioneAbbCoordinator gestoreAbb;
+    private ICoordinatoreCalendario calendarioCoordinator;
 
     //----------------------------------------------------------------
 
     public ReceptionistController(IDashboard view,
             					  RegistrationServicesBundle serviziReg,
-            					  CommonServicesBundle serviziComuni) {
+            					  CommonServicesBundle serviziComuni,
+            					  CalendarServicesBundle serviziCalendario) {
     	
         recDashView = view;
 
         registraAzioniPulsanti();
         inizializzaSchermateStatiche();
 
-        /*Servizi di dominio da passare al coordinatore per realizzare comunicazione
+        /*Servizi di dominio passati ai coordinatori per realizzare comunicazione
          *fra GUI e strato di dominio*/
         
-        /*Siccome "ReceptionistController" incarna il confine fra GUI e Dominio, è lecito
-         *che esso istanzi oggetti concreti.*/
+        /*Siccome "ReceptionistController" incarna il confine fra GUI e Dominio, 
+         *è lecito che esso istanzi oggetti concreti.*/
 
-        /*Al fine di alleggerire il codice, i serviziReg sono raggruppati in un apposito 
-         *bundle.*/
+        /*Al fine di alleggerire il codice, i serviziReg sono raggruppati in 
+         *appositi bundles.*/
         this.serviziReg = serviziReg;
         this.serviziComuni = serviziComuni;
-        
-        
-        // Inizializza il coordinator passando 'this' come handler.
-        /*In quanto oggetto concreto, è meglio che il bundle rimanga nel controllore,
-         *che fa da punto dicontatto fra GUI e dominio, per scongiurare un forte accop-
-         *piamento fra il coordinatore GUI ed una struttura concreta (il bundle).*/
-        customerRegistrationCoordinator = new CustomerRegistrationCoordinator(this, 
-        																	  this.serviziReg.getCalcoloEtaService(),
-        																	  this.serviziComuni.getCampoValidabileFactory(),
-        																	  this.serviziReg.getValidatoreCampi(),
-        																	  this.serviziReg.getControlloRequisiti(),
-        																	  this.serviziComuni.getPrezzoFactory(),
-        																	  this.serviziComuni.getImmettiDati(),
-        																	  this.serviziComuni.getDiscounts());
-        
-        
-        gestoreAbb = new GestioneAbbCoordinator(this,
-								        		this.serviziComuni.getCampoValidabileFactory(),
-								        		this.serviziComuni.getValidatoreCampi(),
-								        		this.serviziComuni.getRecuperaDati(),
-								        		this.serviziComuni.getHeadHunter(),
-								        		this.serviziComuni.getPrezzoFactory(),
-								        		this.serviziComuni.getUpdater(),
-								        		this.serviziComuni.getDiscounts());
+        this.serviziCalendario = serviziCalendario;
+ 
         
     }
 
@@ -90,9 +75,23 @@ public class ReceptionistController implements IReceptionistController {
 
     private void registraAzioniPulsanti() {
 
-        recDashView.aggiungiComando("REGISTER", () -> mostraSchermata("SUB_VIEW"));
+        recDashView.aggiungiComando("REGISTER", () -> {
+        	
+        	mostraRegistrazioneClienteSeNonInizializzato();
+        	mostraSchermata("SUB_VIEW");
+        	});
 
-        recDashView.aggiungiComando("MODIFY", () -> mostraSchermata("LOAD_CLIENT"));
+        recDashView.aggiungiComando("MODIFY", () -> {
+        	
+        	mostraGestioneAbbonamentoSeNonInizializzato();
+        	mostraSchermata("LOAD_CLIENT");});
+        
+        recDashView.aggiungiComando("CALENDAR", () -> {
+        	
+            mostraCalendarioSeNonInizializzato(recDashView.getMainFrame(), 
+            () -> mostraSchermata("CALENDARIO_VIEW"));
+            
+        });
 
         recDashView.aggiungiComando("LOGOUT", () -> {
         	
@@ -124,5 +123,63 @@ public class ReceptionistController implements IReceptionistController {
     }
 
     //----------------------------------------------------------------
+    /*PER "LAZY INITIALIZATION"*/
+    private void mostraCalendarioSeNonInizializzato(JFrame frame, Runnable callback) {
+    	
+        if (calendarioCoordinator == null) {
+        	
+            calendarioCoordinator = new GestioneCalendarioCoordinator(this,
+                                    this.serviziCalendario.getCalendarioService());
+
+            calendarioCoordinator.inizializzaConBarra(frame, callback);
+            
+        } else {callback.run();}
+        
+    }
+
+    
+    //----------------------------------------------------------------
+    /*PER "LAZY INITIALIZATION"*/
+    private void mostraRegistrazioneClienteSeNonInizializzato() {
+    	
+        if (customerRegistrationCoordinator == null) {
+        	
+        	customerRegistrationCoordinator = new CustomerRegistrationCoordinator(
+                this,
+                this.serviziReg.getCalcoloEtaService(),
+                this.serviziComuni.getCampoValidabileFactory(),
+                this.serviziReg.getValidatoreCampi(),
+                this.serviziReg.getControlloRequisiti(),
+                this.serviziComuni.getPrezzoFactory(),
+                this.serviziComuni.getImmettiDati(),
+                this.serviziComuni.getDiscounts()
+            );
+        	
+        }
+        
+    }
+    
+    //----------------------------------------------------------------
+    /*PER "LAZY INITIALIZATION"*/
+    private void mostraGestioneAbbonamentoSeNonInizializzato() {
+    	
+    	if(gestoreAbb == null) {
+    		
+    		gestoreAbb = new GestioneAbbCoordinator(this,
+					   this.serviziComuni.getCampoValidabileFactory(),
+					   this.serviziComuni.getValidatoreCampi(),
+					   this.serviziComuni.getRecuperaDati(),
+					   this.serviziComuni.getHeadHunter(),
+					   this.serviziComuni.getPrezzoFactory(),
+					   this.serviziComuni.getUpdater(),
+					   this.serviziComuni.getDiscounts());
+    		
+    	}
+    	
+    }
+    
+    //----------------------------------------------------------------
+
+
 
 }

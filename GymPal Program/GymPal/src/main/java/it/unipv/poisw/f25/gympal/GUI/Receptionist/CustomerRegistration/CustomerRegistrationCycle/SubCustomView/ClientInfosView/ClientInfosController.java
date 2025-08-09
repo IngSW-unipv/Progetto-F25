@@ -1,13 +1,15 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView;
 
 
+import java.awt.Component;
+import java.awt.Window;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabile.ICampoValidabile;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
@@ -192,14 +194,13 @@ public class ClientInfosController implements IRegexExpression {
     
     private void impostaEventoAcquisisciPermesso() {
         
-        clientInfos.addAcquisisciPermessoListener(e -> {
-            
-            JFrame framePadre = (JFrame) javax.swing.SwingUtilities.getWindowAncestor((java.awt.Component) e.getSource());
+    	clientInfos.addAcquisisciPermessoListener(e -> {
+    	    Component source = (Component) e.getSource();
+    	    Window window = SwingUtilities.getWindowAncestor(source);
 
-            SimulazioneOperazione simulazione = new SimulazioneOperazione(framePadre);
-            simulazione.start();
-            
-        });
+    	    SimulazioneOperazione.mostraCaricamentoFinto(window, "Operazione in corso...");
+    	    
+    	});
         
     }   
     

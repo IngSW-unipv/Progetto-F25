@@ -2,7 +2,6 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoD
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JCheckBox;
@@ -199,44 +198,27 @@ public class ModificaAbbonamentoController {
 	
 	private void aggiornaDTO() {
 		
-	    // Nomi delle sezioni abbonamento corrispondenti ai toggle
-	    List<String> nomiSezioni = Arrays.asList(
-	        "Allenamento mirato con personal trainer",
-	        "Sala allenamento a corpo libero",
-	        "Sala pesi",
-	        "Sala corsi"
-	    );
-
-	    // Nomi corsi corrispondenti alle checkbox
-	    List<String> nomiCorsi = Arrays.asList(
-	        "Crossfit",
-	        "Yoga",
-	        "Pilates",
-	        "Zumba",
-	        "Fullbody"
-	    );
-
-	    // Lista sezioni selezionate
 	    List<String> sezioniSelezionate = new ArrayList<>();
+	    List<String> corsiSelezionati = new ArrayList<>();
+
+	    List<JToggleButton> bottoniToggle = modAbbView.getBottoniToggle();
+	    List<String> nomiSezioni = modAbbView.getNomiSezioni(); 
 	    
-	    for (int i = 0; i < modAbbView.getBottoniToggle().size(); i++) {
-	        if (modAbbView.getBottoniToggle().get(i).isSelected()) {
+	    for (int i = 0; i < bottoniToggle.size(); i++) {
+	        if (bottoniToggle.get(i).isSelected()) {
 	            sezioniSelezionate.add(nomiSezioni.get(i));
 	        }
-	        
 	    }
 
-
-	    // Lista corsi selezionati
-	    List<String> corsiSelezionati = new ArrayList<>();
+	    List<JCheckBox> checkBoxes = modAbbView.getCheckBoxes();
 	    
-	    for (int i = 0; i < modAbbView.getCheckBoxes().size(); i++) {
-	        if (modAbbView.getCheckBoxes().get(i).isSelected()) {
+	    List<String> nomiCorsi = modAbbView.getNomiCorsi(); 
+	    for (int i = 0; i < checkBoxes.size(); i++) {
+	        if (checkBoxes.get(i).isSelected()) {
 	            corsiSelezionati.add(nomiCorsi.get(i));
 	        }
-	        
 	    }
-	    
+
 	    coordinator.acquisisciComponentiAbbonamento(sezioniSelezionate, corsiSelezionati);
 	    
 	}

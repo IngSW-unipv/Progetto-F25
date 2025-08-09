@@ -190,5 +190,14 @@ public class ManagerDashboardView extends JFrame implements IDashboard{
     }
     
     //---------------------------------------------------------------- 
+    
+    @Override
+    public JFrame getMainFrame() {
+    	
+    	return this;
+    	
+    }
+    
+    //---------------------------------------------------------------- 
 
 }

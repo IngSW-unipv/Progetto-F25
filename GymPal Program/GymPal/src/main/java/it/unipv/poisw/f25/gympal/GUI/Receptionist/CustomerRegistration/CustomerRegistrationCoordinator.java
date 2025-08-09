@@ -35,6 +35,7 @@ import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 
 public class CustomerRegistrationCoordinator implements IRegistrationCoordinator, ICoordinator{
 
+	/**/
     private IReceptionistController viewHandler;
 
     /*Viste*/
@@ -136,9 +137,6 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
 
             // Callback onAvanti
             () -> {
-                /*if (riepilogoEPagamento != null) {
-                    viewHandler.registraSchermata("RECAP_PAYMENT", riepilogoEPagamento.getMainPanel());
-                }*/
 
                 riepilogoEPagamento = new RiepilogoEPagamentoView(new DynamicButtonSizeSetter());
 

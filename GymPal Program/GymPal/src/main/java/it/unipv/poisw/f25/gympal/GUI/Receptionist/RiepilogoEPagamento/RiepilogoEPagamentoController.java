@@ -1,9 +1,10 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento;
 
+import java.awt.Component;
+import java.awt.Window;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -101,16 +102,11 @@ public class RiepilogoEPagamentoController {
     private void impostaEventoAvvioPagamento() {
     	
         riepilogoEPagamento.addAvvioPagamentoListener(e -> {
-            /*Questa istruzione rintraccia il componente grafico principale, e lo assegna al
-             *riferimento "framePadre"*/
-            JFrame framePadre = (JFrame) javax.swing.SwingUtilities.
-            					getWindowAncestor((java.awt.Component) e.getSource());
-            
-            /*Il popup con la barra di caricamento è creato ed ancorato al frame ricavato 
-             *dall'istruzione precedente*/
-            SimulazioneOperazione simulazione = new SimulazioneOperazione(framePadre);
-            simulazione.start();
-        });
+    	    Component source = (Component) e.getSource();
+    	    Window window = SwingUtilities.getWindowAncestor(source);
+
+    	    SimulazioneOperazione.mostraCaricamentoFinto(window, "Operazione in corso...");
+    	});
     	
     }
     

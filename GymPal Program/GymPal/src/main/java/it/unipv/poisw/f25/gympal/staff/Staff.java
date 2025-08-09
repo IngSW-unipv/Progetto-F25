@@ -7,7 +7,7 @@ import it.unipv.poisw.f25.gympal.utility.IDateFormat;
 public abstract class Staff implements IDateFormat{
 	
 	//generalità del dipendente
-	private String nome, cognome, contatto, password;
+	private String nome, cognome, contatto/*, password*/;
 	private LocalDate dataDiNascita;
 	
 	

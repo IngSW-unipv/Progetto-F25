@@ -71,7 +71,7 @@ public class RettificaInfoController {
 	
 	//----------------------------------------------------------------
 	
-	public void impostaEventoAvanti() {
+	private void impostaEventoAvanti() {
 		
 		rettInfo.addAvantiListener(e -> {onAvanti.run();});
 		
@@ -95,40 +95,7 @@ public class RettificaInfoController {
 	}
 	
 	//----------------------------------------------------------------
-    
-    private ICampoValidabile registraCampo(JTextField field, String regex) {
-    	
-        ICampoValidabile campo = coordinator.getCampoValidabileFactory()
-        									.creaCampoValidabile(field, regex);
-
-        ValidazioneCampo.applicaFeedbackSwing(campo);
-        
-        return campo;
-    }
-    
-	//----------------------------------------------------------------
-    
-    private void impostaEventiTextFields() {
-    	
-    	coordinator.getValidatoreCampi().registra(registraCampo(rettInfo.getCodiceFiscale(),
-				  								  IRegexExpression.CODICE_FISCALE));
-
-    	coordinator.getValidatoreCampi().registra(registraCampo(rettInfo.getNome(),
-    											  IRegexExpression.NAME_REGEXEXPRESSION));
-
-    	coordinator.getValidatoreCampi().registra(registraCampo(rettInfo.getCognome(),
-    											  IRegexExpression.SURNAME_REGEXEXPRESSION));
-
-    	coordinator.getValidatoreCampi().registra(registraCampo(rettInfo.getCfAnagrafico(),
-    											  IRegexExpression.CODICE_FISCALE));
-    	
-    	coordinator.getValidatoreCampi().registra(registraCampo(rettInfo.getContatto(),
-    											  IRegexExpression.EMAIL));
-
-    }
-    
-    //----------------------------------------------------------------
-    
+	
     private void impostaEventoElimina() {
     	
     	rettInfo.addEliminaListener(e -> {
@@ -165,6 +132,27 @@ public class RettificaInfoController {
     
     //----------------------------------------------------------------
     
+    private void impostaEventiTextFields() {
+    	
+    	coordinator.getValidatoreCampi().registra(registraCampo(rettInfo.getCodiceFiscale(),
+				  								  IRegexExpression.CODICE_FISCALE));
+
+    	coordinator.getValidatoreCampi().registra(registraCampo(rettInfo.getNome(),
+    											  IRegexExpression.NAME_REGEXEXPRESSION));
+
+    	coordinator.getValidatoreCampi().registra(registraCampo(rettInfo.getCognome(),
+    											  IRegexExpression.SURNAME_REGEXEXPRESSION));
+
+    	coordinator.getValidatoreCampi().registra(registraCampo(rettInfo.getCfAnagrafico(),
+    											  IRegexExpression.CODICE_FISCALE));
+    	
+    	coordinator.getValidatoreCampi().registra(registraCampo(rettInfo.getContatto(),
+    											  IRegexExpression.EMAIL));
+
+    }
+    
+    //----------------------------------------------------------------
+    
     private void impostaEventoSaveMods() {
     	
 	    	rettInfo.addSaveModsListener(e -> eseguiSeCampiValidi(() -> {
@@ -173,6 +161,7 @@ public class RettificaInfoController {
 	            onSaveMods.run();
 	            
 	        })
+	    			
 	    );
     	
     }
@@ -187,11 +176,25 @@ public class RettificaInfoController {
                 onInsData.run();
                 
             })
+        		
         );
+        
     }
     
     //----------------------------------------------------------------
     
+    private ICampoValidabile registraCampo(JTextField field, String regex) {
+    	
+        ICampoValidabile campo = coordinator.getCampoValidabileFactory()
+        									.creaCampoValidabile(field, regex);
+
+        ValidazioneCampo.applicaFeedbackSwing(campo);
+        
+        return campo;
+    }
+    
+	//----------------------------------------------------------------
+   
     private void eseguiSeCampiValidi(Runnable eseguiAzione) {
     	
         boolean validitaCampi = coordinator.getValidatoreCampi().tuttiValidi();
@@ -209,7 +212,9 @@ public class RettificaInfoController {
                 + "- per completare la procedura ",
                 "Errore", JOptionPane.ERROR_MESSAGE
             );
+            
         }
+        
     }
     
     //----------------------------------------------------------------
