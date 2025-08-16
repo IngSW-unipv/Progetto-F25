@@ -1,50 +1,100 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.SwingWorker;
 
-import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.ICalendarioService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ICalendarioFacadeService;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.IReceptionistController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.CalendarioSettimanaleController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.CalendarioSettimanaleView;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ICalendarioChangeListener;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ICalendarioSettimanaleView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.DatiCellaCalendarioDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.IDatiCellaCalendarioDTO;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.Caching.CalendarioSettimanaleCachesBuilder;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.Handlers.DTOHandlerCalendarioSettimanale;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.Handlers.SecondaryHandlers.TurniHandler;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
+import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
+import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCorso;
+import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
 
 public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
 
-	/**/
+	/*Varie*/
 	private IReceptionistController viewHandler;
+	
+	/*PER CACHING INFO DA DATABASE*/
+	private List<AppuntamentoPT> tuttiAppuntamenti;
+	private Map<LocalDate, List<SessioneCorso>> corsiCache;
+	private Map<LocalDate, List<Turno>> turniCache;
+	private Map<LocalDate, List<Calendario>> eventiCache;
 	
 	/*Viste*/
 	private ICalendarioSettimanaleView calendarioView;
 	
+	/*Per implementare meccanismo Observable con vista calendario*/
+	private List<ICalendarioChangeListener> listeners = new ArrayList<>();
+	
 	/*Servizi*/
-    private final ICalendarioService calendarioService;
+    private ICalendarioFacadeService calendarioFacade;
     
     /*DTO*/
     private List<DatiCellaCalendarioDTO> settimanaDTOs;
-
+  
     //----------------------------------------------------------------
     
-    public GestioneCalendarioCoordinator(IReceptionistController viewHandler, 
-            							 ICalendarioService calendarioService) {
+    public GestioneCalendarioCoordinator(IReceptionistController viewHandler,
+            							 ICalendarioFacadeService calendarioFacade) {
     	
     		this.viewHandler = viewHandler;
-    		this.calendarioService = calendarioService;
+    		this.calendarioFacade = calendarioFacade;
     		
     }
 
-
+    //----------------------------------------------------------------
+    
+    private void setupSchermataCalendario() {
+    	
+    	calendarioView = new CalendarioSettimanaleView(new DynamicButtonSizeSetter());
+    	viewHandler.registraSchermata("CALENDARIO_VIEW", calendarioView.getMainPanel());
+    	
+    	new CalendarioSettimanaleController(calendarioView, 
+    										calendarioFacade, this);
+    	
+    }    
+    
+    //----------------------------------------------------------------
+    
+    /*Per modifiche al calendario su singola data*/
+    @Override
+    public void notificaCambio(LocalDate data) {
+    	
+        notificaCambio(Collections.singletonList(data));
+        
+    }
+    
+    /*Per modifiche al calendario su più date*/
+    @Override
+    public void notificaCambio(List<LocalDate> dateCambiate) {
+    	
+        for (ICalendarioChangeListener listener : listeners) {
+        	
+            listener.onCambioCalendario(dateCambiate);
+            
+        }
+        
+    }
+    
+    
     //----------------------------------------------------------------
     
     @Override
@@ -56,45 +106,22 @@ public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
         SwingWorker<List<DatiCellaCalendarioDTO>, Integer> worker =
         		new SwingWorker<List<DatiCellaCalendarioDTO>, Integer>() {
 
-            @Override
-            protected List<DatiCellaCalendarioDTO> doInBackground() {
-            	
-                List<DatiCellaCalendarioDTO> lista = new ArrayList<>();
-                
-                LocalDate lunedi = LocalDate.now().with(DayOfWeek.MONDAY);
-                int totaleCelle = 7 * 13 * 2;
-                int count = 0;
+        	@Override
+        	protected List<DatiCellaCalendarioDTO> doInBackground() {
+        		
+        		CalendarioSettimanaleCachesBuilder builder = 
+        		new CalendarioSettimanaleCachesBuilder(calendarioFacade);
+        	    List<DatiCellaCalendarioDTO> lista = builder.build();
 
-                for (int giorno = 0; giorno < 7; giorno++) {
-                	
-                    LocalDate data = lunedi.plusDays(giorno);
+        	    corsiCache = builder.getCorsiCache();
+        	    turniCache = builder.getTurniCache();
+        	    eventiCache = builder.getEventiCache();
+        	    tuttiAppuntamenti = builder.getAppuntamenti();
 
-                    for (int ora = 8; ora <= 20; ora++) {
-                    	
-                        for (int minuti : new int[]{0, 30}) {
-                        	
-                            DatiCellaCalendarioDTO dto = new DatiCellaCalendarioDTO(
-                                data, ora, minuti,
-                                new ArrayList<>(), 
-                                new ArrayList<>(), 
-                                new ArrayList<>()
-                            );
+        	    return lista;
+        	    
+        	}
 
-                            new DTOHandlerCalendarioSettimanale(dto,calendarioService)
-                                 							.popolaDatiCella(minuti);
-
-                            lista.add(dto);
-
-                            count++;
-                            publish((int) ((count / (double) totaleCelle) * 100));
-                            
-                        }
-                        
-                    }
-                    
-                }
-                return lista;
-            }
 
             @Override
             protected void process(List<Integer> chunks) {
@@ -136,27 +163,19 @@ public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
     }  
     
     //----------------------------------------------------------------
-    
-    private void setupSchermataCalendario() {
-    	
-    	calendarioView = new CalendarioSettimanaleView(new DynamicButtonSizeSetter());
-    	viewHandler.registraSchermata("CALENDARIO_VIEW", calendarioView.getMainPanel());
-    	
-    	new CalendarioSettimanaleController(calendarioView, this);
-    	
-    }    
-    
-    //----------------------------------------------------------------    
 
     @Override
-    public IDatiCellaCalendarioDTO getContenutoCella(LocalDate data, int ora, int minuti) {
-    	
-    	
+    public IDatiCellaCalendarioDTO getContenutoCella(LocalDate data, 
+    												 int ora, 
+    												 int minuti) {    	
 
         DatiCellaCalendarioDTO dto = settimanaDTOs.stream()
-            .filter(d -> d.getData().equals(data) && d.getOra() == ora && d.getMinuti() == minuti)
+            .filter(d -> d.getData().equals(data) 
+            		  && d.getOra() == ora 
+            		  && d.getMinuti() == minuti)
             .findFirst()
             .orElse(new DatiCellaCalendarioDTO(data, ora, minuti,
+                                               new ArrayList<>(),
                                                new ArrayList<>(),
                                                new ArrayList<>(),
                                                new ArrayList<>()));
@@ -166,17 +185,12 @@ public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
         
     }
 
-
-
-
     //----------------------------------------------------------------
 
     @Override
     public boolean verificaDisponibilita(LocalDate giorno, int ora) {
-    	
-        /*Creazione handler "al volo" con DTO fittizio, solo per verifica
-         *disponibilità uso metodo statico*/
-        TurniHandler turniHandler = new TurniHandler(calendarioService);
+
+        TurniHandler turniHandler = new TurniHandler(calendarioFacade);
         return turniHandler.esistePersonaleDisponibile(giorno, ora);
         
     }
@@ -187,17 +201,36 @@ public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
      * corsi, eventi e appuntamenti*/
     @Override
     public void aggiornaDatiCella(IDatiCellaCalendarioDTO dto) {
-    	
-        // Istanziazione handler "al volo" e passaggio DTO + servizio
-        /*new TurniHandler(dto, calendarioService).caricaTurniPerDataEOra();
-        new CorsiHandler(dto, calendarioService).caricaCorsiPerDataEOraEMinuti(dto.getMinuti());
-        new EventiHandler(dto, calendarioService).caricaEventiPerDataEOra();
-        new AppuntamentiHandler(dto, calendarioService).caricaAppuntamentiPerDataEOraEMinuti(dto.getMinuti());*/
        
-        new DTOHandlerCalendarioSettimanale(dto, calendarioService).popolaDatiCella(dto.getMinuti());
+    	/*Forzatura aggiornamento da DB*/
+    	corsiCache.remove(dto.getData());
+    	
+        new DTOHandlerCalendarioSettimanale(dto, calendarioFacade, 
+        									tuttiAppuntamenti, corsiCache,
+        									turniCache, eventiCache)
+        								    .popolaDatiCella(dto.getMinuti());
+        				                    
         
     }
     
 
     //----------------------------------------------------------------
+    
+    @Override
+    public void addCalendarioChangeListener(ICalendarioChangeListener listener) {
+    	
+    	listeners.add(listener);
+    	
+    }
+    
+    @Override
+    public void removeCalendarioChangeListener(ICalendarioChangeListener listener) {
+    	
+    	listeners.remove(listener);
+    	
+    }
+    
+    //----------------------------------------------------------------
+   
+
 }

@@ -33,6 +33,7 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
 
     private JButton btnPrecedente;
     private JButton btnSuccessiva;
+    private JButton btnGestioneAvanzata;
     
     private JPanel griglia;
     private JPanel pannelloBottoni;
@@ -66,22 +67,6 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
         
     }
     
-	//----------------------------------------------------------------
-    
-    private void creaPannelloBottoni() {
-    	
-        pannelloBottoni = new JPanel();
-        
-        btnPrecedente = new JButton("<< Settimana Precedente");
-        btnSuccessiva = new JButton("Settimana Successiva >>");
-        
-        buttonSizeSetter.uniformButtonSize(btnPrecedente, btnSuccessiva);
-
-        pannelloBottoni.add(btnPrecedente);
-        pannelloBottoni.add(btnSuccessiva);
-        
-    }
-
 	//----------------------------------------------------------------
 
     @Override
@@ -170,7 +155,7 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
                     LocalDate giornoData = dateSettimana[giorno];
                     CalendarioCellPanel cella = new CalendarioCellPanel(giornoData,
                     												    ora, minuti);
-                    //System.out.println("CREO cella hash: " + cella.hashCode());
+                    
                     cella.addButtonListener(cellClickListener);
                     griglia.add(cella, gbc);
                     celle.add(cella);
@@ -222,6 +207,15 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
     }
     
 	//----------------------------------------------------------------
+    
+    @Override
+    public void addBtnGestioneAvanzataListener(ActionListener listener) {
+    	
+        btnGestioneAvanzata.addActionListener(listener);
+        
+    }
+    
+	//----------------------------------------------------------------
 
     @Override
     public LocalDate getLunediCorrente() {
@@ -239,6 +233,26 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
         
     }
     
+	//----------------------------------------------------------------
+    
+    
+    private void creaPannelloBottoni() {
+    	
+        pannelloBottoni = new JPanel();
+        
+        btnPrecedente = new JButton("<< Settimana Precedente");
+        btnSuccessiva = new JButton("Settimana Successiva >>");
+        btnGestioneAvanzata = new JButton("Gestione avanzata...");
+        
+        buttonSizeSetter.uniformButtonSize(btnPrecedente, btnSuccessiva,
+        								   btnGestioneAvanzata);
+
+        pannelloBottoni.add(btnPrecedente);
+        pannelloBottoni.add(btnSuccessiva);
+        pannelloBottoni.add(btnGestioneAvanzata);
+        
+    }
+
 	//----------------------------------------------------------------
 
 }

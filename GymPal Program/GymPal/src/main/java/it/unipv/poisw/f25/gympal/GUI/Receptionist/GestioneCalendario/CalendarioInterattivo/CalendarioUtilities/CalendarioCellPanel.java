@@ -106,7 +106,8 @@ public class CalendarioCellPanel extends JPanel {
 		
 	    boolean haContenuti = !(dati.getCorsi().isEmpty()
 	                          && dati.getAppuntamentiPT().isEmpty()
-	                          && dati.getEventiGenerici().isEmpty());
+	                          && dati.getEventiGenerici().isEmpty()
+	                          && dati.getTurni().isEmpty());
 
 	    if (haContenuti) {
 	        	

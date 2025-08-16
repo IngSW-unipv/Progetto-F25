@@ -30,6 +30,10 @@ public interface ICalendarioSettimanaleView {
 	
 	//----------------------------------------------------------------
 	
+	public void addBtnGestioneAvanzataListener(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
 	public LocalDate getLunediCorrente();
 	
 	//----------------------------------------------------------------

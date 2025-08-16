@@ -2,8 +2,8 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ICalendarioFacadeService;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.RegistrationServicesBundle;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneCalendario.CalendarServicesBundle;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.CommonServicesBundle;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
@@ -27,7 +27,7 @@ public class ReceptionistController implements IReceptionistController {
     /*Servizi*/
     private RegistrationServicesBundle serviziReg;
     private CommonServicesBundle serviziComuni;
-    private CalendarServicesBundle serviziCalendario;
+    private ICalendarioFacadeService calendarioFacade;
     
     /*Coordinatori GUI*/
     private IRegistrationCoordinator customerRegistrationCoordinator;
@@ -39,7 +39,7 @@ public class ReceptionistController implements IReceptionistController {
     public ReceptionistController(IDashboard view,
             					  RegistrationServicesBundle serviziReg,
             					  CommonServicesBundle serviziComuni,
-            					  CalendarServicesBundle serviziCalendario) {
+            					  ICalendarioFacadeService calendarioFacade) {
     	
         recDashView = view;
 
@@ -56,7 +56,7 @@ public class ReceptionistController implements IReceptionistController {
          *appositi bundles.*/
         this.serviziReg = serviziReg;
         this.serviziComuni = serviziComuni;
-        this.serviziCalendario = serviziCalendario;
+        this.calendarioFacade = calendarioFacade;
  
         
     }
@@ -129,7 +129,7 @@ public class ReceptionistController implements IReceptionistController {
         if (calendarioCoordinator == null) {
         	
             calendarioCoordinator = new GestioneCalendarioCoordinator(this,
-                                    this.serviziCalendario.getCalendarioService());
+                                    calendarioFacade);
 
             calendarioCoordinator.inizializzaConBarra(frame, callback);
             

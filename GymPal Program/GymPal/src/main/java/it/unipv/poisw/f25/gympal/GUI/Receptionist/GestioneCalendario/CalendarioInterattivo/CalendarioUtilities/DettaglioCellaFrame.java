@@ -1,112 +1,197 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.CalendarioUtilities;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.time.LocalDate;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.IDatiCellaCalendarioDTO;
 
-public class DettaglioCellaFrame extends JFrame{
-	
+public class DettaglioCellaFrame extends JFrame {
+
 	private static final long serialVersionUID = 1L;
-	
-	//----------------------------------------------------------------
-	
-	public DettaglioCellaFrame() {
-		
-        setSize(500, 400);
-        setLocationRelativeTo(null); // centro su schermo
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setVisible(true);
-		
-	}
-	
-	//----------------------------------------------------------------
 
-	public DettaglioCellaFrame(IDatiCellaCalendarioDTO dati, 
-							   LocalDate data, 
-							   int ora, int minuti) {
-		
-        super("Dettagli cella - " + data + " " 
-        	 + String.format("%02d:%02d", ora, minuti));
+    // ----------------------------------------------------------------
 
-        setLayout(new BorderLayout());
-        
-        /*############################################################*/
-
-        JPanel contenuto = new JPanel();
-        contenuto.setLayout(new BoxLayout(contenuto, BoxLayout.Y_AXIS));
-        contenuto.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
-        contenuto.add(new JLabel("Data: " + data + "  Ora: " 
-        						+ String.format("%02d:%02d", ora, minuti)));
-
-        contenuto.add(creaSezione("Corsi:", dati.getCorsi()));
-        contenuto.add(creaSezione("Appuntamenti PT:", dati.getAppuntamentiPT()));
-        contenuto.add(creaSezione("Eventi:", dati.getEventiGenerici()));
-        
-        /*############################################################*/
-
-        JPanel footer = new JPanel();
-        JButton chiudi = new JButton("Chiudi");
-        chiudi.addActionListener(e -> dispose());
-
-        JButton modifica = new JButton("Modifica...");
-        
-        modifica.addActionListener(e -> {
-        	
-            // futura logica: apri schermata di modifica
-            JOptionPane.showMessageDialog(this, "Funzione non ancora implementata.");
-            
-        });
-
-        footer.add(modifica);
-        footer.add(chiudi);
-
-        /*############################################################*/
-        
-        add(contenuto, BorderLayout.CENTER);
-        add(footer, BorderLayout.SOUTH);
-
+    public DettaglioCellaFrame() {
         setSize(500, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+        setVisible(true);
     }
-	
-	//----------------------------------------------------------------
 
-    private JPanel creaSezione(String titolo, List<String> elementi) {
+    // ----------------------------------------------------------------
+
+    public DettaglioCellaFrame(IDatiCellaCalendarioDTO dati, LocalDate data,
+                               int ora, int minuti) {
+
+        super("Dettagli cella - " + data 
+        						  + " " + String.format("%02d:%02d", ora, minuti));
+        setLayout(new BorderLayout());
+
+        // HEADER
+        JLabel headerLabel = new JLabel("Data: " + data 
+        										 + "   Ora: " 
+        										 + String.format("%02d:%02d", ora, minuti));
+        headerLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        add(headerLabel, BorderLayout.NORTH);
+
+        // CONTENUTO
+        JPanel contenutoPanel = new JPanel(new GridBagLayout());
+        contenutoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridy = 0;
+        gbc.weightx = 0.25;
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        gbc.gridx = 0;
+        contenutoPanel.add(creaSezioneConLista("Corsi", dati.getCorsi()), gbc);
+
+        gbc.gridx = 1;
+        contenutoPanel.add(creaSezioneConLista("Appuntamenti PT", dati.getAppuntamentiPT()), gbc);
+
+        gbc.gridx = 2;
+        contenutoPanel.add(creaSezioneConLista("Eventi", dati.getEventiGenerici()), gbc);
+
+        gbc.gridx = 3;
+        contenutoPanel.add(creaSezioneConLista("Turni", dati.getTurni()), gbc);
+
+        add(contenutoPanel, BorderLayout.CENTER);
+
+        // FOOTER
+        JPanel footer = new JPanel();
+        JButton chiudiBtn = new JButton("Chiudi");
+        chiudiBtn.addActionListener(e -> dispose());
+        footer.add(chiudiBtn);
+        add(footer, BorderLayout.SOUTH);
+
+        setSize(1600, 600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setVisible(true);
+        
+    }
+
+    // ----------------------------------------------------------------
+
+    private JPanel creaSezioneConLista(String titolo, List<String> dati) {
     	
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createTitledBorder(titolo));
+        JPanel sezionePanel = new JPanel(new BorderLayout());
+        sezionePanel.setBorder(BorderFactory.createTitledBorder(titolo));
 
-        if (elementi == null || elementi.isEmpty()) {
+        DefaultListModel<String> model = new DefaultListModel<>();
+        
+        if (dati == null || dati.isEmpty()) {
         	
-            panel.add(new JLabel("Nessuno"));
+            model.addElement("Nessuno");
             
         } else {
         	
-            for (String el : elementi) {
+            dati.forEach(model::addElement);
+            
+        }
+
+        JList<String> jList = new JList<>(model);
+
+        // Renderer HTML
+        jList.setCellRenderer(new DefaultListCellRenderer() {
+        	
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Component getListCellRendererComponent(JList<?> list,
+                                                          Object value,
+                                                          int index,
+                                                          boolean isSelected,
+                                                          boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, 
+                						  value, index, isSelected, cellHasFocus);
+                String text = (String) value;
+                
+                if (text != null && text.trim().startsWith("<html>")) {
+                	
+                    label.setText(text);  // HTML render
+                    
+                } else {
+                	
+                    label.setText(text);
+                    
+                }
+                
+                return label;
+                
+            }
+            
+        });
+
+        JScrollPane scrollPane = creaListaScrollPane(model, jList);
+        sezionePanel.add(scrollPane, BorderLayout.CENTER);
+
+        sezionePanel.setMinimumSize(new Dimension(200, 100));
+        return sezionePanel;
+        
+    }
+
+    // ----------------------------------------------------------------
+
+    /* La classe 'DefaultListModel' è pensata per essere usata direttamente con
+     * i componenti Swing come 'JList'.
+     * Essa è mutabile, e supporta eventi di modifica, quindi l'interfaccia utente
+     * risulta aggiornata in modo automatico quando i dati cambiano.
+     * 
+     * Una 'List' classica andrebbe convertita in un 'ListModel' prima di essere
+     * passata ad una 'JList'. Peraltro, 'List' non notifica nessun componente
+     * Swing a fronte di cambiamenti nei dati.*/
+    private JScrollPane creaListaScrollPane(DefaultListModel<String> model,
+                                            JList<String> jList) {
+
+        FontMetrics metrics = jList.getFontMetrics(jList.getFont());
+        int visibleRows = Math.max(3, Math.min(model.getSize(), 10));
+        jList.setVisibleRowCount(visibleRows);
+
+        int maxTextWidth = 0;
+        
+        for (int i = 0; i < model.size(); i++) {
+        	
+            int width = metrics.stringWidth(model.get(i));
+            if (width > maxTextWidth) {
             	
-                panel.add(new JLabel("- " + el));
+                maxTextWidth = width;
                 
             }
             
         }
 
-        return panel;
-    }
-    
-	//----------------------------------------------------------------
+        int preferredWidth = Math.max(maxTextWidth + 30, 200);
+        int rowHeight = jList.getFixedCellHeight();
+        if (rowHeight <= 0) rowHeight = metrics.getHeight();
+        int preferredHeight = visibleRows * rowHeight + 10;
 
+        JScrollPane scrollPane = new JScrollPane(jList);
+        scrollPane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
+        scrollPane.setMinimumSize(new Dimension(200, 100));
+
+        return scrollPane;
+        
+    }
+
+    // ----------------------------------------------------------------
+    
 }

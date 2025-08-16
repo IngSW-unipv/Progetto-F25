@@ -28,5 +28,9 @@ public interface IDatiCellaCalendarioDTO {
 	public List<String> getEventiGenerici();
 	
     //----------------------------------------------------------------
+	
+	public List<String> getTurni();
+	
+    //----------------------------------------------------------------
 
 }

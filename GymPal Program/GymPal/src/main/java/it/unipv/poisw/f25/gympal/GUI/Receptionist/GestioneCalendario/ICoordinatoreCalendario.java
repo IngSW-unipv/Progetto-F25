@@ -1,9 +1,11 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.swing.JFrame;
 
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ICalendarioChangeListener;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.IDatiCellaCalendarioDTO;
 
 public interface ICoordinatoreCalendario {
@@ -21,6 +23,18 @@ public interface ICoordinatoreCalendario {
 	//----------------------------------------------------------------
 	 
 	 public void aggiornaDatiCella(IDatiCellaCalendarioDTO dto);
+	 
+	//----------------------------------------------------------------
+	 
+	 public void addCalendarioChangeListener(ICalendarioChangeListener listener);
+	 
+	 public void removeCalendarioChangeListener(ICalendarioChangeListener listener);
+	 
+	//----------------------------------------------------------------
+	 
+	 public void notificaCambio(LocalDate data);
+	 
+	 public void notificaCambio(List<LocalDate> dateCambiate);
 	 
 	//----------------------------------------------------------------
 

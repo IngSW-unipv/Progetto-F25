@@ -12,7 +12,7 @@ public class DatiCellaCalendarioDTO implements IDatiCellaCalendarioDTO {
     private List<String> corsi;
     private List<String> appuntamentiPT;
     private List<String> eventiGenerici;
-    //AGGIUNGERE LISTA TURNI
+    private List<String> turni;
 
     //----------------------------------------------------------------
 
@@ -21,7 +21,8 @@ public class DatiCellaCalendarioDTO implements IDatiCellaCalendarioDTO {
                                   int minuti, 
                                   List<String> corsi,
                                   List<String> appuntamentiPT,
-                                  List<String> eventiGenerici) {
+                                  List<String> eventiGenerici,
+                                  List<String> turni) {
 
         this.data = data;
         this.ora = ora;
@@ -29,6 +30,7 @@ public class DatiCellaCalendarioDTO implements IDatiCellaCalendarioDTO {
         this.corsi = corsi;
         this.appuntamentiPT = appuntamentiPT;
         this.eventiGenerici = eventiGenerici;
+        this.turni = turni;
         
     }
 
@@ -86,6 +88,15 @@ public class DatiCellaCalendarioDTO implements IDatiCellaCalendarioDTO {
         
     }
 
+    //----------------------------------------------------------------
+    
+    @Override
+    public List<String> getTurni(){
+    	
+    	return turni;
+    	
+    }
+    
     //----------------------------------------------------------------
 
     @Override
