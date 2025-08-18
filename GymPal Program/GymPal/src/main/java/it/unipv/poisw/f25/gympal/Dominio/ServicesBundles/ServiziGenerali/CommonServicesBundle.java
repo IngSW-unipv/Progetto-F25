@@ -2,6 +2,8 @@ package it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali;
 
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.IStrategieCalcoloPrezzoFactory;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieCalcoloPrezzoFactory;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.AutEmployee.AutenticaDipendente;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.AutEmployee.IAutenticaDipendente;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveClient.IRetrieveClientFromDB;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveClient.RetrieveClientFromDB;
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveOccasionsDiscounts.IRetrieveDiscountsFromDB;
@@ -18,6 +20,7 @@ import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.Validaz
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.ValidatoreCampi;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.RegexCheck;
+import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
 
@@ -34,6 +37,9 @@ public class CommonServicesBundle {
     private IUpdateClientInsideDB updateClient;
     private ICommitNewClientToDB immettiDati;
     private IRetrieveDiscountsFromDB getDiscounts;
+    
+    private IAutenticaDipendente autenticatore;
+    private StaffFactory staffFactory;
 
     
 	//----------------------------------------------------------------
@@ -54,6 +60,8 @@ public class CommonServicesBundle {
         updateClient = new UpdateClientInsideDB(facade);
         immettiDati = new CommitNewClientToDB(facade);
         getDiscounts = new RetrieveDiscountsFromDB(facade);
+        autenticatore = new AutenticaDipendente(facade);
+        staffFactory = new StaffFactory();
     	
     }
     
@@ -130,6 +138,21 @@ public class CommonServicesBundle {
     }
     
    //----------------------------------------------------------------
-
+    
+    public IAutenticaDipendente getAutDipendente() {
+    	
+    	return autenticatore;
+    	
+    }
+    
+    //----------------------------------------------------------------
+    
+    public StaffFactory getStaffFactory() {
+    	
+    	return staffFactory;
+    	
+    }
+    
+    //----------------------------------------------------------------
 
 }

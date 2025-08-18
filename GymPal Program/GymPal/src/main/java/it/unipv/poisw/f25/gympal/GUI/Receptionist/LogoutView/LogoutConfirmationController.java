@@ -2,8 +2,11 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView;
 
 import java.awt.event.ActionListener;
 
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.AutEmployee.IAutenticaDipendente;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginController;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginView;
+import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
 
 public class LogoutConfirmationController {
@@ -14,8 +17,12 @@ public class LogoutConfirmationController {
 
     //----------------------------------------------------------------
 
-    public LogoutConfirmationController(ILogoutConfirmationView logoutView, IDashboard mainView,
-            String schermataPrecedente) {
+    public LogoutConfirmationController(ILogoutConfirmationView logoutView, 
+    									IDashboard mainView,
+    									String schermataPrecedente,
+    									IRegexCheck validator,
+    									IAutenticaDipendente autenticatore,
+    			                        StaffFactory staffFactory) {
         
         this.view = logoutView;
         this.mainView = mainView;
@@ -37,7 +44,8 @@ public class LogoutConfirmationController {
         view.getConfirmButton().addActionListener(e -> {
             // Logica di logout: mostra login, chiude dashboard
             LoginView loginView = new LoginView();
-            new LoginController(loginView);
+            new LoginController(loginView, validator, 
+            					autenticatore, staffFactory);
             loginView.setVisible(true);
             
             this.mainView.dispose(); // chiude la finestra dashboard

@@ -6,6 +6,8 @@ public class StaffFactory {
 
 	public StaffFactory(){};
 	
+	//----------------------------------------------------------------
+	
 	public Staff generateStaffMember(String key) {
 		
 		switch(key) {
@@ -15,8 +17,9 @@ public class StaffFactory {
 			case "MAN": return new Manager();
 		
 		}
-		return null;
-		
+		return null;		
 	}
+	
+	//----------------------------------------------------------------
 	
 }

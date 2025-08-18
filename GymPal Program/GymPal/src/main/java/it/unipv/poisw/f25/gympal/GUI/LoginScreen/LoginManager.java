@@ -1,72 +1,47 @@
 package it.unipv.poisw.f25.gympal.GUI.LoginScreen;
-import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
-import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.RegexCheck;
-import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.CredentialsPOJO;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.AutEmployee.IAutenticaDipendente;
+import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.LoginResult;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
 import it.unipv.poisw.f25.gympal.staff.Staff;
 
-public class LoginManager implements IRegexExpression {
+public class LoginManager {
 
-    private static LoginManager loginInstance;
-
-	//----------------------------------------------------------------
+    private final IAutenticaDipendente autentica;
+    private final StaffFactory staffFactory;
     
-    private LoginManager() {}
+	//----------------------------------------------------------------
 
-    public static synchronized LoginManager getLoginInstance() {
+    public LoginManager(IAutenticaDipendente autentica, StaffFactory factory) {
     	
-        if (loginInstance == null) {
-        	
-            loginInstance = new LoginManager();
-        }
+        this.autentica = autentica;
+        this.staffFactory = factory;
         
-        return loginInstance;
     }
     
 	//----------------------------------------------------------------
 
-    public Staff login(String nome, String cognome, String staffID) {
+    public LoginResult login(String nome, String cognome, 
+    						 String staffID, String tipo) {
     	
-    	IRegexCheck reg = new RegexCheck();
-        StaffFactory factory = new StaffFactory();
-
-        if (reg.check(nome, NAME_REGEXEXPRESSION)
-            && reg.check(cognome, SURNAME_REGEXEXPRESSION)
-            && reg.check(staffID, STAFF_ID_REGEXEXPRESSION)) {
-
-            CredentialsPOJO credentials = new CredentialsPOJO();
-            credentials.setAllProperties(nome, cognome, staffID);
-
-			//Va qui inserita la logica che mette a confronto le stringhe inserite da GUI con
-			//le credenziali presenti in archivio.
-
-            if (archiveCheck(credentials)) {
-            	
-            	
-            	//Factory che istanzia Dipendente, Manager oppure Receptionist in base a cosa
-            	//sia presente entro staffID
-            	
-                return factory.generateStaffMember(reg.retrieveSubString(staffID));
-                
-            } else {
-            	
-                return null; // Credenziali non trovate in archivio
-            }
-            
-            
-        } else {
+        if (!autentica.autenticazione(nome, cognome, staffID)) {
         	
-            	return null; // Formato errato
+            return new LoginResult(false, "Credenziali non trovate.", null);
+            
         }
-   
-    //----------------------------------------------------------------
+
+        Staff staff = staffFactory.generateStaffMember(tipo);
+        
+        if (staff == null) {
+        	
+            return new LoginResult(false, "Tipo di staff non riconosciuto.", null);
+            
+        }
+
+        return new LoginResult(true,"Login riuscito! Benvenuto, " 
+        					 + staff.getClass().getSimpleName(), staff);
         
     }
-
-    private boolean archiveCheck(CredentialsPOJO credentials) {
-        // Logica di verifica in archivio
-        return true;
-    }
     
+	//----------------------------------------------------------------
+
 }

@@ -34,6 +34,10 @@ public interface ICalendarioSettimanaleView {
 	
 	//----------------------------------------------------------------
 	
+	public void addBtnLegendaListener(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
 	public LocalDate getLunediCorrente();
 	
 	//----------------------------------------------------------------

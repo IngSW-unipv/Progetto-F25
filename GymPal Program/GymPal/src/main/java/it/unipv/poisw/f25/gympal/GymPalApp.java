@@ -9,15 +9,39 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.AutEmployee.AutenticaDipendente;
+import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.AutEmployee.IAutenticaDipendente;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.RegexCheck;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginController;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginView;
+import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.FontSetter.FontSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.FontSetter.IFontSetter;
+import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.setup.PersistenceManager;
 
 public class GymPalApp {
 
     public static void main(String[] args) {
+    	
+    	// AVVIO PERSISTENZA /////////////////////////////////////////////
+    	
+        System.out.println(">>> AVVIO APPLICAZIONE GYMPAL <<<");
+
+        // PASSO 1: Inizializza l'intera infrastruttura di persistenza con una sola chiamata.
+        // Questo metodo si occuperà di creare le factory, il proxy e lanciare la sincronizzazione.
+        try {
+            PersistenceManager.initialize();
+        } catch (Exception e) {
+            System.err.println("Impossibile avviare l'applicazione a causa di un errore critico di inizializzazione:");
+            e.printStackTrace();
+            return; // Interrompi l'avvio se il setup fallisce
+        }  
+        
+    	//----------------------------------------------------------------
+        
+        // AVVIO GUI /////////////////////////////////////////////////////
     	
     	IFontSetter setter = new FontSetter();
     	
@@ -50,24 +74,17 @@ public class GymPalApp {
         	setter.setDefaultFont(font);
         	
             LoginView view = new LoginView();
+            IRegexCheck reg = new RegexCheck();
+            IAutenticaDipendente autenticatore = new AutenticaDipendente(PersistenceFacade.getInstance());
             
-            new LoginController(view);
+            new LoginController(view, reg, autenticatore, new StaffFactory());
             
             view.setVisible(true);
             
         });
         
-            System.out.println(">>> AVVIO APPLICAZIONE GYMPAL <<<");
-
-            // PASSO 1: Inizializza l'intera infrastruttura di persistenza con una sola chiamata.
-            // Questo metodo si occuperà di creare le factory, il proxy e lanciare la sincronizzazione.
-            try {
-                PersistenceManager.initialize();
-            } catch (Exception e) {
-                System.err.println("Impossibile avviare l'applicazione a causa di un errore critico di inizializzazione:");
-                e.printStackTrace();
-                return; // Interrompi l'avvio se il setup fallisce
-            }  
     }
+    
+	//----------------------------------------------------------------
 
 }

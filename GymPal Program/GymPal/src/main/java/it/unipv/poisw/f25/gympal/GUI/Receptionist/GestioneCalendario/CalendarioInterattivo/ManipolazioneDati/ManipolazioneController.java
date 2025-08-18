@@ -336,8 +336,12 @@ public class ManipolazioneController {
 	            
 	        }
 
-	        List<SessioneCorso> sessioni = corsoManager.recuperaSessioniDisponibili(tipo, inizio, fine);
-	        corsiPanel.getSessioniTable().setModel(new SessioneCorsoTableModel(sessioni));
+	        List<SessioneCorso> sessioni = corsoManager
+	        							  .recuperaSessioniDisponibili(tipo, inizio, fine);
+	        
+	        /*Punto applicazione di table-model custom*/
+	        corsiPanel.getSessioniTable()
+	        		  .setModel(new SessioneCorsoTableModel(sessioni));
 
 	    } catch (DateTimeParseException ex) {
 	    	
@@ -366,6 +370,8 @@ public class ManipolazioneController {
 	    	
 	        List<AppuntamentoPT> appuntamenti = calendarioFacade
 	        									.getAppuntamentiPT(cfCliente, staffId);
+	        
+	        /*Punto applicazione di table-model custom*/
 	        apptPanel.getAppuntamentiTable()
 	        		 .setModel(new AppuntamentoPTTableModel(appuntamenti));
 	        

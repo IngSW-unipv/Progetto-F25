@@ -96,7 +96,12 @@ public class ReceptionistController implements IReceptionistController {
         recDashView.aggiungiComando("LOGOUT", () -> {
         	
             System.out.println("schermataPreLogout = " + schermataPreLogout);
-            new LogoutConfirmationController(logoutView, (IDashboard)recDashView, schermataPreLogout);
+            new LogoutConfirmationController(logoutView, 
+            								(IDashboard)recDashView, 
+            								 schermataPreLogout,
+            								 serviziComuni.getRegexChecker(),
+            								 serviziComuni.getAutDipendente(),
+            								 serviziComuni.getStaffFactory());
             recDashView.mostraSchermata("LOGOUT_VIEW"); 
             
         });

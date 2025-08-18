@@ -34,6 +34,7 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
     private JButton btnPrecedente;
     private JButton btnSuccessiva;
     private JButton btnGestioneAvanzata;
+    private JButton btnLegenda;
     
     private JPanel griglia;
     private JPanel pannelloBottoni;
@@ -60,6 +61,7 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
         JScrollPane scrollPane = new JScrollPane(griglia);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         add(scrollPane, BorderLayout.CENTER);
 
         creaPannelloBottoni();
@@ -216,6 +218,15 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
     }
     
 	//----------------------------------------------------------------
+    
+    @Override
+    public void addBtnLegendaListener(ActionListener listener) {
+    	
+    	btnLegenda.addActionListener(listener);
+    	
+    }
+    
+	//----------------------------------------------------------------
 
     @Override
     public LocalDate getLunediCorrente() {
@@ -243,13 +254,16 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
         btnPrecedente = new JButton("<< Settimana Precedente");
         btnSuccessiva = new JButton("Settimana Successiva >>");
         btnGestioneAvanzata = new JButton("Gestione avanzata...");
+        btnLegenda = new JButton("Legenda");
         
+        buttonSizeSetter.uniformButtonSize(btnLegenda);
         buttonSizeSetter.uniformButtonSize(btnPrecedente, btnSuccessiva,
         								   btnGestioneAvanzata);
 
         pannelloBottoni.add(btnPrecedente);
         pannelloBottoni.add(btnSuccessiva);
         pannelloBottoni.add(btnGestioneAvanzata);
+        pannelloBottoni.add(btnLegenda);
         
     }
 

@@ -1,11 +1,19 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ICalendarioFacadeService;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.ICoordinatoreCalendario;
@@ -39,6 +47,7 @@ public class CalendarioSettimanaleController implements ICalendarioChangeListene
         impostaMeccanismoObservable();
         inizializzaTabella(cellListenerProvider());
         impostaEventoBtnGestioneAvanzata();
+        impostaEventoBtnLegenda();
         
     }
     
@@ -144,12 +153,52 @@ public class CalendarioSettimanaleController implements ICalendarioChangeListene
     
 	//----------------------------------------------------------------
     
+    private void impostaEventoBtnLegenda() {
+      	
+        view.addBtnLegendaListener(e -> {
+            JPanel legendaPanel = new JPanel();
+            legendaPanel.setLayout(new BoxLayout(legendaPanel, BoxLayout.Y_AXIS));
+
+            legendaPanel.add(creaVoceLegenda(new Color(100, 200, 255), "Corsi"));
+            legendaPanel.add(creaVoceLegenda(new Color(255, 170, 80), "Appuntamenti PT"));
+            legendaPanel.add(creaVoceLegenda(new Color(200, 100, 255), "Eventi generici"));
+            legendaPanel.add(creaVoceLegenda(new Color(255, 240, 80), "Turni staff"));
+
+            JOptionPane.showMessageDialog(null, legendaPanel,
+                    "Legenda colori", JOptionPane.INFORMATION_MESSAGE);
+        });
+    	
+    }
+    
+    
+    private JPanel creaVoceLegenda(Color colore, String testo) {
+    	
+        JPanel voce = new JPanel(new BorderLayout());
+        voce.setOpaque(false);
+
+        JPanel quadrato = new JPanel();
+        quadrato.setBackground(colore);
+        quadrato.setPreferredSize(new Dimension(20, 20));
+        quadrato.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+
+        JLabel label = new JLabel(" " + testo);
+        voce.add(quadrato, BorderLayout.WEST);
+        voce.add(label, BorderLayout.CENTER);
+        return voce;
+        
+    }
+    
+	//----------------------------------------------------------------
+    
     private void aggiornaCelle(List<CalendarioCellPanel> celle) {
     	
         for (CalendarioCellPanel cella : celle) {
         	
             IDatiCellaCalendarioDTO dati = coordinator.getContenutoCella(
-                cella.getData(), cella.getOra(), cella.getMinuti());
+            							   cella.getData(), 
+            							   cella.getOra(), 
+            							   cella.getMinuti());
+            
             cella.aggiornaColoreSfondo(dati);
             
         }

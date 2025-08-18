@@ -63,7 +63,13 @@ public class ManagerController implements IManagerController{
     	manDashView.aggiungiComando("LOGOUT", () -> {
         	
             System.out.println("schermataPreLogout = " + schermataPreLogout);
-            new LogoutConfirmationController(logoutView, (IDashboard)manDashView, schermataPreLogout);
+            
+            new LogoutConfirmationController(logoutView, 
+						            		(IDashboard)manDashView, 
+											 schermataPreLogout,
+											 serviziComuni.getRegexChecker(),
+											 serviziComuni.getAutDipendente(),
+											 serviziComuni.getStaffFactory());
             manDashView.mostraSchermata("LOGOUT_VIEW"); 
             
         });

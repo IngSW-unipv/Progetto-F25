@@ -8,11 +8,11 @@ public class CredentialsPOJO implements Serializable {
 	
 	private String nome, cognome, staffID;
 	
-	
+	//-----------------------------------------------------	
 	
 	public CredentialsPOJO() {}
 	
-	
+	//-----------------------------------------------------	
 
 	public String getNome() {
 		return nome;
@@ -51,5 +51,7 @@ public class CredentialsPOJO implements Serializable {
 		setStaffID(staffID);
 		
 	}
+	
+	//-----------------------------------------------------
 	
 }
