@@ -49,8 +49,13 @@ public class IscrizioneCorsiPanel extends JPanel{
 		
 		/* Evita che i due campi si ripristinino al valore precedente quando il
 		 * focus sul campo è perso*/
-		dataInizioField.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
-		dataFineField.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
+		
+		/* La costante 'PERSIST' fa assicura che, inserita una data nel formato
+		 * sbagliato 'gg-MM-yyyy' anziché 'yyyy-MM-gg', i numeri nel campo non
+		 * siano rimescolati a casaccio, ma rimanga visualizzata la data nel for-
+		 * mato errato.*/
+		dataInizioField.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		dataFineField.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		
 		dataInizioField.addFocusListener(new FocusAdapter() {
 			
@@ -102,6 +107,7 @@ public class IscrizioneCorsiPanel extends JPanel{
         /*############################################################*/
 		
 		sessioniTable = new JTable();
+		sessioniTable.setAutoCreateRowSorter(true);
 		add(new JScrollPane(sessioniTable), BorderLayout.CENTER);
 		
         /*############################################################*/

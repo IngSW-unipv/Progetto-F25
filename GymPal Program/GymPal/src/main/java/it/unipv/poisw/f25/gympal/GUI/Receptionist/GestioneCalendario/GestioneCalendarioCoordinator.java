@@ -9,8 +9,8 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.SwingWorker;
 
-import it.unipv.poisw.f25.gympal.ApplicationLayer.ICalendarioFacadeService;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.IReceptionistController;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDateUtils;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.CalendarioSettimanaleController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.CalendarioSettimanaleView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ICalendarioChangeListener;
@@ -21,6 +21,7 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.Cachin
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.Handlers.DTOHandlerCalendarioSettimanale;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.Handlers.SecondaryHandlers.TurniHandler;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
 import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
@@ -29,8 +30,8 @@ import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
 
 public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
 
-	/*Varie*/
-	private IReceptionistController viewHandler;
+	/*Controllore*/
+	private IRegistraEMostraSchermate viewHandler;
 	
 	/*PER CACHING INFO DA DATABASE*/
 	private List<AppuntamentoPT> tuttiAppuntamenti;
@@ -46,17 +47,23 @@ public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
 	
 	/*Servizi*/
     private ICalendarioFacadeService calendarioFacade;
+    private IDateUtils dateUtils;
     
     /*DTO*/
     private List<DatiCellaCalendarioDTO> settimanaDTOs;
   
     //----------------------------------------------------------------
     
-    public GestioneCalendarioCoordinator(IReceptionistController viewHandler,
-            							 ICalendarioFacadeService calendarioFacade) {
+    public GestioneCalendarioCoordinator(IRegistraEMostraSchermate viewHandler,
+            							 ICalendarioFacadeService calendarioFacade,
+            							 IDateUtils dateUtils) {
     	
+    		/*Controller*/
     		this.viewHandler = viewHandler;
+    		
+    		/*Servizi*/
     		this.calendarioFacade = calendarioFacade;
+    		this.dateUtils = dateUtils;
     		
     }
 
@@ -68,7 +75,9 @@ public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
     	viewHandler.registraSchermata("CALENDARIO_VIEW", calendarioView.getMainPanel());
     	
     	new CalendarioSettimanaleController(calendarioView, 
-    										calendarioFacade, this);
+    										calendarioFacade, 
+    										dateUtils,
+    										this);
     	
     }    
     

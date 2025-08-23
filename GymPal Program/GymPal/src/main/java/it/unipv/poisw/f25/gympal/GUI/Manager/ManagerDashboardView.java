@@ -53,9 +53,15 @@ public class ManagerDashboardView extends JFrame implements IDashboard{
         pannelloSinistro.setLayout(new GridBagLayout());
         pannelloSinistro.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
-        rectClientData = new JButton("<html><center>Rettifica<br>Dati Cliente</center></html>");
-        addRemModEvents = new JButton("<html><center>Aggiungi<br>Rimuovi<br>Modifica<br>Eventi</center></html>");
-        planShifts = new JButton("<html><center>Pianifica<br>Turni Lavoro</center></html>");
+        rectClientData = new JButton("<html><center>Rettifica<br>"
+        						   + "Dati Cliente</center></html>");
+        
+        addRemModEvents = new JButton("<html><center>Aggiungi<br>Rimuovi<br>Modifica:"
+        							+ "<br>Eventi<br>&<br>Corsi</center></html>");
+        
+        planShifts = new JButton("<html><center>Profili<br>Dipendenti<br>&<br>"
+        					   + "Pianifica<br>Turni Lavoro</center></html>");
+        
         logOutButton = new JButton("Log Out");
         
         GridBagConstraints gbc = new GridBagConstraints();
@@ -112,19 +118,6 @@ public class ManagerDashboardView extends JFrame implements IDashboard{
     }
     
     //----------------------------------------------------------------
-    
-    private JPanel creaSchermata(String testo, Color coloreSfondo) {
-    	
-        JPanel panel = new JPanel();
-        
-        panel.setBackground(coloreSfondo);
-        
-        panel.add(new JLabel(testo));
-        
-        return panel;
-    }
-    
-    //----------------------------------------------------------------    
 
     @Override
     public void aggiungiComando(String nomeComando, Runnable azione) {
@@ -139,11 +132,11 @@ public class ManagerDashboardView extends JFrame implements IDashboard{
                 bottone = rectClientData;
                 break;
                 
-            case "ADD_REM_MOD_EVENTS":
+            case "ADD_REM_MOD_EVENTS_COURSES":
                 bottone = addRemModEvents;
                 break;
                 
-            case "PLAN_SHIFTS":
+            case "PLAN_SHIFTS_HANDLE_EMPLOYEES":
             	bottone = planShifts;
             	break;
                 
@@ -152,6 +145,7 @@ public class ManagerDashboardView extends JFrame implements IDashboard{
                 break;
                 
             default:
+            	
                 throw new IllegalArgumentException("Comando non riconosciuto: " +
                 									nomeComando);
         }
@@ -170,7 +164,9 @@ public class ManagerDashboardView extends JFrame implements IDashboard{
     /* Implementazione metodo dell’interfaccia: mostra la schermata specificata */
     @Override
     public void mostraSchermata(String nome) {
+    	
         cardLayout.show(pannelloDestro, nome);
+        
     }
     
     //----------------------------------------------------------------  
@@ -186,7 +182,9 @@ public class ManagerDashboardView extends JFrame implements IDashboard{
     
     @Override
     public void dispose() {
+    	
         super.dispose();
+        
     }
     
     //---------------------------------------------------------------- 
@@ -199,5 +197,18 @@ public class ManagerDashboardView extends JFrame implements IDashboard{
     }
     
     //---------------------------------------------------------------- 
+    
+    private JPanel creaSchermata(String testo, Color coloreSfondo) {
+    	
+        JPanel panel = new JPanel();
+        
+        panel.setBackground(coloreSfondo);
+        
+        panel.add(new JLabel(testo));
+        
+        return panel;
+    }
+    
+    //----------------------------------------------------------------  
 
 }

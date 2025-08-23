@@ -1,10 +1,14 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist;
+import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import it.unipv.poisw.f25.gympal.ApplicationLayer.ICalendarioFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.RegistrationServicesBundle;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.CommonServicesBundle;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneTurni.TurniDipendente.IGestoreTurniPersonali;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ICommonServicesBundle;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDateUtils;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.GestioneAbbCoordinator;
@@ -13,9 +17,15 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.GestioneCal
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.ICoordinatoreCalendario;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationView;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
+import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.Supporto.TurnoIndividuale;
+import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.VisualizzazioneTurni.IVisualizzaTurniCoordinator;
+import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.VisualizzazioneTurni.VisualizzaTurniCoordinator;
+import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
+import it.unipv.poisw.f25.gympal.staff.Receptionist;
 
-public class ReceptionistController implements IReceptionistController {
+public class ReceptionistController implements IRegistraEMostraSchermate {
 
     private String schermataPreLogout = "SCHERMATA0";
 	
@@ -26,23 +36,35 @@ public class ReceptionistController implements IReceptionistController {
 
     /*Servizi*/
     private RegistrationServicesBundle serviziReg;
-    private CommonServicesBundle serviziComuni;
+    private ICommonServicesBundle serviziComuni;
     private ICalendarioFacadeService calendarioFacade;
+    private IDateUtils dateUtils;
+    private IGestoreTurniPersonali gestoreTurni;
     
     /*Coordinatori GUI*/
     private IRegistrationCoordinator customerRegistrationCoordinator;
     private IGestioneAbbCoordinator gestoreAbb;
     private ICoordinatoreCalendario calendarioCoordinator;
+    private IVisualizzaTurniCoordinator turniCoordinator;
+    
+    /*Per visualizzazione turni Receptionist*/
+    private Receptionist receptionist;
 
     //----------------------------------------------------------------
 
     public ReceptionistController(IDashboard view,
+    							  Receptionist receptionist,
             					  RegistrationServicesBundle serviziReg,
-            					  CommonServicesBundle serviziComuni,
-            					  ICalendarioFacadeService calendarioFacade) {
+            					  ICommonServicesBundle serviziComuni,
+            					  ICalendarioFacadeService calendarioFacade,
+            					  IDateUtils dateUtils,
+            					  IGestoreTurniPersonali gestoreTurni) {
     	
         recDashView = view;
+        
+        this.receptionist = receptionist;
 
+        /*Inizializzazioni*/
         registraAzioniPulsanti();
         inizializzaSchermateStatiche();
 
@@ -57,6 +79,8 @@ public class ReceptionistController implements IReceptionistController {
         this.serviziReg = serviziReg;
         this.serviziComuni = serviziComuni;
         this.calendarioFacade = calendarioFacade;
+        this.dateUtils = dateUtils;
+        this.gestoreTurni = gestoreTurni;
  
         
     }
@@ -91,6 +115,11 @@ public class ReceptionistController implements IReceptionistController {
             mostraCalendarioSeNonInizializzato(recDashView.getMainFrame(), 
             () -> mostraSchermata("CALENDARIO_VIEW"));
             
+        });
+        
+        recDashView.aggiungiComando("TURNI_RECEPTIONIST", () -> {
+            mostraVisualizzaTurniSeNonInizializzato();
+            mostraSchermata("TURNI");
         });
 
         recDashView.aggiungiComando("LOGOUT", () -> {
@@ -134,7 +163,7 @@ public class ReceptionistController implements IReceptionistController {
         if (calendarioCoordinator == null) {
         	
             calendarioCoordinator = new GestioneCalendarioCoordinator(this,
-                                    calendarioFacade);
+                                    calendarioFacade, dateUtils);
 
             calendarioCoordinator.inizializzaConBarra(frame, callback);
             
@@ -183,6 +212,20 @@ public class ReceptionistController implements IReceptionistController {
     	
     }
     
+    //----------------------------------------------------------------
+
+    /*PER "LAZY INITIALIZATION"*/
+    private void mostraVisualizzaTurniSeNonInizializzato() {
+        if (turniCoordinator == null) {
+            String staffID = receptionist.getStaffID();
+
+            List<Turno> turni = gestoreTurni.caricaTurni(staffID);
+            List<TurnoIndividuale> personali = gestoreTurni.estraiTurniPersonali(staffID, turni);
+
+            turniCoordinator = new VisualizzaTurniCoordinator(this, personali);
+        }
+    }
+   
     //----------------------------------------------------------------
 
 

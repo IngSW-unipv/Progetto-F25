@@ -1,17 +1,16 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
-import it.unipv.poisw.f25.gympal.ApplicationLayer.ICalendarioFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ClienteNonAbbonatoException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ConflittoOrarioException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.DatiNonTrovatiException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.SessionePienaException;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDateUtils;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.ICoordinatoreCalendario;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.ControllerSupport.AppuntamentoPTManager;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.ControllerSupport.SessioneCorsoManager;
@@ -32,6 +31,7 @@ public class ManipolazioneController {
     
     /*Servizi*/
     private ICalendarioFacadeService calendarioFacade;
+    private IDateUtils dateUtils;
 
     /*Managers*/
     private final SessioneCorsoManager corsoManager;
@@ -41,6 +41,7 @@ public class ManipolazioneController {
 	
 	public ManipolazioneController(IManipolazioneFrame frame,
 								   ICalendarioFacadeService calendarioFacade,
+								   IDateUtils dateUtils,
 								   ICoordinatoreCalendario coordinator) {
 		/*Vista*/
 		this.frame = frame;
@@ -50,10 +51,15 @@ public class ManipolazioneController {
 		
 		/*Servizi*/
 		this.calendarioFacade = calendarioFacade;
+		this.dateUtils = dateUtils;
 		
 		/*Managers*/
-	    this.corsoManager = new SessioneCorsoManager(calendarioFacade, this.coordinator);
-	    this.ptManager = new AppuntamentoPTManager(calendarioFacade, this.coordinator);
+	    this.corsoManager = new SessioneCorsoManager(calendarioFacade,
+	    											 this.dateUtils,
+	    											 this.coordinator);
+	    
+	    this.ptManager = new AppuntamentoPTManager(calendarioFacade, 
+	    										   this.coordinator);
 		
         inizializzaPannelli();
         		
@@ -96,9 +102,32 @@ public class ManipolazioneController {
 
 	    apptPanel.addAnnullaBtnListener(e -> gestisciAnnullamentoPT(apptPanel));
 	    
+	    popolaStaffIdComboBox(apptPanel);
+	    
 	}
 	
 	//----------------------------------------------------------------
+	
+	private void popolaStaffIdComboBox(AppuntamentiPTPanel apptPanel) {
+		
+		
+	    try {
+	        List<String> soloDIP = ptManager.getSoloStaffIdDIP();	        
+	        apptPanel.setStaffIdOptions(soloDIP);
+	        
+	    } catch (Exception e) {
+	    	
+	        mostraErrore("Errore durante il caricamento degli staffId: " 
+	        			+ e.getMessage());
+	        
+	        e.printStackTrace();
+	        
+	    }
+	    
+	}
+	
+	//----------------------------------------------------------------
+
 	
 	private void gestisciIscrizioneCorso(IscrizioneCorsiPanel corsiPanel) {
 		
@@ -315,41 +344,20 @@ public class ManipolazioneController {
 	    String tipo = corsiPanel.getTipoCorsoFiltro();
 	    String inizioStr = corsiPanel.getDataInizioFiltro().trim();
 	    String fineStr = corsiPanel.getDataFineFiltro().trim();
-
-	    if ((inizioStr.isEmpty() && !fineStr.isEmpty()) ||
-	        (!inizioStr.isEmpty() && fineStr.isEmpty())) {
-	    	
-	        mostraMessaggio("Inserisci entrambe le date o nessuna.");
-	        return;
-	        
-	    }
-
+	    
 	    try {
 	    	
-	        LocalDate inizio = inizioStr.isEmpty() ? null : LocalDate.parse(inizioStr);
-	        LocalDate fine = fineStr.isEmpty() ? null : LocalDate.parse(fineStr);
-
-	        if (inizio != null && fine != null && fine.isBefore(inizio)) {
-	        	
-	            mostraMessaggio("La data fine non può essere precedente alla data inizio.");
-	            return;
-	            
-	        }
-
-	        List<SessioneCorso> sessioni = corsoManager
-	        							  .recuperaSessioniDisponibili(tipo, inizio, fine);
+	        List<SessioneCorso> sessioni = corsoManager.recuperaSessioniDaStringhe(tipo, inizioStr, fineStr);
+	        corsiPanel.getSessioniTable().setModel(new SessioneCorsoTableModel(sessioni));
 	        
-	        /*Punto applicazione di table-model custom*/
-	        corsiPanel.getSessioniTable()
-	        		  .setModel(new SessioneCorsoTableModel(sessioni));
-
-	    } catch (DateTimeParseException ex) {
+	    } catch (IllegalArgumentException ex) {
 	    	
-	        mostraErrore("Formato data non valido. Usa yyyy-MM-dd.");
+	        mostraMessaggio(ex.getMessage());
 	        
 	    } catch (Exception ex) {
 	    	
-	        mostraErrore("Errore durante il recupero delle sessioni:\n" + ex.getMessage());
+	        mostraErrore("Errore durante il recupero delle sessioni:\n" 
+	        			+ ex.getMessage());
 	        ex.printStackTrace();
 	        
 	    }

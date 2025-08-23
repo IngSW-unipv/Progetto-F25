@@ -10,7 +10,6 @@ import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.RemoveCl
 import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.UpdateClient.IUpdateClientInsideDB;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
-import it.unipv.poisw.f25.gympal.GUI.Manager.IManagerController;
 import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.DTO.DTOHandlerRettifica;
 import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.Rettifica.IRettificaInfoView;
 import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.Rettifica.RettificaInfoController;
@@ -21,6 +20,7 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDa
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.ModificaAbbCliente.ModificaAbbonamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.ModAbbContract.IModAbbContract;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DataFerry.RawClientData;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.EtichettaPiuCampoFactory;
@@ -28,7 +28,7 @@ import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.EtichettaPiuCam
 public class RettificaCoordinator implements IRettificaCoordinator, IModAbbContract{
 	
 	/*Controllore*/
-	private IManagerController viewHandler;
+	private IRegistraEMostraSchermate viewHandler;
     
     /*Viste*/
     private IRettificaInfoView rettView;
@@ -49,7 +49,7 @@ public class RettificaCoordinator implements IRettificaCoordinator, IModAbbContr
     
     //----------------------------------------------------------------
     
-    public RettificaCoordinator(IManagerController viewHandler,
+    public RettificaCoordinator(IRegistraEMostraSchermate viewHandler,
     							ICampoValidabileFactory campoValidabileFactory,
     							IValidatoreCampi validatoreCampi,
     							IRetrieveClientFromDB recuperaDati,

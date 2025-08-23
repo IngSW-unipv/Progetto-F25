@@ -1,13 +1,15 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.ControllerSupport;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import it.unipv.poisw.f25.gympal.ApplicationLayer.ICalendarioFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ClienteNonAbbonatoException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ConflittoOrarioException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.DatiNonTrovatiException;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.ICoordinatoreCalendario;
 import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
+import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.Dipendente;
 
 public class AppuntamentoPTManager {
 	
@@ -61,6 +63,18 @@ public class AppuntamentoPTManager {
         
         return success;
         
+    }
+    
+	//----------------------------------------------------------------
+    
+    public List<String> getSoloStaffIdDIP() {
+    	
+        return calendarioFacade.getRetrieveDipendentiService()
+                               .retrieve()
+                               .stream()
+                               .map(Dipendente::getStaffId)
+                               .filter(id -> id.contains("DIP"))
+                               .collect(Collectors.toList());
     }
     
 	//----------------------------------------------------------------

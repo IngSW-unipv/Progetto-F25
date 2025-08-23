@@ -52,4 +52,9 @@ public class LogoutConfirmationView extends JPanel implements ILogoutConfirmatio
     
 	//----------------------------------------------------------------
     
+    @Override
+    public JPanel getMainPanel() {return this;}
+    
+	//----------------------------------------------------------------
+    
 }

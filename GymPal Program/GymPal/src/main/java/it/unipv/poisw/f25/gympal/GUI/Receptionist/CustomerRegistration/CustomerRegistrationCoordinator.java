@@ -16,7 +16,6 @@ import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.Validaz
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
 import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.MasterDTO;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.IReceptionistController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ISubscriptionCustomizationView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.SubscriptionCustomizationController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.SubscriptionCustomizationView;
@@ -29,6 +28,7 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoE
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.ICoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.EtichettaPiuCampoFactory;
 import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
@@ -36,7 +36,7 @@ import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 public class CustomerRegistrationCoordinator implements IRegistrationCoordinator, ICoordinator{
 
 	/**/
-    private IReceptionistController viewHandler;
+    private IRegistraEMostraSchermate viewHandler;
 
     /*Viste*/
     private ISubscriptionCustomizationView subView;
@@ -59,7 +59,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     //----------------------------------------------------------------
 
 
-    public CustomerRegistrationCoordinator(IReceptionistController viewHandler,
+    public CustomerRegistrationCoordinator(IRegistraEMostraSchermate viewHandler,
     									   ICalcoloEtaService etaService,
     									   ICampoValidabileFactory campovalidabileFactory,
     									   IValidatoreCampi validatoreCampi,

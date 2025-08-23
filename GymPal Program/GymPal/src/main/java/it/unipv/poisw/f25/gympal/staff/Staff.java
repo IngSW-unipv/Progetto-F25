@@ -7,15 +7,16 @@ import it.unipv.poisw.f25.gympal.utility.IDateFormat;
 public abstract class Staff implements IDateFormat{
 	
 	//generalità del dipendente
-	private String nome, cognome, contatto/*, password*/;
+	private String nome, cognome, contatto;
 	private LocalDate dataDiNascita;
-	
-	
 	private String staffID;
 	
-	public Staff() {}; //Da rimuovere, in caso
+	//----------------------------------------------------------------
+	
+	/*Costruttori*/
+	
+	public Staff() {}; 
 
-	//costruttore
 	public Staff(String nome, String cognome, String contatto, LocalDate dataDiNascita) {
 		this.nome = nome;
 		this.cognome = cognome;
@@ -23,6 +24,18 @@ public abstract class Staff implements IDateFormat{
 		this.dataDiNascita = dataDiNascita; 
 		generateStaffId();
 	}
+	
+	//----------------------------------------------------------------
+	
+	public void setBasicInfo(String nome, String cognome, String staffID) {
+		
+	    this.nome = nome;
+	    this.cognome = cognome;
+	    this.staffID = staffID;
+	    
+	}
+	
+	//----------------------------------------------------------------
 	
 	//getters e setters
 	public String getNome() {
@@ -33,6 +46,8 @@ public abstract class Staff implements IDateFormat{
 		this.nome = nome;
 	}
 
+	//----------------------------------------------------------------
+	
 	public String getCognome() {
 		return cognome;
 	}
@@ -40,6 +55,8 @@ public abstract class Staff implements IDateFormat{
 	public void setCognome(String cognome) {
 		this.cognome = cognome;
 	}
+	
+	//----------------------------------------------------------------
 
 	public String getContatto() {
 		return contatto;
@@ -49,6 +66,7 @@ public abstract class Staff implements IDateFormat{
 		this.contatto = contatto;
 	}
 
+	//----------------------------------------------------------------
 
 	public void setDataDiNascita(LocalDate dataDiNascita) {
 		this.dataDiNascita = dataDiNascita;
@@ -58,22 +76,29 @@ public abstract class Staff implements IDateFormat{
 		return staffID;
 	}
 	
+	//----------------------------------------------------------------
+	
 	//metodo per formattare la data
     public String getDataNascitaFormattata() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATEFORMAT);
         return dataDiNascita.format(formatter);
     }
+    
+	//----------------------------------------------------------------
+	
+	public void presence() {System.out.println("STAFF: ci sono!");}
+	
+	//----------------------------------------------------------------
+	
+	public void initGUI() {};
+	
+	//----------------------------------------------------------------	
 	
 	//metodo per generare lo staff Id
 	private void generateStaffId() {
 		staffID = nome + "_" + cognome;		
 	}
 	
-	
-	public void presence() {System.out.println("STAFF: ci sono!");}
-	
-	public void initGUI() {};
-	
-		
+	//----------------------------------------------------------------	
 	
 }

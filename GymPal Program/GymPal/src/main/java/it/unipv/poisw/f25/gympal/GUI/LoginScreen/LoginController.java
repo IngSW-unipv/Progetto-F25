@@ -26,25 +26,36 @@ public class LoginController implements IRegexExpression {
         this.loginManager = new LoginManager(autenticatore, staffFactory);
 
         this.view.addLoginListener(e -> gestisciLogin());
+        
     }
     
 	//----------------------------------------------------------------
 
     private void gestisciLogin() {
     	
+    	// BYPASS ///////////////////////////////////////////////////
     	if (view.isBypassEnabled()) {
+    		
     	    String tipo = view.getTipoBypassato();
 
     	    Staff staff = new StaffFactory().generateStaffMember(tipo);
+    	    
     	    if (staff != null) {
+    	    	
     	        view.mostraMessaggio("Login bypass attivo - accesso come " + tipo);
     	        DashboardDispatcherFactory.getDashboardPer(staff).avvia();
     	        view.dispose();
+    	        
     	    } else {
+    	    	
     	        view.mostraMessaggio("Tipo di staff non valido per il bypass.");
+    	        
     	    }
+    	    
     	    return;
+    	    
     	}
+    	//////////////////////////////////////////////////////////////
     	
         String nome = view.getNome();
         String cognome = view.getCognome();

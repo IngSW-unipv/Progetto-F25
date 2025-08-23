@@ -6,6 +6,6 @@ import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.Dipendente;
 
 public interface IRetrieveDipendentiFromDB {
 	
-	public List<Dipendente> retrive();
+	public List<Dipendente> retrieve();
 
 }

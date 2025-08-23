@@ -2,8 +2,10 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.Calendario
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,7 +22,7 @@ public class AppuntamentiPTPanel extends JPanel {
     private JButton annullaBtn;
 
     private JTextField cfClienteField;
-    private JTextField staffIdField;
+    private JComboBox<String> staffIdComboBox;
     private JButton filtraBtn;
 
     //----------------------------------------------------------------
@@ -35,13 +37,14 @@ public class AppuntamentiPTPanel extends JPanel {
         JPanel filtroPanel = new JPanel();
 
         cfClienteField = new JTextField(16);
-        staffIdField = new JTextField(35);
+        staffIdComboBox = new JComboBox<>();
+        staffIdComboBox.setEditable(false);
 
         filtroPanel.add(new JLabel("CF Cliente:"));
         filtroPanel.add(cfClienteField);
         
         filtroPanel.add(new JLabel("StaffId:"));
-        filtroPanel.add(staffIdField);
+        filtroPanel.add(staffIdComboBox);
         
         filtraBtn = new JButton("Filtra");
         filtroPanel.add(filtraBtn);
@@ -51,13 +54,14 @@ public class AppuntamentiPTPanel extends JPanel {
         /*############################################################*/
 
         appuntamentiTable = new JTable();
+        appuntamentiTable.setAutoCreateRowSorter(true);
         add(new JScrollPane(appuntamentiTable), BorderLayout.CENTER);
         
         /*############################################################*/
 
         JPanel btnPanel = new JPanel();
-        fissaBtn = new JButton("Iscrivi Cliente");
-        annullaBtn = new JButton("Annulla Iscrizione");
+        fissaBtn = new JButton("Fissa Appuntamento");
+        annullaBtn = new JButton("Annulla Appuntamento");
 
         btnPanel.add(fissaBtn);
         btnPanel.add(annullaBtn);
@@ -106,7 +110,23 @@ public class AppuntamentiPTPanel extends JPanel {
 
     public String getStaffIdFiltro() {
     	
-        return staffIdField.getText().trim();
+    	Object selected = staffIdComboBox.getSelectedItem();
+        return selected != null ? selected.toString().trim() : "";
+        
+    }
+    
+    //----------------------------------------------------------------
+    
+    public void setStaffIdOptions(List<String> staffIds) {
+    	
+        staffIdComboBox.removeAllItems();
+        staffIdComboBox.addItem(""); // Per selezionare "nessuno"
+        
+        for (String id : staffIds) {
+        	
+            staffIdComboBox.addItem(id);
+            
+        }
         
     }
     

@@ -24,7 +24,7 @@ import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
 
-public class CommonServicesBundle {
+public class CommonServicesBundle implements ICommonServicesBundle{
 	
 	private IPersistenceFacade facade;
 	
@@ -66,7 +66,7 @@ public class CommonServicesBundle {
     }
     
 	//----------------------------------------------------------------
-
+    @Override
     public IRegexCheck getRegexChecker() {
     	
         return regexChecker;
@@ -74,7 +74,7 @@ public class CommonServicesBundle {
     }
     
 	//----------------------------------------------------------------
-
+    @Override
     public ICampoValidabileFactory getCampoValidabileFactory() {
     	
         return campoValidabileFactory;
@@ -82,7 +82,7 @@ public class CommonServicesBundle {
     }
     
 	//----------------------------------------------------------------
-
+    @Override
     public IValidatoreCampi getValidatoreCampi() {
     	
         return validatoreCampi;
@@ -90,7 +90,7 @@ public class CommonServicesBundle {
     }
     
 	//----------------------------------------------------------------
-    
+    @Override
     public IStrategieCalcoloPrezzoFactory getPrezzoFactory() {
     	
     	return prezzoFactory;
@@ -98,7 +98,7 @@ public class CommonServicesBundle {
     }
     
    //----------------------------------------------------------------
-    
+    @Override
     public IRetrieveClientFromDB getRecuperaDati() {
     	
     	return recuperaDati;
@@ -106,7 +106,7 @@ public class CommonServicesBundle {
     }
     
    //----------------------------------------------------------------
-    
+    @Override
     public IDeleteClientFromDB getHeadHunter() {
     	
     	return headHunter;
@@ -114,7 +114,7 @@ public class CommonServicesBundle {
     }
     
    //----------------------------------------------------------------
-    
+    @Override
     public IUpdateClientInsideDB getUpdater() {
     	
     	return updateClient;
@@ -122,7 +122,7 @@ public class CommonServicesBundle {
     }
     
    //---------------------------------------------------------------- 
-    
+    @Override
     public ICommitNewClientToDB getImmettiDati() {
     	
     	return immettiDati;
@@ -130,7 +130,7 @@ public class CommonServicesBundle {
     }
     
    //----------------------------------------------------------------
-    
+    @Override
     public IRetrieveDiscountsFromDB getDiscounts() {
     	
     	return getDiscounts;
@@ -138,7 +138,7 @@ public class CommonServicesBundle {
     }
     
    //----------------------------------------------------------------
-    
+    @Override
     public IAutenticaDipendente getAutDipendente() {
     	
     	return autenticatore;
@@ -146,7 +146,7 @@ public class CommonServicesBundle {
     }
     
     //----------------------------------------------------------------
-    
+    @Override
     public StaffFactory getStaffFactory() {
     	
     	return staffFactory;

@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.DipendenteDashboardAvviabile;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.ManagerDashboardAvviabile;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.ReceptionistDashboardAvviabile;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.CommonInterface.IDashboardAvviabile;
+import it.unipv.poisw.f25.gympal.staff.Dipendente;
 import it.unipv.poisw.f25.gympal.staff.Manager;
 import it.unipv.poisw.f25.gympal.staff.Receptionist;
 import it.unipv.poisw.f25.gympal.staff.Staff;
@@ -88,10 +90,10 @@ public class DashboardDispatcherFactory {
     	 * "ReceptionistDashboardAvviabile" implementa "IDashboardAvviabile", dunque è
     	 * del tipo corretto*/
     	
-        mappa.put(Receptionist.class, staff -> new ReceptionistDashboardAvviabile());
+        mappa.put(Receptionist.class, staff -> new ReceptionistDashboardAvviabile((Receptionist) staff));
         mappa.put(Manager.class, staff -> new ManagerDashboardAvviabile());
-        /*Una terza entry per Dipendente, in futuro*/
-        
+        mappa.put(Dipendente.class, staff -> new DipendenteDashboardAvviabile((Dipendente) staff));
+                
     }
     
     //----------------------------------------------------------------

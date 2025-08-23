@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.ApplicationLayer;
+package it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -65,7 +65,7 @@ public interface ICalendarioFacadeService {
     
 	//----------------------------------------------------------------
     
-    public List<Calendario> getEventiByDate(LocalDate data);
+    //public List<Calendario> getEventiByDate(LocalDate data);
     
 	//----------------------------------------------------------------
     

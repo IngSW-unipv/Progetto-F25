@@ -20,7 +20,7 @@ public class RetrieveDipendentiFromDB implements IRetrieveDipendentiFromDB{
     //----------------------------------------------------------------
 	
 	@Override
-	public List<Dipendente> retrive() {
+	public List<Dipendente> retrieve() {
 			
 		return facade.selectAllDipendenti();
 		

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import it.unipv.poisw.f25.gympal.ApplicationLayer.ICalendarioFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.DatiCellaCalendarioDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.DipendentiInfosDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.IDipendentiInfosDTO;
@@ -132,7 +132,7 @@ public class CalendarioSettimanaleCachesBuilder {
         for (int i = 0; i < 7; i++) {
         	
             LocalDate data = lunedi.plusDays(i);
-            List<Calendario> eventi = calendarioFacade.getEventiByDate(data);
+            List<Calendario> eventi = calendarioFacade.findEventiByDate(data);
             eventiCache.put(data, eventi != null ? eventi : new ArrayList<>());
             
         }

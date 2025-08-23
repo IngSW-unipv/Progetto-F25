@@ -15,7 +15,6 @@ import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.MasterDTO;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.IReceptionistController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.DTOHandlerGestione;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.IRecuperoDatiView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.RecuperoDatiController;
@@ -32,6 +31,7 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoE
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.ICoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.EtichettaPiuCampoFactory;
 import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
@@ -39,7 +39,7 @@ import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordinator, IModAbbContract{
 	
 	private String schermataPreRinnovo;
-	private IReceptionistController viewHandler;
+	private IRegistraEMostraSchermate viewHandler;
 	
     /*Viste*/
     private IRecuperoDatiView recuperoDati;
@@ -61,7 +61,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 	
     //----------------------------------------------------------------
 	
-	public GestioneAbbCoordinator(IReceptionistController viewHandler,
+	public GestioneAbbCoordinator(IRegistraEMostraSchermate viewHandler,
 								  ICampoValidabileFactory campovalidabileFactory,
 								  IValidatoreCampi validatoreCampi,
 								  IRetrieveClientFromDB veicoloDati,

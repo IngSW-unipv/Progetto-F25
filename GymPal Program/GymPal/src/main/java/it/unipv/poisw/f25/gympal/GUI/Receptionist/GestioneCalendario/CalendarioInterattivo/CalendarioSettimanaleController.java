@@ -15,7 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import it.unipv.poisw.f25.gympal.ApplicationLayer.ICalendarioFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDateUtils;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.ICoordinatoreCalendario;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.CalendarioUtilities.CalendarioCellPanel;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.CalendarioUtilities.DettaglioCellaFrame;
@@ -30,20 +31,30 @@ public class CalendarioSettimanaleController implements ICalendarioChangeListene
     private final ICalendarioSettimanaleView view;
     
     /*Coordinatore*/
-    private final ICoordinatoreCalendario coordinator;
+    private ICoordinatoreCalendario coordinator;
+    
+    /*Servizi*/
     private ICalendarioFacadeService calendarioFacade;
+    private IDateUtils dateUtils;
 
 	//----------------------------------------------------------------
 
 
     public CalendarioSettimanaleController(ICalendarioSettimanaleView view,
     									   ICalendarioFacadeService calendarioFacade,
+    									   IDateUtils dateUtils,
     									   ICoordinatoreCalendario coordinator) {
-    	
+    	/*Vista*/
         this.view = view;
-        this.coordinator = coordinator;
-        this.calendarioFacade = calendarioFacade;
         
+        /*Coordinatore*/
+        this.coordinator = coordinator;
+        
+        /*Servizi*/
+        this.calendarioFacade = calendarioFacade;
+        this.dateUtils = dateUtils;
+        
+        /*Inizializzazioni*/
         impostaMeccanismoObservable();
         inizializzaTabella(cellListenerProvider());
         impostaEventoBtnGestioneAvanzata();
@@ -145,7 +156,8 @@ public class CalendarioSettimanaleController implements ICalendarioChangeListene
     	view.addBtnGestioneAvanzataListener(e -> {
     		
     		IManipolazioneFrame frame = new ManipolazioneFrame();
-    		new ManipolazioneController(frame,calendarioFacade, coordinator);
+    		new ManipolazioneController(frame,calendarioFacade, 
+    									dateUtils, coordinator);
     		
     	});
     	

@@ -26,7 +26,7 @@ public class DTOHandlerDipendentiInfos {
 		
 		List<String> IDs = new ArrayList<>();
 
-		for(Dipendente d: retrieveListaDip.retrive()) {
+		for(Dipendente d: retrieveListaDip.retrieve()) {
 			
 			IDs.add(d.getStaffId());
 			
@@ -42,7 +42,7 @@ public class DTOHandlerDipendentiInfos {
 
 		List<String> staffIDs = new ArrayList<>();
 		
-		for(Dipendente d: retrieveListaDip.retrive()) {
+		for(Dipendente d: retrieveListaDip.retrieve()) {
 
 			staffIDs.add(d.getStaffId());
 			

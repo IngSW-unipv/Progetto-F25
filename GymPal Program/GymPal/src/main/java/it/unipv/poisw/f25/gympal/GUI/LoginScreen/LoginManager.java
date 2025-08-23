@@ -36,6 +36,9 @@ public class LoginManager {
             return new LoginResult(false, "Tipo di staff non riconosciuto.", null);
             
         }
+        
+        // Inizializzazione oggetto Staff con dati del login
+        staff.setBasicInfo(nome, cognome, staffID);
 
         return new LoginResult(true,"Login riuscito! Benvenuto, " 
         					 + staff.getClass().getSimpleName(), staff);

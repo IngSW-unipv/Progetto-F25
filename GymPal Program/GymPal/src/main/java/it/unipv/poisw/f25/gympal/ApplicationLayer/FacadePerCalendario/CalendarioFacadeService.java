@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.ApplicationLayer;
+package it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -130,7 +130,7 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
             
         } else {
         	
-            for (Dipendente d : retrieveListaDip.retrive()) {
+            for (Dipendente d : retrieveListaDip.retrieve()) {
             	
                 String id = d.getStaffId();
                 if (id != null && id.contains("DIP")) {
@@ -158,12 +158,12 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
     
 	//----------------------------------------------------------------
 
-    @Override
+    /*@Override
     public List<Calendario> getEventiByDate(LocalDate data) {
     	
         return calendarioService.findEventiByDate(data);
         
-    }
+    }*/
     
 	//----------------------------------------------------------------
 
@@ -190,7 +190,9 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
     public List<Calendario> findEventiByDate(LocalDate data) {
     	
         if (data != null) {
+        	
             return calendarioService.findEventiByDate(data);
+            
         }
         
         return new ArrayList<>();

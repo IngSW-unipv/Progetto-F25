@@ -35,6 +35,10 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
     private JButton modifySubscriptionButton;
     private JButton corsiEdAppuntamentiButton;
     
+    //////////////////////////
+    private JButton turniPersonaliButton;
+    /////////////////////////
+    
     private JSplitPane splitPane;
 
     // Mappa interna per associare i comandi alle azioni
@@ -64,7 +68,10 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
         corsiEdAppuntamentiButton = new JButton("<html><center>Gestione calendario<br>"
 							        		  + "partecipazione corsi<br>"
 							        		  + "ed<br>appuntamenti PT</html>");
-
+        
+        ///////////////////////////////////
+        turniPersonaliButton = new JButton("<html><center>Visualizza<br>Turni Personali</center></html>");
+        ///////////////////////////////////
         pannelloSinistro = new JPanel();
 
         /*Scelto "GridBagLayout" anziché "GridLayout" siccome quest'ultimo soffre di
@@ -88,9 +95,15 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
         
         gbc.gridy = 2;
         pannelloSinistro.add(corsiEdAppuntamentiButton, gbc);
-
+        
+        /////////////////////////////////////////////////
         gbc.gridy = 3;
+        pannelloSinistro.add(turniPersonaliButton, gbc);
+        /////////////////////////////////////////////////
+
+        gbc.gridy = 4;
         pannelloSinistro.add(logOutButton, gbc);
+        
         
         pannelloSinistro.setPreferredSize(new Dimension(200, 1300));
         
@@ -138,19 +151,6 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
     }
     
     //----------------------------------------------------------------
-    
-    private JPanel creaSchermata(String testo, Color coloreSfondo) {
-    	
-        JPanel panel = new JPanel();
-        
-        panel.setBackground(coloreSfondo);
-        
-        panel.add(new JLabel(testo));
-        
-        return panel;
-    }
-    
-    //----------------------------------------------------------------    
 
     /* Implementazione metodo dell’interfaccia: associa una Runnable ad
      * un comando ed al bottone relativo */
@@ -174,6 +174,12 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
             case "CALENDAR":
                 bottone = corsiEdAppuntamentiButton;
                 break;
+             
+                //////////////////////////////////
+            case "TURNI_RECEPTIONIST":
+                bottone = turniPersonaliButton;
+                break;
+                //////////////////////////////////
                 
             case "LOGOUT":
                 bottone = logOutButton;
@@ -228,5 +234,18 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
     }
     
     //---------------------------------------------------------------- 
+    
+    private JPanel creaSchermata(String testo, Color coloreSfondo) {
+    	
+        JPanel panel = new JPanel();
+        
+        panel.setBackground(coloreSfondo);
+        
+        panel.add(new JLabel(testo));
+        
+        return panel;
+    }
+    
+    //----------------------------------------------------------------  
     
 }
