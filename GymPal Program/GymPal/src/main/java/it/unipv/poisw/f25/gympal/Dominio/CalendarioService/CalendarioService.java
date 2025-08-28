@@ -209,7 +209,7 @@ public class CalendarioService implements ICalendarioService {
         controllaValiditaAbbonamento(cliente, data);
 
         //Controlla se l'abbonamento del cliente include lezioni con PT
-        if (!cliente.getComposizioneAbbonamento().startsWith("S.PESI")) {
+        if (!cliente.getComposizioneAbbonamento().startsWith("A.PTRAINER")) {
             throw new ClienteNonAbbonatoException("L'abbonamento del cliente non include lezioni con Personal Trainer.");
         }
         
