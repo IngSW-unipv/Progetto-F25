@@ -57,6 +57,8 @@ public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
   
     //----------------------------------------------------------------
     
+    //----------------------------------------------------------------
+    
     public GestioneCalendarioCoordinator(IRegistraEMostraSchermate viewHandler,
             							 ICalendarioFacadeService calendarioFacade,
             							 IFasciaOrariaValidator fasciaValidator,
