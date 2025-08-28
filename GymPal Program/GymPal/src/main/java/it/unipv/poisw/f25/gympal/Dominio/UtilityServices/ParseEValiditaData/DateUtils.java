@@ -1,8 +1,10 @@
 package it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Date;
 
 public class DateUtils implements IDateUtils{
 
@@ -34,6 +36,16 @@ public class DateUtils implements IDateUtils{
         
     }
     
+	//----------------------------------------------------------------
+	
+	@Override
+	public LocalDate convertiDaUtilDate(Date data) {
+		
+	    if (data == null) return null;
+	    return data.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	    
+	}
+	
 	//----------------------------------------------------------------
     
 }

@@ -2,7 +2,6 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.Customer
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.AbstractButton;
@@ -11,13 +10,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.ICustomerRegistrationCoordinator;
 
 
 public class SubscriptionCustomizationController {
 	
 	private ISubscriptionCustomizationView view;
-	private IRegistrationCoordinator coordinator;
+	private ICustomerRegistrationCoordinator coordinator;
 	
 
 	
@@ -39,7 +38,7 @@ public class SubscriptionCustomizationController {
 	public SubscriptionCustomizationController(ISubscriptionCustomizationView scv,
 											   Runnable onAvantiCallback,
 											   Runnable onAnnullaCallback,
-											   IRegistrationCoordinator coordinator) {
+											   ICustomerRegistrationCoordinator coordinator) {
 		
 		view = scv;
 		this.coordinator = coordinator;
@@ -167,7 +166,7 @@ public class SubscriptionCustomizationController {
 				
 		view.addAvantiListener(e -> {
 			
-		    if (!verificaSelezione(view.getBottoniToggle())) {
+		    if (!almenoUnoSelezionato(view.getBottoniToggle())) {
 		    	
 		    	/*Controlla che almeno un abbonamento sia selezionato*/
 		    	
@@ -175,7 +174,7 @@ public class SubscriptionCustomizationController {
 		        								  + "di continuare.", "Errore", JOptionPane.ERROR_MESSAGE);
 		        
 		    } else if (view.getBottoniToggle().get(3).isSelected() && 
-		    		   !verificaSelezione(view.getCheckBoxes())){
+		    		   !almenoUnoSelezionato(view.getCheckBoxes())){
 		    	
 		    	/*Se "Sala Corsi" è selezionato, controlla anche che sia selezionato almeno un
 		    	 *corso.*/
@@ -225,13 +224,21 @@ public class SubscriptionCustomizationController {
 	
 	private void impostaEventoAnulla() {
 		
-		view.addAnnullaListener(e -> {onAnulla.run();});
+		view.addAnnullaListener(e -> {
+			
+			if (onAnulla != null) {
+				
+			    onAnulla.run();
+			    
+			}
+			
+		});
 		
 	}
 	
 	//----------------------------------------------------------------
 		
-	private boolean verificaSelezione(List<? extends AbstractButton> listaBottoni) {
+	private boolean almenoUnoSelezionato(List<? extends AbstractButton> listaBottoni) {
 		
 		for (AbstractButton btn : listaBottoni) {
 			
@@ -251,45 +258,36 @@ public class SubscriptionCustomizationController {
 	
 	private void aggiornaDTO() {
 		
-	    // Nomi delle sezioni abbonamento corrispondenti ai toggle
-	    List<String> nomiSezioni = Arrays.asList(
-	        "Allenamento mirato con personal trainer",
-	        "Sala allenamento a corpo libero",
-	        "Sala pesi",
-	        "Sala corsi"
-	    );
+		 List<String> sezioniSelezionate = new ArrayList<>();
+		    List<String> corsiSelezionati = new ArrayList<>();
 
-	    // Nomi corsi corrispondenti alle checkbox
-	    List<String> nomiCorsi = Arrays.asList(
-	        "Crossfit",
-	        "Yoga",
-	        "Pilates",
-	        "Zumba",
-	        "Fullbody"
-	    );
+		    List<JToggleButton> bottoniToggle = view.getBottoniToggle();
+		    List<String> nomiSezioni = view.getNomiSezioni(); 
+		    
+		    for (int i = 0; i < bottoniToggle.size(); i++) {
+		    	
+		        if (bottoniToggle.get(i).isSelected()) {
+		        	
+		            sezioniSelezionate.add(nomiSezioni.get(i));
+		            
+		        }
+		        
+		    }
 
-	    // Lista sezioni selezionate
-	    List<String> sezioniSelezionate = new ArrayList<>();
-	    
-	    for (int i = 0; i < view.getBottoniToggle().size(); i++) {
-	        if (view.getBottoniToggle().get(i).isSelected()) {
-	            sezioniSelezionate.add(nomiSezioni.get(i));
-	        }
-	        
-	    }
+		    List<JCheckBox> checkBoxes = view.getCheckBoxes();	    
+		    List<String> nomiCorsi = view.getNomiCorsi(); 
+		    
+		    for (int i = 0; i < checkBoxes.size(); i++) {
+		    	
+		        if (checkBoxes.get(i).isSelected()) {
+		        	
+		            corsiSelezionati.add(nomiCorsi.get(i));
+		            
+		        }
+		        
+		    }
 
-
-	    // Lista corsi selezionati
-	    List<String> corsiSelezionati = new ArrayList<>();
-	    
-	    for (int i = 0; i < view.getCheckBoxes().size(); i++) {
-	        if (view.getCheckBoxes().get(i).isSelected()) {
-	            corsiSelezionati.add(nomiCorsi.get(i));
-	        }
-	        
-	    }
-	    
-	    coordinator.acquisisciComponentiAbbonamento(sezioniSelezionate, corsiSelezionati);
+		    coordinator.acquisisciComponentiAbbonamento(sezioniSelezionate, corsiSelezionati);
 	    
 	}
 	

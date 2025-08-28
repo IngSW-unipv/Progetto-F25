@@ -8,7 +8,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.ModAbbContract.IModAbbContract;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.ModAbbContract.IModAbbContract;
 
 public class ModificaAbbonamentoController {
 	
@@ -205,18 +205,26 @@ public class ModificaAbbonamentoController {
 	    List<String> nomiSezioni = modAbbView.getNomiSezioni(); 
 	    
 	    for (int i = 0; i < bottoniToggle.size(); i++) {
+	    	
 	        if (bottoniToggle.get(i).isSelected()) {
+	        	
 	            sezioniSelezionate.add(nomiSezioni.get(i));
+	            
 	        }
+	        
 	    }
 
-	    List<JCheckBox> checkBoxes = modAbbView.getCheckBoxes();
-	    
+	    List<JCheckBox> checkBoxes = modAbbView.getCheckBoxes();	    
 	    List<String> nomiCorsi = modAbbView.getNomiCorsi(); 
+	    
 	    for (int i = 0; i < checkBoxes.size(); i++) {
+	    	
 	        if (checkBoxes.get(i).isSelected()) {
+	        	
 	            corsiSelezionati.add(nomiCorsi.get(i));
+	            
 	        }
+	        
 	    }
 
 	    coordinator.acquisisciComponentiAbbonamento(sezioniSelezionate, corsiSelezionati);

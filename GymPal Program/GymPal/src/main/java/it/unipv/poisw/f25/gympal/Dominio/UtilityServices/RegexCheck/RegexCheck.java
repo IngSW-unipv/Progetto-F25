@@ -1,7 +1,5 @@
 package it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck;
 
-import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
-
 public class RegexCheck implements IRegexCheck{
 	
 	public RegexCheck() {}

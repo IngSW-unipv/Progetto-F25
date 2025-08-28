@@ -5,13 +5,13 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.AutEmployee.IAutenticaDipendente;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.Autenticazione.IAutenticaDipendente;
+import it.unipv.poisw.f25.gympal.Dominio.staff.Dipendente;
+import it.unipv.poisw.f25.gympal.Dominio.staff.Manager;
+import it.unipv.poisw.f25.gympal.Dominio.staff.Receptionist;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginManager;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.LoginResult;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
-import it.unipv.poisw.f25.gympal.staff.Dipendente;
-import it.unipv.poisw.f25.gympal.staff.Manager;
-import it.unipv.poisw.f25.gympal.staff.Receptionist;
 
 public class LoginManagerTest {
 

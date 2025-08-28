@@ -1,12 +1,12 @@
 package it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities;
 
-import it.unipv.poisw.f25.gympal.staff.Staff;
+import it.unipv.poisw.f25.gympal.Dominio.staff.Staff;
 
 public class LoginResult {
 
-	private final boolean successo;
-    private final String messaggio;
-    private final Staff staff;
+	private boolean successo;
+    private String messaggio;
+    private Staff staff;
     
 	//----------------------------------------------------------------
 

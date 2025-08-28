@@ -12,6 +12,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
+
 public class AppuntamentiPTPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -27,7 +30,8 @@ public class AppuntamentiPTPanel extends JPanel {
 
     //----------------------------------------------------------------
 
-    public AppuntamentiPTPanel() {
+    public AppuntamentiPTPanel(IDynamicButtonSizeSetter buttonSizeSetter,
+    						   IFontChangeRegister fontChangeRegister) {
 
         setLayout(new BorderLayout());
 
@@ -62,12 +66,16 @@ public class AppuntamentiPTPanel extends JPanel {
         JPanel btnPanel = new JPanel();
         fissaBtn = new JButton("Fissa Appuntamento");
         annullaBtn = new JButton("Annulla Appuntamento");
+        
+        buttonSizeSetter.uniformButtonSize(fissaBtn, annullaBtn);
 
         btnPanel.add(fissaBtn);
         btnPanel.add(annullaBtn);
 
         add(btnPanel, BorderLayout.SOUTH);
-
+        
+        fontChangeRegister.register(this, buttonSizeSetter);
+        
     }
 
     //----------------------------------------------------------------

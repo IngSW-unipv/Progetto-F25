@@ -14,6 +14,7 @@ import javax.swing.border.EmptyBorder;
 
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.IEtichettaPiuCampoFactory;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
 
@@ -48,7 +49,8 @@ public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
 	//----------------------------------------------------------------
 	
 	public RecuperoDatiView (IDynamicButtonSizeSetter setter,
-							 IEtichettaPiuCampoFactory campoEtichettato) {
+							 IEtichettaPiuCampoFactory campoEtichettato,
+							 IFontChangeRegister fontChangeRegister) {
 		
 		buttonSizeSetter = setter;
 		this.campoEtichettato = campoEtichettato;
@@ -213,6 +215,8 @@ public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
 		/*############################################################*/
 		
 		add(mainSplitPanel);
+		
+		fontChangeRegister.register(this, buttonSizeSetter);
 		
 	}
 	
@@ -379,5 +383,6 @@ public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
 	}
 	
 	//----------------------------------------------------------------
+	
 
 }

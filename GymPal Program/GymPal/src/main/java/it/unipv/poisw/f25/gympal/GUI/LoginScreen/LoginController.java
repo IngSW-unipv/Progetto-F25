@@ -1,13 +1,20 @@
 package it.unipv.poisw.f25.gympal.GUI.LoginScreen;
 
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.AutEmployee.IAutenticaDipendente;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.Autenticazione.IAutenticaDipendente;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexExpression;
+import it.unipv.poisw.f25.gympal.Dominio.staff.Staff;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.DashboardDispatcherFactory;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.LoginResult;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
-import it.unipv.poisw.f25.gympal.staff.Staff;
 
+/**
+ * Esegue il processo di login:
+ * 1. Valida input utente tramite Regex
+ * 2. Estrae tipo di staff dallo staffID
+ * 3. Delega l'autenticazione a LoginManager
+ * 4. Interpreta il LoginResult e apre la dashboard appropriata
+ */
 public class LoginController implements IRegexExpression {
 
     private final LoginView view;

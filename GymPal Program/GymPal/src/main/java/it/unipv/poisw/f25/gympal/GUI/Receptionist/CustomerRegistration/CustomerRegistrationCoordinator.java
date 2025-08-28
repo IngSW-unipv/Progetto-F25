@@ -5,16 +5,19 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.FromDB.RetrieveOccasionsDiscounts.IRetrieveDiscountsFromDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.TowardsDB.AddClient.ICommitNewClientToDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.Bundle.ICommonServicesBundle;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.IStrategieCalcoloPrezzoFactory;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.IStrategieCalcoloPrezzo;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveOccasionsDiscounts.IRetrieveDiscountsFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.AddClient.ICommitNewClientToDB;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.IRegistrationServicesBundle;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDateUtils;
 import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.MasterDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ISubscriptionCustomizationView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.SubscriptionCustomizationController;
@@ -31,17 +34,13 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryI
 import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.EtichettaPiuCampoFactory;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 
-public class CustomerRegistrationCoordinator implements IRegistrationCoordinator, ICoordinator{
+public class CustomerRegistrationCoordinator implements ICustomerRegistrationCoordinator, ICoordinator{
 
 	/**/
     private IRegistraEMostraSchermate viewHandler;
-
-    /*Viste*/
-    private ISubscriptionCustomizationView subView;
-    private IClientInfosView clientInfosView;
-    private IRiepilogoEPagamentoView riepilogoEPagamento;
     
     /*Servizi*/
     private ICalcoloEtaService etaService;
@@ -51,6 +50,8 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     private IStrategieCalcoloPrezzoFactory prezzoFactory;
     private ICommitNewClientToDB commitDataToDB;
     private IRetrieveDiscountsFromDB getDiscounts;
+    private IFontChangeRegister changeRegister;
+    private IDateUtils dateUtils;
 
 
     private MasterDTO abbDTO;
@@ -60,23 +61,21 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
 
 
     public CustomerRegistrationCoordinator(IRegistraEMostraSchermate viewHandler,
-    									   ICalcoloEtaService etaService,
-    									   ICampoValidabileFactory campovalidabileFactory,
-    									   IValidatoreCampi validatoreCampi,
-    									   ICtrlReqAnagraficiService controlloRequisiti,
-    									   IStrategieCalcoloPrezzoFactory prezzoFactory,
-    									   ICommitNewClientToDB veicoloDati,
-    									   IRetrieveDiscountsFromDB getDiscounts) {
+    									   ICommonServicesBundle serviziComuni,
+    									   IRegistrationServicesBundle serviziReg,
+    									   IDateUtils dateUtils) {
         
     	/*Servizi*/
     	this.viewHandler = viewHandler;
-    	this.etaService = etaService;
-    	this.campovalidabileFactory = campovalidabileFactory;
-    	this.validatoreCampi = validatoreCampi;
-    	this.controlloRequisiti = controlloRequisiti;
-    	this.prezzoFactory = prezzoFactory;
-    	this.getDiscounts = getDiscounts;
-    	this.commitDataToDB = veicoloDati;
+    	this.etaService = serviziReg.getCalcoloEtaService();
+    	this.campovalidabileFactory = serviziComuni.getCampoValidabileFactory();
+    	this.validatoreCampi = serviziReg.getValidatoreCampi();
+    	this.controlloRequisiti = serviziReg.getControlloRequisiti();
+    	this.prezzoFactory = serviziComuni.getPrezzoFactory();
+    	this.getDiscounts = serviziComuni.getDiscounts();
+    	this.commitDataToDB = serviziComuni.getImmettiDati();
+    	this.changeRegister = serviziComuni.getFontChangeRegister();
+    	this.dateUtils = dateUtils;
 
     	/*Navigazione GUI*/
         inizializzaCicloRegistrazioneCliente();
@@ -101,7 +100,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
 
     private void setupSubscriptionCustomization() {
     	
-        subView = new SubscriptionCustomizationView(new DynamicButtonSizeSetter());
+    	ISubscriptionCustomizationView subView = new SubscriptionCustomizationView(new DynamicButtonSizeSetter(), changeRegister);
         
         viewHandler.registraSchermata("SUB_VIEW", subView.getMainPanel());
 
@@ -127,8 +126,8 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
 
     private void setupClientInfos() {
     	
-        clientInfosView = new ClientInfosView(new DynamicButtonSizeSetter(),
-        									  new EtichettaPiuCampoFactory());
+    	IClientInfosView clientInfosView = new ClientInfosView(new DynamicButtonSizeSetter(),
+        									  new EtichettaPiuCampoFactory(), changeRegister);
         
         viewHandler.registraSchermata("INFOS_VIEW", clientInfosView.getMainPanel());
 
@@ -138,7 +137,7 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
             // Callback onAvanti
             () -> {
 
-                riepilogoEPagamento = new RiepilogoEPagamentoView(new DynamicButtonSizeSetter());
+            	IRiepilogoEPagamentoView riepilogoEPagamento = new RiepilogoEPagamentoView(new DynamicButtonSizeSetter(), changeRegister);
 
                 new RiepilogoEPagamentoController(
                     riepilogoEPagamento,
@@ -266,6 +265,15 @@ public class CustomerRegistrationCoordinator implements IRegistrationCoordinator
     public IRetrieveDiscountsFromDB getScontiOccasioni() {
     	
     	return getDiscounts;
+    	
+    }
+    
+   //----------------------------------------------------------------
+    
+    @Override
+    public IDateUtils getDateUtils() {
+    	
+    	return dateUtils;
     	
     }
     

@@ -26,16 +26,16 @@ public class CalendarioCellPanel extends JPanel {
 	private JButton button;
 	
 	/*Azzurro*/
-	private static final Color COLORE_CORSI = new Color(100, 200, 255); 
+	private final Color COLORE_CORSI = new Color(100, 200, 255); 
 	
 	/*Arancione*/
-	private static final Color COLORE_APPUNTAMENTI = new Color(255, 170, 80); 
+	private final Color COLORE_APPUNTAMENTI = new Color(255, 170, 80); 
 	
 	/*Viola*/
-	private static final Color COLORE_EVENTI = new Color(200, 100, 255);
+	private final Color COLORE_EVENTI = new Color(200, 100, 255);
 	
 	/*Giallo*/
-	private static final Color COLORE_TURNI = new Color(255, 240, 80);
+	private final Color COLORE_TURNI = new Color(255, 240, 80);
 	
 	private JPanel fascePanel;
 	private JPanel fasciaCorsi;
@@ -102,7 +102,7 @@ public class CalendarioCellPanel extends JPanel {
 	    button = new JButton(String.format("%02d:%02d", ora, minuti));
 	    button.setOpaque(true);
 	    button.setFocusable(false);
-	    button.setFont(new Font("SansSerif", Font.BOLD, 18));
+	    button.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 	    button.setPreferredSize(new Dimension(180, 80));
 
 	    /*Bottone posto in primo piano, sopra le fasce*/

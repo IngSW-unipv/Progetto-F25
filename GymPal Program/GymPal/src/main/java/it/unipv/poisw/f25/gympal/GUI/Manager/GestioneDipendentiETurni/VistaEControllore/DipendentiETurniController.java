@@ -7,19 +7,25 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerGestioneDipendenti.IDipendentiCRUDFacadeService;
-import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerGestioneTurni.ITurniCRUDFacadeService;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneDipendenti.ICRUDDipendentiSupportServices;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneTurni.ICRUDTurniSupportServices;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.FacadePerGestioneDipendenti.IDipendentiCRUDFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.FacadePerGestioneTurni.ITurniCRUDFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.SupportoDipendenti.ICRUDDipendentiSupportServices;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.SupportoTurni.ICRUDTurniSupportServices;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.CampoValidabile.ICampoValidabile;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.GeneratoreStaffID.IStaffIdGeneratorService;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexExpression;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.IDipendentiETurniCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.VistaEControllore.ControllerSupport.DipendentiManager;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.VistaEControllore.ControllerSupport.TurniManager;
+import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.VistaEControllore.ControllerSupport.ObsAddDelDipendenti.IDipendentiChangeListener;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.VistaEControllore.PannelliPerTabs.PannelloDipendenti;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.VistaEControllore.PannelliPerTabs.PannelloTurni;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.ValidazioneCampo;
 
-public class DipendentiETurniController {
+public class DipendentiETurniController implements IDipendentiChangeListener{
 	
 	/* Vista */
     private IDipendentiETurniView view;
@@ -32,6 +38,7 @@ public class DipendentiETurniController {
     private final ICRUDTurniSupportServices supportoCRUDTurni;
 	private final IDipendentiCRUDFacadeService dipCRUDService;
     private final ICRUDDipendentiSupportServices supportpCRUDdip;
+    private final IStaffIdGeneratorService generatoreStaffIDs;
 
     /* Manager */
     private TurniManager turniManager;
@@ -41,18 +48,37 @@ public class DipendentiETurniController {
 
     public DipendentiETurniController(IDipendentiETurniView view,
                                       IDipendentiETurniCoordinator coordinator) {
+    	
+    	/*Vista*/
         this.view = view;
+        
+        /*Coordinatore*/
         this.coordinator = coordinator;
 
+        /*Servizi*/
         this.turniCRUDService = this.coordinator.getTurniCRUDService();
         this.supportoCRUDTurni = this.coordinator.getTurniCRUDSupportServices();
         this.dipCRUDService = this.coordinator.getDipendentiCRUDService();
         this.supportpCRUDdip = this.coordinator.getDipendentiCRUDSupportServices();
+        this.generatoreStaffIDs = this.coordinator.getGeneratoreStaffIDs();
 
+        /*Inizializzazioni*/
         inizializzaPannelloTurni();
         inizializzaPannelloDipendenti(); 
+        
+        /*Registrazione ascoltatore*/
+        this.dipManager.addDipendentiChangeListener(this);
     }
 
+    //----------------------------------------------------------------
+    /*Observable per ComboBox*/
+    @Override
+    public void onListaDipendentiAggiornata() {
+        
+        turniManager.popolaComboDipendenti();
+        
+    }
+    
     //----------------------------------------------------------------
 
     private void inizializzaPannelloTurni() {
@@ -92,6 +118,8 @@ public class DipendentiETurniController {
         impostaDeselezioneClickFuoriTabella(turniPanel);
         
     }
+    
+    
 
     //----------------------------------------------------------------
     
@@ -124,6 +152,36 @@ public class DipendentiETurniController {
 
         // Deseleziona riga se clic fuori
         impostaDeselezioneClickFuoriTabella(dipPanel);
+        
+        // Listener per il bottone "Genera ID"
+        /* Posto in questo punto del codice siccome non riguarda direttamente 
+         * l'accesso al database, né tantomento la tabella in cui sono visualizzati
+         * i dati dei dipendenti ('dipManager' gestisce CRUD e selezione dei dati)*/
+        dipPanel.addGeneraIdBtnListener(e -> {
+            String nome = dipPanel.getNome().trim();
+            String cognome = dipPanel.getCognome().trim();
+            String ruolo = dipPanel.getRuolo();
+            String citta = dipPanel.getCitta().trim();
+
+            if (nome.isEmpty() || cognome.isEmpty() 
+            				   || ruolo == null 
+            				   || citta.isEmpty()) {
+                supportpCRUDdip.getDialogUtils()
+                			   .mostraInfo("Inserisci nome, cognome, ruolo e città "
+                			   			 + "prima "
+                			   			 + "di generare lo Staff ID.");
+                
+                return;
+                
+            }
+
+            String idGenerato = generatoreStaffIDs.generaStaffId(nome, cognome, 
+            													 ruolo, citta);
+            dipPanel.setStaffId(idGenerato);
+        });
+        
+        impostaValidazioneCampiDipendente();
+
         
     }
 
@@ -178,5 +236,39 @@ public class DipendentiETurniController {
     }*/
 
     //----------------------------------------------------------------
+    
+    private ICampoValidabile registraCampo(JTextField field, String regex) {
+    	
+        ICampoValidabile campo = coordinator.getCampoValidabileFactory()
+        									.creaCampoValidabile(field, regex);
+
+        ValidazioneCampo.applicaFeedbackSwing(campo);
+        
+        return campo;
+    }
+    
+    //----------------------------------------------------------------
+    
+    private void impostaValidazioneCampiDipendente() {
+
+        ICampoValidabile campoNome = registraCampo(
+            ((PannelloDipendenti) view.getDipendentiPanel()).getNomeField(),
+            IRegexExpression.NAME_REGEXEXPRESSION);
+
+        ICampoValidabile campoCognome = registraCampo(
+            ((PannelloDipendenti) view.getDipendentiPanel()).getCognomeField(),
+            IRegexExpression.SURNAME_REGEXEXPRESSION);
+
+        ICampoValidabile campoId = registraCampo(
+            ((PannelloDipendenti) view.getDipendentiPanel()).getStaffIdField(),
+            IRegexExpression.STAFF_ID_REGEXEXPRESSION);
+
+        coordinator.getValidatoreCampi().registra(campoNome);
+        coordinator.getValidatoreCampi().registra(campoCognome);
+        coordinator.getValidatoreCampi().registra(campoId);
+    }
+    
+    //----------------------------------------------------------------
+
 
 }

@@ -27,6 +27,12 @@ public class DTOHandlerGestione {
 				
 	}
 	
+	public String esponiCf() {
+		
+		return abbDTO.getCodiceFiscale();
+		
+	}
+	
 	//----------------------------------------------------------------
 	
 	public void composizioneAbbonamento(List<String> sezioniSelezionate,

@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import it.unipv.poisw.f25.gympal.Dominio.staff.Dipendente;
+import it.unipv.poisw.f25.gympal.Dominio.staff.Manager;
+import it.unipv.poisw.f25.gympal.Dominio.staff.Receptionist;
+import it.unipv.poisw.f25.gympal.Dominio.staff.Staff;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.DipendenteDashboardAvviabile;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.ManagerDashboardAvviabile;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.ReceptionistDashboardAvviabile;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.CommonInterface.IDashboardAvviabile;
-import it.unipv.poisw.f25.gympal.staff.Dipendente;
-import it.unipv.poisw.f25.gympal.staff.Manager;
-import it.unipv.poisw.f25.gympal.staff.Receptionist;
-import it.unipv.poisw.f25.gympal.staff.Staff;
 
 
 /*DashboardDispatcherFactory è una factory con dispatching che:

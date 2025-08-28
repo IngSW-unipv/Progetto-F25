@@ -28,6 +28,7 @@ import javax.swing.SwingUtilities;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.IDatiClienteReadOnly;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagamentoView{
 
@@ -71,7 +72,8 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	
     //----------------------------------------------------------------
 	
-	public RiepilogoEPagamentoView(IDynamicButtonSizeSetter setter) {
+	public RiepilogoEPagamentoView(IDynamicButtonSizeSetter setter,
+								   IFontChangeRegister fontChangeRegister) {
 		
 		buttonSizeSetter = setter;
 		
@@ -270,6 +272,8 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	    /*############################################################*/
 
 	    add(secondSplitPanel);
+	    
+	    fontChangeRegister.register(this, buttonSizeSetter);
 	    
 	}
 
@@ -568,6 +572,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	    }
 	 
 	//----------------------------------------------------------------
+
 	    
 	
 }

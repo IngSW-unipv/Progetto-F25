@@ -8,6 +8,7 @@ import javax.swing.JTabbedPane;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneEventiECorsi.VistaEControllore.PannelliPerTabs.PannelloCorsi;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneEventiECorsi.VistaEControllore.PannelliPerTabs.PannelloEventi;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class EventiECorsiView extends JPanel implements IEventiECorsiView{
 
@@ -20,14 +21,15 @@ public class EventiECorsiView extends JPanel implements IEventiECorsiView{
 	
 	//----------------------------------------------------------------
 	
-	public EventiECorsiView(IDynamicButtonSizeSetter buttonSizeSetter) {
+	public EventiECorsiView(IDynamicButtonSizeSetter buttonSizeSetter,
+							IFontChangeRegister changeRegister) {
 		
 		setLayout(new BorderLayout());
 		
 		tabbedPane = new JTabbedPane();
 		
-		corsiPanel = new PannelloCorsi(buttonSizeSetter);
-		eventiPanel = new PannelloEventi(buttonSizeSetter);
+		corsiPanel = new PannelloCorsi(buttonSizeSetter, changeRegister);
+		eventiPanel = new PannelloEventi(buttonSizeSetter, changeRegister);
 	
 	    tabbedPane.addTab("Gestione Corsi", corsiPanel);
 	    tabbedPane.addTab("Gestione Eventi", eventiPanel);

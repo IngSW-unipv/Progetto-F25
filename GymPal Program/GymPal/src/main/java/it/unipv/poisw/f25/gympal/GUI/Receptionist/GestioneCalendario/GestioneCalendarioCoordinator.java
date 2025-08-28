@@ -10,6 +10,8 @@ import javax.swing.JFrame;
 import javax.swing.SwingWorker;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.Bundle.ICommonServicesBundle;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.Validatori.ValidatoreFasciaOraria.IFasciaOrariaValidator;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDateUtils;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.CalendarioSettimanaleController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.CalendarioSettimanaleView;
@@ -20,9 +22,10 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.IDatiC
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.Caching.CalendarioSettimanaleCachesBuilder;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.Handlers.DTOHandlerCalendarioSettimanale;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.Handlers.SecondaryHandlers.TurniHandler;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulateOps.SimulazioneOperazione;
 import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
 import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
 import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCorso;
@@ -39,15 +42,15 @@ public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
 	private Map<LocalDate, List<Turno>> turniCache;
 	private Map<LocalDate, List<Calendario>> eventiCache;
 	
-	/*Viste*/
-	private ICalendarioSettimanaleView calendarioView;
-	
 	/*Per implementare meccanismo Observable con vista calendario*/
 	private List<ICalendarioChangeListener> listeners = new ArrayList<>();
 	
 	/*Servizi*/
     private ICalendarioFacadeService calendarioFacade;
+    private IFasciaOrariaValidator fasciaValidator;
+    private IFontChangeRegister changeRegister;
     private IDateUtils dateUtils;
+    
     
     /*DTO*/
     private List<DatiCellaCalendarioDTO> settimanaDTOs;
@@ -56,7 +59,9 @@ public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
     
     public GestioneCalendarioCoordinator(IRegistraEMostraSchermate viewHandler,
             							 ICalendarioFacadeService calendarioFacade,
-            							 IDateUtils dateUtils) {
+            							 IFasciaOrariaValidator fasciaValidator,
+            							 IDateUtils dateUtils,
+            							 ICommonServicesBundle serviziComuni) {
     	
     		/*Controller*/
     		this.viewHandler = viewHandler;
@@ -64,6 +69,8 @@ public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
     		/*Servizi*/
     		this.calendarioFacade = calendarioFacade;
     		this.dateUtils = dateUtils;
+    		this.changeRegister = serviziComuni.getFontChangeRegister();
+    		this.fasciaValidator = fasciaValidator;
     		
     }
 
@@ -71,12 +78,15 @@ public class GestioneCalendarioCoordinator implements ICoordinatoreCalendario {
     
     private void setupSchermataCalendario() {
     	
-    	calendarioView = new CalendarioSettimanaleView(new DynamicButtonSizeSetter());
+    	ICalendarioSettimanaleView calendarioView = new CalendarioSettimanaleView(new DynamicButtonSizeSetter(),
+    												changeRegister);
     	viewHandler.registraSchermata("CALENDARIO_VIEW", calendarioView.getMainPanel());
     	
     	new CalendarioSettimanaleController(calendarioView, 
     										calendarioFacade, 
     										dateUtils,
+    										changeRegister,
+    										fasciaValidator,
     										this);
     	
     }    

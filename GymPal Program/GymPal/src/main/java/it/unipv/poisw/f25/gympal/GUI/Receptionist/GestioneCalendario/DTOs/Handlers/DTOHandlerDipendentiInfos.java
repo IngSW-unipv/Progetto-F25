@@ -3,7 +3,7 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.Handl
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveDipendenti.IRetrieveDipendentiFromDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.FromDB.RetrieveDipendenti.IRetrieveDipendentiFromDB;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.DipendentiInfosDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.IDipendentiInfosDTO;
 import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.Dipendente;

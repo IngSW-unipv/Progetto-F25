@@ -25,6 +25,14 @@ public class CtrlReqAnagraficiService implements ICtrlReqAnagraficiService {
 		
 	}
 	
+	@Override
+	public boolean isCertificatoValido(boolean selezioneCertificato) {
+		
+	    return !richiediCertificato() || selezioneCertificato;
+	    
+	}
+
+	
 	//----------------------------------------------------------------
 	
 	@Override
@@ -33,6 +41,14 @@ public class CtrlReqAnagraficiService implements ICtrlReqAnagraficiService {
 		return etaService.isMinorenne(dataNascita);
 		
 	}
+	
+	@Override
+	public boolean isPermessoGenitoriValido(LocalDate dataNascita, boolean selezionePermesso) {
+		
+	    return !richiediPermessoGenitori(dataNascita) || selezionePermesso;
+	    
+	}
+
 	
 	//----------------------------------------------------------------
 

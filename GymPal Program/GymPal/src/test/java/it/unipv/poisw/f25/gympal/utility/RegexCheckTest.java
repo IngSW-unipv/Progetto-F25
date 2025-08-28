@@ -9,8 +9,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexExpression;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.RegexCheck;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
 
 
 public class RegexCheckTest {

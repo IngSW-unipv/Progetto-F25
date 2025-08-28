@@ -13,5 +13,9 @@ public interface IDynamicButtonSizeSetter {
 	public void uniformButtonSize(AbstractButton... buttons);
 	
 	//----------------------------------------------------------------
+	
+	public void recomputeAll();
 
+	//----------------------------------------------------------------
+	
 }

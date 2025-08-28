@@ -1,11 +1,14 @@
 package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.Validatori.ValidatoreFasciaOraria.IFasciaOrariaValidator;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ClienteNonAbbonatoException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ConflittoOrarioException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.DatiNonTrovatiException;
@@ -14,6 +17,7 @@ import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDat
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.ICoordinatoreCalendario;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.ControllerSupport.AppuntamentoPTManager;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.ControllerSupport.SessioneCorsoManager;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.JDialogFissaAppuntamento.FissaAppuntamentoDialog;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.PannelliPerTabs.AppuntamentiPTPanel;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.PannelliPerTabs.IscrizioneCorsiPanel;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.PannelliPerTabs.CustomTableModelsForPanels.AppuntamentoPTTableModel;
@@ -24,13 +28,14 @@ import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCor
 public class ManipolazioneController {
 	
 	/*Vista*/
-	private IManipolazioneFrame frame;
+	private final IManipolazioneFrame frame;
 	
     /*Coordinatore*/
-    private final ICoordinatoreCalendario coordinator;
+    private ICoordinatoreCalendario coordinator;
     
     /*Servizi*/
     private ICalendarioFacadeService calendarioFacade;
+    private IFasciaOrariaValidator fasciaValidator;
     private IDateUtils dateUtils;
 
     /*Managers*/
@@ -41,6 +46,7 @@ public class ManipolazioneController {
 	
 	public ManipolazioneController(IManipolazioneFrame frame,
 								   ICalendarioFacadeService calendarioFacade,
+								   IFasciaOrariaValidator fasciaValidator,
 								   IDateUtils dateUtils,
 								   ICoordinatoreCalendario coordinator) {
 		/*Vista*/
@@ -51,6 +57,7 @@ public class ManipolazioneController {
 		
 		/*Servizi*/
 		this.calendarioFacade = calendarioFacade;
+		this.fasciaValidator = fasciaValidator;
 		this.dateUtils = dateUtils;
 		
 		/*Managers*/
@@ -102,24 +109,30 @@ public class ManipolazioneController {
 
 	    apptPanel.addAnnullaBtnListener(e -> gestisciAnnullamentoPT(apptPanel));
 	    
-	    popolaStaffIdComboBox(apptPanel);
+	    popolaStaffIdComboBox(apptPanel::setStaffIdOptions);
 	    
 	}
 	
 	//----------------------------------------------------------------
 	
-	private void popolaStaffIdComboBox(AppuntamentiPTPanel apptPanel) {
-		
+	private void popolaStaffIdComboBox(Consumer<List<String>> staffIdConsumer) {
 		
 	    try {
-	        List<String> soloDIP = ptManager.getSoloStaffIdDIP();	        
-	        apptPanel.setStaffIdOptions(soloDIP);
+	    	
+	        List<String> soloDIP = ptManager.getSoloStaffIdDIP();	
+	        /* 'Consumer' è un'intefaccia funzionala dotata di un unico metodo
+	         * astratto ('accept').
+	         * Quando è invocato 'popolaStaffIdComboBox(apptPanel::setStaffIdOptions)'
+	         * Java sa che 'popolaStaffIdComboBox' accetta una 'Consumer<List<String>>'
+	         * e che il metodo 'setStaffIdOptions' accetta una 'List<String>'.
+	         * Quindi, Java può creare un oggetto 'Consumer<List<String>>' che
+	         * chiama 'setStaffIdOptions' quando è invocata 'accept()'.*/
+	        staffIdConsumer.accept(soloDIP);
 	        
 	    } catch (Exception e) {
 	    	
 	        mostraErrore("Errore durante il caricamento degli staffId: " 
-	        			+ e.getMessage());
-	        
+	        			 + e.getMessage());
 	        e.printStackTrace();
 	        
 	    }
@@ -155,7 +168,7 @@ public class ManipolazioneController {
 	        
 	    } catch (ClienteNonAbbonatoException e) {
 	    	
-	        mostraErrore("Il cliente non è abbonato.");
+	        mostraErrore("Nell'abbonamento del cliente non è incluso questo corso.");
 	        
 	    } catch (ConflittoOrarioException e) {
 	    	
@@ -218,31 +231,41 @@ public class ManipolazioneController {
 	
 	private void gestisciPrenotazionePT(AppuntamentiPTPanel apptPanel) {
 		
-	    JTable table = apptPanel.getAppuntamentiTable();
-	    int selectedRow = table.getSelectedRow();
-
-	    if (selectedRow == -1) {
-	    	
-	        mostraMessaggio("Seleziona un appuntamento.");
-	        return;
-	        
-	    }
-
-	    AppuntamentoPTTableModel model = (AppuntamentoPTTableModel) table.getModel();
-	    AppuntamentoPT app = model.getAppuntamentoAt(selectedRow);
-
-	    String cfCliente = richiediCfCliente();
-	    if (cfCliente == null) return;
-
 	    try {
 	    	
-	        ptManager.prenota(cfCliente, app);
+	        // Recupera lista di dipendenti con ID contenente "DIP"
+	    	List<String> staffIdDIP = new ArrayList<>();
+	    	popolaStaffIdComboBox(staffIdDIP::addAll);
+
+	        // Inizializza e mostra la dialog
+	        
+	        FissaAppuntamentoDialog dialog = new FissaAppuntamentoDialog(
+	            staffIdDIP,
+	            dateUtils,
+	            fasciaValidator
+	        );
+	        dialog.setVisible(true);
+
+	        // Acquisizione informazioni appuntamento da finestra di dialogo
+	        AppuntamentoPT nuovoAppuntamento = dialog.getAppuntamentoPT();
+
+	        // Chiusura dialog senza inserire dati
+	        if (nuovoAppuntamento == null) {
+	        	
+	            return;
+	            
+	        }
+
+	        // Prenotazione
+	        ptManager.prenota(nuovoAppuntamento.getCf(),
+	        				  nuovoAppuntamento);
+
 	        refreshTables();
 	        mostraMessaggio("Lezione prenotata.");
-	        
+
 	    } catch (ClienteNonAbbonatoException e) {
 	    	
-	        mostraErrore("Il cliente non è abbonato.");
+	        mostraErrore("L'abbonamento del cliente non include 'Sala Pesi'.");
 	        
 	    } catch (ConflittoOrarioException e) {
 	    	
@@ -256,10 +279,11 @@ public class ManipolazioneController {
 	    	
 	        mostraErrore("Errore inaspettato: " + ex.getMessage());
 	        
+	        ex.printStackTrace();
+	        
 	    }
 	    
 	}
-
 	
 	//----------------------------------------------------------------
 	

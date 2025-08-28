@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class EliminaProfiloView extends JPanel implements IEliminaProfiloView {
 
@@ -32,7 +33,8 @@ public class EliminaProfiloView extends JPanel implements IEliminaProfiloView {
 	
 	//----------------------------------------------------------------
 	
-	public EliminaProfiloView(IDynamicButtonSizeSetter setter){
+	public EliminaProfiloView(IDynamicButtonSizeSetter setter,
+							  IFontChangeRegister fontChangeRegister){
 		
 		buttonSizeSetter = setter;
 		
@@ -116,6 +118,8 @@ public class EliminaProfiloView extends JPanel implements IEliminaProfiloView {
 		/*############################################################*/
 		
 		add(mainSplitPanel);		
+		
+		fontChangeRegister.register(this, buttonSizeSetter);
 		
 	}
 	

@@ -5,25 +5,27 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.RegistrationServicesBundle;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneTurni.TurniDipendente.IGestoreTurniPersonali;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ICommonServicesBundle;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.SupportoTurni.TurniDipendente.IGestoreTurniPersonali;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.Bundle.ICommonServicesBundle;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.FinestreDiDialogo.IDialogUtils;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.Validatori.ValidatoreFasciaOraria.IFasciaOrariaValidator;
+import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.IRegistrationServicesBundle;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDateUtils;
+import it.unipv.poisw.f25.gympal.Dominio.staff.Receptionist;
+import it.unipv.poisw.f25.gympal.GUI.LogoutView.LogoutConfirmationController;
+import it.unipv.poisw.f25.gympal.GUI.LogoutView.LogoutConfirmationView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCoordinator;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.ICustomerRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.GestioneAbbCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.IGestioneAbbCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.GestioneCalendarioCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.ICoordinatoreCalendario;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationController;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationView;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
 import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.Supporto.TurnoIndividuale;
 import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.VisualizzazioneTurni.IVisualizzaTurniCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.VisualizzazioneTurni.VisualizzaTurniCoordinator;
 import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
-import it.unipv.poisw.f25.gympal.staff.Receptionist;
 
 public class ReceptionistController implements IRegistraEMostraSchermate {
 
@@ -35,14 +37,18 @@ public class ReceptionistController implements IRegistraEMostraSchermate {
 
 
     /*Servizi*/
-    private RegistrationServicesBundle serviziReg;
-    private ICommonServicesBundle serviziComuni;
+    
     private ICalendarioFacadeService calendarioFacade;
-    private IDateUtils dateUtils;
+    private IFasciaOrariaValidator fasciaValidator;
+    private IRegistrationServicesBundle serviziReg;
     private IGestoreTurniPersonali gestoreTurni;
+    private ICommonServicesBundle serviziComuni;
+    private IDialogUtils dialogUtils;
+    private IDateUtils dateUtils;
+
     
     /*Coordinatori GUI*/
-    private IRegistrationCoordinator customerRegistrationCoordinator;
+    private ICustomerRegistrationCoordinator customerRegistrationCoordinator;
     private IGestioneAbbCoordinator gestoreAbb;
     private ICoordinatoreCalendario calendarioCoordinator;
     private IVisualizzaTurniCoordinator turniCoordinator;
@@ -54,11 +60,13 @@ public class ReceptionistController implements IRegistraEMostraSchermate {
 
     public ReceptionistController(IDashboard view,
     							  Receptionist receptionist,
-            					  RegistrationServicesBundle serviziReg,
+            					  IRegistrationServicesBundle serviziReg,
             					  ICommonServicesBundle serviziComuni,
             					  ICalendarioFacadeService calendarioFacade,
+            					  IGestoreTurniPersonali gestoreTurni,
+            					  IFasciaOrariaValidator fasciaValidator,
             					  IDateUtils dateUtils,
-            					  IGestoreTurniPersonali gestoreTurni) {
+            					  IDialogUtils dialogUtils) {
     	
         recDashView = view;
         
@@ -79,8 +87,10 @@ public class ReceptionistController implements IRegistraEMostraSchermate {
         this.serviziReg = serviziReg;
         this.serviziComuni = serviziComuni;
         this.calendarioFacade = calendarioFacade;
-        this.dateUtils = dateUtils;
         this.gestoreTurni = gestoreTurni;
+        this.dateUtils = dateUtils;
+        this.dialogUtils = dialogUtils;
+        this.fasciaValidator = fasciaValidator;
  
         
     }
@@ -128,9 +138,7 @@ public class ReceptionistController implements IRegistraEMostraSchermate {
             new LogoutConfirmationController(logoutView, 
             								(IDashboard)recDashView, 
             								 schermataPreLogout,
-            								 serviziComuni.getRegexChecker(),
-            								 serviziComuni.getAutDipendente(),
-            								 serviziComuni.getStaffFactory());
+            								 serviziComuni);
             recDashView.mostraSchermata("LOGOUT_VIEW"); 
             
         });
@@ -163,7 +171,10 @@ public class ReceptionistController implements IRegistraEMostraSchermate {
         if (calendarioCoordinator == null) {
         	
             calendarioCoordinator = new GestioneCalendarioCoordinator(this,
-                                    calendarioFacade, dateUtils);
+                                    calendarioFacade, 
+                                    fasciaValidator, 
+                                    dateUtils, 
+                                    serviziComuni);
 
             calendarioCoordinator.inizializzaConBarra(frame, callback);
             
@@ -179,15 +190,10 @@ public class ReceptionistController implements IRegistraEMostraSchermate {
         if (customerRegistrationCoordinator == null) {
         	
         	customerRegistrationCoordinator = new CustomerRegistrationCoordinator(
-                this,
-                this.serviziReg.getCalcoloEtaService(),
-                this.serviziComuni.getCampoValidabileFactory(),
-                this.serviziReg.getValidatoreCampi(),
-                this.serviziReg.getControlloRequisiti(),
-                this.serviziComuni.getPrezzoFactory(),
-                this.serviziComuni.getImmettiDati(),
-                this.serviziComuni.getDiscounts()
-            );
+        									  this, 
+        									  serviziComuni, 
+        									  serviziReg,
+        									  dateUtils);
         	
         }
         
@@ -199,14 +205,9 @@ public class ReceptionistController implements IRegistraEMostraSchermate {
     	
     	if(gestoreAbb == null) {
     		
-    		gestoreAbb = new GestioneAbbCoordinator(this,
-					   this.serviziComuni.getCampoValidabileFactory(),
-					   this.serviziComuni.getValidatoreCampi(),
-					   this.serviziComuni.getRecuperaDati(),
-					   this.serviziComuni.getHeadHunter(),
-					   this.serviziComuni.getPrezzoFactory(),
-					   this.serviziComuni.getUpdater(),
-					   this.serviziComuni.getDiscounts());
+    		gestoreAbb = new GestioneAbbCoordinator(this, 
+    												serviziComuni,
+    												dialogUtils);
     		
     	}
     	
@@ -222,7 +223,9 @@ public class ReceptionistController implements IRegistraEMostraSchermate {
             List<Turno> turni = gestoreTurni.caricaTurni(staffID);
             List<TurnoIndividuale> personali = gestoreTurni.estraiTurniPersonali(staffID, turni);
 
-            turniCoordinator = new VisualizzaTurniCoordinator(this, personali);
+            turniCoordinator = new VisualizzaTurniCoordinator(this, 
+            												  personali, 
+            												  serviziComuni.getFontChangeRegister());
         }
     }
    

@@ -4,12 +4,13 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveClient.IRetrieveClientFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.AddClient.ICommitNewClientToDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.RemoveClient.IDeleteClientFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.UpdateClient.IUpdateClientInsideDB;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.FromDB.RetrieveClient.IRetrieveClientFromDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.TowardsDB.AddClient.ICommitNewClientToDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.TowardsDB.RemoveClient.IDeleteClientFromDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.TowardsDB.UpdateClient.IUpdateClientInsideDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.Bundle.ICommonServicesBundle;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.DTO.DTOHandlerRettifica;
 import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.Rettifica.IRettificaInfoView;
 import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.Rettifica.RettificaInfoController;
@@ -18,21 +19,18 @@ import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.MasterDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.ModificaAbbCliente.IModificaAbbonamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.ModificaAbbCliente.ModificaAbbonamentoController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.ModificaAbbCliente.ModificaAbbonamentoView;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.ModAbbContract.IModAbbContract;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DataFerry.RawClientData;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.EtichettaPiuCampoFactory;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.ModAbbContract.IModAbbContract;
 
 public class RettificaCoordinator implements IRettificaCoordinator, IModAbbContract{
 	
 	/*Controllore*/
 	private IRegistraEMostraSchermate viewHandler;
-    
-    /*Viste*/
-    private IRettificaInfoView rettView;
-    private IModificaAbbonamentoView modificaAbb;
     
     /*Servizi*/
     private ICampoValidabileFactory campoValidabileFactory;
@@ -41,6 +39,7 @@ public class RettificaCoordinator implements IRettificaCoordinator, IModAbbContr
     private IDeleteClientFromDB removeDBData;
     private IUpdateClientInsideDB updateDBData;
     private ICommitNewClientToDB commitDataToDB;
+    private IFontChangeRegister changeRegister;
     
 
 	/*DTO e Inizializzatore*/
@@ -50,23 +49,19 @@ public class RettificaCoordinator implements IRettificaCoordinator, IModAbbContr
     //----------------------------------------------------------------
     
     public RettificaCoordinator(IRegistraEMostraSchermate viewHandler,
-    							ICampoValidabileFactory campoValidabileFactory,
-    							IValidatoreCampi validatoreCampi,
-    							IRetrieveClientFromDB recuperaDati,
-    							IDeleteClientFromDB headHunter,
-    							IUpdateClientInsideDB updateClient,
-    							ICommitNewClientToDB immettiDati) {
+    							ICommonServicesBundle serviziComuni) {
     	
     	/*Controllore*/
     	this.viewHandler = viewHandler;
     	
     	/*Servizi*/
-    	this.campoValidabileFactory = campoValidabileFactory;
-    	this.validatoreCampi = validatoreCampi;
-    	this.retrieveDBData = recuperaDati;
-    	this.removeDBData = headHunter;
-    	this.updateDBData = updateClient;
-    	this.commitDataToDB = immettiDati;
+    	this.campoValidabileFactory = serviziComuni.getCampoValidabileFactory();
+    	this.validatoreCampi = serviziComuni.getValidatoreCampi();
+    	this.retrieveDBData = serviziComuni.getRecuperaDati();
+    	this.removeDBData = serviziComuni.getHeadHunter();
+    	this.updateDBData = serviziComuni.getUpdater();
+    	this.commitDataToDB = serviziComuni.getImmettiDati();
+    	this.changeRegister = serviziComuni.getFontChangeRegister();
     	
     	/*Navigazione GUI*/
     	inizializzaCicloRettifica();
@@ -90,8 +85,8 @@ public class RettificaCoordinator implements IRettificaCoordinator, IModAbbContr
 	
 	private void setupRettificaDatiAnagrafici() {
 		
-		rettView = new RettificaInfoView(new DynamicButtonSizeSetter(),
-	  			 						 new EtichettaPiuCampoFactory());
+		IRettificaInfoView rettView = new RettificaInfoView(new DynamicButtonSizeSetter(),
+	  			 						 new EtichettaPiuCampoFactory(), changeRegister);
 
 		viewHandler.registraSchermata("RETT_INFO", rettView.getMainPanel());
 		
@@ -187,7 +182,7 @@ public class RettificaCoordinator implements IRettificaCoordinator, IModAbbContr
 	
 	private void setupModificaAbbonamento() {
 		
-		modificaAbb = new ModificaAbbonamentoView(new DynamicButtonSizeSetter());
+		IModificaAbbonamentoView modificaAbb = new ModificaAbbonamentoView(new DynamicButtonSizeSetter(), changeRegister);
 		
 		viewHandler.registraSchermata("MODIFICA_ABB", modificaAbb.getMainPanel());
 		

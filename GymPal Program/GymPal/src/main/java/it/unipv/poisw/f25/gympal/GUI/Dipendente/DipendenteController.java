@@ -4,18 +4,18 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneTurni.TurniDipendente.IGestoreTurniPersonali;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ICommonServicesBundle;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.ILogoutConfirmationView;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationController;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationView;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.SupportoTurni.TurniDipendente.IGestoreTurniPersonali;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.Bundle.ICommonServicesBundle;
+import it.unipv.poisw.f25.gympal.Dominio.staff.Dipendente;
+import it.unipv.poisw.f25.gympal.GUI.LogoutView.ILogoutConfirmationView;
+import it.unipv.poisw.f25.gympal.GUI.LogoutView.LogoutConfirmationController;
+import it.unipv.poisw.f25.gympal.GUI.LogoutView.LogoutConfirmationView;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
 import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.Supporto.TurnoIndividuale;
 import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.VisualizzazioneTurni.IVisualizzaTurniCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.VisualizzazioneTurni.VisualizzaTurniCoordinator;
 import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
-import it.unipv.poisw.f25.gympal.staff.Dipendente;
 
 public class DipendenteController implements IRegistraEMostraSchermate{
 
@@ -102,9 +102,7 @@ public class DipendenteController implements IRegistraEMostraSchermate{
             new LogoutConfirmationController(logoutView, 
 						            		(IDashboard)dipDashView, 
 											 schermataPreLogout,
-											 serviziComuni.getRegexChecker(),
-											 serviziComuni.getAutDipendente(),
-											 serviziComuni.getStaffFactory());
+											 serviziComuni);
             dipDashView.mostraSchermata("LOGOUT_VIEW"); 
             
         });
@@ -123,7 +121,9 @@ public class DipendenteController implements IRegistraEMostraSchermate{
             List<TurnoIndividuale> personali = gestoreTurni
             								  .estraiTurniPersonali(staffID, turni);
 
-            turniCoordinator = new VisualizzaTurniCoordinator(this, personali);
+            turniCoordinator = new VisualizzaTurniCoordinator(this, 
+            				                                  personali,
+            				                                  serviziComuni.getFontChangeRegister());
             
         }
         

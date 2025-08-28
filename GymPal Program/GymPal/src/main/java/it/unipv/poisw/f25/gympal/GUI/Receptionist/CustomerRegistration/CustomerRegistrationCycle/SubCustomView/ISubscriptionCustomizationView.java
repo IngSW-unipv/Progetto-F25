@@ -28,6 +28,14 @@ public interface ISubscriptionCustomizationView {
     
     //----------------------------------------------------------------
     
+    public List<String> getNomiSezioni();
+    
+    //----------------------------------------------------------------
+    
+    public List<String> getNomiCorsi();
+    
+    //----------------------------------------------------------------
+    
     public void addAvantiListener(ActionListener listener);
     
     //----------------------------------------------------------------

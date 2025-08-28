@@ -9,6 +9,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
+
 public class VisualizzaTurniView extends JPanel implements IVisualizzaTurniView{
 
 	private static final long serialVersionUID = 1L;
@@ -17,13 +19,15 @@ public class VisualizzaTurniView extends JPanel implements IVisualizzaTurniView{
 	
     //------------------------------------------------------------
 	
-	public VisualizzaTurniView() {
+	public VisualizzaTurniView(IFontChangeRegister fontChangeRegister) {
 
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createCompoundBorder(
                   BorderFactory.createLineBorder(Color.GRAY),
                   new EmptyBorder(10, 10, 10, 10)));
         initTable();
+        
+        fontChangeRegister.register(this);
 		
 	}
 	

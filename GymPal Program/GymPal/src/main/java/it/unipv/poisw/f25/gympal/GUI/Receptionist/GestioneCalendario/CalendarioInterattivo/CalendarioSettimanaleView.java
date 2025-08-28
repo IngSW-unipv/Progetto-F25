@@ -23,10 +23,12 @@ import javax.swing.SwingConstants;
 
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.CalendarioUtilities.CalendarioCellPanel;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class CalendarioSettimanaleView extends JPanel implements ICalendarioSettimanaleView {
 
     private static final long serialVersionUID = 1L;
+    
     private final int ORE_INIZIO = 8;
     private final int ORE_FINE = 20;
     private final int NUM_GIORNI = 7;
@@ -47,7 +49,8 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
     
 	//----------------------------------------------------------------
 
-    public CalendarioSettimanaleView(IDynamicButtonSizeSetter setter) {
+    public CalendarioSettimanaleView(IDynamicButtonSizeSetter setter,
+    								 IFontChangeRegister fontChangeRegister) {
     	
     	buttonSizeSetter = setter;
     	
@@ -66,6 +69,8 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
 
         creaPannelloBottoni();
         add(pannelloBottoni, BorderLayout.SOUTH);
+        
+        fontChangeRegister.register(this, buttonSizeSetter);
         
     }
     
@@ -113,7 +118,7 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
             						+ giorno.toString();
 
             JLabel label = new JLabel(labelText, SwingConstants.CENTER);
-            label.setFont(new Font("SansSerif", Font.BOLD, 20));
+            label.setFont(new Font("Segoe UI", Font.PLAIN, 20));
             label.setOpaque(true);
             label.setBackground(new Color(230, 230, 250));
             label.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -268,5 +273,6 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
     }
 
 	//----------------------------------------------------------------
+
 
 }

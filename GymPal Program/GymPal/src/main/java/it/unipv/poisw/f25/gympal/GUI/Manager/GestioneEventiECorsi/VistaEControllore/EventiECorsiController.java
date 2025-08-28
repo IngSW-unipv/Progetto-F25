@@ -13,10 +13,10 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
-import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerGestioneEventiGenerici.IEventiCRUDFacadeService;
-import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerGestioneSessioniCorsi.ICorsiCRUDFacadeService;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneEventi.ICRUDEventiSupportServices;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneSessioniCorsi.ICRUDCorsiSupportServices;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneEventiESessioni.FacadePerGestioneEventiGenerici.IEventiCRUDFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneEventiESessioni.FacadePerGestioneSessioniCorsi.ICorsiCRUDFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneEventiESessioni.SupportoCorsi.ICRUDCorsiSupportServices;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneEventiESessioni.SupportoEventi.ICRUDEventiSupportServices;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneEventiECorsi.IEventiECorsiCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneEventiECorsi.VistaEControllore.ControllerSupport.EventiGenericiManager;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneEventiECorsi.VistaEControllore.ControllerSupport.SessioniCorsiManager;

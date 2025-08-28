@@ -25,6 +25,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.DateFormatter;
 
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class PannelloEventi extends JPanel {
 
@@ -51,7 +52,8 @@ public class PannelloEventi extends JPanel {
     
 	//----------------------------------------------------------------
 
-    public PannelloEventi(IDynamicButtonSizeSetter buttonSizeSetter) {
+    public PannelloEventi(IDynamicButtonSizeSetter buttonSizeSetter,
+    					  IFontChangeRegister fontChangeRegister) {
     	
         this.buttonSizeSetter = buttonSizeSetter;
 
@@ -63,6 +65,8 @@ public class PannelloEventi extends JPanel {
         initFiltroPanel();
         initTable();
         add(createGestioneEventiPanel());
+        
+        fontChangeRegister.register(this, buttonSizeSetter);
         
     }
     

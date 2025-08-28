@@ -1,22 +1,18 @@
 package it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration;
 
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.ValidatoreCampi;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.ControlloRequisitiAnagrafica.CtrlReqAnagraficiService;
 import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.ControlloRequisitiAnagrafica.ICtrlReqAnagraficiService;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.ValidatoreCampi;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.CalcoloEtaService;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
 
-public class RegistrationServicesBundle {
+public class RegistrationServicesBundle implements IRegistrationServicesBundle{
 	
 
     private ICalcoloEtaService calcoloEtaService;
     private IValidatoreCampi validatoreCampi;
     private ICtrlReqAnagraficiService controlloRequisiti;
-
-    //private ICommitNewClientToDB veicoloDati;
-    //private IPersistenceFacade facade;
-    
     
 	//----------------------------------------------------------------
 
@@ -27,16 +23,11 @@ public class RegistrationServicesBundle {
         this.validatoreCampi = new ValidatoreCampi();
         this.controlloRequisiti = new CtrlReqAnagraficiService(calcoloEtaService);
 
-        
-        //this.facade = PersistenceFacade.getInstance();
-        //this.veicoloDati = new CommitNewClientToDB(facade);
-        
-
-        
     }
     
 	//----------------------------------------------------------------
 
+    @Override
     public ICalcoloEtaService getCalcoloEtaService() {
     	
         return calcoloEtaService;
@@ -45,6 +36,7 @@ public class RegistrationServicesBundle {
 
 	//----------------------------------------------------------------
 
+    @Override
     public IValidatoreCampi getValidatoreCampi() {
     	
         return validatoreCampi;
@@ -53,6 +45,7 @@ public class RegistrationServicesBundle {
     
 	//----------------------------------------------------------------
 
+    @Override
     public ICtrlReqAnagraficiService getControlloRequisiti() {
     	
         return controlloRequisiti;
@@ -60,13 +53,5 @@ public class RegistrationServicesBundle {
     }
     
 	//----------------------------------------------------------------
-    
-    /*public ICommitNewClientToDB getVeicoloDati() {
-    	
-    	return veicoloDati;
-    	
-    }*/
-    
-   //----------------------------------------------------------------
 
 }

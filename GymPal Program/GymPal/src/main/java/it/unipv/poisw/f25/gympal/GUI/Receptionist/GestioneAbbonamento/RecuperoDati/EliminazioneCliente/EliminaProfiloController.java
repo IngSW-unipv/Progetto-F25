@@ -33,7 +33,7 @@ public class EliminaProfiloController {
 		this.onIndietro = onIndietro;
 		this.onConferma = onConferma;
 		
-		impostaEventoAnulla();
+		impostaEventoAnnulla();
 		impostaEventoIndietro();
 		impostaEventoConferma();
 		
@@ -44,7 +44,7 @@ public class EliminaProfiloController {
 	
 	//----------------------------------------------------------------
 	
-	private void impostaEventoAnulla() {
+	private void impostaEventoAnnulla() {
 		
 		eliminaView.addAnnullaListener(e -> {onAnnulla.run();});
 		
@@ -79,7 +79,7 @@ public class EliminaProfiloController {
                  } catch (Exception ex) {
             	 
                         JOptionPane.showMessageDialog(
-                        	null,
+                        	eliminaView.getMainPanel(),
                             "Errore, tentativo eliminazione FALLITO:\n" + ex.getMessage(),
                             "Errore",
                             JOptionPane.ERROR_MESSAGE);
@@ -97,9 +97,19 @@ public class EliminaProfiloController {
     
     private void impostaLabel() {
     	
-    	eliminaView.getCfLabel().setText("Codice fiscale cliente: " + coordinator.getDTO().getCodiceFiscale());
+        if (coordinator.getDTO() != null && coordinator.getDTO().getCodiceFiscale() != null) {
+        	
+            eliminaView.getCfLabel().setText("Codice fiscale cliente: " 
+            								+ coordinator.getDTO().getCodiceFiscale());
+            
+        } else {
+        	
+            eliminaView.getCfLabel().setText("Codice fiscale cliente: "
+            							   + "[dato non disponibile]");
+            
+        }
     	
-    };
+    }
     
     
 	//----------------------------------------------------------------

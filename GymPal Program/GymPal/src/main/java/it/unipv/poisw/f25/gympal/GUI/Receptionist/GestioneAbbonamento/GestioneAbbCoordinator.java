@@ -2,18 +2,18 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento;
 
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.FromDB.RetrieveClient.IRetrieveClientFromDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.FromDB.RetrieveOccasionsDiscounts.IRetrieveDiscountsFromDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.TowardsDB.RemoveClient.IDeleteClientFromDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.TowardsDB.UpdateClient.IUpdateClientInsideDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.Bundle.ICommonServicesBundle;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.FinestreDiDialogo.IDialogUtils;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.IStrategieCalcoloPrezzoFactory;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieDiPagamento.IStrategieCalcoloPrezzo;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveClient.IRetrieveClientFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveOccasionsDiscounts.IRetrieveDiscountsFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.RemoveClient.IDeleteClientFromDB;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.TowardsDB.UpdateClient.IUpdateClientInsideDB;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.MasterDTO;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.DTO.DTOHandlerGestione;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.IRecuperoDatiView;
@@ -25,7 +25,6 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDa
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.ModificaAbbCliente.IModificaAbbonamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.ModificaAbbCliente.ModificaAbbonamentoController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoDati.ModificaAbbCliente.ModificaAbbonamentoView;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.ModAbbContract.IModAbbContract;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.IRiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoView;
@@ -34,18 +33,14 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryI
 import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.EtichettaPiuCampoFactory;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.ModAbbContract.IModAbbContract;
 import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 
 public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordinator, IModAbbContract{
 	
 	private String schermataPreRinnovo;
 	private IRegistraEMostraSchermate viewHandler;
-	
-    /*Viste*/
-    private IRecuperoDatiView recuperoDati;
-    private IEliminaProfiloView eliminazioneDati;
-    private IRiepilogoEPagamentoView riepilogoEPagamento;
-    private IModificaAbbonamentoView modificaAbb;
     
     /*Servizi*/
     private ICampoValidabileFactory campoValidabileFactory;
@@ -55,6 +50,8 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
     private IStrategieCalcoloPrezzoFactory prezzoFactory;
     private IUpdateClientInsideDB updateDBData;
     private IRetrieveDiscountsFromDB getDiscounts;
+    private IFontChangeRegister changeRegister;
+    private IDialogUtils dialogUtils;
     
     private MasterDTO abbDTO;
     private DTOHandlerGestione costruttoreDTOHelper;
@@ -62,24 +59,21 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
     //----------------------------------------------------------------
 	
 	public GestioneAbbCoordinator(IRegistraEMostraSchermate viewHandler,
-								  ICampoValidabileFactory campovalidabileFactory,
-								  IValidatoreCampi validatoreCampi,
-								  IRetrieveClientFromDB veicoloDati,
-								  IDeleteClientFromDB headHunter,
-								  IStrategieCalcoloPrezzoFactory prezzoFactory,
-								  IUpdateClientInsideDB updateClient,
-								  IRetrieveDiscountsFromDB getDiscounts) {
+								  ICommonServicesBundle serviziComuni,
+								  IDialogUtils dialogUtils) {
 		
 		/*Servizi*/
 		this.viewHandler = viewHandler;
-    	this.campoValidabileFactory = campovalidabileFactory;
-    	this.validatoreCampi = validatoreCampi;
-    	this.retrieveDBData = veicoloDati;
-    	this.removeDBData = headHunter;
-    	this.prezzoFactory = prezzoFactory;
-    	this.updateDBData = updateClient;
-    	this.getDiscounts = getDiscounts;
-		
+    	this.campoValidabileFactory = serviziComuni.getCampoValidabileFactory();
+    	this.validatoreCampi = serviziComuni.getValidatoreCampi();
+    	this.retrieveDBData = serviziComuni.getRecuperaDati();
+    	this.removeDBData = serviziComuni.getHeadHunter();
+    	this.prezzoFactory = serviziComuni.getPrezzoFactory();
+    	this.updateDBData = serviziComuni.getUpdater();
+    	this.getDiscounts = serviziComuni.getDiscounts();
+    	this.changeRegister = serviziComuni.getFontChangeRegister();
+    	this.dialogUtils = dialogUtils;
+    			
     	/*Navigazione GUI*/
 		inizializzaCicloGestione();
 		
@@ -98,11 +92,48 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 	}
 	
     //----------------------------------------------------------------
+		
+	private void setupRiepilogoEPagamento() {
+		
+	    IRiepilogoEPagamentoView riepilogoEPagamento = 
+	    		new RiepilogoEPagamentoView(
+	    				new DynamicButtonSizeSetter(), changeRegister);
+
+	    new RiepilogoEPagamentoController(
+	        riepilogoEPagamento,
+
+	        // On Indietro
+	        () -> viewHandler.mostraSchermata(schermataPreRinnovo),
+
+	        // On Conferma
+	        () -> {
+	            updateDBData.update(abbDTO);
+	            inizializzaCicloGestione();
+	            viewHandler.mostraSchermata("SCHERMATA0");
+	        },
+
+	        // On Annulla
+	        () -> {
+	            inizializzaCicloGestione();
+	            viewHandler.mostraSchermata("SCHERMATA0");
+	        },
+
+	        this
+	        
+	    );
+
+	    viewHandler.registraSchermata("RECAP_PAYMENT", riepilogoEPagamento.getMainPanel());
+	    viewHandler.mostraSchermata("RECAP_PAYMENT");
+	    
+	}
+	
+    //----------------------------------------------------------------
 	
 	private void setupRecuperoDati() {
 		
-		recuperoDati = new RecuperoDatiView (new DynamicButtonSizeSetter(),
-											 new EtichettaPiuCampoFactory());
+		IRecuperoDatiView recuperoDati = new RecuperoDatiView (new DynamicButtonSizeSetter(),
+											 new EtichettaPiuCampoFactory(),
+											 changeRegister);
 		
 		viewHandler.registraSchermata("LOAD_CLIENT", recuperoDati.getMainPanel());
 		
@@ -139,42 +170,8 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 				() -> {
 					
 					schermataPreRinnovo = "LOAD_CLIENT";
-					
-					/*if (riepilogoEPagamento != null) {
-	                    viewHandler.registraSchermata("RECAP_PAYMENT", riepilogoEPagamento.getMainPanel());
-	                }*/
 
-	                riepilogoEPagamento = new RiepilogoEPagamentoView(new DynamicButtonSizeSetter());
-
-	                new RiepilogoEPagamentoController(
-	                    riepilogoEPagamento,
-	                                        
-	                    //On Indietro
-	                    () -> viewHandler.mostraSchermata(schermataPreRinnovo),
-	                    
-	                    //On Conferma
-	                    () -> {
-	                    	
-	                    	/*Qui è chiamato il metodo che passa i dati al service-layer*/
-	                    	updateDBData.update(abbDTO);
-	                    	
-	                    	inizializzaCicloGestione();
-	                        viewHandler.mostraSchermata("SCHERMATA0");
-	                    },
-	                    
-	                    //On Annulla
-	                    () -> {
-	                    	
-	                    	inizializzaCicloGestione();
-	                        viewHandler.mostraSchermata("SCHERMATA0");
-	                    	
-	                    },
-                    
-	                    this
-	                );
-
-	                viewHandler.registraSchermata("RECAP_PAYMENT", riepilogoEPagamento.getMainPanel());
-	                viewHandler.mostraSchermata("RECAP_PAYMENT");		
+					setupRiepilogoEPagamento();		
 					
 				},
 				
@@ -192,9 +189,45 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 	
     //----------------------------------------------------------------
 	
+	private void setupModificaAbbonamento() {
+		
+		IModificaAbbonamentoView modificaAbb = 
+				new ModificaAbbonamentoView(
+						new DynamicButtonSizeSetter(), changeRegister);
+		
+		viewHandler.registraSchermata("MODIFICA_ABB", modificaAbb.getMainPanel());
+		
+		new ModificaAbbonamentoController (modificaAbb,
+				
+				//onAnnulla
+				() -> {					
+					
+					inizializzaCicloGestione();
+					viewHandler.mostraSchermata("SCHERMATA0");},
+				
+				//onIndietro
+				() -> {viewHandler.mostraSchermata("LOAD_CLIENT");},
+				
+				//onAvanti
+				() -> {
+					
+					schermataPreRinnovo = "MODIFICA_ABB";
+					
+					setupRiepilogoEPagamento();
+					
+					
+				},
+				
+				this);
+		
+	}
+	
+	//----------------------------------------------------------------
+	
 	private void setupEliminaProfiloCliente() {
 		
-		eliminazioneDati = new EliminaProfiloView(new DynamicButtonSizeSetter());
+		IEliminaProfiloView eliminazioneDati = new EliminaProfiloView(new DynamicButtonSizeSetter(),
+																	  changeRegister);
 		
 		viewHandler.registraSchermata("ELIMINA_CLIENT", eliminazioneDati.getMainPanel());
 		
@@ -216,33 +249,7 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 									  },
 									  
 									  //onConferma
-									  () -> {
-										  
-										  	
-										    boolean esito = removeDBData.huntAndKill(abbDTO);
-										    
-										    if (esito) {
-										    	
-										        JOptionPane.showMessageDialog(
-										        		null, 
-										        		"Eliminazione avvenuta con successo.",
-										        		"Successo", 
-										        		JOptionPane.INFORMATION_MESSAGE);
-										        
-										    } else {
-										    	
-										        JOptionPane.showMessageDialog(
-										        		null, 
-										        		"Errore durante l'eliminazione del profilo.", 
-										        		"Errore", 
-										        		JOptionPane.ERROR_MESSAGE);
-										        
-										    }
-										  
-										  inizializzaCicloGestione();
-										  viewHandler.mostraSchermata("SCHERMATA0");
-										  
-									  },
+									  () -> {eliminaClienteDaDB();},
 									  
 									  this);
 		
@@ -251,72 +258,51 @@ public class GestioneAbbCoordinator implements IGestioneAbbCoordinator, ICoordin
 	
 	//----------------------------------------------------------------
 	
-	private void setupModificaAbbonamento() {
+	
+	
+	private void eliminaClienteDaDB() {
 		
-		modificaAbb = new ModificaAbbonamentoView(new DynamicButtonSizeSetter());
-		
-		viewHandler.registraSchermata("MODIFICA_ABB", modificaAbb.getMainPanel());
-		
-		new ModificaAbbonamentoController (modificaAbb,
-				
-				//onAnnulla
-				() -> {					
-					
-					inizializzaCicloGestione();
-					viewHandler.mostraSchermata("SCHERMATA0");},
-				
-				//onIndietro
-				() -> {viewHandler.mostraSchermata("LOAD_CLIENT");},
-				
-				//onAvanti
-				() -> {
-					
-					schermataPreRinnovo = "MODIFICA_ABB";
-					
-					/*if (riepilogoEPagamento != null) {
-	                    viewHandler.registraSchermata("RECAP_PAYMENT", riepilogoEPagamento.getMainPanel());
-	                }*/
-
-	                riepilogoEPagamento = new RiepilogoEPagamentoView(new DynamicButtonSizeSetter());
-
-	                new RiepilogoEPagamentoController(
-	                    riepilogoEPagamento,
-	                                        
-	                    //On Indietro
-	                    () -> viewHandler.mostraSchermata(schermataPreRinnovo),
-	                    
-	                    //On Conferma
-	                    () -> {
-	                    	
-	                    	/*Qui è chiamato il metodo che passa i dati al service-layer*/
-	                    	updateDBData.update(abbDTO);
-	                    	
-	                    	inizializzaCicloGestione();
-	                        viewHandler.mostraSchermata("SCHERMATA0");
-	                    },
-	                    
-	                    //On Annulla
-	                    () -> {
-	                    	
-	                    	inizializzaCicloGestione();
-	                        viewHandler.mostraSchermata("SCHERMATA0");
-	                    	
-	                    },
-                    
-	                    this
-	                );
-
-	                viewHandler.registraSchermata("RECAP_PAYMENT", riepilogoEPagamento.getMainPanel());
-	                viewHandler.mostraSchermata("RECAP_PAYMENT");
-					
-					
-				},
-				
-				this);
-		
+	    try {
+	    	
+	        boolean esito = removeDBData.eliminaClienteCompletamente(abbDTO);
+	        mostraMessaggioEsito(esito);
+	        
+	    } catch (Exception ex) {
+	    	
+	        dialogUtils.mostraErrore(
+	            "Errore imprevisto durante l'eliminazione del "
+	            + "profilo:\n" + ex.getMessage()
+	        );
+	        
+	    } finally {
+	    	
+	        inizializzaCicloGestione();
+	        viewHandler.mostraSchermata("SCHERMATA0");
+	        
+	    }
+	    
 	}
 	
 	//----------------------------------------------------------------
+	
+	private void mostraMessaggioEsito(boolean esito) {
+		
+	    if (esito) {
+	    	
+	        dialogUtils.mostraInfo("Eliminazione avvenuta con successo.");
+	        
+	    } else {
+	    	
+	        dialogUtils.mostraErrore("Errore durante l'eliminazione del profilo.");
+	        
+	    }
+	    
+	}
+
+	
+	//----------------------------------------------------------------
+	
+
 	
 	@Override
 	public void acquisisciCfCliente(String Cf) {

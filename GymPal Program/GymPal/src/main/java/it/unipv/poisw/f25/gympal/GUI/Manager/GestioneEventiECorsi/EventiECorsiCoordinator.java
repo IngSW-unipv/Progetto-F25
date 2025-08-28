@@ -1,24 +1,23 @@
 package it.unipv.poisw.f25.gympal.GUI.Manager.GestioneEventiECorsi;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
-import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerGestioneEventiGenerici.IEventiCRUDFacadeService;
-import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerGestioneSessioniCorsi.ICorsiCRUDFacadeService;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneEventi.ICRUDEventiSupportServices;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneSessioniCorsi.ICRUDCorsiSupportServices;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneEventiESessioni.IEventiESessioniServicesBundle;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneEventiESessioni.FacadePerGestioneEventiGenerici.IEventiCRUDFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneEventiESessioni.FacadePerGestioneSessioniCorsi.ICorsiCRUDFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneEventiESessioni.SupportoCorsi.ICRUDCorsiSupportServices;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneEventiESessioni.SupportoEventi.ICRUDEventiSupportServices;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.GenerazioneIDSessioneCorso.ISessionIdGenerator;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneEventiECorsi.VistaEControllore.EventiECorsiController;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneEventiECorsi.VistaEControllore.EventiECorsiView;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneEventiECorsi.VistaEControllore.IEventiECorsiView;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class EventiECorsiCoordinator implements IEventiECorsiCoordinator{
 	
 	/*Controllore*/
 	private IRegistraEMostraSchermate viewHandler;
-	
-	/*Viste*/
-	private IEventiECorsiView eventiECorsi;
 	
 	/*Servizi*/
 	private ISessionIdGenerator generatoreIDs;
@@ -27,16 +26,15 @@ public class EventiECorsiCoordinator implements IEventiECorsiCoordinator{
 	private ICRUDCorsiSupportServices supportoCRUDCorsi;
 	private IEventiCRUDFacadeService eventiCRUDService;
 	private ICRUDEventiSupportServices supportoCRUDeventi;
+	private IFontChangeRegister changeRegister;
 	
     //----------------------------------------------------------------
 	
 	public EventiECorsiCoordinator(IRegistraEMostraSchermate viewHandler,
 								   ISessionIdGenerator generatoreIDs,
 								   ICalendarioFacadeService calendarioService,
-								   ICorsiCRUDFacadeService corsiCRUDService,
-								   ICRUDCorsiSupportServices supportoCRUDCorsi,
-								   IEventiCRUDFacadeService eventiCRUDService,
-								   ICRUDEventiSupportServices supportoCRUDeventi) {
+								   IFontChangeRegister changeRegister,
+								   IEventiESessioniServicesBundle eventiESessioniServices) {
 		
 		/*Controllore*/
 		this.viewHandler = viewHandler;
@@ -44,10 +42,11 @@ public class EventiECorsiCoordinator implements IEventiECorsiCoordinator{
 		/*Servizi*/
 		this.generatoreIDs = generatoreIDs;
 		this.calendarioService = calendarioService;
-		this.corsiCRUDService = corsiCRUDService;
-		this.supportoCRUDCorsi = supportoCRUDCorsi;
-		this.eventiCRUDService = eventiCRUDService;
-		this.supportoCRUDeventi = supportoCRUDeventi;
+		this.corsiCRUDService = eventiESessioniServices.getCorsiCRUD();
+		this.supportoCRUDCorsi = eventiESessioniServices.getCorsiSupport();
+		this.eventiCRUDService = eventiESessioniServices.getEventiCRUD();
+		this.supportoCRUDeventi = eventiESessioniServices.getEventiSupport();
+		this.changeRegister = changeRegister;
 		
 		/*Inizializzazione schermate GUI*/
 		setupSchermataEventiECorsi();
@@ -58,7 +57,7 @@ public class EventiECorsiCoordinator implements IEventiECorsiCoordinator{
 	
 	private void setupSchermataEventiECorsi() {
 		
-		eventiECorsi = new EventiECorsiView(new DynamicButtonSizeSetter());
+		IEventiECorsiView eventiECorsi = new EventiECorsiView(new DynamicButtonSizeSetter(), changeRegister);
 		viewHandler.registraSchermata("EVENTI_E_CORSI", eventiECorsi.getMainPanel());
 		
 		new EventiECorsiController(eventiECorsi, this);

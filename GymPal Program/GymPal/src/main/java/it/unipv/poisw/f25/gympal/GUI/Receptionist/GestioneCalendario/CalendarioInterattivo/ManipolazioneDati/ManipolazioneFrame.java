@@ -6,6 +6,8 @@ import javax.swing.JTabbedPane;
 
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.PannelliPerTabs.AppuntamentiPTPanel;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.PannelliPerTabs.IscrizioneCorsiPanel;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class ManipolazioneFrame extends JFrame implements IManipolazioneFrame{
 
@@ -18,14 +20,15 @@ public class ManipolazioneFrame extends JFrame implements IManipolazioneFrame{
 	
 	//----------------------------------------------------------------
 	
-	public ManipolazioneFrame() {
+	public ManipolazioneFrame(IDynamicButtonSizeSetter setter,
+							  IFontChangeRegister changeRegister) {
 		
 		super("Gestione Modifiche Calendario");
 		
 		tabbedPane = new JTabbedPane();
 		
-		corsiPanel = new IscrizioneCorsiPanel();
-		appuntamentiPanel = new AppuntamentiPTPanel();
+		corsiPanel = new IscrizioneCorsiPanel(setter, changeRegister);
+		appuntamentiPanel = new AppuntamentiPTPanel(setter, changeRegister);
 		
 	    tabbedPane.addTab("Corsi", corsiPanel);
 	    tabbedPane.addTab("Appuntamenti", appuntamentiPanel);

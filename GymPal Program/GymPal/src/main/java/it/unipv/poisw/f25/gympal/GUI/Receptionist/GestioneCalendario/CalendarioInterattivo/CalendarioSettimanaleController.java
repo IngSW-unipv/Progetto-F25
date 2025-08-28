@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.Validatori.ValidatoreFasciaOraria.IFasciaOrariaValidator;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDateUtils;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.ICoordinatoreCalendario;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.CalendarioUtilities.CalendarioCellPanel;
@@ -24,6 +25,8 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioI
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.ManipolazioneController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.CalendarioInterattivo.ManipolazioneDati.ManipolazioneFrame;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneCalendario.DTOs.IDatiCellaCalendarioDTO;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class CalendarioSettimanaleController implements ICalendarioChangeListener {
 
@@ -43,6 +46,8 @@ public class CalendarioSettimanaleController implements ICalendarioChangeListene
     public CalendarioSettimanaleController(ICalendarioSettimanaleView view,
     									   ICalendarioFacadeService calendarioFacade,
     									   IDateUtils dateUtils,
+    									   IFontChangeRegister changeRegister,
+    									   IFasciaOrariaValidator fasciaValidator,
     									   ICoordinatoreCalendario coordinator) {
     	/*Vista*/
         this.view = view;
@@ -57,7 +62,7 @@ public class CalendarioSettimanaleController implements ICalendarioChangeListene
         /*Inizializzazioni*/
         impostaMeccanismoObservable();
         inizializzaTabella(cellListenerProvider());
-        impostaEventoBtnGestioneAvanzata();
+        impostaEventoBtnGestioneAvanzata(changeRegister, fasciaValidator);
         impostaEventoBtnLegenda();
         
     }
@@ -130,6 +135,23 @@ public class CalendarioSettimanaleController implements ICalendarioChangeListene
     
 	//----------------------------------------------------------------
     
+    private void aggiornaCelle(List<CalendarioCellPanel> celle) {
+    	
+        for (CalendarioCellPanel cella : celle) {
+        	
+            IDatiCellaCalendarioDTO dati = coordinator.getContenutoCella(
+            							   cella.getData(), 
+            							   cella.getOra(), 
+            							   cella.getMinuti());
+            
+            cella.aggiornaColoreSfondo(dati);
+            
+        }
+        
+    }
+    
+	//----------------------------------------------------------------
+    
     private void aggiornaColoriCelle() {
     	
     	aggiornaCelle(view.getTutteLeCelle());
@@ -151,13 +173,16 @@ public class CalendarioSettimanaleController implements ICalendarioChangeListene
     
 	//----------------------------------------------------------------
     
-    private void impostaEventoBtnGestioneAvanzata() {
+    private void impostaEventoBtnGestioneAvanzata(IFontChangeRegister changeRegister,
+    											  IFasciaOrariaValidator fasciaValidator) {
     	
     	view.addBtnGestioneAvanzataListener(e -> {
     		
-    		IManipolazioneFrame frame = new ManipolazioneFrame();
-    		new ManipolazioneController(frame,calendarioFacade, 
-    									dateUtils, coordinator);
+    		IManipolazioneFrame frame = new ManipolazioneFrame(new DynamicButtonSizeSetter(), changeRegister);
+    		new ManipolazioneController(frame,calendarioFacade,
+    									fasciaValidator, 
+    									dateUtils, 
+    									coordinator);
     		
     	});
     	
@@ -201,24 +226,6 @@ public class CalendarioSettimanaleController implements ICalendarioChangeListene
     }
     
 	//----------------------------------------------------------------
-    
-    private void aggiornaCelle(List<CalendarioCellPanel> celle) {
-    	
-        for (CalendarioCellPanel cella : celle) {
-        	
-            IDatiCellaCalendarioDTO dati = coordinator.getContenutoCella(
-            							   cella.getData(), 
-            							   cella.getOra(), 
-            							   cella.getMinuti());
-            
-            cella.aggiornaColoreSfondo(dati);
-            
-        }
-        
-    }
-    
-	//----------------------------------------------------------------
-
     
     @Override
     public void onCambioCalendario(List <LocalDate> dataCambiata) {

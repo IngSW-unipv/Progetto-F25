@@ -3,10 +3,10 @@ package it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.Rettifica;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabile.ICampoValidabile;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.CampoValidabile.ICampoValidabile;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexExpression;
 import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.IRettificaCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.ValidazioneCampo;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
 
 public class RettificaInfoController {
 

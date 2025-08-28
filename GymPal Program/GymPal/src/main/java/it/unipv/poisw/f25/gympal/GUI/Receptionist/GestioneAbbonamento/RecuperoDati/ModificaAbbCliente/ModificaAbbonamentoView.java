@@ -22,6 +22,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class ModificaAbbonamentoView extends JPanel implements IModificaAbbonamentoView {
 
@@ -67,10 +68,14 @@ public class ModificaAbbonamentoView extends JPanel implements IModificaAbboname
 
     //----------------------------------------------------------------
 
-    public ModificaAbbonamentoView(IDynamicButtonSizeSetter setter) {
+    public ModificaAbbonamentoView(IDynamicButtonSizeSetter setter, 
+    							   IFontChangeRegister fontChangeRegister) {
 
     	buttonSizeSetter = setter;
     	initVista();
+    	
+    	fontChangeRegister.register(this, buttonSizeSetter);
+
 
     }
 
@@ -367,6 +372,7 @@ public class ModificaAbbonamentoView extends JPanel implements IModificaAbboname
     }
 
     //----------------------------------------------------------------
+
     
     
 }

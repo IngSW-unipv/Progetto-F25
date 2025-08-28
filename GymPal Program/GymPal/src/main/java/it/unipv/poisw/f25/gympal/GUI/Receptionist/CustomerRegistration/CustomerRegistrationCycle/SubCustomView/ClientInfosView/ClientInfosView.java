@@ -20,6 +20,7 @@ import javax.swing.event.ChangeListener;
 
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.IEtichettaPiuCampoFactory;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class ClientInfosView extends JPanel implements IClientInfosView{
 
@@ -67,7 +68,8 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
    //----------------------------------------------------------------
 		
 	public ClientInfosView (IDynamicButtonSizeSetter setter,
-							IEtichettaPiuCampoFactory campoEtichettato) {
+							IEtichettaPiuCampoFactory campoEtichettato,
+							IFontChangeRegister fontChangeRegister) {
 		
 		buttonSizeSetter = setter;
 		this.campoEtichettato = campoEtichettato;
@@ -279,6 +281,9 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 		/*############################################################*/
 		
 		add(mainSplitPanel);
+		
+		fontChangeRegister.register(this, buttonSizeSetter);
+
 		
 	}
 	

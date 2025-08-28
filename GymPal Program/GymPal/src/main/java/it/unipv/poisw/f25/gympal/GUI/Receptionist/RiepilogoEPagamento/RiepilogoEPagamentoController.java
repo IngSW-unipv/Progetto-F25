@@ -13,7 +13,7 @@ import it.unipv.poisw.f25.gympal.Dominio.Enums.MetodoPagamento;
 import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.IDatiClienteReadOnly;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.ICoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.Popups.PopupScontiOccasione;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulateOps.SimulazioneOperazione;
 import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 
 public class RiepilogoEPagamentoController {

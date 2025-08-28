@@ -4,22 +4,31 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.FromDB.RetrieveDipendenti.IRetrieveDipendentiFromDB;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.ICalendarioService;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ClienteNonAbbonatoException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.ConflittoOrarioException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.DatiNonTrovatiException;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.SessionePienaException;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.RetrieveDipendenti.IRetrieveDipendentiFromDB;
 import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
 import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
 import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.Dipendente;
+import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.PartecipazioneCorso;
 import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCorso;
 import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
 
 public class CalendarioFacadeService implements ICalendarioFacadeService{
 
-    private final ICalendarioService calendarioService;
-    private final IRetrieveDipendentiFromDB retrieveListaDip;
+    private ICalendarioService calendarioService;
+    private IRetrieveDipendentiFromDB retrieveListaDip;
+    
+	//----------------------------------------------------------------
+    
+    public CalendarioFacadeService(ICalendarioService calendarioService) {
+    	
+    	this.calendarioService = calendarioService;
+    	
+    }
     
 	//----------------------------------------------------------------
 
@@ -31,6 +40,8 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
         
     }
 
+	//----------------------------------------------------------------
+	//----------------------------------------------------------------
 	//----------------------------------------------------------------
     
     // CORSI /////////////////////////////////////////////////////////
@@ -57,6 +68,15 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
     }
     
 	//----------------------------------------------------------------
+    
+    @Override
+    public List<PartecipazioneCorso> getPartecipazioniCliente(String cfCliente){
+    	
+    	return calendarioService.findPartecipazioniByCliente(cfCliente);
+    	
+    }
+    
+	//----------------------------------------------------------------
 
     @Override
     public void prenotaSessione(String cf, String sessioneId) 
@@ -75,6 +95,8 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
         
     }
     
+	//----------------------------------------------------------------
+	//----------------------------------------------------------------
 	//----------------------------------------------------------------
 
     // PT ////////////////////////////////////////////////////////////
@@ -102,6 +124,13 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
     }
     
 	//----------------------------------------------------------------
+    
+    @Override
+    public List<AppuntamentoPT> getAppuntamentiPT(String cf){
+    	
+    	return calendarioService.findLezioniPTByCliente(cf);
+    	
+    }
 
     @Override
     public List<AppuntamentoPT> getAppuntamentiPT(String cf, String staffId) {
@@ -145,6 +174,8 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
         return result;
     }
     
+	//----------------------------------------------------------------
+	//----------------------------------------------------------------
 	//----------------------------------------------------------------
     
     // CACHING ///////////////////////////////////////////////////////

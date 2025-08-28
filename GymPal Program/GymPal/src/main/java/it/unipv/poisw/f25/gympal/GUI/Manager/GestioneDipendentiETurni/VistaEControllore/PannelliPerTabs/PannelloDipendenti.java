@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionListener;
 
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class PannelloDipendenti extends JPanel{
 
@@ -29,7 +31,11 @@ public class PannelloDipendenti extends JPanel{
     private JTextField nomeField;
     private JTextField cognomeField;
     private JTextField contattoField;
+    private JTextField cittaField;
+    
+    private JComboBox<String> ruoloComboBox;
 
+    private JButton generaIdBtn;
     private JButton creaBtn;
     private JButton modificaBtn;
     private JButton cancellaBtn;
@@ -39,8 +45,9 @@ public class PannelloDipendenti extends JPanel{
 
     //------------------------------------------------------------
 
-    public PannelloDipendenti(IDynamicButtonSizeSetter buttonSizeSetter) {
-
+    public PannelloDipendenti(IDynamicButtonSizeSetter buttonSizeSetter,
+    						  IFontChangeRegister fontChangeRegister) {
+    	
         this.buttonSizeSetter = buttonSizeSetter;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -50,6 +57,7 @@ public class PannelloDipendenti extends JPanel{
 
         initTable();
         add(createGestioneDipendentiPanel());
+        fontChangeRegister.register(this, buttonSizeSetter);
         
     }
 
@@ -79,8 +87,12 @@ public class PannelloDipendenti extends JPanel{
 
         JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         staffIdField = new JTextField(20);
+        staffIdField.setToolTipText("Modificabile, ma si consiglia di "
+        						  + "usare la generazione automatica.");
         nomeField = new JTextField(10);
         cognomeField = new JTextField(10);
+        ruoloComboBox = new JComboBox<>(new String[] {"DIP", "REC", "MAN"});
+        cittaField = new JTextField(15);
         contattoField = new JTextField(20);
 
         inputPanel.add(new JLabel("Staff ID:"));
@@ -89,18 +101,24 @@ public class PannelloDipendenti extends JPanel{
         inputPanel.add(nomeField);
         inputPanel.add(new JLabel("Cognome:"));
         inputPanel.add(cognomeField);
+        inputPanel.add(new JLabel("Ruolo:"));
+        inputPanel.add(ruoloComboBox);
+        inputPanel.add(new JLabel("Città:"));
+        inputPanel.add(cittaField);
         inputPanel.add(new JLabel("Contatto:"));
         inputPanel.add(contattoField);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        generaIdBtn = new JButton("Genera ID");
         creaBtn = new JButton("Crea");
         modificaBtn = new JButton("Modifica");
         cancellaBtn = new JButton("Cancella");
         pulisciBtn = new JButton("Pulisci");
 
-        buttonSizeSetter.uniformButtonSize(creaBtn, modificaBtn, 
+        buttonSizeSetter.uniformButtonSize(generaIdBtn, creaBtn, modificaBtn, 
         								   cancellaBtn, pulisciBtn);
 
+        buttonPanel.add(generaIdBtn);
         buttonPanel.add(creaBtn);
         buttonPanel.add(modificaBtn);
         buttonPanel.add(cancellaBtn);
@@ -129,6 +147,12 @@ public class PannelloDipendenti extends JPanel{
         
     }
     
+    public JTextField getStaffIdField() {
+    	
+    	return staffIdField;
+    	
+    }
+    
     //------------------------------------------------------------
 
     public String getNome() {
@@ -137,11 +161,39 @@ public class PannelloDipendenti extends JPanel{
         
     }
     
+    public JTextField getNomeField() {
+    	
+    	return nomeField;
+    	
+    }
+    
     //------------------------------------------------------------
 
     public String getCognome() {
     	
         return cognomeField.getText().trim();
+        
+    }
+    
+    public JTextField getCognomeField() {
+    	
+    	return cognomeField;
+    	
+    }
+    
+    //------------------------------------------------------------
+    
+    public String getRuolo() {
+    	
+        return (String) ruoloComboBox.getSelectedItem();
+        
+    }
+    
+    //------------------------------------------------------------
+    
+    public String getCitta() {
+    	
+        return cittaField.getText().trim();
         
     }
     
@@ -197,6 +249,14 @@ public class PannelloDipendenti extends JPanel{
     }
 
     //------------------------------------------------------------
+    
+    public void addGeneraIdBtnListener(ActionListener listener) {
+    	
+        generaIdBtn.addActionListener(listener);
+        
+    }
+    
+    //------------------------------------------------------------
 
     public void addCreaBtnListener(ActionListener listener) {
     	
@@ -237,5 +297,7 @@ public class PannelloDipendenti extends JPanel{
     }
     
     //------------------------------------------------------------
+
+
 
 }

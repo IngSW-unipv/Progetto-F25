@@ -104,13 +104,19 @@ public class DettaglioCellaFrame extends JFrame {
             
         } else {
         	
+        	/*Al modello sono aggiunte tutte le stringhe nella lista 'dati'*/
             dati.forEach(model::addElement);
             
         }
 
         JList<String> jList = new JList<>(model);
 
-        // Renderer HTML
+        /* Renderer HTML:  questo blocco controlla se una stringa comincia con il
+         * tag '<html>' e, in tal caso, consente a 'JLabel' di renderizzare conte-
+         * nuto HTML.
+         * 
+         * Nel caso in cui una stringa non sia posta in formato HTML, essa è ren-
+         * derizzata normalmente.*/
         jList.setCellRenderer(new DefaultListCellRenderer() {
         	
             private static final long serialVersionUID = 1L;
@@ -121,13 +127,15 @@ public class DettaglioCellaFrame extends JFrame {
                                                           int index,
                                                           boolean isSelected,
                                                           boolean cellHasFocus) {
+            	
                 JLabel label = (JLabel) super.getListCellRendererComponent(list, 
                 						  value, index, isSelected, cellHasFocus);
+                
                 String text = (String) value;
                 
                 if (text != null && text.trim().startsWith("<html>")) {
                 	
-                    label.setText(text);  // HTML render
+                    label.setText(text);  
                     
                 } else {
                 	

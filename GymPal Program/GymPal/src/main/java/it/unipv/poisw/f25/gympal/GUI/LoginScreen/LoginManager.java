@@ -1,8 +1,8 @@
 package it.unipv.poisw.f25.gympal.GUI.LoginScreen;
-import it.unipv.poisw.f25.gympal.Dominio.DataTransferServices.FromDB.AutEmployee.IAutenticaDipendente;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.Autenticazione.IAutenticaDipendente;
+import it.unipv.poisw.f25.gympal.Dominio.staff.Staff;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.LoginResult;
 import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
-import it.unipv.poisw.f25.gympal.staff.Staff;
 
 public class LoginManager {
 

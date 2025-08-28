@@ -8,6 +8,7 @@ import javax.swing.JTabbedPane;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.VistaEControllore.PannelliPerTabs.PannelloDipendenti;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.VistaEControllore.PannelliPerTabs.PannelloTurni;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class DipendentiETurniView extends JPanel implements IDipendentiETurniView{
 
@@ -21,14 +22,15 @@ public class DipendentiETurniView extends JPanel implements IDipendentiETurniVie
 	
     //----------------------------------------------------------------
 	
-	public DipendentiETurniView(IDynamicButtonSizeSetter buttonSizeSetter) {
+	public DipendentiETurniView(IDynamicButtonSizeSetter buttonSizeSetter,
+								IFontChangeRegister changeRegister) {
 		
 		setLayout(new BorderLayout());
 		
 		tabbedPane = new JTabbedPane();
 		
-		turniPanel = new PannelloTurni(buttonSizeSetter);
-		dipPanel = new PannelloDipendenti(buttonSizeSetter);
+		turniPanel = new PannelloTurni(buttonSizeSetter, changeRegister);
+		dipPanel = new PannelloDipendenti(buttonSizeSetter, changeRegister);
 		
 		tabbedPane.add("Pianificazione Turni", turniPanel);
 		tabbedPane.add("Gestione Dipendenti", dipPanel);

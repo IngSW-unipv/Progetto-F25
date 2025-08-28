@@ -4,18 +4,17 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.Customer
 import java.awt.Component;
 import java.awt.Window;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabile.ICampoValidabile;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.IRegistrationCoordinator;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.CampoValidabile.ICampoValidabile;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexExpression;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.ICustomerRegistrationCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.ValidazioneCampo;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulazioneOperazione;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulateOps.SimulazioneOperazione;
 
 public class ClientInfosController implements IRegexExpression {
 
@@ -23,7 +22,7 @@ public class ClientInfosController implements IRegexExpression {
     private IClientInfosView clientInfos;
     
     /*Coordinatore*/
-    private IRegistrationCoordinator coordinator;
+    private ICustomerRegistrationCoordinator coordinator;
 
     /*CallBacks*/
     private Runnable onAvanti;
@@ -32,20 +31,24 @@ public class ClientInfosController implements IRegexExpression {
     
     //----------------------------------------------------------------
     
-    public ClientInfosController(IClientInfosView infos, Runnable onAvantiCallback,
-                                                         Runnable onIndietroCallback,
-                                                         Runnable onAnnullaCallback,
-                                                 IRegistrationCoordinator coordinator) {
-        
+    public ClientInfosController(IClientInfosView infos, 
+    							 Runnable onAvantiCallback,
+    							 Runnable onIndietroCallback,
+                                 Runnable onAnnullaCallback,
+                                 ICustomerRegistrationCoordinator coordinator) {
+        /*Vista*/
         clientInfos = infos;
+        
+        /*Callbacks*/
         onAvanti = onAvantiCallback;
         onIndietro = onIndietroCallback;
         onAnnulla = onAnnullaCallback;
         
+        /*Coordinatore*/
         this.coordinator = coordinator;
         
  
-        
+        /*Applicazione Listeners*/
         impostaEventiTextFields();
         impostaControlloEta ();
         impostaEventoAvanti();
@@ -96,8 +99,7 @@ public class ClientInfosController implements IRegexExpression {
             
             Date dataDiNascita = (Date) clientInfos.getDateSpinner().getValue();
             
-            LocalDate nascita = dataDiNascita.toInstant().atZone(ZoneId.systemDefault())
-                    									 .toLocalDate();
+            LocalDate nascita = coordinator.getDateUtils().convertiDaUtilDate(dataDiNascita);
             
             
             if (coordinator.isMinorenne(nascita)) {
@@ -125,7 +127,9 @@ public class ClientInfosController implements IRegexExpression {
         clientInfos.addAvantiListener(e -> {
         	
         	Date dataDiNascita = (Date) clientInfos.getDateSpinner().getValue();
-            LocalDate nascita = dataDiNascita.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        	
+            //LocalDate nascita = dataDiNascita.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate nascita = coordinator.getDateUtils().convertiDaUtilDate(dataDiNascita);
 
         	/*Riferito al contenuto dei "JTextField"*/
             boolean validitaCampi = coordinator.getValidatoreCampi().tuttiValidi();
@@ -135,15 +139,15 @@ public class ClientInfosController implements IRegexExpression {
              *dunque, causa negazione, la prima parte dell'equazione booleana è sempre
              *posta a 'false' - per superare questo controllo, l'utente deve scegliere
              *"Si", di modo da avere "FALSE OR TRUE = TRUE"*/
-            boolean certificatoOk = !coordinator.getCtrlReqAnagraficiService().richiediCertificato() ||
-            						 clientInfos.getCertIdoneitàSi().isSelected();
+            boolean certificatoOk = coordinator.getCtrlReqAnagraficiService()
+                    						   .isCertificatoValido(clientInfos.getCertIdoneitàSi().isSelected());
             
             System.out.println("CertificatoOk: " + certificatoOk);
             
             /*Se non è richiesto il permesso (cliente maggiorenne), allora tutto ok.
 			  Se è richiesto (cliente minorenne), è controllato che sia selezionato "Sì"*/
-            boolean permessoGenitoriOK = !coordinator.getCtrlReqAnagraficiService().richiediPermessoGenitori(nascita) ||
-            							  clientInfos.getPermessoGenitoriSi().isSelected();
+            boolean permessoGenitoriOK = coordinator.getCtrlReqAnagraficiService()
+                    								.isPermessoGenitoriValido(nascita, clientInfos.getPermessoGenitoriSi().isSelected());
             System.out.println("PermessoGenitoriOk: " + permessoGenitoriOK);
 
             if (validitaCampi && certificatoOk && permessoGenitoriOK) {
@@ -195,6 +199,7 @@ public class ClientInfosController implements IRegexExpression {
     private void impostaEventoAcquisisciPermesso() {
         
     	clientInfos.addAcquisisciPermessoListener(e -> {
+    		
     	    Component source = (Component) e.getSource();
     	    Window window = SwingUtilities.getWindowAncestor(source);
 

@@ -2,10 +2,10 @@ package it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.RecuperoD
 
 import javax.swing.JTextField;
 
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ValidazioneCampi.CampoValidabile.ICampoValidabile;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.CampoValidabile.ICampoValidabile;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexExpression;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.ValidazioneCampo;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.GestioneAbbonamento.IGestioneAbbCoordinator;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.IRegexExpression;
 
 public class RecuperoDatiController {
 	
@@ -32,16 +32,20 @@ public class RecuperoDatiController {
 								  Runnable onModifica,
 								  IGestioneAbbCoordinator coordinator){
 		
+		/*Vista*/
 		this.recuperoDati = recuperoDati;
+		
+		/*Coordinatore*/
 		this.coordinator = coordinator;
 		
+		/*Callbacks*/
 		this.onAnnulla = onAnnulla;
 		this.onElimina = onElimina;
 		this.onEstrai = onEstrai;
 		this.onRinnova = onRinnova;
 		this.onModifica = onModifica;
 		
-		
+		/*Inizializzazione vista*/
 		viewInit();
 		
 		/*Inizializzazione listeners*/
@@ -64,6 +68,31 @@ public class RecuperoDatiController {
 	
 	//----------------------------------------------------------------
 	
+	private void impostaEventoElimina() {
+		
+		recuperoDati.addEliminaListener(e -> {onElimina.run();});
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+    private void impostaEventoModifica() {
+    	
+		recuperoDati.addModificaListenr(e -> {onModifica.run();});
+    	
+    }
+    
+	//----------------------------------------------------------------
+    
+    
+    private void impostaEventoRinnova() {
+    	
+		recuperoDati.addRinnovaListenr(e -> {onRinnova.run();});
+    	
+    }
+    
+	//----------------------------------------------------------------
+	
 	private void impostaEventoEstrazione() {
 		
 		recuperoDati.addEstraiListenr(e -> {
@@ -71,7 +100,6 @@ public class RecuperoDatiController {
 			coordinator.acquisisciCfCliente(recuperoDati.getCodiceFiscale().getText().trim());
 
 			onEstrai.run();
-
 
 			setLabels();
 			
@@ -85,12 +113,14 @@ public class RecuperoDatiController {
 	
 	//----------------------------------------------------------------
 	
-	private void impostaEventoElimina() {
-		
-		recuperoDati.addEliminaListener(e -> {onElimina.run();});
-		
-	}
-	
+    
+    private void impostaEventiTextFields() {
+
+    	coordinator.getValidatoreCampi().registra(registraCampo(recuperoDati.getCodiceFiscale(), 
+    															IRegexExpression.CODICE_FISCALE));
+
+    }
+    
 	//----------------------------------------------------------------
 	
     private ICampoValidabile registraCampo(JTextField field, String regex) {
@@ -101,31 +131,6 @@ public class RecuperoDatiController {
         ValidazioneCampo.applicaFeedbackSwing(campo);
         
         return campo;
-    }
-    
-	//----------------------------------------------------------------
-    
-    private void impostaEventiTextFields() {
-
-    	coordinator.getValidatoreCampi().registra(registraCampo(recuperoDati.getCodiceFiscale(), 
-    															IRegexExpression.CODICE_FISCALE));
-
-    }
-    
-	//----------------------------------------------------------------
-    
-    private void impostaEventoRinnova() {
-    	
-		recuperoDati.addRinnovaListenr(e -> {onRinnova.run();});
-    	
-    }
-    
-	//----------------------------------------------------------------
-    
-    private void impostaEventoModifica() {
-    	
-		recuperoDati.addModificaListenr(e -> {onModifica.run();});
-    	
     }
     
 	//----------------------------------------------------------------

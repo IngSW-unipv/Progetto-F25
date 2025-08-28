@@ -1,24 +1,35 @@
 package it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.VistaEControllore.ControllerSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
-import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerGestioneDipendenti.IDipendentiCRUDFacadeService;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneDipendenti.ICRUDDipendentiSupportServices;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.FacadePerGestioneDipendenti.IDipendentiCRUDFacadeService;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.SupportoDipendenti.ICRUDDipendentiSupportServices;
+import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.VistaEControllore.ControllerSupport.ObsAddDelDipendenti.IDipendentiChangeListener;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.VistaEControllore.PannelliPerTabs.PannelloDipendenti;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.VistaEControllore.PannelliPerTabs.CustomTableModelsForPanels.DipendentiTableModel;
 import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.Dipendente;
 
 public class DipendentiManager {
-
+	
+	/*Servizi*/
 	private final IDipendentiCRUDFacadeService dipendentiService;
     private final ICRUDDipendentiSupportServices support;
+    
+    /*Pannello su cui agisce il manager*/
     private final PannelloDipendenti dipendentiPanel;
+    
+    /**/
     private String staffIdSelezionato;
 
+    /*Modello tabella*/
     private DipendentiTableModel tableModel;
+    
+    /*Per meccanismo observable*/
+    private final List<IDipendentiChangeListener> listeners = new ArrayList<>();
     
     //--------------------------------------------------------------------
 
@@ -92,6 +103,8 @@ public class DipendentiManager {
                 dipendentiPanel.pulisciCampi();
                 support.getDialogUtils()
                 	   .mostraInfo("Dipendente creato con successo.");
+                
+                notificaAggiornamentoDipendenti();
                 
             } else {
             	
@@ -181,6 +194,8 @@ public class DipendentiManager {
                 support.getDialogUtils()
                 	   .mostraInfo("Dipendente eliminato con successo.");
                 
+                notificaAggiornamentoDipendenti();
+                
             } else {
             	
                 support.getDialogUtils().mostraErrore("Eliminazione fallita.");
@@ -206,6 +221,32 @@ public class DipendentiManager {
         
     }
 
+    //--------------------------------------------------------------------
+    /* Usato all'esterno di DipendentiManager dagli ascoltatori che si vogliono
+     * registrare per ricevere aggiornamenti su eventuali cambiamenti riguardo
+     * aggiunta/rimozione di profili dipendente*/
+    public void addDipendentiChangeListener(IDipendentiChangeListener listener) {
+    	
+        listeners.add(listener);
+        
+    }
+    
+    //--------------------------------------------------------------------
+    /* Usato internamente da DipendentiManager per notificare cambiamenti a tutti
+     * gli ascoltatori registrati alla lista "listeners", tramite innesco del me-
+     * todo 'onListaDipendentiAggiornata()' - ogni ascoltatore fa un proprio over-
+     * ride di questo metodo, nel cui corpo sono inserite le azioni che l'ascolta-
+     * tore deve compiere nel momento in cui gli è notificato un cambiamento*/
+    private void notificaAggiornamentoDipendenti() {
+    	
+        for (IDipendentiChangeListener l : listeners) {
+        	
+            l.onListaDipendentiAggiornata();
+            
+        }
+        
+    }
+    
     //--------------------------------------------------------------------
 
     private Dipendente leggiInput() {

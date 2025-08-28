@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.AbstractButton;
@@ -19,6 +20,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class SubscriptionCustomizationView extends JPanel implements ISubscriptionCustomizationView {
 
@@ -42,11 +44,27 @@ public class SubscriptionCustomizationView extends JPanel implements ISubscripti
 	private JButton avanti;
 	private JButton annulla;
 	
+    private final List<String> nomiSezioni = Arrays.asList(
+    		
+    	    "Allenamento mirato con personal trainer",
+    	    "Sala allenamento a corpo libero",
+    	    "Sala pesi",
+    	    "Sala corsi"
+    	    
+    	);
+
+    private final List<String> nomiCorsi = Arrays.asList(
+    			
+    	    "Crossfit", "Yoga", "Pilates", "Zumba", "Fullbody"
+    	    
+    	);
+	
 	private final IDynamicButtonSizeSetter buttonSizeSetter;
 
 	//----------------------------------------------------------------
 
-	public SubscriptionCustomizationView (IDynamicButtonSizeSetter setter) {
+	public SubscriptionCustomizationView (IDynamicButtonSizeSetter setter,
+										  IFontChangeRegister fontChangeRegister) {
 		
 		buttonSizeSetter = setter;
 
@@ -171,6 +189,7 @@ public class SubscriptionCustomizationView extends JPanel implements ISubscripti
 		add(splitPaneFather);
 		add(Box.createVerticalGlue());
 		
+		fontChangeRegister.register(this, buttonSizeSetter);
 		
 	}
 
@@ -226,6 +245,24 @@ public class SubscriptionCustomizationView extends JPanel implements ISubscripti
 	//----------------------------------------------------------------
 	
 	@Override
+	public List<String> getNomiSezioni(){
+		
+		return nomiSezioni;
+		
+	}
+	
+	//----------------------------------------------------------------
+	
+	@Override
+	public List<String> getNomiCorsi(){
+		
+		return nomiCorsi;
+		
+	}
+	
+	//----------------------------------------------------------------	
+	
+	@Override
 	public void addAvantiListener(ActionListener listener) {
 		
 		avanti.addActionListener(listener);
@@ -251,5 +288,6 @@ public class SubscriptionCustomizationView extends JPanel implements ISubscripti
 	}
 	
 	//----------------------------------------------------------------
+
 	
 }

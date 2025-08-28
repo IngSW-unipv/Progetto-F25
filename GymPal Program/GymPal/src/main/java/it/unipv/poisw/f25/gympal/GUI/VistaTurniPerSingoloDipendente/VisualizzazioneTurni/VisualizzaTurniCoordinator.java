@@ -3,6 +3,7 @@ package it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.Visualizzaz
 import java.util.List;
 
 import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.Supporto.TurnoIndividuale;
 import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.VisualizzazioneTurni.VistaEControllore.IVisualizzaTurniView;
 import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.VisualizzazioneTurni.VistaEControllore.VisualizzaTurniController;
@@ -12,26 +13,27 @@ public class VisualizzaTurniCoordinator implements IVisualizzaTurniCoordinator{
 	
 	/*Controllore*/
 	private IRegistraEMostraSchermate viewHandler;
-	
-	/*Viste*/
-	private IVisualizzaTurniView turniView;
-	
-	/*Servizi*/
-	
-	
+
     /*Lista Turni del Dipendente*/
     private List<TurnoIndividuale> listaTurni;
+    
+    /*Servizi*/
+    private IFontChangeRegister changeRegister;
 	
 	//----------------------------------------------------------------
 	
 	public VisualizzaTurniCoordinator(IRegistraEMostraSchermate viewHandler,
-									  List<TurnoIndividuale> listaTurni) {
+									  List<TurnoIndividuale> listaTurni,
+									  IFontChangeRegister changeRegister) {
 		
 		/*Controllore*/
 		this.viewHandler = viewHandler;
 		
 		/*Lista Turni*/
-		this.listaTurni = listaTurni;		
+		this.listaTurni = listaTurni;	
+		
+		/*Servizi*/
+		this.changeRegister = changeRegister;
 		
 		/*Inizializzazione Schermate GUI*/
 		setupSchermataTurni();
@@ -42,7 +44,7 @@ public class VisualizzaTurniCoordinator implements IVisualizzaTurniCoordinator{
 	
 	private void setupSchermataTurni() {
 		
-		turniView = new VisualizzaTurniView();
+		IVisualizzaTurniView turniView = new VisualizzaTurniView(changeRegister);
 		viewHandler.registraSchermata("TURNI", turniView.getMainPanel());
 		
 		new VisualizzaTurniController(turniView, this);

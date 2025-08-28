@@ -1,6 +1,6 @@
 package it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities;
 
-import it.unipv.poisw.f25.gympal.staff.*;
+import it.unipv.poisw.f25.gympal.Dominio.staff.*;
 
 public class StaffFactory {
 

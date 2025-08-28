@@ -6,9 +6,13 @@ public interface ICtrlReqAnagraficiService {
 	
 	public boolean richiediCertificato();
 	
+	public boolean isCertificatoValido(boolean selezioneCertificato);
+	
     //----------------------------------------------------------------
 	
 	public boolean richiediPermessoGenitori(LocalDate dataNascita);
+	
+	public boolean isPermessoGenitoriValido(LocalDate dataNascita, boolean selezionePermesso);
 	
     //----------------------------------------------------------------
 

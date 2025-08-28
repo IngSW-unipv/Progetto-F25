@@ -3,24 +3,18 @@ package it.unipv.poisw.f25.gympal.GUI.Manager;
 import javax.swing.JPanel;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
-import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerGestioneDipendenti.IDipendentiCRUDFacadeService;
-import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerGestioneEventiGenerici.IEventiCRUDFacadeService;
-import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerGestioneSessioniCorsi.ICorsiCRUDFacadeService;
-import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerGestioneTurni.ITurniCRUDFacadeService;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneDipendenti.ICRUDDipendentiSupportServices;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneEventi.ICRUDEventiSupportServices;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneSessioniCorsi.ICRUDCorsiSupportServices;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.GestioneTurni.ICRUDTurniSupportServices;
-import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.ServiziGenerali.ICommonServicesBundle;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneEventiESessioni.IEventiESessioniServicesBundle;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.ITurniEDipendentiServicesBundle;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.Bundle.ICommonServicesBundle;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.GenerazioneIDSessioneCorso.ISessionIdGenerator;
+import it.unipv.poisw.f25.gympal.GUI.LogoutView.LogoutConfirmationController;
+import it.unipv.poisw.f25.gympal.GUI.LogoutView.LogoutConfirmationView;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.DipendentiETurniCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneDipendentiETurni.IDipendentiETurniCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneEventiECorsi.EventiECorsiCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Manager.GestioneEventiECorsi.IEventiECorsiCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.IRettificaCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.RettificaCoordinator;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationController;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.LogoutView.LogoutConfirmationView;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
 
@@ -36,14 +30,8 @@ public class ManagerController implements IRegistraEMostraSchermate{
     private ICommonServicesBundle serviziComuni;
     private ISessionIdGenerator generatoreIDs;
     private ICalendarioFacadeService calendarioService;
-    private ICorsiCRUDFacadeService corsiCRUDService;
-    private ICRUDCorsiSupportServices supportoCRUDCorsi;
-    private IEventiCRUDFacadeService eventiCRUDService;
-    private ICRUDEventiSupportServices supportoCRUDeventi;
-    private ITurniCRUDFacadeService turniCRUDService;
-    private ICRUDTurniSupportServices supportoCRUDTurni;
-	private IDipendentiCRUDFacadeService dipCRUDService;
-    private ICRUDDipendentiSupportServices supportpCRUDdip;
+    private ITurniEDipendentiServicesBundle turniDipServices;
+    private IEventiESessioniServicesBundle eventiESessioniServices;
     
     /*Coordinatori GUI*/
     private IRettificaCoordinator rettCoord;
@@ -53,39 +41,25 @@ public class ManagerController implements IRegistraEMostraSchermate{
     //----------------------------------------------------------------
     
     public ManagerController(IDashboard view,
-    						 ICommonServicesBundle serviziComuni,
-    						 ISessionIdGenerator generatoreIDs,
-    						 ICalendarioFacadeService calendarioService,
-    						 ICorsiCRUDFacadeService corsiCRUDService,
-    						 ICRUDCorsiSupportServices supportoCRUDCorsi,
-    						 IEventiCRUDFacadeService eventiCRUDService,
-    						 ICRUDEventiSupportServices supportoCRUDeventi,
-    						 ITurniCRUDFacadeService turniCRUDService,
-    						 ICRUDTurniSupportServices supportoCRUDTurni,
-    						 IDipendentiCRUDFacadeService dipCRUDService,
-    						 ICRUDDipendentiSupportServices supportpCRUDdip) {
-    	
-    	/*Dashboard*/
-    	manDashView = view;
-    	
-    	/*Servizi*/
-    	this.serviziComuni = serviziComuni;
-    	this.generatoreIDs = generatoreIDs;
-    	this.calendarioService = calendarioService;
-    	this.corsiCRUDService = corsiCRUDService;
-    	this.supportoCRUDCorsi = supportoCRUDCorsi;
-    	this.eventiCRUDService = eventiCRUDService;
-    	this.supportoCRUDeventi = supportoCRUDeventi;
-    	this.turniCRUDService = turniCRUDService;
-    	this.supportoCRUDTurni = supportoCRUDTurni;
-    	this.dipCRUDService = dipCRUDService;
-    	this.supportpCRUDdip = supportpCRUDdip;
-    	
-    	/**/
-        registraAzioniPulsanti();
-        inizializzaSchermateStatiche();
-    	
+            				 ICommonServicesBundle serviziComuni,
+            				 ISessionIdGenerator generatoreIDs,
+            				 ICalendarioFacadeService calendarioFacade,
+            				 ITurniEDipendentiServicesBundle turniDipServices,
+            				 IEventiESessioniServicesBundle eventiESessioniServices) {
+
+   	
+		this.manDashView = view;
+		this.serviziComuni = serviziComuni;
+		this.generatoreIDs = generatoreIDs;
+		this.calendarioService = calendarioFacade;
+		this.eventiESessioniServices = eventiESessioniServices;
+    	this.turniDipServices = turniDipServices; 
+		
+		registraAzioniPulsanti();
+		inizializzaSchermateStatiche();
+		
     }
+
     
     //----------------------------------------------------------------
     
@@ -146,9 +120,7 @@ public class ManagerController implements IRegistraEMostraSchermate{
             new LogoutConfirmationController(logoutView, 
 						            		(IDashboard)manDashView, 
 											 schermataPreLogout,
-											 serviziComuni.getRegexChecker(),
-											 serviziComuni.getAutDipendente(),
-											 serviziComuni.getStaffFactory());
+											 serviziComuni);
             manDashView.mostraSchermata("LOGOUT_VIEW"); 
             
         });
@@ -162,12 +134,7 @@ public class ManagerController implements IRegistraEMostraSchermate{
     	if(rettCoord == null) {
     		
     		rettCoord = new RettificaCoordinator(this,
-												 this.serviziComuni.getCampoValidabileFactory(),
-												 this.serviziComuni.getValidatoreCampi(),
-												 this.serviziComuni.getRecuperaDati(),
-												 this.serviziComuni.getHeadHunter(),
-												 this.serviziComuni.getUpdater(),
-												 this.serviziComuni.getImmettiDati());
+												 serviziComuni);
     		
     	}
     	
@@ -179,12 +146,11 @@ public class ManagerController implements IRegistraEMostraSchermate{
     	
     	if(eventiECorsiCoord == null) {
     		
-    		eventiECorsiCoord = new EventiECorsiCoordinator(this, generatoreIDs,
+    		eventiECorsiCoord = new EventiECorsiCoordinator(this, 
+    														generatoreIDs,
     														calendarioService,
-    														corsiCRUDService,
-    														supportoCRUDCorsi,
-    														eventiCRUDService,
-    														supportoCRUDeventi);
+    														serviziComuni.getFontChangeRegister(),
+    														eventiESessioniServices);
     		
     	}
     	
@@ -197,10 +163,8 @@ public class ManagerController implements IRegistraEMostraSchermate{
     	if(dipETurniCoord == null) {
     		
     		dipETurniCoord = new DipendentiETurniCoordinator(this,
-    													     turniCRUDService,
-    													     supportoCRUDTurni,
-    													     dipCRUDService,
-    													     supportpCRUDdip);
+    													     turniDipServices,
+    													     serviziComuni);
     		
     	}
     	

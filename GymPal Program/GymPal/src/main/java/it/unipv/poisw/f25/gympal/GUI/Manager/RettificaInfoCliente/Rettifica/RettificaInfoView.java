@@ -24,6 +24,7 @@ import it.unipv.poisw.f25.gympal.GUI.MasterDTOBuilder.IDatiClienteReadOnly;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DataFerry.RawClientData;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.EtichettaPiuCampo.IEtichettaPiuCampoFactory;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
 
 public class RettificaInfoView extends JPanel implements IRettificaInfoView{
 
@@ -66,7 +67,8 @@ public class RettificaInfoView extends JPanel implements IRettificaInfoView{
 	//----------------------------------------------------------------
 	
 	public RettificaInfoView(IDynamicButtonSizeSetter setter,
-							 IEtichettaPiuCampoFactory campoEtichettato) {
+							 IEtichettaPiuCampoFactory campoEtichettato,
+							 IFontChangeRegister fontChangeRegister) {
 		
 		buttonSizeSetter = setter;
 		this.campoEtichettato = campoEtichettato;
@@ -320,6 +322,8 @@ public class RettificaInfoView extends JPanel implements IRettificaInfoView{
 		
 		add(mainSplitPanel);
 		
+		fontChangeRegister.register(this, buttonSizeSetter);
+		
 		
 	}
 	
@@ -540,5 +544,6 @@ public class RettificaInfoView extends JPanel implements IRettificaInfoView{
 	}
 	
 	//----------------------------------------------------------------
+	
 	
 }
