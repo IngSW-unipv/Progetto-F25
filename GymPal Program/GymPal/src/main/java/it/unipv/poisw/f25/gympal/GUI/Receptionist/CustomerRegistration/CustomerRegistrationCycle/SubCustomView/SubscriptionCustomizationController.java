@@ -15,10 +15,14 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.ICustomer
 
 public class SubscriptionCustomizationController {
 	
+	/*Vista*/
 	private ISubscriptionCustomizationView view;
+	
+	/*Coordinatore*/
 	private ICustomerRegistrationCoordinator coordinator;
 	
 
+	/*Callbacks*/
 	
 	/*Questo Runnable serve ad istituire un metodo di "CallBack" che avvisi il
 	 *"ReceptionistController" dell'avvenuta pressione del tasto "avanti", di modo che

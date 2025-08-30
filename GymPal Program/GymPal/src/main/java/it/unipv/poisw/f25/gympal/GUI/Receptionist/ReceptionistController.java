@@ -29,15 +29,15 @@ import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
 
 public class ReceptionistController implements IRegistraEMostraSchermate {
 
+	/*Schermata di Default*/
     private String schermataPreLogout = "SCHERMATA0";
 	
 	/*Viste*/
-    private final IDashboard recDashView;
+    private IDashboard recDashView;
     private LogoutConfirmationView logoutView;
 
 
-    /*Servizi*/
-    
+    /*Servizi*/    
     private ICalendarioFacadeService calendarioFacade;
     private IFasciaOrariaValidator fasciaValidator;
     private IRegistrationServicesBundle serviziReg;
@@ -230,7 +230,5 @@ public class ReceptionistController implements IRegistraEMostraSchermate {
     }
    
     //----------------------------------------------------------------
-
-
 
 }

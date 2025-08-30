@@ -2,9 +2,9 @@ package it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.Rettifica;
 
 import java.awt.event.ActionListener;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.time.ZoneId;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
@@ -30,6 +31,7 @@ public class RettificaInfoView extends JPanel implements IRettificaInfoView{
 
 	private static final long serialVersionUID = 1L;
 
+	/*Dati Cliente estratti*/
 	private JTextField codiceFiscale;
 	
 	private JTextField nome;
@@ -44,25 +46,26 @@ public class RettificaInfoView extends JPanel implements IRettificaInfoView{
 	private ButtonGroup sesso;
 	
 	
+	/*Operazioni*/
 	private JButton estrai;
 	private JButton elimina;
 	private JButton saveMods;
 	private JButton insData;
+	
+	/*Navigazione*/
 	private JButton annulla;
 	private JButton avanti;
 	
+	/*Labels*/
 	private JLabel cfErrato;
 	private JLabel postElimina;
 	
-	private JPanel navigationPanel;
-	
+	/*Pannelli & SplitPane*/
 	private JSplitPane mainSplitPanel;
-	private JSplitPane estraiAndEdit;
-	private JSplitPane eliminaAndInfosView;
-	private JSplitPane editAndInsertBtns;
 	
-	private final IDynamicButtonSizeSetter buttonSizeSetter;
-	private final IEtichettaPiuCampoFactory campoEtichettato;
+	/*Servizi*/
+	private IDynamicButtonSizeSetter buttonSizeSetter;
+	private IEtichettaPiuCampoFactory campoEtichettato;
 	
 	//----------------------------------------------------------------
 	
@@ -70,480 +73,393 @@ public class RettificaInfoView extends JPanel implements IRettificaInfoView{
 							 IEtichettaPiuCampoFactory campoEtichettato,
 							 IFontChangeRegister fontChangeRegister) {
 		
-		buttonSizeSetter = setter;
-		this.campoEtichettato = campoEtichettato;
-		
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.setBorder(new EmptyBorder(10, 5, 10, 5));
-		
-		/*PannelloDxUP(Anagrafica)####################################*/
-		
-		JPanel pannelloDxUP = new JPanel();
-		
-		pannelloDxUP.setLayout(new BoxLayout(pannelloDxUP, BoxLayout.Y_AXIS));
+		this.buttonSizeSetter = setter;
+        this.campoEtichettato = campoEtichettato;
 
-		pannelloDxUP.add(Box.createVerticalGlue());
-		
-		nome = new JTextField(80);
-		nome.setAlignmentX(CENTER_ALIGNMENT);
-		
-		cognome = new JTextField(80);
-		cognome.setAlignmentX(CENTER_ALIGNMENT);
-		
-		contatto = new JTextField(80);
-		contatto.setAlignmentX(CENTER_ALIGNMENT);
-		
-		cfAnagrafico = new JTextField(80);
-		cfAnagrafico.setAlignmentX(CENTER_ALIGNMENT);
-		cfAnagrafico.setEditable(false);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBorder(new EmptyBorder(10, 5, 10, 5));
 
-		/*Data di nascita*/
-		SpinnerDateModel model = new SpinnerDateModel();
-	    dateSpinner = new JSpinner(model);
-	    JSpinner.DateEditor editor = new JSpinner.DateEditor(dateSpinner, "dd/MM/yyyy");
-	    dateSpinner.setEditor(editor);
-	    dateSpinner.setAlignmentX(CENTER_ALIGNMENT);
-	    
-	    /*M / F*/
-	    maschio = new JRadioButton ("Maschio");
-	    femmina = new JRadioButton ("Femmina");
-		maschio.setAlignmentX(CENTER_ALIGNMENT);
-		femmina.setAlignmentX(CENTER_ALIGNMENT);
-	    
-	    sesso = new ButtonGroup();
-		sesso.add(maschio);
-		sesso.add(femmina);
-		maschio.setSelected(true);
+        initFields();
 
-		
-		JLabel panelTitle = new JLabel("-=Anagrafica Cliente=-");
-		panelTitle.setAlignmentX(CENTER_ALIGNMENT);
-		JLabel nota = new JLabel("Modificare 'cf' -SE, E SOLO SE- dati utente sono stati eliminati");
-		nota.setAlignmentX(CENTER_ALIGNMENT);
-		
-		pannelloDxUP.add(Box.createVerticalGlue());
-		pannelloDxUP.add(panelTitle);
-		pannelloDxUP.add(Box.createVerticalStrut(30));
-		
-		pannelloDxUP.add(this.campoEtichettato.creaCampoEtichettato("Nome: ", nome));
-		pannelloDxUP.add(Box.createVerticalStrut(10));
-		
-		pannelloDxUP.add(this.campoEtichettato.creaCampoEtichettato("Cognome: ", cognome));
-		pannelloDxUP.add(Box.createVerticalStrut(20));
-		
-		pannelloDxUP.add(this.campoEtichettato.creaCampoEtichettato("Data di nascita (dd/MM/aa): ", dateSpinner));
-		pannelloDxUP.add(Box.createVerticalStrut(20));
-		
-		pannelloDxUP.add(nota);
-		pannelloDxUP.add(Box.createVerticalStrut(5));
-		pannelloDxUP.add(this.campoEtichettato.creaCampoEtichettato("Codice Fiscale: ", cfAnagrafico));
-		pannelloDxUP.add(Box.createVerticalStrut(10));
-		
-		pannelloDxUP.add(this.campoEtichettato.creaCampoEtichettato("Contatto cliente (email): ", contatto));
-		pannelloDxUP.add(Box.createVerticalStrut(30));
-		
-		
-		JLabel sessoLabel = new JLabel("Seleziona il sesso del cliente:");
-		sessoLabel.setAlignmentX(CENTER_ALIGNMENT);
-		pannelloDxUP.add(sessoLabel);
-		pannelloDxUP.add(Box.createVerticalStrut(10));
-		
-		pannelloDxUP.add(maschio);
-		pannelloDxUP.add(Box.createVerticalStrut(5));
-		
-		pannelloDxUP.add(femmina);
-		pannelloDxUP.add(Box.createVerticalStrut(10));
-		pannelloDxUP.add(Box.createVerticalGlue());
-		
-		/*pannelloDxDown(Salva Modifiche / Re-Insert)#################*/
-		
-		JPanel pannelloDxDown = new JPanel();
-		JPanel pannelloDxDownLeft = new JPanel();
-		JPanel pannelloDxDownRight = new JPanel();
-		
-		saveMods = new JButton("Salva Modifiche");
-		saveMods.setAlignmentX(CENTER_ALIGNMENT);
-		saveMods.setEnabled(false);
-		
-		insData = new JButton("Re-Ins Dati");
-		insData.setAlignmentX(CENTER_ALIGNMENT);
-		insData.setEnabled(false);
-		
-		buttonSizeSetter.uniformButtonSize(saveMods, insData);
-		
-		postElimina = new JLabel("Usare -DOPO- Elimina");
-		postElimina.setAlignmentX(CENTER_ALIGNMENT);
-		
-		pannelloDxDownLeft.setLayout(new BoxLayout(pannelloDxDownLeft, BoxLayout.Y_AXIS));
-		pannelloDxDownLeft.add(Box.createHorizontalGlue());
-		pannelloDxDownLeft.add(Box.createVerticalStrut(35));
-		pannelloDxDownLeft.add(saveMods);
-		pannelloDxDownLeft.add(Box.createHorizontalGlue());
-		
-		pannelloDxDownRight.setLayout(new BoxLayout(pannelloDxDownRight, BoxLayout.Y_AXIS));
-		pannelloDxDownRight.add(Box.createHorizontalGlue());
-		pannelloDxDownRight.add(postElimina);
-		pannelloDxDownRight.add(Box.createVerticalStrut(10));
-		pannelloDxDownRight.add(insData);
-		pannelloDxDownRight.add(Box.createHorizontalGlue());
-		
-		pannelloDxDown.setLayout(new BoxLayout(pannelloDxDown, BoxLayout.X_AXIS));
-				
-		pannelloDxDown.add(Box.createHorizontalGlue());
-		pannelloDxDown.add(pannelloDxDownLeft);
-		pannelloDxDown.add(Box.createHorizontalStrut(40));
-		pannelloDxDown.add(pannelloDxDownRight);
-		pannelloDxDown.add(Box.createHorizontalGlue());
-		
-		/*editAndInsertBtns(JSplitPane)###############################*/
-		
-		editAndInsertBtns = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		editAndInsertBtns.setTopComponent(pannelloDxUP);
-		editAndInsertBtns.setBottomComponent(pannelloDxDown);
-		
-		SwingUtilities.invokeLater(() -> {
+        JPanel estraiPanel = buildEstraiPanel();
+        JSplitPane eliminaAndEdit = buildEliminaAndEditSection();
+        JSplitPane estraiAndEdit = buildEstraiAndEditPanel(estraiPanel, eliminaAndEdit);
+        JPanel navigationPanel = buildNavigationPanel();
 
-			editAndInsertBtns.setDividerLocation(0.9); 
-		    
-		});
-		
-		editAndInsertBtns.setEnabled(false);
-		
-		/*eliminaPanel################################################*/
-		
-		JPanel eliminaPanel = new JPanel();
-		eliminaPanel.setLayout(new BoxLayout(eliminaPanel, BoxLayout.Y_AXIS));
-		
-		cfErrato = new JLabel("CF errato? Allora: ");
-		cfErrato.setAlignmentX(CENTER_ALIGNMENT);
+        mainSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, estraiAndEdit, navigationPanel);
+        SwingUtilities.invokeLater(() -> mainSplitPanel.setDividerLocation(0.80));
+        mainSplitPanel.setEnabled(false);
 
-		elimina = new JButton("Elimina");
-		elimina.setEnabled(false);
-		elimina.setAlignmentX(CENTER_ALIGNMENT);
-		buttonSizeSetter.uniformButtonSize(elimina);
-		
-		eliminaPanel.add(Box.createVerticalGlue());
-		eliminaPanel.add(Box.createVerticalStrut(10));
-		eliminaPanel.add(cfErrato);
-		eliminaPanel.add(Box.createVerticalStrut(10));
-		eliminaPanel.add(elimina);
-		eliminaPanel.add(Box.createVerticalGlue());		
-		
-		/*eliminaAndInfosView(JSplitPane)#############################*/
-		
-		eliminaAndInfosView = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		
-		eliminaAndInfosView.setLeftComponent(eliminaPanel);
-		eliminaAndInfosView.setRightComponent(editAndInsertBtns);
-		
-		SwingUtilities.invokeLater(() -> {
+        add(mainSplitPanel);
 
-			eliminaAndInfosView.setDividerLocation(0.2); 
-		    
-		});
-		
-		eliminaAndInfosView.setEnabled(false);
-		
-		/*estraiPanel#################################################*/
-		
-		JPanel estraiPanel = new JPanel();
-		
-		estraiPanel.setLayout(new BoxLayout(estraiPanel, BoxLayout.Y_AXIS));
-		
-		codiceFiscale = new JTextField(80);
-		estrai = new JButton ("Estrai Dati");
-		buttonSizeSetter.uniformButtonSize(estrai);
-		
-		JLabel titleLabel = new JLabel("-=Inserisci codice fiscale del cliente=-");
-		
-		estraiPanel.add(Box.createVerticalGlue());
-		
-		titleLabel.setAlignmentX(CENTER_ALIGNMENT);
-		estrai.setAlignmentX(CENTER_ALIGNMENT);
-		
-		estraiPanel.add(titleLabel);
-		estraiPanel.add(Box.createVerticalStrut(30));
-		estraiPanel.add(this.campoEtichettato.creaCampoEtichettato("CF: ", codiceFiscale));
-		estraiPanel.add(Box.createVerticalStrut(10));
-		estraiPanel.add(estrai);
-		estraiPanel.add(Box.createVerticalStrut(30));
-		estraiPanel.add(Box.createVerticalGlue());
-		
-		/*estraiAndEdit(JSplitPane)###################################*/
-		
-		estraiAndEdit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		
-		estraiAndEdit.setTopComponent(estraiPanel);
-		estraiAndEdit.setBottomComponent(eliminaAndInfosView);
-		
-		SwingUtilities.invokeLater(() -> {
-			
-			
-			estraiAndEdit.setDividerLocation(0.35); 
-		    
-		});
-		
-		estraiAndEdit.setEnabled(false);
-		
-		/*navigationPanel##############################################*/
-		
-		navigationPanel = new JPanel();
-		
-		navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
-		
+        fontChangeRegister.register(this, buttonSizeSetter);
+    }
 
-		annulla = new JButton ("Annulla");
-		avanti = new JButton ("Avanti");
-		
-		buttonSizeSetter.uniformButtonSize(annulla, avanti);
-		
-		navigationPanel.add(Box.createHorizontalGlue());
-		navigationPanel.add(annulla);
-		navigationPanel.add(Box.createHorizontalStrut(100));
-		navigationPanel.add(avanti);
-		navigationPanel.add(Box.createHorizontalGlue());
-		
-		/*mainSplitPanel(JSplitPane)##################################*/
-		
-		mainSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		
-		mainSplitPanel.setTopComponent(estraiAndEdit);
-		mainSplitPanel.setBottomComponent(navigationPanel);
-		
-		SwingUtilities.invokeLater(() -> {
-			
-			mainSplitPanel.setDividerLocation(0.80); 
-		    
-		});
-		
-		mainSplitPanel.setEnabled(false);
-		
-		/*############################################################*/
-		
-		add(mainSplitPanel);
-		
-		fontChangeRegister.register(this, buttonSizeSetter);
-		
-		
-	}
-	
 	//----------------------------------------------------------------
-	
-	@Override
-	public void setTextFieldsContent(IDatiClienteReadOnly abbDTO) {
-		
-		nome.setText(abbDTO.getNome());
-		cognome.setText(abbDTO.getCognome());
-		contatto.setText(abbDTO.getContatto());
-		cfAnagrafico.setText(abbDTO.getCodiceFiscale());
-		
-		LocalDate date = abbDTO.getDataNascita();
-    	Date convertedDate = java.sql.Date.valueOf(date);
-    	dateSpinner.setValue(convertedDate);
-		
-    	if("M".equals(abbDTO.getSesso())) {
-    		
-    		maschio.setSelected(true);
-    		
-    	} else {
-    		
-    		femmina.setSelected(true);
-    		
-    	}
+
+    private void initFields() {
     	
-	}
-	
-	//----------------------------------------------------------------
-	
-	@Override
-	public RawClientData getDatiClienteRaw() {
-		
-	    String name = nome.getText();
-	    String surname = cognome.getText();
-	    String fiscalCode = cfAnagrafico.getText(); //codiceFiscale.getText();
-	    String contact = contatto.getText();
-	    String sesso = maschio.isSelected() ? "M" : "F";
-	    java.util.Date utilDate = (java.util.Date) dateSpinner.getValue();
-	    LocalDate dataNascita = utilDate.toInstant()
-	                                    .atZone(ZoneId.systemDefault())
-	                                    .toLocalDate();
+        codiceFiscale = new JTextField(80);
+        nome = new JTextField(80);
+        cognome = new JTextField(80);
+        cfAnagrafico = new JTextField(80);
+        contatto = new JTextField(80);
 
-	    return new RawClientData(name, surname, fiscalCode, 
-	    						 contact, sesso, dataNascita);
-	}
-	
-	//----------------------------------------------------------------
+        cfAnagrafico.setEditable(false);
 
-	@Override
-	public JTextField getCodiceFiscale() {
-		
-		return codiceFiscale;
-		
-	}
-	
-	//----------------------------------------------------------------
-	
-	@Override
-	public JTextField getNome() {
-		
-		return nome;
-		
-	}
+        SpinnerDateModel model = new SpinnerDateModel();
+        dateSpinner = new JSpinner(model);
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(dateSpinner, "dd/MM/yyyy");
+        dateSpinner.setEditor(editor);
 
-	//----------------------------------------------------------------
-	
-	@Override
-	public JTextField getCognome() {
-		
-		return cognome;
-		
-	}
-	
-	//----------------------------------------------------------------
-	
-	@Override
-	public JTextField getCfAnagrafico() {
-		
-		return cfAnagrafico;
-		
-	}
-	
-	//----------------------------------------------------------------
-	
-	@Override
-	public JTextField getContatto() {
-		
-		return contatto;
-		
-	}
-	
-	//----------------------------------------------------------------
-	
-	@Override
-	public JSpinner getDateSpinner() {
-		
-		return dateSpinner;
-		
-	}
-	
-	@Override
-	public void addDateSpinnerListener(ChangeListener listener) {
-		
-		dateSpinner.addChangeListener(listener);
-		
-	}
+        maschio = new JRadioButton("Maschio");
+        femmina = new JRadioButton("Femmina");
+        sesso = new ButtonGroup();
+        sesso.add(maschio);
+        sesso.add(femmina);
+        maschio.setSelected(true);
 
-	//----------------------------------------------------------------
-	
-	@Override
-	public JRadioButton getMaschio() {
-		
-		return maschio;
-		
-	}
+        estrai = new JButton("Estrai Dati");
+        elimina = new JButton("Elimina");
+        saveMods = new JButton("Salva Modifiche");
+        insData = new JButton("Re-Ins Dati");
+        annulla = new JButton("Annulla");
+        avanti = new JButton("Avanti");
 
-	//----------------------------------------------------------------
+        saveMods.setEnabled(false);
+        insData.setEnabled(false);
+        elimina.setEnabled(false);
 
-	@Override
-	public JRadioButton getFemmina() {
-		
-		return femmina;
-		
-	}
-	
-	//----------------------------------------------------------------
-	
-	@Override
-	public void addEstraiListenr(ActionListener listener) {
-		
-		estrai.addActionListener(listener);
-		
-	}
-	
-	//----------------------------------------------------------------
-	
-    @Override
-    public void addEliminaListener(ActionListener listener) {
-    	
-        elimina.addActionListener(listener);
+        buttonSizeSetter.uniformButtonSize(estrai, elimina, saveMods,
+        								   insData, annulla, avanti);
+
+        cfErrato = new JLabel("CF errato? Allora: ");
+        postElimina = new JLabel("Usare -DOPO- Elimina");
         
     }
-	
-	//----------------------------------------------------------------
-    
-    @Override
-    public void addSaveModsListener(ActionListener listener) {
-    	
-        saveMods.addActionListener(listener);
-        
-    }
-	
-	//----------------------------------------------------------------
-    
-    @Override
-    public void addInsDataListener(ActionListener listener) {
-    	
-        insData.addActionListener(listener);
-        
-    }
-	
-	//----------------------------------------------------------------
-    
-    
-	
-    @Override
-    public void addAnnullaListener(ActionListener listener) {
-    	
-        annulla.addActionListener(listener);
-        
-    }
-	
-	//----------------------------------------------------------------
-    
-	@Override
-	public void addAvantiListener(ActionListener listener) {
-		
-		avanti.addActionListener(listener);
-		
-	}
 
 	//----------------------------------------------------------------
-	
-	@Override
-	public JPanel getMainPanel() {
-		
-	    return this; 
-	    
-	}
-	
+    
+    private JPanel buildEstraiPanel() {
+    	
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createTitledBorder(""));
+
+        JLabel titleLabel = new JLabel("-=Inserisci codice fiscale del cliente=-");
+        titleLabel.setAlignmentX(CENTER_ALIGNMENT);
+        estrai.setAlignmentX(CENTER_ALIGNMENT);
+
+        panel.add(Box.createVerticalGlue());
+        panel.add(titleLabel);
+        panel.add(Box.createVerticalStrut(30));
+        panel.add(campoEtichettato.creaCampoEtichettato("CF: ", codiceFiscale));
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(estrai);
+        panel.add(Box.createVerticalStrut(30));
+        panel.add(Box.createVerticalGlue());
+
+        return panel;
+        
+    }
+    
 	//----------------------------------------------------------------
-	
-	@Override
-	public void setEliminaEnabled(boolean enabled) {
-		
-		elimina.setEnabled(enabled);
-		
-	}
-	
+
+    private JSplitPane buildEliminaAndEditSection() {
+    	
+        JSplitPane editAndInsertBtns = buildEditAndInsertSection();
+        JPanel eliminaPanel = buildEliminaPanel();
+
+        JSplitPane eliminaAndInfosView = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, eliminaPanel, editAndInsertBtns);
+        SwingUtilities.invokeLater(() -> eliminaAndInfosView.setDividerLocation(0.2));
+        eliminaAndInfosView.setEnabled(false);
+
+        return eliminaAndInfosView;
+        
+    }
+    
 	//----------------------------------------------------------------
-	
-	@Override
-	public void setSaveModsEnabled(boolean enabled) {
-		
-		saveMods.setEnabled(enabled);
-		
-	}
-	
+
+    private JSplitPane buildEditAndInsertSection() {
+    	
+        JPanel anagraficaPanel = buildAnagraficaPanel();
+        JPanel modReinsertPanel = buildSaveAndReinsertPanel();
+
+        JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(anagraficaPanel), modReinsertPanel);
+        SwingUtilities.invokeLater(() -> split.setDividerLocation(0.9));
+        split.setEnabled(false);
+
+        return split;
+        
+    }
+    
 	//----------------------------------------------------------------
-	
-	@Override
-	public void setInsDataEnabled(boolean enabled) {
-		
-		insData.setEnabled(enabled);
-		
-	}
-	
+
+    private JPanel buildAnagraficaPanel() {
+    	
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JLabel title = new JLabel("-=Anagrafica Cliente=-");
+        title.setAlignmentX(CENTER_ALIGNMENT);
+
+        JLabel note = new JLabel("Modificare 'cf' -SE, E SOLO SE- dati utente sono stati eliminati");
+        note.setAlignmentX(CENTER_ALIGNMENT);
+
+        panel.add(Box.createVerticalGlue());
+        panel.add(title);
+        panel.add(Box.createVerticalStrut(30));
+        panel.add(campoEtichettato.creaCampoEtichettato("Nome: ", nome));
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(campoEtichettato.creaCampoEtichettato("Cognome: ", cognome));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(campoEtichettato.creaCampoEtichettato("Data di nascita (dd/MM/aa): ", dateSpinner));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(note);
+        panel.add(Box.createVerticalStrut(5));
+        panel.add(campoEtichettato.creaCampoEtichettato("Codice Fiscale: ", cfAnagrafico));
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(campoEtichettato.creaCampoEtichettato("Contatto cliente (email): ", contatto));
+        panel.add(Box.createVerticalStrut(30));
+
+        JLabel sessoLabel = new JLabel("Seleziona il sesso del cliente:");
+        sessoLabel.setAlignmentX(CENTER_ALIGNMENT);
+        maschio.setAlignmentX(CENTER_ALIGNMENT);
+        femmina.setAlignmentX(CENTER_ALIGNMENT);
+
+        panel.add(sessoLabel);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(maschio);
+        panel.add(Box.createVerticalStrut(5));
+        panel.add(femmina);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(Box.createVerticalGlue());
+
+        return panel;
+        
+    }
+    
 	//----------------------------------------------------------------
-	
-	
+
+    private JPanel buildSaveAndReinsertPanel() {
+    	
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        panel.setBorder(BorderFactory.createTitledBorder("Modifica -O- Re-introduci dati Cliente"));
+
+        JPanel left = new JPanel();
+        left.setLayout(new BoxLayout(left, BoxLayout.Y_AXIS));
+        left.add(Box.createVerticalStrut(35));
+        left.add(saveMods);
+
+        JPanel right = new JPanel();
+        right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
+        right.add(postElimina);
+        right.add(Box.createVerticalStrut(10));
+        right.add(insData);
+
+        panel.add(Box.createHorizontalGlue());
+        panel.add(left);
+        panel.add(Box.createHorizontalStrut(40));
+        panel.add(right);
+        panel.add(Box.createHorizontalGlue());
+
+        return panel;
+        
+    }
+    
+	//----------------------------------------------------------------
+
+    private JPanel buildEliminaPanel() {
+    	
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createTitledBorder("ATTENZIONE - OPERAZIONE IRREVERSIBILE"));
+
+        panel.add(Box.createVerticalGlue());
+        panel.add(Box.createVerticalStrut(10));
+        cfErrato.setAlignmentX(CENTER_ALIGNMENT);
+        elimina.setAlignmentX(CENTER_ALIGNMENT);
+        panel.add(cfErrato);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(elimina);
+        panel.add(Box.createVerticalGlue());
+
+        return panel;
+        
+    }
+    
+	//----------------------------------------------------------------
+
+    private JSplitPane buildEstraiAndEditPanel(JPanel estraiPanel, 
+    										   JSplitPane eliminaAndInfosView) {
+    	
+        JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, estraiPanel, eliminaAndInfosView);
+        SwingUtilities.invokeLater(() -> split.setDividerLocation(0.35));
+        split.setEnabled(false);
+        return split;
+        
+    }
+    
+	//----------------------------------------------------------------
+
+    private JPanel buildNavigationPanel() {
+    	
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        panel.setBorder(BorderFactory.createTitledBorder(""));
+
+        panel.add(Box.createHorizontalGlue());
+        panel.add(annulla);
+        panel.add(Box.createHorizontalStrut(100));
+        panel.add(avanti);
+        panel.add(Box.createHorizontalGlue());
+
+        return panel;
+        
+    }
+
+	//----------------------------------------------------------------
+
+    @Override public void setTextFieldsContent(IDatiClienteReadOnly abbDTO) {
+    	
+        nome.setText(abbDTO.getNome());
+        cognome.setText(abbDTO.getCognome());
+        contatto.setText(abbDTO.getContatto());
+        cfAnagrafico.setText(abbDTO.getCodiceFiscale());
+        dateSpinner.setValue(Date.valueOf(abbDTO.getDataNascita()));
+        
+        if ("M".equals(abbDTO.getSesso())) {
+        	
+        	maschio.setSelected(true);
+        	
+        } 
+        
+        else {
+        	
+        	femmina.setSelected(true);
+        	
+        }
+        
+    }
+    
+	//----------------------------------------------------------------
+
+    @Override public RawClientData getDatiClienteRaw() {
+    	
+        return new RawClientData(
+        		
+            nome.getText(), cognome.getText(), cfAnagrafico.getText(),
+            contatto.getText(), maschio.isSelected() ? "M" : "F",
+            ((java.util.Date) dateSpinner.getValue())
+            							 .toInstant()
+            							 .atZone(ZoneId.systemDefault())
+            							 .toLocalDate()
+            							 
+        );
+        
+    }
+    
+	//----------------------------------------------------------------
+
+    @Override public JTextField getCodiceFiscale() { return codiceFiscale; }
+    
+	//----------------------------------------------------------------
+    
+    @Override public JTextField getNome() { return nome; }
+    
+	//----------------------------------------------------------------
+    
+    @Override public JTextField getCognome() { return cognome; }
+    
+	//----------------------------------------------------------------
+    
+    @Override public JTextField getCfAnagrafico() { return cfAnagrafico; }
+    
+	//----------------------------------------------------------------
+    
+    @Override public JTextField getContatto() { return contatto; }
+    
+	//----------------------------------------------------------------
+    
+    @Override public JSpinner getDateSpinner() { return dateSpinner; }
+    
+	//----------------------------------------------------------------
+    
+    @Override public void addDateSpinnerListener(ChangeListener l) { 
+    	
+    	dateSpinner.addChangeListener(l); 
+    	
+    }
+    
+	//----------------------------------------------------------------
+    
+    @Override public JRadioButton getMaschio() { return maschio; }
+    
+	//----------------------------------------------------------------
+    
+    @Override public JRadioButton getFemmina() { return femmina; }
+    
+	//----------------------------------------------------------------
+
+    @Override public void addEstraiListenr(ActionListener listener) { 
+    	
+    	estrai.addActionListener(listener); 
+    	
+    }
+    
+	//----------------------------------------------------------------
+    
+    @Override public void addEliminaListener(ActionListener listener) {
+    	
+    	elimina.addActionListener(listener); 
+    	
+    }
+    
+	//----------------------------------------------------------------
+    
+    @Override public void addSaveModsListener(ActionListener listener) { 
+    	
+    	saveMods.addActionListener(listener); }
+    
+	//----------------------------------------------------------------
+    
+    @Override public void addInsDataListener(ActionListener listener) {
+    	
+    	insData.addActionListener(listener); }
+    
+	//----------------------------------------------------------------
+    
+    @Override public void addAnnullaListener(ActionListener listener) {
+    	
+    	annulla.addActionListener(listener); 
+    	
+    }
+    
+	//----------------------------------------------------------------
+    
+    @Override public void addAvantiListener(ActionListener listener) { 
+    	
+    	avanti.addActionListener(listener); 
+    	
+    }
+    
+	//----------------------------------------------------------------
+
+    @Override public JPanel getMainPanel() { return this; }
+    
+	//----------------------------------------------------------------
+
+    @Override public void setEliminaEnabled(boolean b) { elimina.setEnabled(b); }
+    
+	//----------------------------------------------------------------
+    
+    @Override public void setSaveModsEnabled(boolean b) { saveMods.setEnabled(b); }
+    
+	//----------------------------------------------------------------
+    
+    @Override public void setInsDataEnabled(boolean b) { insData.setEnabled(b); }
+    
+	//----------------------------------------------------------------
+    
 }

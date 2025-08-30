@@ -23,7 +23,7 @@ public class ManagerController implements IRegistraEMostraSchermate{
 	private String schermataPreLogout = "SCHERMATA0";
 	
 	/*Viste*/
-    private final IDashboard manDashView;
+    private IDashboard manDashView;
     private LogoutConfirmationView logoutView;
     
     /*Servizi*/

@@ -153,14 +153,6 @@ public class IscrizioneCorsiPanel extends JPanel{
 	
 	//----------------------------------------------------------------
 	
-	/*public void setSessioniTableModel(TableModel model) {
-		
-	    sessioniTable.setModel(model);
-	    
-	}*/
-	
-	//----------------------------------------------------------------
-	
 	public String getTipoCorsoFiltro() {
 		
 	    return tipoCorsoField.getText().trim();

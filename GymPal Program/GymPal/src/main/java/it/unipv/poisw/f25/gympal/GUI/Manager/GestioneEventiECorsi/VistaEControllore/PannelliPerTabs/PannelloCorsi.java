@@ -32,19 +32,21 @@ public class PannelloCorsi extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private JTable sessioniTable;
-	
+	/*Tabella & Filtro*/
+	private JTable sessioniTable;	
 	private JTextField tipoCorsoFiltro;
 	private JFormattedTextField dataInizioField;
 	private JFormattedTextField dataFineField;
 	private JButton filtraBtn;
 	
+	/*Operazioni*/
 	private JButton creaBtn;
 	private JButton modificaBtn;
 	private JButton cancellaBtn;
 	private JButton pulisciBtn;
 	private JButton generaIdBtn;
 	
+	/*Input*/
 	private JTextField tipoCorsoPerId;
 	private JTextField idSessioneField;
 	private JComboBox<String> staffIdField;
@@ -52,7 +54,8 @@ public class PannelloCorsi extends JPanel{
 	
 	private JFormattedTextField dataField;
 	
-	private final IDynamicButtonSizeSetter buttonSizeSetter;
+	/*Servizi*/
+	private IDynamicButtonSizeSetter buttonSizeSetter;
 	
 	//----------------------------------------------------------------
 	

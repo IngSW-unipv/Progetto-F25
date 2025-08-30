@@ -33,11 +33,11 @@ public class EventiECorsiController {
 	private IEventiECorsiCoordinator coordinator;
 	
 	/*Servizi*/
-	private final ICalendarioFacadeService calendarioService;
-	private final ICorsiCRUDFacadeService corsiCRUDService;
-	private final ICRUDCorsiSupportServices supportoCRUDCorsi;
-	private final IEventiCRUDFacadeService eventiCRUDService;
-	private final ICRUDEventiSupportServices supportoCRUDeventi;
+	private ICalendarioFacadeService calendarioService;
+	private ICorsiCRUDFacadeService corsiCRUDService;
+	private ICRUDCorsiSupportServices supportoCRUDCorsi;
+	private IEventiCRUDFacadeService eventiCRUDService;
+	private ICRUDEventiSupportServices supportoCRUDeventi;
 	
 	/*Managers*/
 	private SessioniCorsiManager corsiManager;

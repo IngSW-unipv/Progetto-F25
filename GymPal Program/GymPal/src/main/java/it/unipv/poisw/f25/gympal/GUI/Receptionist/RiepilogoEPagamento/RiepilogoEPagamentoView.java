@@ -34,19 +34,23 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 
 	private static final long serialVersionUID = 1L;
 	
+	/*Split Panes*/
 	private JSplitPane mainSplitPanel;
 	private JSplitPane mainBottomSplitPanel;
 	private JSplitPane secondSplitPanel; //Il pannello superiore coincide con "mainSplitPanel"
 	
+	/*Pannelli*/
 	private JPanel mainUpperPanel;
 	private JPanel mainBottomLeftPanel; //Qui finisce il riepilogo
 	private JPanel mainBottomRightPanel; //Opzioni per la factory che calcola i prezzi
 	private JPanel navigationPanel; //Qui finisce il pannello con il bottone "Intrietro"
 	
+	/*Opzioni di sconto*/
 	private JCheckBox scontoEtaCheckBox;
 	private JCheckBox scontoOccasioniCheckBox;
 	private JButton scontoOccasioniBtn;
 	
+	/*Opzioni di pagamento*/
 	private JRadioButton carta;
 	private JRadioButton contanti;
 	private JRadioButton noPagamento;
@@ -57,6 +61,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	private JButton annulla;
 	private JButton avvioPagamento;
 	
+	/*Durata Abbonamento*/
 	private JRadioButtonMenuItem trimestrale;
 	private JRadioButtonMenuItem semestrale;
 	private JRadioButtonMenuItem annuale;
@@ -75,207 +80,193 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	public RiepilogoEPagamentoView(IDynamicButtonSizeSetter setter,
 								   IFontChangeRegister fontChangeRegister) {
 		
-		buttonSizeSetter = setter;
-		
-	    setLayout(new BorderLayout());
-	    
-	    /*############################################################*/
-	    
-	    mainUpperPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-	    
-	    mainUpperPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-	    
-	    mainUpperPanel.setBorder(BorderFactory.createTitledBorder("Riepilogo Anagrafica:"));
 
-	    mainSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-	    
-	    JPanel upperPanelContainer = new JPanel();
-	    upperPanelContainer.setLayout(new BorderLayout());
+        this.buttonSizeSetter = setter;
+        setLayout(new BorderLayout());
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        initComponents();
+        buildMainUpperPanel();
+        buildMainBottomPanels();
+        buildNavigationPanel();
+        buildSecondSplitPanel();
 
-	    upperPanelContainer.add(mainUpperPanel, BorderLayout.CENTER);
+        add(secondSplitPanel);
 
-	    mainSplitPanel.setTopComponent(upperPanelContainer);
-	    
-	    /*############################################################*/
-	    
+        fontChangeRegister.register(this, buttonSizeSetter);
+    }
+
+    //----------------------------------------------------------------
+
+	// Inizializzazione componenti vista
+    private void initComponents() {
+        
+        mainUpperPanel = new JPanel(new GridLayout(0, 2, 10, 10));
+        mainUpperPanel.setBorder(BorderFactory.createCompoundBorder(
+        	    		
+        	            BorderFactory.createTitledBorder("Riepilogo Anagrafica:"),
+        	            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        	            
+        	        )
+        	    );
+
+        mainSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        modalitaPagamento = new ButtonGroup();
+        sceltaMesi = new ButtonGroup();
+
+        // Bottom left panel (pagamento)
         mainBottomLeftPanel = new JPanel(new BorderLayout(10, 10));
+
         
-        mainBottomLeftPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        
-        mainBottomLeftPanel.setBorder(BorderFactory.createTitledBorder("Sezione pagamento:"
-        															   + " selezionare una opzione per"
-        															   + " sbloccare 'Conferma'"));
-        
+        mainBottomLeftPanel.setBorder(BorderFactory.createCompoundBorder(
+	  			 					  BorderFactory.createTitledBorder("Sezione "
+	  			 					  + "pagamento: selezionare una opzione per"
+	  			 					  + " sbloccare 'Conferma'"),
+	  			 					  BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+
         prezzoTotaleLabel = new JLabel("Totale: € 0.00", JLabel.CENTER);
         prezzoTotaleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-        
+
         avvioPagamento = new JButton("Avvio Pagamento");
-        
+
         carta = new JRadioButton(" - Carta di credito / Bancomat");
         contanti = new JRadioButton(" - Contanti");
-        noPagamento = new JRadioButton (" - No pagamento (abbonamento provvisorio - 30gg)");
-        
-        modalitaPagamento = new ButtonGroup();
-        
+        noPagamento = new JRadioButton(" - No pagamento (abbonamento provvisorio - 30gg)");
+
         modalitaPagamento.add(carta);
         modalitaPagamento.add(contanti);
         modalitaPagamento.add(noPagamento);
-        
-        //Sottopannello locale a "mainBottomLeftPanel"
-        JPanel sceltaModalitaPagamento = new JPanel ();
-        sceltaModalitaPagamento.setLayout(new BoxLayout(sceltaModalitaPagamento, BoxLayout.Y_AXIS));
 
+        // Bottom right panel (sconti)
+        mainBottomRightPanel = new JPanel(new GridLayout(0, 1, 5, 5));
+        mainBottomRightPanel.setBorder(BorderFactory.createTitledBorder("Sezione sconti:"));
+
+        scontoEtaCheckBox = new JCheckBox("Applica sconto età");
+        scontoOccasioniCheckBox = new JCheckBox("Applica sconto occasioni");
+        scontoOccasioniBtn = new JButton("Seleziona sconto occasioni");
+        scontoOccasioniBtn.setEnabled(false);
+
+        trimestrale = new JRadioButtonMenuItem("Trimestrale");
+        semestrale = new JRadioButtonMenuItem("Semestrale");
+        annuale = new JRadioButtonMenuItem("Annuale");
+        mensile = new JRadioButtonMenuItem("Mensile");
+
+        sceltaMesi.add(mensile);
+        sceltaMesi.add(trimestrale);
+        sceltaMesi.add(semestrale);
+        sceltaMesi.add(annuale);
+        mensile.setSelected(true);
+
+        popupMenu = new JPopupMenu();
+        popupMenu.add(mensile);
+        popupMenu.add(trimestrale);
+        popupMenu.add(semestrale);
+        popupMenu.add(annuale);
+
+        scontoSuBaseMesi = new JButton("Numero mesi");
+
+        // Navigation panel buttons
+        indietro = new JButton("Indietro");
+        conferma = new JButton("Conferma");
+        annulla = new JButton("Annulla");
+
+        buttonSizeSetter.uniformButtonSize(scontoOccasioniBtn, 
+        								   indietro, 
+        								   conferma, 
+        								   annulla);
+        
+    }
+    
+    //----------------------------------------------------------------
+
+    private void buildMainUpperPanel() {
+    	
+        JPanel upperPanelContainer = new JPanel(new BorderLayout());
+        upperPanelContainer.add(mainUpperPanel, BorderLayout.CENTER);
+        mainSplitPanel.setTopComponent(upperPanelContainer);
+        
+    }
+    
+    //----------------------------------------------------------------
+
+    // Costruzione mainBottomLeftPanel
+    private void buildMainBottomPanels() {
+    	
+        JPanel sceltaModalitaPagamento = new JPanel();
+        sceltaModalitaPagamento.setLayout(new BoxLayout(sceltaModalitaPagamento, BoxLayout.Y_AXIS));
         sceltaModalitaPagamento.add(carta);
         sceltaModalitaPagamento.add(Box.createVerticalStrut(5));
         sceltaModalitaPagamento.add(contanti);
         sceltaModalitaPagamento.add(Box.createVerticalStrut(5));
         sceltaModalitaPagamento.add(noPagamento);
         sceltaModalitaPagamento.add(Box.createVerticalStrut(5));
-        
+
         mainBottomLeftPanel.add(prezzoTotaleLabel, BorderLayout.NORTH);
         mainBottomLeftPanel.add(sceltaModalitaPagamento, BorderLayout.WEST);
         mainBottomLeftPanel.add(avvioPagamento, BorderLayout.SOUTH);
 
-                
-        /*############################################################*/
-        
-        mainBottomRightPanel = new JPanel();
-        
-        mainBottomRightPanel.setLayout(new GridLayout(0, 1, 5, 5));
-        
-        mainBottomRightPanel.setBorder(BorderFactory.createTitledBorder("Sezione sconti:"));
-        
-        scontoEtaCheckBox = new JCheckBox("Applica sconto età");
+        // Costruzione mainBottomRightPanel
         mainBottomRightPanel.add(scontoEtaCheckBox);
-        
+
         JPanel scontoOccasioniPanel = new JPanel();
-        scontoOccasioniPanel.setLayout(new BoxLayout(scontoOccasioniPanel,
-        								   BoxLayout.Y_AXIS));
-        
-        scontoOccasioniCheckBox = new JCheckBox("Applica sconto occasioni");
-        //mainBottomRightPanel.add(scontoOccasioniCheckBox);
-        
-        scontoOccasioniBtn = new JButton("Seleziona sconto occasioni");
-        scontoOccasioniBtn.setEnabled(false);
-        buttonSizeSetter.uniformButtonSize(scontoOccasioniBtn);
-        //mainBottomRightPanel.add(scontoOccasioniBtn);
-        
+        scontoOccasioniPanel.setLayout(new BoxLayout(scontoOccasioniPanel, BoxLayout.Y_AXIS));
         scontoOccasioniPanel.add(scontoOccasioniCheckBox);
         scontoOccasioniPanel.add(Box.createVerticalStrut(10));
         scontoOccasioniPanel.add(scontoOccasioniBtn);
-
         mainBottomRightPanel.add(scontoOccasioniPanel);
-        
-        trimestrale = new JRadioButtonMenuItem("Trimestrale");
-        semestrale = new JRadioButtonMenuItem("Semestrale");
-        annuale = new JRadioButtonMenuItem("Annuale");
-        mensile = new JRadioButtonMenuItem("Mensile");
-        
-        sceltaMesi = new ButtonGroup();
-        sceltaMesi.add(mensile);
-        sceltaMesi.add(trimestrale);
-        sceltaMesi.add(semestrale);
-        sceltaMesi.add(annuale);
-                
-        mensile.setSelected(true);
-        
-        /*Il JPopupMenu non è un componente visivo fisso, come un JPanel o un JButton.
-         *Esso è visualizzato in modo dinamico, su base temporanea, tramite invocazione del
-         *metodo "show", che per input ha:
-         *
-         *- il componente che invoca il PopupMenu
-         *
-         *- la posizione "x" rispetto al componente che invoca il menu
-         *
-         *- la posizione "y" rispetto al componente che invoca il menu
-         *
-         *ES: popupMenu.show(scontoSuBaseMesi, 0, 0); */
-        
-        popupMenu = new JPopupMenu();
-        popupMenu.add(mensile);
-        popupMenu.add(trimestrale);
-        popupMenu.add(semestrale);
-        popupMenu.add(annuale);
-        
-        /*Aggiunto separatore e label*/
-        JSeparator separator = new JSeparator();
-        //In orizzontale, sottile.
-        separator.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1)); 
-        mainBottomRightPanel.add(separator);
-        
-        JLabel durataLabel = new JLabel("Sceglie durata abbonamento (applica sconto base): ");
-        durataLabel.setAlignmentX(CENTER_ALIGNMENT); 
-        mainBottomRightPanel.add(durataLabel);
-        ////////////////////////////////////////////
-        
-        scontoSuBaseMesi = new JButton("Numero mesi");
-                
-        mainBottomRightPanel.add(scontoSuBaseMesi);
-        
-	    /*############################################################*/
-	    
-	    mainBottomSplitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-	    
-	    mainBottomSplitPanel.setRightComponent(mainBottomLeftPanel);
-	    
-	    mainBottomSplitPanel.setLeftComponent(mainBottomRightPanel);
-	    
-		SwingUtilities.invokeLater(() -> {
-			
-			mainBottomSplitPanel.setDividerLocation(0.5); 
-		    
-		});
-		
-		mainBottomSplitPanel.setEnabled(false);
-	    
-	    mainSplitPanel.setBottomComponent(mainBottomSplitPanel);
-        
-	    /*############################################################*/
-	    
-	    navigationPanel = new JPanel();
-	    
-	    navigationPanel.setLayout(new BoxLayout(navigationPanel, 
-	    												 BoxLayout.X_AXIS));
-	    
-	    
-	    indietro = new JButton ("Indietro");
-		conferma = new JButton ("Conferma");
-		annulla = new JButton ("Annulla");
-		
-		buttonSizeSetter.uniformButtonSize(indietro, conferma, annulla);
-		
-		navigationPanel.add(Box.createHorizontalGlue());
-		navigationPanel.add(annulla);
-		navigationPanel.add(Box.createHorizontalStrut(100));
-		navigationPanel.add(indietro);
-		navigationPanel.add(Box.createHorizontalStrut(100));
-		navigationPanel.add(conferma);
-		navigationPanel.add(Box.createHorizontalGlue());
-	    
-	    /*############################################################*/
-	    
-	    secondSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-	    
-	    secondSplitPanel.setTopComponent(mainSplitPanel);
-	    
-	    secondSplitPanel.setBottomComponent(navigationPanel);
-	    
-		SwingUtilities.invokeLater(() -> {
-			
-			secondSplitPanel.setDividerLocation(0.8); 
-		    
-		});
-		
-		secondSplitPanel.setEnabled(false);
-	    
-	    /*############################################################*/
 
-	    add(secondSplitPanel);
-	    
-	    fontChangeRegister.register(this, buttonSizeSetter);
-	    
-	}
+        JSeparator separator = new JSeparator();
+        separator.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+        mainBottomRightPanel.add(separator);
+
+        JLabel durataLabel = new JLabel("Sceglie durata abbonamento (applica sconto base): ");
+        durataLabel.setAlignmentX(CENTER_ALIGNMENT);
+        mainBottomRightPanel.add(durataLabel);
+
+        mainBottomRightPanel.add(scontoSuBaseMesi);
+
+        // Split panel per la parte inferiore
+        mainBottomSplitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        mainBottomSplitPanel.setLeftComponent(mainBottomRightPanel);
+        mainBottomSplitPanel.setRightComponent(mainBottomLeftPanel);
+
+        SwingUtilities.invokeLater(() -> mainBottomSplitPanel.setDividerLocation(0.5));
+        mainBottomSplitPanel.setEnabled(false);
+
+        mainSplitPanel.setBottomComponent(mainBottomSplitPanel);
+        
+    }
+    
+    //----------------------------------------------------------------
+
+    private void buildNavigationPanel() {
+    	
+        navigationPanel = new JPanel();
+        navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
+        navigationPanel.setBorder(BorderFactory.createTitledBorder(""));
+
+        navigationPanel.add(Box.createHorizontalGlue());
+        navigationPanel.add(annulla);
+        navigationPanel.add(Box.createHorizontalStrut(100));
+        navigationPanel.add(indietro);
+        navigationPanel.add(Box.createHorizontalStrut(100));
+        navigationPanel.add(conferma);
+        navigationPanel.add(Box.createHorizontalGlue());
+        
+    }
+    
+    //----------------------------------------------------------------
+
+    private void buildSecondSplitPanel() {
+    	
+        secondSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        secondSplitPanel.setTopComponent(mainSplitPanel);
+        secondSplitPanel.setBottomComponent(navigationPanel);
+
+        SwingUtilities.invokeLater(() -> secondSplitPanel.setDividerLocation(0.8));
+        secondSplitPanel.setEnabled(false);
+        
+    }
 
 	
     //----------------------------------------------------------------

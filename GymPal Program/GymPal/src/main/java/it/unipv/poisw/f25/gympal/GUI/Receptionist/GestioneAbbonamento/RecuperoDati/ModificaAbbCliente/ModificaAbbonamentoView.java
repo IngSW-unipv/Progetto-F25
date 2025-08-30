@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -28,16 +29,20 @@ public class ModificaAbbonamentoView extends JPanel implements IModificaAbboname
 
     private static final long serialVersionUID = 1L;
 
+    /*Navigazione*/
     private JButton annulla;
     private JButton avanti;
     private JButton indietro;
 
+    /*Operazioni*/
     private JButton conferma;
     private JButton resetta;
     
+    /*Sezioni & Corsi*/
     private List<JToggleButton> toggleButtons;
     private List<JCheckBox> checkBoxes;
 
+    /*Pannelli & SplitPane*/
     private JSplitPane mainSplitPanel;
     private JSplitPane displayAndModifyAbb;
     private JSplitPane subscriptionEditor;
@@ -49,6 +54,7 @@ public class ModificaAbbonamentoView extends JPanel implements IModificaAbboname
     private JPanel applyReverseChanges;
     private JPanel navigationPanel;
     
+    /**/
     private final List<String> nomiSezioni = Arrays.asList(
     		
     	    "Allenamento mirato con personal trainer",
@@ -64,7 +70,8 @@ public class ModificaAbbonamentoView extends JPanel implements IModificaAbboname
     	    
     	);
 
-    private final IDynamicButtonSizeSetter buttonSizeSetter;
+    /*Servizi*/
+    private IDynamicButtonSizeSetter buttonSizeSetter;
 
     //----------------------------------------------------------------
 
@@ -90,6 +97,9 @@ public class ModificaAbbonamentoView extends JPanel implements IModificaAbboname
         // Inizializzazione componentiPanel con layout verticale
         componentiPanel = new JPanel();
         componentiPanel.setLayout(new BoxLayout(componentiPanel, BoxLayout.Y_AXIS));
+        componentiPanel.setBorder(BorderFactory.createCompoundBorder(
+				  				  BorderFactory.createTitledBorder(""),
+				  				  BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
         JLabel messageLabel = new JLabel("-=Componi l'abbonamento=-");
         messageLabel.setAlignmentX(CENTER_ALIGNMENT);
@@ -113,6 +123,9 @@ public class ModificaAbbonamentoView extends JPanel implements IModificaAbboname
         // Inizializzazione corsiPanel con layout verticale
         corsiPanel = new JPanel();
         corsiPanel.setLayout(new BoxLayout(corsiPanel, BoxLayout.Y_AXIS));
+        corsiPanel.setBorder(BorderFactory.createCompoundBorder(
+				  			 BorderFactory.createTitledBorder("Selezione Corsi"),
+				  			 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
         // Creazione dinamica dei checkbox da nomiCorsi e le aggiungo a corsiPanel
         checkBoxes = new ArrayList<>();
@@ -157,6 +170,7 @@ public class ModificaAbbonamentoView extends JPanel implements IModificaAbboname
         /* Inizializzazione listsPanel con layout verticale )*/
         listsPanel = new JPanel();
         listsPanel.setLayout(new BoxLayout(listsPanel, BoxLayout.Y_AXIS));
+        listsPanel.setBorder(BorderFactory.createTitledBorder(""));
 
         /*############################################################*/
 
@@ -171,6 +185,7 @@ public class ModificaAbbonamentoView extends JPanel implements IModificaAbboname
         // Pannello navigazione (pulsanti avanti, indietro, annulla)
         navigationPanel = new JPanel();
         navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
+        navigationPanel.setBorder(BorderFactory.createTitledBorder(""));
 
         annulla = new JButton("Annulla");
         indietro = new JButton("Indietro");
@@ -192,6 +207,10 @@ public class ModificaAbbonamentoView extends JPanel implements IModificaAbboname
         // Pannello per pulsanti reset e conferma
         applyReverseChanges = new JPanel();
         applyReverseChanges.setLayout(new BoxLayout(applyReverseChanges, BoxLayout.X_AXIS));
+        applyReverseChanges.setBorder(BorderFactory.createCompoundBorder(
+        	        				  BorderFactory.createTitledBorder(""),
+        	        				  BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        
 
         resetta = new JButton("Resetta composizione");
         conferma = new JButton("Conferma composzione");

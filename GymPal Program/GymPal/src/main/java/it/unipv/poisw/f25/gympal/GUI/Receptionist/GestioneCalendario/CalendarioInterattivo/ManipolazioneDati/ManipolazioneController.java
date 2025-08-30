@@ -28,7 +28,7 @@ import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCor
 public class ManipolazioneController {
 	
 	/*Vista*/
-	private final IManipolazioneFrame frame;
+	private IManipolazioneFrame frame;
 	
     /*Coordinatore*/
     private ICoordinatoreCalendario coordinator;

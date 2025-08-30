@@ -9,8 +9,11 @@ import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashbo
 
 public class LogoutConfirmationController {
     
+	/*Viste*/
     private ILogoutConfirmationView view;
     private IDashboard mainView;
+    
+    /*Input*/
     private String schermataPrecedente;
 
     //----------------------------------------------------------------

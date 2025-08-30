@@ -34,11 +34,11 @@ public class DipendentiETurniController implements IDipendentiChangeListener{
     private IDipendentiETurniCoordinator coordinator;
 
     /* Servizi */
-    private final ITurniCRUDFacadeService turniCRUDService;
-    private final ICRUDTurniSupportServices supportoCRUDTurni;
-	private final IDipendentiCRUDFacadeService dipCRUDService;
-    private final ICRUDDipendentiSupportServices supportpCRUDdip;
-    private final IStaffIdGeneratorService generatoreStaffIDs;
+    private ITurniCRUDFacadeService turniCRUDService;
+    private ICRUDTurniSupportServices supportoCRUDTurni;
+	private IDipendentiCRUDFacadeService dipCRUDService;
+    private ICRUDDipendentiSupportServices supportpCRUDdip;
+    private IStaffIdGeneratorService generatoreStaffIDs;
 
     /* Manager */
     private TurniManager turniManager;

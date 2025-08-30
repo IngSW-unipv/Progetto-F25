@@ -25,7 +25,7 @@ import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerR
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.IClientInfosView;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTO.DTOHandlerRegistrazione;
+import it.unipv.poisw.f25.gympal.GUI.Receptionist.CustomerRegistration.DTOHandler.DTOHandlerRegistrazione;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.IRiepilogoEPagamentoView;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoController;
 import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.RiepilogoEPagamentoView;

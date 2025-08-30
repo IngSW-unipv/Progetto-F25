@@ -22,7 +22,7 @@ public class DipendenteController implements IRegistraEMostraSchermate{
 	private String schermataPreLogout = "SCHERMATA0";
 	
 	/*Viste*/
-    private final IDashboard dipDashView;
+    private IDashboard dipDashView;
     private ILogoutConfirmationView logoutView;
     
     /*Servizi*/

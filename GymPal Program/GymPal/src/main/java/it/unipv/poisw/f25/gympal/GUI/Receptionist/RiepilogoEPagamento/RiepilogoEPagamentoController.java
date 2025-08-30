@@ -18,9 +18,13 @@ import it.unipv.poisw.f25.gympal.persistence.beans.Sconto.Sconto;
 
 public class RiepilogoEPagamentoController {
     
+	/*Vista*/
     private IRiepilogoEPagamentoView riepilogoEPagamento;
+    
+    /*Coordinatore*/
     private ICoordinator coordinator;
     
+    /*Callbacks*/
     private Runnable onIndietro;
     private Runnable onConferma;
     private Runnable onAnnulla;

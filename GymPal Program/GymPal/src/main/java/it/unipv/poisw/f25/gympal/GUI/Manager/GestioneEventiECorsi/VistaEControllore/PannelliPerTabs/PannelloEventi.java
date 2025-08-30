@@ -31,11 +31,13 @@ public class PannelloEventi extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
+	/*Tabella & Filtro*/
     private JTable eventiTable;
     private JFormattedTextField dataInizioField;
     private JFormattedTextField dataFineField;
     private JButton filtraBtn;
 
+    /*Input*/
     private JTextField nomeEventoField;
     private JFormattedTextField dataEventoField;
     private JTextField oraInizioField;
@@ -43,12 +45,14 @@ public class PannelloEventi extends JPanel {
     private JTextField destinatarioField;
     private JTextArea messaggioArea;
 
+    /*Operazioni*/
     private JButton creaBtn;
     private JButton modificaBtn;
     private JButton cancellaBtn;
     private JButton pulisciBtn;
 
-    private final IDynamicButtonSizeSetter buttonSizeSetter;
+    /*Servizi*/
+    private IDynamicButtonSizeSetter buttonSizeSetter;
     
 	//----------------------------------------------------------------
 

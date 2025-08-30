@@ -32,23 +32,27 @@ public class PannelloTurni extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 
+	/*Tabella & Filtro*/
     private JTable turniTable;
     private JFormattedTextField dataInizioField;
     private JFormattedTextField dataFineField;
     private JButton filtraBtn;
 
+    /*Input*/
     private JFormattedTextField dataTurnoField;
     private JComboBox<String> recMatBox;
     private JComboBox<String> recPomBox;
     private JComboBox<String> ptMatBox;
     private JComboBox<String> ptPomBox;
 
+    /*Operazioni*/
     private JButton creaBtn;
     private JButton modificaBtn;
     private JButton cancellaBtn;
     private JButton pulisciBtn;
 
-    private final IDynamicButtonSizeSetter buttonSizeSetter;
+    /*Servizi*/
+    private IDynamicButtonSizeSetter buttonSizeSetter;
 
     //------------------------------------------------------------
 

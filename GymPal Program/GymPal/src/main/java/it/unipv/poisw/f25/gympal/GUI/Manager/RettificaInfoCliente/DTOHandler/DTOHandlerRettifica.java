@@ -1,4 +1,4 @@
-package it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.DTO;
+package it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.DTOHandler;
 
 import java.util.List;
 

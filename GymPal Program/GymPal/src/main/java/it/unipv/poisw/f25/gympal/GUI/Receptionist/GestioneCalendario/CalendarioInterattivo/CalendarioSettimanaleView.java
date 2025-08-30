@@ -45,7 +45,7 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
     private LocalDate lunediCorrente;
     
     private List<CalendarioCellPanel> celle;
-    private final IDynamicButtonSizeSetter buttonSizeSetter;
+    private IDynamicButtonSizeSetter buttonSizeSetter;
     
 	//----------------------------------------------------------------
 

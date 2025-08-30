@@ -25,23 +25,26 @@ public class PannelloDipendenti extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 
+	/*Tabella & Filtro*/
     private JTable dipendentiTable;
-
     private JTextField staffIdField;
     private JTextField nomeField;
     private JTextField cognomeField;
     private JTextField contattoField;
     private JTextField cittaField;
     
+    /*Input*/
     private JComboBox<String> ruoloComboBox;
 
+    /*Operazioni*/
     private JButton generaIdBtn;
     private JButton creaBtn;
     private JButton modificaBtn;
     private JButton cancellaBtn;
     private JButton pulisciBtn;
 
-    private final IDynamicButtonSizeSetter buttonSizeSetter;
+    /*Servizi*/
+    private IDynamicButtonSizeSetter buttonSizeSetter;
 
     //------------------------------------------------------------
 

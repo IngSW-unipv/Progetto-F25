@@ -11,7 +11,7 @@ import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.TowardsDB
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.Bundle.ICommonServicesBundle;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
-import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.DTO.DTOHandlerRettifica;
+import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.DTOHandler.DTOHandlerRettifica;
 import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.Rettifica.IRettificaInfoView;
 import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.Rettifica.RettificaInfoController;
 import it.unipv.poisw.f25.gympal.GUI.Manager.RettificaInfoCliente.Rettifica.RettificaInfoView;
