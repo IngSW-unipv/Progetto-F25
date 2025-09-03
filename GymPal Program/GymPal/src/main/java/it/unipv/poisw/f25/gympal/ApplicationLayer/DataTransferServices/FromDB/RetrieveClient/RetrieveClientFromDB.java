@@ -3,7 +3,7 @@ package it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.FromDB.R
 import it.unipv.poisw.f25.gympal.ApplicationLayer.Mappers.ClienteToDTO.ClientToDTO;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.Mappers.ClienteToDTO.IClientToDTO;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.Mappers.Codecs.ListsToStringCodec;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 

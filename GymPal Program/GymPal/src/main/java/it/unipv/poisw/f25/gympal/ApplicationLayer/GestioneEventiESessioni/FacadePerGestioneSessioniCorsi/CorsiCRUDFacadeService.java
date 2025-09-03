@@ -6,7 +6,7 @@ import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.ICalendarioService;
 
 public class CorsiCRUDFacadeService implements ICorsiCRUDFacadeService {
 	
-    private final ICalendarioService calendarioService;
+    private ICalendarioService calendarioService;
     
 	//----------------------------------------------------------------
     
@@ -50,7 +50,11 @@ public class CorsiCRUDFacadeService implements ICorsiCRUDFacadeService {
     
     @Override
     public boolean pulisciSessioniVecchie() {
+
+    	/* Sono prima annullate tutte le partecipazini ai corsi interessati, poi
+    	 * sono eliminati i corsi stessi*/
     	
+    	calendarioService.pulisciPrenotazioniVecchie();    	
         return calendarioService.pulisciSessioniVecchie();
         
     }

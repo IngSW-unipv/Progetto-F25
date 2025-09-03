@@ -2,7 +2,7 @@ package it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.Supp
 
 import java.util.List;
 
-import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.Supporto.TurnoIndividuale;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.SupportoTurni.TurniDipendente.ClasseDiSupporto.TurnoIndividuale;
 import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
 
 public interface IGestoreTurniPersonali {

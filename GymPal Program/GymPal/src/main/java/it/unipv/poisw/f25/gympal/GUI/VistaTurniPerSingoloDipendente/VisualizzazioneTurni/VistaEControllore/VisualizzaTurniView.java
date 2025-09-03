@@ -9,7 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
-import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.IFontChangeRegister;
 
 public class VisualizzaTurniView extends JPanel implements IVisualizzaTurniView{
 
@@ -21,26 +21,19 @@ public class VisualizzaTurniView extends JPanel implements IVisualizzaTurniView{
 	
 	public VisualizzaTurniView(IFontChangeRegister fontChangeRegister) {
 
+		/*Layout Pannello principale*/
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createCompoundBorder(
                   BorderFactory.createLineBorder(Color.GRAY),
                   new EmptyBorder(10, 10, 10, 10)));
+        
+        /*Inizializzazione tabella*/
         initTable();
         
+        /*Sottoscrizione a meccanismo cambio-font*/
         fontChangeRegister.register(this);
 		
 	}
-	
-    //------------------------------------------------------------
-	
-    private void initTable() {
-    	
-        turniTable = new JTable();
-        turniTable.setAutoCreateRowSorter(true);
-        JScrollPane scrollPane = new JScrollPane(turniTable);
-        add(scrollPane, BorderLayout.CENTER);
-        
-    }
 	
     //------------------------------------------------------------
     
@@ -57,5 +50,16 @@ public class VisualizzaTurniView extends JPanel implements IVisualizzaTurniView{
 	public JPanel getMainPanel() {return this;}
 	
     //------------------------------------------------------------
-
+	
+    private void initTable() {
+    	
+        turniTable = new JTable();
+        turniTable.setAutoCreateRowSorter(true);
+        JScrollPane scrollPane = new JScrollPane(turniTable);
+        add(scrollPane, BorderLayout.CENTER);
+        
+    }
+	
+    //------------------------------------------------------------
+	
 }

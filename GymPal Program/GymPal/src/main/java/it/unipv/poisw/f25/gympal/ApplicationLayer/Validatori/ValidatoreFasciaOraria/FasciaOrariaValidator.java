@@ -23,7 +23,7 @@ public class FasciaOrariaValidator implements IFasciaOrariaValidator{
 
             return !inizio.isBefore(ORA_MIN) &&
                    !fine.isAfter(ORA_MAX) &&
-                   fine.isAfter(inizio);
+                    fine.isAfter(inizio);
             
         } catch (DateTimeParseException e) {
         	
@@ -39,7 +39,8 @@ public class FasciaOrariaValidator implements IFasciaOrariaValidator{
     	
         if (!fascia.matches("\\d{2}:\\d{2}-\\d{2}:\\d{2}")) {
         	
-            return "Formato fascia oraria non valido. Usa HH:mm-HH:mm, es. 18:00-19:00.";
+            return "Formato fascia oraria non valido. Usa HH:mm-HH:mm, "
+            	 + "es. 18:00-19:00.";
             
         }
 

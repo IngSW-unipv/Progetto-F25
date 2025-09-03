@@ -6,7 +6,7 @@ import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.TowardsDB
 import it.unipv.poisw.f25.gympal.ApplicationLayer.Mappers.Codecs.IListsToStringCodec;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.CalcoloEtaService;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.CalcoloEControlloEta.ICalcoloEtaService;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 
 public class DTOtoCliente implements IDTOtoCliente{

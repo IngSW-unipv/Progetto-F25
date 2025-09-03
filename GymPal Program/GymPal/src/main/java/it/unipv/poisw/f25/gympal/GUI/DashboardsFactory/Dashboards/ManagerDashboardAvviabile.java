@@ -8,17 +8,16 @@ import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneEventiESessioni.Eventi
 import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneEventiESessioni.IEventiESessioniServicesBundle;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.ITurniEDipendentiServicesBundle;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.TurniEDipendentiServicesBundle;
-import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.FacadePerGestioneDipendenti.DipendentiCRUDFacadeService;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.CommonServicesBundleFactory;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ICommonServicesBundleFactory;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.Bundle.ICommonServicesBundle;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioService;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.ICalendarioService;
-import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.GenerazioneIDSessioneCorso.DefaultSessionIdGenerator;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.GenerazioneIDSessioneCorso.ISessionIdGenerator;
+import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.GenerazioneIDSessioneCorso.SessionIdGenerator;
+import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.ManagerController;
+import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.ManagerDashboardView;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.CommonInterface.IDashboardAvviabile;
-import it.unipv.poisw.f25.gympal.GUI.Manager.ManagerController;
-import it.unipv.poisw.f25.gympal.GUI.Manager.ManagerDashboardView;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
 
@@ -38,7 +37,7 @@ public class ManagerDashboardAvviabile implements IDashboardAvviabile{
 	        IRetrieveDipendentiFromDB listaDip = new RetrieveDipendentiFromDB(persistence);
 	        
 	        /*Generatore ID per sessioni corsi*/
-	        ISessionIdGenerator generatoreIDs = new DefaultSessionIdGenerator();
+	        ISessionIdGenerator generatoreIDs = new SessionIdGenerator();
 	        
 	        /*Servizi per visualizzazione/popolazione calendario 
 	         *sessioni/eventi/appuntamenti/ecc.*/
@@ -47,14 +46,12 @@ public class ManagerDashboardAvviabile implements IDashboardAvviabile{
 
 	        /*Servizi Comuni*/
 	        ICommonServicesBundleFactory factory = new CommonServicesBundleFactory(persistence, calendarioFacade);
-	        ICommonServicesBundle serviziComuni = factory.create();
+	        ICommonServicesBundle serviziComuni = factory.buildBundle();
 	        
 	        /*Servizi per responasbilità manageriali*/
 	        ITurniEDipendentiServicesBundle turniDipServices = new TurniEDipendentiServicesBundle(
 	                calendarioService,
-	                new DipendentiCRUDFacadeService(persistence),
-	                persistence,
-	                listaDip
+	                persistence
 	        );
 	        
 	        IEventiESessioniServicesBundle eventiESessioniServices = new EventiESessioniServicesBundle(calendarioService);

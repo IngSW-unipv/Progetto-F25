@@ -8,7 +8,7 @@ import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
 
 public class TurniCRUDFacadeService implements ITurniCRUDFacadeService{
 	
-	private final ICalendarioService calendarioService;
+	private ICalendarioService calendarioService;
 
     //------------------------------------------------------------
 	

@@ -22,9 +22,9 @@ import it.unipv.poisw.f25.gympal.Dominio.ServicesBundles.CustomerRegistration.Re
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.DateUtils;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDateUtils;
 import it.unipv.poisw.f25.gympal.Dominio.staff.Receptionist;
+import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.ReceptionistController;
+import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.ReceptionistDashboardView;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.CommonInterface.IDashboardAvviabile;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.ReceptionistController;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.ReceptionistDashboardView;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
 
@@ -61,7 +61,7 @@ public class ReceptionistDashboardAvviabile implements IDashboardAvviabile{
         
         /*Servizi comuni a più parti della GUI*/
         ICommonServicesBundleFactory factory = new CommonServicesBundleFactory(persistence, calendarioFacade);
-        ICommonServicesBundle serviziComuni = factory.create();
+        ICommonServicesBundle serviziComuni = factory.buildBundle();
         
         /*Servizi Validazione Date ed Ore*/
         IDateUtils dateUtils = new DateUtils();
@@ -71,7 +71,7 @@ public class ReceptionistDashboardAvviabile implements IDashboardAvviabile{
         IDialogUtils dialogUtils = new DialogUtils();
         
         /*Servizi per estrazione turni singolo dipendente*/
-        IEstraiTurniDipendenteService estraiTurni = new EstraiTurniDipendenteService();
+        IEstraiTurniDipendenteService estraiTurni = new EstraiTurniDipendenteService(persistence);
         IGestoreTurniPersonali gestoreTurni = new GestoreTurniPersonali(estraiTurni);
         
         /*Istanziazione controllore e relativa vista*/

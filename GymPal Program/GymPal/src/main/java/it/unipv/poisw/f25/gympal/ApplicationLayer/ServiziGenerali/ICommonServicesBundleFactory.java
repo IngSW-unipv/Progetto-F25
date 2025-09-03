@@ -4,6 +4,6 @@ import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.Bundle.ICommon
 
 public interface ICommonServicesBundleFactory {
 	
-	public ICommonServicesBundle create();
+	public ICommonServicesBundle buildBundle();
 
 }

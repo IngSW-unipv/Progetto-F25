@@ -1,0 +1,83 @@
+package it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.GestioneAbbonamento.RecuperoDati;
+
+import java.awt.event.ActionListener;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public interface IRecuperoDatiView {
+	
+	public JTextField getCodiceFiscale();
+	
+	//----------------------------------------------------------------
+	
+	public JLabel getCfLabel();
+	
+	//----------------------------------------------------------------
+	
+	public JLabel getNomeLabel();
+	
+	//----------------------------------------------------------------
+	
+	public JLabel getCognomeLabel();
+	
+	//----------------------------------------------------------------
+	
+	public JLabel getContattoLabel();
+	
+	//----------------------------------------------------------------
+	
+	public JLabel getSessoLabel();
+	
+	//----------------------------------------------------------------
+	
+	public JLabel getDurataAbbonamentoLabel();
+	
+	//----------------------------------------------------------------
+	
+	public JLabel getInizioAbbLabel();
+	
+	//----------------------------------------------------------------
+	
+	public JLabel getFineAbbLabel();
+	
+	//----------------------------------------------------------------
+	
+	public void addEstraiListenr(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
+	public void addAnnullaListener(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
+	public void addRinnovaListenr(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
+	public void addModificaListenr(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
+	public void addEliminaListener(ActionListener listener);
+	
+	//----------------------------------------------------------------
+	
+	public JPanel getMainPanel();
+	
+	//----------------------------------------------------------------
+	
+	public void setRinnovaEnabled(boolean enabled);
+	
+	//----------------------------------------------------------------
+	
+	public void setModificaEnabled(boolean enabled);
+	
+	//----------------------------------------------------------------
+	
+	public void setEliminaEnabled(boolean enabled);
+	
+	//----------------------------------------------------------------
+
+}

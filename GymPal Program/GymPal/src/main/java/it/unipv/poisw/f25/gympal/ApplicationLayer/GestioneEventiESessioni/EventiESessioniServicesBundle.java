@@ -19,10 +19,10 @@ import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.Date
 
 public class EventiESessioniServicesBundle implements IEventiESessioniServicesBundle{
 
-	private final IEventiCRUDFacadeService eventiCRUD;
-    private final ICRUDEventiSupportServices eventiSupport;
-    private final ICorsiCRUDFacadeService corsiCRUD;
-    private final ICRUDCorsiSupportServices corsiSupport;
+	private IEventiCRUDFacadeService eventiCRUD;
+    private ICRUDEventiSupportServices eventiSupport;
+    private ICorsiCRUDFacadeService corsiCRUD;
+    private ICRUDCorsiSupportServices corsiSupport;
 
     //------------------------------------------------------------
 

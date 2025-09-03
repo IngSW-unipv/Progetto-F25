@@ -10,7 +10,7 @@ public interface ISessionIdGenerator {
 	
 	//----------------------------------------------------------------
 
-	String generateId(String tipoCorso);
+	public String generateId(String tipoCorso);
 	
 	//----------------------------------------------------------------	
 	

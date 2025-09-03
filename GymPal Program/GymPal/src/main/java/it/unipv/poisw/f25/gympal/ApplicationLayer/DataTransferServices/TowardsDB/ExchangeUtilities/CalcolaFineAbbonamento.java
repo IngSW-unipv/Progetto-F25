@@ -14,8 +14,7 @@ public class CalcolaFineAbbonamento {
 	
 	private static final Map<DurataAbbonamento, 
 							 Function<LocalDate, LocalDate>> CALCOLOFINEABBONAMENTO =
-							 
-							 					new EnumMap<>(DurataAbbonamento.class);
+							 new EnumMap<>(DurataAbbonamento.class);
 	
     //----------------------------------------------------------------
 	

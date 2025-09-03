@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.Mappers.Codecs.ListsToStringCodec;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.Mappers.DTOtoCliente.DTOtoCliente;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.Mappers.DTOtoCliente.IDTOtoCliente;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 

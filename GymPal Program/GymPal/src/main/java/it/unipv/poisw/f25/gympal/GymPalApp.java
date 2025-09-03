@@ -13,9 +13,9 @@ import it.unipv.poisw.f25.gympal.ApplicationLayer.Autenticazione.AutenticaDipend
 import it.unipv.poisw.f25.gympal.ApplicationLayer.Autenticazione.IAutenticaDipendente;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.RegexCheck;
-import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginController;
-import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginView;
-import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
+import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LoginScreen.LoginController;
+import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LoginScreen.LoginView;
+import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LoginScreen.LoginUtilities.StaffFactory;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.FontSetter.FontSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.FontSetter.IFontSetter;
 import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;

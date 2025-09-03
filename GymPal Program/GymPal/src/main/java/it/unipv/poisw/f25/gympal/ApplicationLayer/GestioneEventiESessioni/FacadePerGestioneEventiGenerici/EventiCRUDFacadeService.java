@@ -9,7 +9,7 @@ import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
 
 public class EventiCRUDFacadeService implements IEventiCRUDFacadeService{
 	
-	private final ICalendarioService calendarioService;
+	private ICalendarioService calendarioService;
 
     //---------------------------------------------------------------
 

@@ -8,16 +8,13 @@ import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.TowardsDB
 import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.TowardsDB.UpdateClient.IUpdateClientInsideDB;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.IFontChangeRegister;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.FontManager.IFontManager;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.IStrategieCalcoloPrezzoFactory;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
-import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.FontManager.IFontManager;
-import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
+import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LoginScreen.LoginUtilities.StaffFactory;
 
 public class CommonServicesBundle implements ICommonServicesBundle{
-	
-	//private IPersistenceFacade facade;
 	
     private final IRegexCheck regexChecker;
     private final ICampoValidabileFactory campoValidabileFactory;
@@ -36,8 +33,7 @@ public class CommonServicesBundle implements ICommonServicesBundle{
     
 	//----------------------------------------------------------------
     
-    public CommonServicesBundle(IPersistenceFacade facade,
-					            IRegexCheck regexChecker,
+    public CommonServicesBundle(IRegexCheck regexChecker,
 					            ICampoValidabileFactory campoValidabileFactory,
 					            IValidatoreCampi validatoreCampi,
 					            IStrategieCalcoloPrezzoFactory prezzoFactory,
@@ -51,7 +47,7 @@ public class CommonServicesBundle implements ICommonServicesBundle{
 					            IAutenticaDipendente autenticatore,
 					            StaffFactory staffFactory) {
 
-		//this.facade = facade;
+		
 		this.regexChecker = regexChecker;
 		this.campoValidabileFactory = campoValidabileFactory;
 		this.validatoreCampi = validatoreCampi;

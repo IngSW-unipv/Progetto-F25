@@ -2,7 +2,7 @@ package it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.TowardsD
 
 import java.time.LocalDate;
 
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 
 public interface ICommitNewClientToDB {
 

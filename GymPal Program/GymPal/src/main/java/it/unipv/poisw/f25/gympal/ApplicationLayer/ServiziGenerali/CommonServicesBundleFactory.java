@@ -19,15 +19,15 @@ import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCam
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.CampoValidabileFactory.ICampoValidabileFactory;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.IValidatoreCampi;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.ValidazioneCampi.ValidatoreCampi.ValidatoreCampi;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.FontChangeRegister;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.IFontChangeRegister;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.FontManager.FontManager;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.FontManager.IFontManager;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.IStrategieCalcoloPrezzoFactory;
 import it.unipv.poisw.f25.gympal.Dominio.CalcoloPrezzoFactory.StrategieCalcoloPrezzoFactory;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.IRegexCheck;
 import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.RegexCheck.RegexCheck;
-import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.FontChangeRegister;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.IFontChangeRegister;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.FontManager.FontManager;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.GestioneFont.FontManager.IFontManager;
+import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LoginScreen.LoginUtilities.StaffFactory;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 
 public class CommonServicesBundleFactory implements ICommonServicesBundleFactory{
@@ -48,7 +48,7 @@ public class CommonServicesBundleFactory implements ICommonServicesBundleFactory
 	//----------------------------------------------------------------
 
     @Override
-    public ICommonServicesBundle create() {
+    public ICommonServicesBundle buildBundle() {
         // -------------------------------
         // Autenticazione ed Utenti
         // -------------------------------
@@ -85,8 +85,7 @@ public class CommonServicesBundleFactory implements ICommonServicesBundleFactory
         // -------------------------------
         // Bundle Finale
         // -------------------------------
-        return new CommonServicesBundle(persistence,
-                						regexChecker,
+        return new CommonServicesBundle(regexChecker,
                 						campoFactory,
                 						validatore,
                 						prezzoFactory,

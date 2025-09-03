@@ -10,6 +10,7 @@ import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.DatiNon
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.SessionePienaException;
 import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
 import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
+import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.PartecipazioneCorso;
 import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCorso;
 import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
@@ -28,13 +29,17 @@ public interface ICalendarioFacadeService {
 	
 	//----------------------------------------------------------------
 	
+	public List<Cliente> findClientiBySessione(String idSessione);
+	
+	//----------------------------------------------------------------
+	
 	public void prenotaSessione(String cf, String sessioneId) 
 		   throws ClienteNonAbbonatoException, ConflittoOrarioException,
 		          DatiNonTrovatiException, SessionePienaException;
 	
 	//----------------------------------------------------------------
 	
-	public boolean annullaSessione(String cf, String sessioneId);
+	public boolean annullaPartecipazione(String cf, String sessioneId);
 	
 	//----------------------------------------------------------------
 	//----------------------------------------------------------------

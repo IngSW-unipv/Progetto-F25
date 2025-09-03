@@ -3,7 +3,7 @@ package it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.TowardsD
 import java.util.List;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.FacadePerCalendario.ICalendarioFacadeService;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
@@ -11,8 +11,8 @@ import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.Parte
 
 public class DeleteClientFromDB implements IDeleteClientFromDB{
 	
-	private final IPersistenceFacade persistenceFacade;
-    private final ICalendarioFacadeService calendarioFacade;
+	private IPersistenceFacade persistenceFacade;
+    private ICalendarioFacadeService calendarioFacade;
     
 	//----------------------------------------------------------------
 
@@ -73,7 +73,7 @@ public class DeleteClientFromDB implements IDeleteClientFromDB{
         	
             for (PartecipazioneCorso p : partecipazioni) {
             	
-                calendarioFacade.annullaSessione(p.getCf(), p.getSessioneId());
+                calendarioFacade.annullaPartecipazione(p.getCf(), p.getSessioneId());
                 
             }
             

@@ -7,7 +7,7 @@ import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.Dipendente;
 
 public class DipendentiCRUDFacadeService implements IDipendentiCRUDFacadeService {
 	
-	private final IPersistenceFacade persistence;
+	private IPersistenceFacade persistence;
 	
     //------------------------------------------------------------
 

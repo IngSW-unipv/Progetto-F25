@@ -17,7 +17,9 @@ public class DialogUtils implements IDialogUtils{
     }
     
 	//----------------------------------------------------------------
-
+	
+	/* Usato ovunque sia necessario far comparire un popup con una richiesta di
+	 * conferma da sottoporre all'utente.*/
 	@Override
     public int conferma(String msg, String titolo) {
         return JOptionPane.showConfirmDialog(null, msg, titolo, JOptionPane.YES_NO_OPTION);

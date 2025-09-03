@@ -35,9 +35,5 @@ public interface ICalcolaPrezzo {
     public List<Sconto> getScontiOccasioneSelezionati();
     
 	//----------------------------------------------------------------
-    
-    //public void setScontiOccasioneSelezionati(List<Sconto> scontiOccasioneSelezionati);
-    
-	//----------------------------------------------------------------
 
 }

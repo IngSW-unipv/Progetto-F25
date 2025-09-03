@@ -3,18 +3,17 @@ package it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.Supp
 import java.util.List;
 
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
-import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
 
 public class EstraiTurniDipendenteService implements IEstraiTurniDipendenteService{
 	
-	private IPersistenceFacade facade;
+	private IPersistenceFacade persistence;
 	
 	//----------------------------------------------------------------
 	
-	public EstraiTurniDipendenteService() {
+	public EstraiTurniDipendenteService(IPersistenceFacade facade) {
 		
-		facade = PersistenceFacade.getInstance();
+		this.persistence = facade;
 	}
 	
 	//----------------------------------------------------------------
@@ -23,8 +22,8 @@ public class EstraiTurniDipendenteService implements IEstraiTurniDipendenteServi
 	public List<Turno> turniPerSingoloDipendente(Turno turno){
 		
 	    // Recupera tutti i turni in cui è presente un determinato membro dello staff 
-	    // Staff id del dipendente interessato da inserire in recMat del dummy turno
-		return facade.selectAllTurniByPerson(turno);
+	    // Staff id del dipendente interessato da inserire in 'recMat' del dummy 'turno'
+		return persistence.selectAllTurniByPerson(turno);
 		
 	}
 	

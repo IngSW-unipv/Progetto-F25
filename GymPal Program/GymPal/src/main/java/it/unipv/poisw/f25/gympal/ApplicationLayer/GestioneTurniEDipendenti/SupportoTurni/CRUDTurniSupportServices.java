@@ -7,10 +7,10 @@ import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDat
 
 public class CRUDTurniSupportServices implements ICRUDTurniSupportServices{
 
-    private final IDateUtils dateUtils;
-    private final IDialogUtils dialogUtils;
-    private final IDateRangeUtils dateRangeGen;
-    private final IRetrieveDipendentiFromDB retrieveDips;
+    private IDateUtils dateUtils;
+    private IDialogUtils dialogUtils;
+    private IDateRangeUtils dateRangeGen;
+    private IRetrieveDipendentiFromDB retrieveDips;
     
     //------------------------------------------------------------
 

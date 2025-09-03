@@ -9,9 +9,9 @@ import it.unipv.poisw.f25.gympal.ApplicationLayer.Autenticazione.IAutenticaDipen
 import it.unipv.poisw.f25.gympal.Dominio.staff.Dipendente;
 import it.unipv.poisw.f25.gympal.Dominio.staff.Manager;
 import it.unipv.poisw.f25.gympal.Dominio.staff.Receptionist;
-import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginManager;
-import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.LoginResult;
-import it.unipv.poisw.f25.gympal.GUI.LoginScreen.LoginUtilities.StaffFactory;
+import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LoginScreen.LoginManager;
+import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LoginScreen.LoginUtilities.LoginResult;
+import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LoginScreen.LoginUtilities.StaffFactory;
 
 public class LoginManagerTest {
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.Mappers.Codecs.IListsToStringCodec;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.Mappers.ExchangeUtilities.BDayFromCf;
 import it.unipv.poisw.f25.gympal.Dominio.Enums.DurataAbbonamento;
-import it.unipv.poisw.f25.gympal.GUI.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
+import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.RiepilogoEPagamento.AuxiliaryInterfaces.IDatiCliente;
 import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 
 public class ClientToDTO implements IClientToDTO{

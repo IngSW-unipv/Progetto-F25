@@ -1,6 +1,7 @@
 package it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti;
 
-import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.FromDB.RetrieveDipendenti.IRetrieveDipendentiFromDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.DataTransferServices.FromDB.RetrieveDipendenti.RetrieveDipendentiFromDB;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.FacadePerGestioneDipendenti.DipendentiCRUDFacadeService;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.FacadePerGestioneDipendenti.IDipendentiCRUDFacadeService;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.FacadePerGestioneTurni.ITurniCRUDFacadeService;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.FacadePerGestioneTurni.TurniCRUDFacadeService;
@@ -18,25 +19,23 @@ import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 
 public class TurniEDipendentiServicesBundle implements ITurniEDipendentiServicesBundle{
 	
-	private final ITurniCRUDFacadeService turniCRUD;
-    private final ICRUDTurniSupportServices turniSupport;
-    private final IDipendentiCRUDFacadeService dipCRUD;
-    private final ICRUDDipendentiSupportServices dipSupport;
-    private final IStaffIdGeneratorService staffIdGen;
+	private ITurniCRUDFacadeService turniCRUD;
+    private ICRUDTurniSupportServices turniSupport;
+    private IDipendentiCRUDFacadeService dipCRUD;
+    private ICRUDDipendentiSupportServices dipSupport;
+    private IStaffIdGeneratorService staffIdGen;
     
 	//----------------------------------------------------------------
 
     public TurniEDipendentiServicesBundle(ICalendarioService calendarioService,
-                                          IDipendentiCRUDFacadeService dipService,
-                                          IPersistenceFacade persistence,
-                                          IRetrieveDipendentiFromDB listaDip) {
+                                          IPersistenceFacade persistence) {
     	
         this.turniCRUD = new TurniCRUDFacadeService(calendarioService);
         this.turniSupport = new CRUDTurniSupportServices(new DateUtils(), 
         												 new DialogUtils(), 
         												 new DateRangeUtils(), 
-        												 listaDip);
-        this.dipCRUD = dipService;
+        												 new RetrieveDipendentiFromDB(persistence));
+        this.dipCRUD = new DipendentiCRUDFacadeService(persistence);
         this.dipSupport = new CRUDDipendentiSupportServices(new DialogUtils());
         this.staffIdGen = new StaffIdGeneratorService(persistence);
         

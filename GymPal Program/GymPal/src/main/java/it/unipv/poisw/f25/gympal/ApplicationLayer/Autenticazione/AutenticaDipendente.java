@@ -5,13 +5,13 @@ import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.Dipendente;
 
 public class AutenticaDipendente implements IAutenticaDipendente {
 
-	private IPersistenceFacade facade;
+	private IPersistenceFacade persistence;
 	
 	//----------------------------------------------------------------
 	
 	public AutenticaDipendente(IPersistenceFacade facade) {
 		
-		this.facade = facade;
+		this.persistence = facade;
 		
 	}
 	
@@ -25,7 +25,7 @@ public class AutenticaDipendente implements IAutenticaDipendente {
 		dip.setStaffId(staffId);
 		
 		/*Query al database*/
-		Dipendente dipEstratto = facade.selectDipendente(dip);
+		Dipendente dipEstratto = persistence.selectDipendente(dip);
 		
 		/*Checks*/		
 		if(dipEstratto != null) {

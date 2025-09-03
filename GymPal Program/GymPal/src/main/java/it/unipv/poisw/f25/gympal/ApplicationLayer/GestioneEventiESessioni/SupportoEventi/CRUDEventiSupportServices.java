@@ -9,12 +9,14 @@ import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDat
 
 public class CRUDEventiSupportServices implements ICRUDEventiSupportServices{
 	
-	private final IEventoValidator eventoValidator;
-    private final IDialogUtils dialogUtils;
-    private final IDateUtils dateUtils;
-    private final IFasciaOrariaValidator fasciaValidator;
-    private final IOraUtils validatoreOra;
-    private final IDateRangeUtils datesRangeGen;
+	private IEventoValidator eventoValidator;
+    private IDialogUtils dialogUtils;
+    private IDateUtils dateUtils;
+    private IFasciaOrariaValidator fasciaValidator;
+    private IOraUtils validatoreOra;
+    private IDateRangeUtils datesRangeGen;
+    
+    //----------------------------------------------------------------
 
     public CRUDEventiSupportServices(IEventoValidator eventoValidator,
                                      IDialogUtils dialogUtils,

@@ -4,7 +4,7 @@ import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.FinestreDiDial
 
 public class CRUDDipendentiSupportServices implements ICRUDDipendentiSupportServices{
 	
-	private final IDialogUtils dialogUtils;
+	private IDialogUtils dialogUtils;
 	
     //------------------------------------------------------------
 

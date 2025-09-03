@@ -12,6 +12,7 @@ import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.DatiNon
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioExc.SessionePienaException;
 import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;
 import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
+import it.unipv.poisw.f25.gympal.persistence.beans.ClienteBean.Cliente;
 import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.Dipendente;
 import it.unipv.poisw.f25.gympal.persistence.beans.PartecipazioneCorsoBean.PartecipazioneCorso;
 import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCorso;
@@ -77,6 +78,15 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
     }
     
 	//----------------------------------------------------------------
+    
+    @Override
+    public List<Cliente> findClientiBySessione(String idSessione) {
+    	
+    	return calendarioService.findClientiBySessione(idSessione);
+    	
+    }
+    
+	//----------------------------------------------------------------
 
     @Override
     public void prenotaSessione(String cf, String sessioneId) 
@@ -89,7 +99,7 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
 	//----------------------------------------------------------------
 
     @Override
-    public boolean annullaSessione(String cf, String sessioneId) {
+    public boolean annullaPartecipazione(String cf, String sessioneId) {
     	
         return calendarioService.annullaPrenotazioneCorso(cf, sessioneId);
         
@@ -102,11 +112,11 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
     // PT ////////////////////////////////////////////////////////////
     @Override
     public void prenotaLezionePT(String cf, 
-            String staffId, 
-            LocalDate data, 
-            String fascia) throws ConflittoOrarioException, 
-    							  ClienteNonAbbonatoException, 
-    							  DatiNonTrovatiException {
+            				     String staffId, 
+            				     LocalDate data, 
+            				     String fascia) throws ConflittoOrarioException, 
+    							  					   ClienteNonAbbonatoException, 
+    							  					   DatiNonTrovatiException {
 	
     	calendarioService.prenotaLezionePT(cf, staffId, data, fascia);
 	}
@@ -186,15 +196,6 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
         return calendarioService.findTurniByRange(inizio, fine);
         
     }
-    
-	//----------------------------------------------------------------
-
-    /*@Override
-    public List<Calendario> getEventiByDate(LocalDate data) {
-    	
-        return calendarioService.findEventiByDate(data);
-        
-    }*/
     
 	//----------------------------------------------------------------
 

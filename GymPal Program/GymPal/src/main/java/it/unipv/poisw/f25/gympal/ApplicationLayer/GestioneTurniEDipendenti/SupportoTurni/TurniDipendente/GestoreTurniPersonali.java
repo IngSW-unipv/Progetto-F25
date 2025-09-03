@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.Supporto.TurnoIndividuale;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.SupportoTurni.TurniDipendente.ClasseDiSupporto.TurnoIndividuale;
 import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
 
 public class GestoreTurniPersonali implements IGestoreTurniPersonali{
 	
-	private final IEstraiTurniDipendenteService estrattore;
+	private IEstraiTurniDipendenteService estrattore;
 	
     //------------------------------------------------------------
 
@@ -23,10 +23,10 @@ public class GestoreTurniPersonali implements IGestoreTurniPersonali{
     //------------------------------------------------------------
 
     @Override
-    public List<Turno> caricaTurni(String staffID) {
+    public List<Turno> caricaTurni(String staffId) {
     	
         Turno t = new Turno();
-        t.setRecMat(staffID);
+        t.setRecMat(staffId);
         return estrattore.turniPerSingoloDipendente(t);
         
     }
@@ -43,6 +43,7 @@ public class GestoreTurniPersonali implements IGestoreTurniPersonali{
         	
             LocalDate data = t.getData();
             if (staffId.equals(t.getRecMat())) {
+            	
                 risultati.add(new TurnoIndividuale(data, "Rec. Mattina", staffId));
                 
             }
@@ -60,6 +61,7 @@ public class GestoreTurniPersonali implements IGestoreTurniPersonali{
             }
             
             if (staffId.equals(t.getPtPom())) {
+            	
                 risultati.add(new TurnoIndividuale(data, "PT Pomeriggio", staffId));
                 
             }

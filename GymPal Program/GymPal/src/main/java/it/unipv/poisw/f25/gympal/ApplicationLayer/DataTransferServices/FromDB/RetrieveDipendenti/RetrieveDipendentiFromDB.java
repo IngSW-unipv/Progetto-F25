@@ -7,13 +7,13 @@ import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.Dipendente;
 
 public class RetrieveDipendentiFromDB implements IRetrieveDipendentiFromDB{
 	
-	private IPersistenceFacade facade;
+	private IPersistenceFacade persistence;
 	
     //----------------------------------------------------------------
 	
 	public RetrieveDipendentiFromDB(IPersistenceFacade facade) {
 		
-		this.facade = facade;
+		this.persistence = facade;
 		
 	}
 	
@@ -22,7 +22,7 @@ public class RetrieveDipendentiFromDB implements IRetrieveDipendentiFromDB{
 	@Override
 	public List<Dipendente> retrieve() {
 			
-		return facade.selectAllDipendenti();
+		return persistence.selectAllDipendenti();
 		
 	}
 	

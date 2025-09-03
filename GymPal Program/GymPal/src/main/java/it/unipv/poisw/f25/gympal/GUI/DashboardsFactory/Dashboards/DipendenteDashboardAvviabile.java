@@ -12,15 +12,17 @@ import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.Bundle.ICommon
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.CalendarioService;
 import it.unipv.poisw.f25.gympal.Dominio.CalendarioService.ICalendarioService;
 import it.unipv.poisw.f25.gympal.Dominio.staff.Dipendente;
+import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Dipendente.DipendenteController;
+import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Dipendente.DipendenteDashboardView;
 import it.unipv.poisw.f25.gympal.GUI.DashboardsFactory.Dashboards.CommonInterface.IDashboardAvviabile;
-import it.unipv.poisw.f25.gympal.GUI.Dipendente.DipendenteController;
-import it.unipv.poisw.f25.gympal.GUI.Dipendente.DipendenteDashboardView;
 import it.unipv.poisw.f25.gympal.persistence.IPersistenceFacade;
 import it.unipv.poisw.f25.gympal.persistence.PersistenceFacade;
 
 public class DipendenteDashboardAvviabile implements IDashboardAvviabile{
 	
-	private final Dipendente dipendente;
+	private Dipendente dipendente;
+	
+    //----------------------------------------------------------------
 	
 	public DipendenteDashboardAvviabile(Dipendente dipendente) {
 		
@@ -43,10 +45,10 @@ public class DipendenteDashboardAvviabile implements IDashboardAvviabile{
 		
 		/*Servizi comuni a più parti della GUI*/
         ICommonServicesBundleFactory factory = new CommonServicesBundleFactory(persistence, calendarioFacade);
-        ICommonServicesBundle serviziComuni = factory.create();
+        ICommonServicesBundle serviziComuni = factory.buildBundle();
 		
 		/*Servizio Estrazione Turni*/
-		IEstraiTurniDipendenteService estraiTurni = new EstraiTurniDipendenteService();
+		IEstraiTurniDipendenteService estraiTurni = new EstraiTurniDipendenteService(persistence);
 		IGestoreTurniPersonali gestoreTurni = new GestoreTurniPersonali(estraiTurni);
 		
 		/*Istanziazione controllore e relativa vista*/

@@ -7,10 +7,10 @@ import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.ParseEValiditaData.IDat
 
 public class CRUDCorsiSupportServices implements ICRUDCorsiSupportServices{
 	
-	private final IFasciaOrariaValidator fasciaValidator;
-    private final ISessioneCorsoValidator sessioneValidator;
-    private final IDateUtils dateUtils;
-    private final IDialogUtils dialogUtils;
+	private IFasciaOrariaValidator fasciaValidator;
+    private ISessioneCorsoValidator sessioneValidator;
+    private IDateUtils dateUtils;
+    private IDialogUtils dialogUtils;
         
 	//----------------------------------------------------------------
 

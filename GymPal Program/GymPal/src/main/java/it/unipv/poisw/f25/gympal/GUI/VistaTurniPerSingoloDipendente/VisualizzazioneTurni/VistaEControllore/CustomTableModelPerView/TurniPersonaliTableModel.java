@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.Supporto.TurnoIndividuale;
+import it.unipv.poisw.f25.gympal.ApplicationLayer.GestioneTurniEDipendenti.SupportoTurni.TurniDipendente.ClasseDiSupporto.TurnoIndividuale;
 
 public class TurniPersonaliTableModel extends AbstractTableModel {
     
