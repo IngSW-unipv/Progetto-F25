@@ -25,6 +25,7 @@ public class AppuntamentiPTPanel extends JPanel {
     /*Operazioni*/
     private JButton fissaBtn;
     private JButton annullaBtn;
+    private JButton pulisciBtn;
 
     /*Filtro*/
     private JTextField cfClienteField;
@@ -69,11 +70,13 @@ public class AppuntamentiPTPanel extends JPanel {
         JPanel btnPanel = new JPanel();
         fissaBtn = new JButton("Fissa Appuntamento");
         annullaBtn = new JButton("Annulla Appuntamento");
+        pulisciBtn = new JButton("Pulisci app.ti vecchi");
         
-        buttonSizeSetter.uniformButtonSize(fissaBtn, annullaBtn);
+        buttonSizeSetter.uniformButtonSize(fissaBtn, annullaBtn, pulisciBtn);
 
         btnPanel.add(fissaBtn);
         btnPanel.add(annullaBtn);
+        btnPanel.add(pulisciBtn);
 
         add(btnPanel, BorderLayout.SOUTH);
         
@@ -101,6 +104,14 @@ public class AppuntamentiPTPanel extends JPanel {
         
     }
 
+    //----------------------------------------------------------------
+    
+    public void addPulisciBtnListener(ActionListener listener) {
+    	
+    	pulisciBtn.addActionListener(listener);
+    	
+    }
+    
     //----------------------------------------------------------------
 
     public void addFiltroListener(ActionListener listener) {

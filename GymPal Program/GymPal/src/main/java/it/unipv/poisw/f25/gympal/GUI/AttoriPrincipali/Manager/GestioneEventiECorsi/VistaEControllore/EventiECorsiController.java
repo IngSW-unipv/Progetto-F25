@@ -22,7 +22,7 @@ import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneEventiECor
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneEventiECorsi.VistaEControllore.ControllerSupport.SessioniCorsiManager;
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneEventiECorsi.VistaEControllore.PannelliPerTabs.PannelloCorsi;
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneEventiECorsi.VistaEControllore.PannelliPerTabs.PannelloEventi;
-import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneEventiECorsi.VistaEControllore.PannelliPerTabs.TabellaSelezionabile;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.TableGiversCommonInterface.ITabellaSelezionabile;
 import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.Dipendente;
 
 public class EventiECorsiController {
@@ -178,7 +178,7 @@ public class EventiECorsiController {
 		
 	//----------------------------------------------------------------
 	
-	private void impostaDeselezioneClickFuoriTabella(TabellaSelezionabile pannello) {
+	private void impostaDeselezioneClickFuoriTabella(ITabellaSelezionabile pannello) {
 		
 	    JTable table = pannello.getTabella();
 

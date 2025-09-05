@@ -27,8 +27,9 @@ import javax.swing.text.DateFormatter;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.IFontChangeRegister;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.TableGiversCommonInterface.ITabellaSelezionabile;
 
-public class PannelloCorsi extends JPanel implements TabellaSelezionabile{
+public class PannelloCorsi extends JPanel implements ITabellaSelezionabile{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -151,10 +152,16 @@ public class PannelloCorsi extends JPanel implements TabellaSelezionabile{
 		
         /*############################################################*/
 		
-		JPanel btnPanel = new JPanel();
+		/*JPanel btnPanel = new JPanel();
 		
-		add(btnPanel, BorderLayout.SOUTH);
-		add(createGestioneSessioniPanel());
+		add(btnPanel, BorderLayout.SOUTH);*/
+        JScrollPane scrollableGestionePanel = new JScrollPane(createGestioneSessioniPanel());
+        scrollableGestionePanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollableGestionePanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollableGestionePanel.getVerticalScrollBar().setUnitIncrement(20);
+        scrollableGestionePanel.setAlignmentX(CENTER_ALIGNMENT);
+
+        add(scrollableGestionePanel);
 		
 		fontChangeRegister.register(this, buttonSizeSetter);
 		

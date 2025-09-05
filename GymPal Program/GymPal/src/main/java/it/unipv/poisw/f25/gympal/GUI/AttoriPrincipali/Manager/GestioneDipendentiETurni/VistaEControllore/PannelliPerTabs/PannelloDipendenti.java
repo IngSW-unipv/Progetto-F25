@@ -20,20 +20,21 @@ import javax.swing.event.ListSelectionListener;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.IFontChangeRegister;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.TableGiversCommonInterface.ITabellaSelezionabile;
 
-public class PannelloDipendenti extends JPanel{
+public class PannelloDipendenti extends JPanel implements ITabellaSelezionabile{
 
 	private static final long serialVersionUID = 1L;
 
-	/*Tabella & Filtro*/
+	/*Tabella*/
     private JTable dipendentiTable;
+    
+    /*Input*/
     private JTextField staffIdField;
     private JTextField nomeField;
     private JTextField cognomeField;
     private JTextField contattoField;
     private JTextField cittaField;
-    
-    /*Input*/
     private JComboBox<String> ruoloComboBox;
 
     /*Operazioni*/
@@ -51,15 +52,28 @@ public class PannelloDipendenti extends JPanel{
     public PannelloDipendenti(IDynamicButtonSizeSetter buttonSizeSetter,
     						  IFontChangeRegister fontChangeRegister) {
     	
+    	/*Servizi*/
         this.buttonSizeSetter = buttonSizeSetter;
 
+        /*Layout Pannello principale*/
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createCompoundBorder(
                   BorderFactory.createLineBorder(Color.GRAY),
                   new EmptyBorder(10, 10, 10, 10)));
 
+        /*Costruzione contenuto pannello*/
         initTable();
-        add(createGestioneDipendentiPanel());
+        
+        JScrollPane scrollableGestionePanel = new JScrollPane(createGestioneDipendentiPanel());
+        scrollableGestionePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scrollableGestionePanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollableGestionePanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        scrollableGestionePanel.getVerticalScrollBar().setUnitIncrement(20);
+
+        add(scrollableGestionePanel);
+        
+        /*Sottoscrizione a meccanismo cambio-font*/
         fontChangeRegister.register(this, buttonSizeSetter);
         
     }
@@ -136,11 +150,14 @@ public class PannelloDipendenti extends JPanel{
 
     //------------------------------------------------------------
 
-    public JTable getDipendentiTable() {
+    @Override
+    public JTable getTabella() {return dipendentiTable;}
+    
+    /*public JTable getDipendentiTable() {
     	
         return dipendentiTable;
         
-    }
+    }*/
     
     //------------------------------------------------------------
 

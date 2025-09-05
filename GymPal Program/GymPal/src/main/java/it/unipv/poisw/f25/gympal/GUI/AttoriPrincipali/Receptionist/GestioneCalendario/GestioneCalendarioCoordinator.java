@@ -23,7 +23,7 @@ import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.GestioneCalen
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.GestioneCalendario.DTOs.Caching.CalendarioSettimanaleCachesBuilder;
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.GestioneCalendario.DTOs.Handlers.DTOHandlerCalendarioSettimanale;
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.GestioneCalendario.DTOs.Handlers.SecondaryHandlers.TurniHandler;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.CommonInterfaces.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.SimulateOps.SimulazioneOperazione;
 import it.unipv.poisw.f25.gympal.persistence.beans.AppuntamentoPTBean.AppuntamentoPT;

@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import it.unipv.poisw.f25.gympal.ApplicationLayer.ServiziGenerali.Bundle.ICommonServicesBundle;
 import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LoginScreen.LoginController;
 import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LoginScreen.LoginView;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.CommonInterfaces.DashboardsCommonInterface.IDashboard;
 
 public class LogoutConfirmationController {
     

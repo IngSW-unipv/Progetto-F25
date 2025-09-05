@@ -15,23 +15,26 @@ import it.unipv.poisw.f25.gympal.persistence.beans.CalendarioBean.Calendario;
 
 public class EventiGenericiManager {
 	
-	/* Servizi */
-    private final IEventiCRUDFacadeService eventiService;
+    /*Pannello*/
+    private PannelloEventi eventiPanel;
+    
+    /*Modello Tabella*/
+    private EventiTableModel tableModel;
+    
+	/*Servizi*/
+    private IEventiCRUDFacadeService eventiService;
 
-    /* Supporti */
-    private final ICRUDEventiSupportServices supportUtils;
-
-    /* GUI */
-    private final PannelloEventi eventiPanel;
+    /*Supporto*/
+    private ICRUDEventiSupportServices supportoGestionEventi;
 
     // ----------------------------------------------------------------
 
     public EventiGenericiManager(IEventiCRUDFacadeService eventiService,
-    							 ICRUDEventiSupportServices supportUtils,
+    							 ICRUDEventiSupportServices supportoGestionEventi,
                                  PannelloEventi eventiPanel) {
     	
         this.eventiService = eventiService;
-        this.supportUtils = supportUtils;
+        this.supportoGestionEventi = supportoGestionEventi;
         this.eventiPanel = eventiPanel;
     }
 
@@ -46,32 +49,32 @@ public class EventiGenericiManager {
         String msg = eventiPanel.getMessaggio();
         String destinatario = eventiPanel.getDestinatario();
 
-        if (!supportUtils.getEventoValidator()
+        if (!supportoGestionEventi.getEventoValidator()
         				 .campiObbligatoriCompilati(nomeEvento, 
         						 					dataStr, 
         						 					orainizioStr, orafineStr)) {
-            supportUtils.getDialogUtils().mostraErrore("Tutti i campi "
+            supportoGestionEventi.getDialogUtils().mostraErrore("Tutti i campi "
             										 + "obbligatori devono essere"
             										 + " compilati.");
             return;
             
         }
 
-        LocalDate data = supportUtils.getDateUtils().parseData(dataStr);
-        LocalTime inizio = supportUtils.getOraUtils().parseOra(orainizioStr);
-        LocalTime fine = supportUtils.getOraUtils().parseOra(orafineStr);
+        LocalDate data = supportoGestionEventi.getDateUtils().parseData(dataStr);
+        LocalTime inizio = supportoGestionEventi.getOraUtils().parseOra(orainizioStr);
+        LocalTime fine = supportoGestionEventi.getOraUtils().parseOra(orafineStr);
 
         if (data == null || inizio == null || fine == null) {
         	
-            supportUtils.getDialogUtils().mostraErrore("Formato data o ora "
+            supportoGestionEventi.getDialogUtils().mostraErrore("Formato data o ora "
             										 + "non valido.");
             return;
             
         }
 
-        if (!supportUtils.getOraUtils().isRangeValido(inizio, fine)) {
+        if (!supportoGestionEventi.getOraUtils().isRangeValido(inizio, fine)) {
         	
-            supportUtils.getDialogUtils().mostraErrore("L'orario di fine deve essere"
+            supportoGestionEventi.getDialogUtils().mostraErrore("L'orario di fine deve essere"
             										 + " successivo a quello di "
             										 + "inizio.");
             return;
@@ -83,12 +86,12 @@ public class EventiGenericiManager {
 
         if (success) {
         	
-            supportUtils.getDialogUtils().mostraInfo("Evento creato con successo.");
+            supportoGestionEventi.getDialogUtils().mostraInfo("Evento creato con successo.");
             refreshTabellaEventi();
             
         } else {
         	
-            supportUtils.getDialogUtils()
+            supportoGestionEventi.getDialogUtils()
             			.mostraErrore("Errore nella creazione dell'evento.");
             
         }
@@ -103,7 +106,7 @@ public class EventiGenericiManager {
         
         if (selezionato == null) {
         	
-            supportUtils.getDialogUtils()
+            supportoGestionEventi.getDialogUtils()
             			.mostraInfo("Seleziona un evento da modificare.");
             return;
             
@@ -116,34 +119,34 @@ public class EventiGenericiManager {
         String nuovoMsg = eventiPanel.getMessaggio();
         String nuovoDestinatario = eventiPanel.getDestinatario();
 
-        if (!supportUtils.getEventoValidator()
+        if (!supportoGestionEventi.getEventoValidator()
         				 .campiObbligatoriCompilati(nuovoNome, nuovaDataStr, 
         						 					nuovaOraInizioStr, 
         						 					nuovaOraFineStr)) {
         	
-            supportUtils.getDialogUtils()
+            supportoGestionEventi.getDialogUtils()
             			.mostraErrore("Tutti i campi obbligatori devono essere "
             					    + "compilati.");
             return;
             
         }
 
-        LocalDate nuovaData = supportUtils.getDateUtils().parseData(nuovaDataStr);
-        LocalTime nuovaOraInizio = supportUtils.getOraUtils().parseOra(nuovaOraInizioStr);
-        LocalTime nuovaOraFine = supportUtils.getOraUtils().parseOra(nuovaOraFineStr);
+        LocalDate nuovaData = supportoGestionEventi.getDateUtils().parseData(nuovaDataStr);
+        LocalTime nuovaOraInizio = supportoGestionEventi.getOraUtils().parseOra(nuovaOraInizioStr);
+        LocalTime nuovaOraFine = supportoGestionEventi.getOraUtils().parseOra(nuovaOraFineStr);
 
         if (nuovaData == null || nuovaOraInizio == null || nuovaOraFine == null) {
         	
-            supportUtils.getDialogUtils()
+            supportoGestionEventi.getDialogUtils()
             			.mostraErrore("Formato data o ora non valido.");
             return;
             
         }
 
-        if (!supportUtils.getOraUtils()
+        if (!supportoGestionEventi.getOraUtils()
         				 .isRangeValido(nuovaOraInizio, nuovaOraFine)) {
         	
-            supportUtils.getDialogUtils().mostraErrore("L'orario di fine deve essere"
+            supportoGestionEventi.getDialogUtils().mostraErrore("L'orario di fine deve essere"
             		                                 + " successivo a quello di "
             		                                 + "inizio.");
             return;
@@ -158,13 +161,13 @@ public class EventiGenericiManager {
                 nuovoMsg, nuovoDestinatario);
 
         if (success) {
-            supportUtils.getDialogUtils()
+            supportoGestionEventi.getDialogUtils()
             			.mostraInfo("Evento modificato con successo.");
             refreshTabellaEventi();
             
         } else {
         	
-            supportUtils.getDialogUtils()
+            supportoGestionEventi.getDialogUtils()
             			.mostraErrore("Errore nella modifica dell'evento.");
             
         }
@@ -179,13 +182,13 @@ public class EventiGenericiManager {
         
         if (selezionato == null) {
         	
-            supportUtils.getDialogUtils()
+            supportoGestionEventi.getDialogUtils()
             			.mostraInfo("Seleziona un evento da cancellare.");
             return;
             
         }
 
-        int conferma = supportUtils.getDialogUtils()
+        int conferma = supportoGestionEventi.getDialogUtils()
         						   .conferma("Vuoi davvero cancellare l'evento \"" 
         								   	+ selezionato.getNomeEvento() + "\"?",
         								     "Conferma cancellazione");
@@ -203,14 +206,14 @@ public class EventiGenericiManager {
 
         if (success) {
         	
-            supportUtils.getDialogUtils()
+            supportoGestionEventi.getDialogUtils()
             		    .mostraInfo("Evento cancellato con successo.");
             refreshTabellaEventi();
             eventiPanel.pulisciCampi();
             
         } else {
         	
-            supportUtils.getDialogUtils()
+            supportoGestionEventi.getDialogUtils()
             			.mostraErrore("Errore durante la cancellazione.");
             
         }
@@ -221,7 +224,7 @@ public class EventiGenericiManager {
 
     public void onSelezioneRiga() {
     	
-        JTable tabella = eventiPanel.getEventiTable();
+        JTable tabella = eventiPanel.getTabella();
         int viewRow = tabella.getSelectedRow();
 
         if (viewRow == -1) {
@@ -232,8 +235,8 @@ public class EventiGenericiManager {
         }
 
         int modelRow = tabella.convertRowIndexToModel(viewRow);
-        EventiTableModel model = (EventiTableModel) tabella.getModel();
-        Calendario evento = model.getEventoAt(modelRow);
+        Calendario evento = tableModel.getEventoAt(modelRow);
+
 
         // Verifica nullità e formattazione campi in modo sicuro
         String data = evento.getDataEvento() != null ? evento.getDataEvento()
@@ -258,7 +261,7 @@ public class EventiGenericiManager {
 
     public void onPulisciEventiVecchi() {
     	
-        int conferma = supportUtils.getDialogUtils()
+        int conferma = supportoGestionEventi.getDialogUtils()
         						   .conferma(
                   "Questa operazione eliminerà tutti gli eventi precedenti "
                 + "alla data odierna.\nProcedere?",
@@ -270,14 +273,14 @@ public class EventiGenericiManager {
 
         if (success) {
         	
-            supportUtils.getDialogUtils()
+            supportoGestionEventi.getDialogUtils()
             			.mostraInfo("Eventi vecchi eliminati con successo.");
             refreshTabellaEventi();
             eventiPanel.pulisciCampi();
             
         } else {
         	
-            supportUtils.getDialogUtils()
+            supportoGestionEventi.getDialogUtils()
             			.mostraErrore("Errore durante la pulizia.");
             
         }
@@ -293,23 +296,23 @@ public class EventiGenericiManager {
 
         try {
         	
-            LocalDate inizio = inizioStr.isEmpty() ? null : supportUtils.getDateUtils()
+            LocalDate inizio = inizioStr.isEmpty() ? null : supportoGestionEventi.getDateUtils()
             															.parseData(inizioStr);
-            LocalDate fine = fineStr.isEmpty() ? null : supportUtils.getDateUtils()
+            LocalDate fine = fineStr.isEmpty() ? null : supportoGestionEventi.getDateUtils()
             														.parseData(fineStr);
 
             if ((inizio != null && fine == null) || 
             	(inizio == null && fine != null)) {
             	
-                supportUtils.getDialogUtils()
+                supportoGestionEventi.getDialogUtils()
                             .mostraInfo("Inserisci entrambe le date o nessuna.");
                 return;
                 
             }
 
-            if (!supportUtils.getDateUtils().isRangeValido(inizio, fine)) {
+            if (!supportoGestionEventi.getDateUtils().isRangeValido(inizio, fine)) {
             	
-                 supportUtils.getDialogUtils()
+                 supportoGestionEventi.getDialogUtils()
                              .mostraInfo("La data fine non può precedere quella"
                              		   + " d'inizio.");
                 return;
@@ -320,9 +323,9 @@ public class EventiGenericiManager {
             if (inizio == null && fine == null) {
             	
                 // Nessun filtro: mostra eventi del mese corrente
-                LocalDate start = supportUtils.getDateRangeUtils()
+                LocalDate start = supportoGestionEventi.getDateRangeUtils()
                 							  .getInizioMeseCorrente();
-                LocalDate end = supportUtils.getDateRangeUtils()
+                LocalDate end = supportoGestionEventi.getDateRangeUtils()
                 							.getFineMeseCorrente();
                 eventi = eventiService.findEventiByRange(start, end);
                 
@@ -333,11 +336,11 @@ public class EventiGenericiManager {
                 
             }
 
-            eventiPanel.getEventiTable()
-                       .setModel(new EventiTableModel(eventi));
+            tableModel = new EventiTableModel(eventi);
+            eventiPanel.getTabella().setModel(tableModel);
 
         } catch (Exception e) {
-            supportUtils.getDialogUtils()
+            supportoGestionEventi.getDialogUtils()
                         .mostraErrore("Errore durante il caricamento eventi:\n" 
                         			 + e.getMessage());
         }
@@ -348,13 +351,16 @@ public class EventiGenericiManager {
 
     private Calendario getEventoSelezionato() {
     	
-        JTable tabella = eventiPanel.getEventiTable();
+        JTable tabella = eventiPanel.getTabella();
         int riga = tabella.getSelectedRow();
-        if (riga == -1) return null;
+        if (riga == -1) {return null;}
 
+        /* Il metodo "convertRowIndexToModel" assicura la corretta mappatura
+         * dell'indice di una riga a video con l'indice della medesima riga nel
+         * table-model, a prescindere da come le righe siano ordinate a video. */
         int modelRow = tabella.convertRowIndexToModel(riga);
-        EventiTableModel model = (EventiTableModel) tabella.getModel();
-        return model.getEventoAt(modelRow);
+        return tableModel.getEventoAt(modelRow);
+
         
     }
 

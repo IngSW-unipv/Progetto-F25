@@ -12,19 +12,20 @@ public class TurnoTableModel extends AbstractTableModel{
 	
 	private static final long serialVersionUID = 1L;
 
-    private final List<Turno> turni;
+    private List<Turno> turni;
     
     private final String[] columnNames = {
         "Data", "Rec. Mattina", "Rec. Pomeriggio", "PT Mattina", "PT Pomeriggio"
     };
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private final DateTimeFormatter formatter;
 
     //------------------------------------------------------------
     
     public TurnoTableModel() {
     	
         this.turni = new ArrayList<>();
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         
     }
     
@@ -33,6 +34,7 @@ public class TurnoTableModel extends AbstractTableModel{
     public TurnoTableModel(List<Turno> turni) {
     	
         this.turni = new ArrayList<>(turni);
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         
     }
     

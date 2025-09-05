@@ -27,8 +27,9 @@ import javax.swing.text.DateFormatter;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.IFontChangeRegister;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.TableGiversCommonInterface.ITabellaSelezionabile;
 
-public class PannelloTurni extends JPanel{
+public class PannelloTurni extends JPanel implements ITabellaSelezionabile{
 
 	private static final long serialVersionUID = 1L;
 
@@ -59,17 +60,29 @@ public class PannelloTurni extends JPanel{
     public PannelloTurni(IDynamicButtonSizeSetter buttonSizeSetter,
     					 IFontChangeRegister fontChangeRegister) {
     	
+    	/*Servizi*/
         this.buttonSizeSetter = buttonSizeSetter;
 
+        /*Layout Pannello principale*/
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createCompoundBorder(
                   BorderFactory.createLineBorder(Color.GRAY),
                   new EmptyBorder(10, 10, 10, 10)));
 
+        /*Costruzione contenuto pannello*/
         initFiltroPanel();
         initTable();
-        add(createGestioneTurniPanel());
         
+        JScrollPane scrollableGestionePanel = new JScrollPane(createGestioneTurniPanel());
+        scrollableGestionePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scrollableGestionePanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollableGestionePanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        scrollableGestionePanel.getVerticalScrollBar().setUnitIncrement(20);
+        
+        add(scrollableGestionePanel);
+        
+        /*Sottoscrizione a meccanismo cambio-font*/
         fontChangeRegister.register(this, buttonSizeSetter);
         
     }
@@ -200,11 +213,14 @@ public class PannelloTurni extends JPanel{
 
     //------------------------------------------------------------
 
-    public JTable getTurniTable() {
+    @Override
+    public JTable getTabella() {return turniTable;}
+    
+    /*public JTable getTurniTable() {
     	
         return turniTable;
         
-    }
+    }*/
     
     //------------------------------------------------------------
 

@@ -186,10 +186,11 @@ public class RettificaInfoView extends JPanel implements IRettificaInfoView{
 
     private JSplitPane buildEditAndInsertSection() {
     	
-        JPanel anagraficaPanel = buildAnagraficaPanel();
+    	JScrollPane anagraficaScroll = new JScrollPane(buildAnagraficaPanel());
         JPanel modReinsertPanel = buildSaveAndReinsertPanel();
 
-        JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(anagraficaPanel), modReinsertPanel);
+        JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
+        								  anagraficaScroll, modReinsertPanel);
         SwingUtilities.invokeLater(() -> split.setDividerLocation(0.9));
         split.setEnabled(false);
 

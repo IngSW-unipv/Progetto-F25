@@ -11,8 +11,9 @@ import it.unipv.poisw.f25.gympal.Dominio.staff.Dipendente;
 import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LogoutView.ILogoutConfirmationView;
 import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LogoutView.LogoutConfirmationController;
 import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LogoutView.LogoutConfirmationView;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.CommonInterfaces.ControllersCommonInterface.IRegistraEMostraSchermate;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.CommonInterfaces.DashboardsCommonInterface.IDashboard;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.VisualizzazioneTurni.IVisualizzaTurniCoordinator;
 import it.unipv.poisw.f25.gympal.GUI.VistaTurniPerSingoloDipendente.VisualizzazioneTurni.VisualizzaTurniCoordinator;
 import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
@@ -52,7 +53,7 @@ public class DipendenteController implements IRegistraEMostraSchermate{
     	/*Oggetto contenente "staffID"*/
     	this.dipendente = dipendente;
     	
-    	/**/
+    	/*Inizializzazioni*/
     	registraAzioniPulsanti();
         inizializzaSchermateStatiche();
     	
@@ -79,7 +80,8 @@ public class DipendenteController implements IRegistraEMostraSchermate{
     
     private void inizializzaSchermateStatiche() {
 
-        logoutView = new LogoutConfirmationView();
+        logoutView = new LogoutConfirmationView(serviziComuni.getFontChangeRegister(),
+        								        new DynamicButtonSizeSetter());
         dipDashView.registraSchermata("LOGOUT_VIEW", logoutView.getMainPanel());
         
     }

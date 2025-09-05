@@ -26,8 +26,9 @@ import javax.swing.text.DateFormatter;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.IFontChangeRegister;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.TableGiversCommonInterface.ITabellaSelezionabile;
 
-public class PannelloEventi extends JPanel implements TabellaSelezionabile{
+public class PannelloEventi extends JPanel implements ITabellaSelezionabile{
 
 	private static final long serialVersionUID = 1L;
 
@@ -68,7 +69,15 @@ public class PannelloEventi extends JPanel implements TabellaSelezionabile{
 
         initFiltroPanel();
         initTable();
-        add(createGestioneEventiPanel());
+        
+        JScrollPane scrollableGestionePanel = new JScrollPane(createGestioneEventiPanel());
+        scrollableGestionePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scrollableGestionePanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollableGestionePanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        scrollableGestionePanel.getVerticalScrollBar().setUnitIncrement(20);
+        
+        add(scrollableGestionePanel);
         
         fontChangeRegister.register(this, buttonSizeSetter);
         
@@ -194,11 +203,11 @@ public class PannelloEventi extends JPanel implements TabellaSelezionabile{
     @Override
     public JTable getTabella() {return eventiTable;}
 
-    public JTable getEventiTable() {
+    /*public JTable getEventiTable() {
     	
         return eventiTable;
         
-    }
+    }*/
     
 	//----------------------------------------------------------------
 

@@ -136,6 +136,15 @@ public class CalendarioFacadeService implements ICalendarioFacadeService{
 	//----------------------------------------------------------------
     
     @Override
+    public boolean pulisciAppuntamentiVecchi() {
+    	
+    	return calendarioService.pulisciLezioniVecchie();
+    	
+    }
+    
+	//----------------------------------------------------------------
+    
+    @Override
     public List<AppuntamentoPT> getAppuntamentiPT(String cf){
     	
     	return calendarioService.findLezioniPTByCliente(cf);

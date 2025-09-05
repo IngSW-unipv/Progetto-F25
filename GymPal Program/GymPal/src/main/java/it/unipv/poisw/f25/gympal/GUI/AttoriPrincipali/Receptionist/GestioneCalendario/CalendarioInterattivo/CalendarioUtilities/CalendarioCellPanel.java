@@ -13,7 +13,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.IFontChangeRegister;
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.GestioneCalendario.DTOs.IDatiCellaCalendarioDTO;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
 
 public class CalendarioCellPanel extends JPanel {
 
@@ -45,7 +47,9 @@ public class CalendarioCellPanel extends JPanel {
 	
 	//----------------------------------------------------------------
 		
-	public CalendarioCellPanel(LocalDate data, int ora, int minuti) {
+	public CalendarioCellPanel(LocalDate data, int ora, int minuti,
+							   IFontChangeRegister fontChangeRegister,
+							   IDynamicButtonSizeSetter buttonSizeSetter) {
 		
 	    this.data = data;
 	    this.ora = ora;
@@ -104,6 +108,8 @@ public class CalendarioCellPanel extends JPanel {
 	    button.setFocusable(false);
 	    button.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 	    button.setPreferredSize(new Dimension(180, 80));
+	    
+	    buttonSizeSetter.uniformButtonSize(button);
 
 	    /*Bottone posto in primo piano, sopra le fasce*/
 	    GridBagConstraints gbc = new GridBagConstraints();
@@ -113,6 +119,7 @@ public class CalendarioCellPanel extends JPanel {
 	    gbc.fill = GridBagConstraints.NONE;
 	    add(button, gbc);
 
+	    fontChangeRegister.register(this, buttonSizeSetter);
 	    
 	}
 

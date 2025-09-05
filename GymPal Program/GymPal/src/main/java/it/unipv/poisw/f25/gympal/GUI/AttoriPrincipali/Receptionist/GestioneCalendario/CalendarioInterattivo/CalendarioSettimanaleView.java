@@ -52,6 +52,7 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
     
     /*Servizi*/
     private IDynamicButtonSizeSetter buttonSizeSetter;
+    private IFontChangeRegister fontChangeRegister;
     
 	//----------------------------------------------------------------
 
@@ -59,6 +60,7 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
     								 IFontChangeRegister fontChangeRegister) {
     	
     	buttonSizeSetter = setter;
+    	this.fontChangeRegister = fontChangeRegister;
     	
         setLayout(new BorderLayout());
 
@@ -167,7 +169,9 @@ public class CalendarioSettimanaleView extends JPanel implements ICalendarioSett
 
                     LocalDate giornoData = dateSettimana[giorno];
                     CalendarioCellPanel cella = new CalendarioCellPanel(giornoData,
-                    												    ora, minuti);
+                    												    ora, minuti,
+                    												    fontChangeRegister,
+                    												    buttonSizeSetter);
                     
                     cella.addButtonListener(cellClickListener);
                     griglia.add(cella, gbc);

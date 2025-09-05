@@ -22,9 +22,10 @@ import javax.swing.JSplitPane;
 import javax.swing.plaf.FontUIResource;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.FontManager.IFontManager;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.CommonInterfaces.DashboardsCommonInterface.IDashboard;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.CommonInterfaces.FontConstantsCommonInterface.IFontConstants;
 
-public class ReceptionistDashboardView extends JFrame implements IDashboard {
+public class ReceptionistDashboardView extends JFrame implements IDashboard, IFontConstants {
 
     private static final long serialVersionUID = 1L;
 	
@@ -46,7 +47,7 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
     private JButton corsiEdAppuntamentiButton;
     private JButton turniPersonaliButton;
 
-    // Mappa interna per associare i comandi alle azioni
+    // Mappa interna per associare comandi ad azioni
     private Map<String, Runnable> azioniComandi = new HashMap<>();
     
     /*ComboBox per selezione dimensioni font*/
@@ -82,8 +83,8 @@ public class ReceptionistDashboardView extends JFrame implements IDashboard {
 
         
         /*Selezione dimensioni font*/////////////////////////////
-        fontSizeSelector = new JComboBox<>(new Integer[]{12, 14, 15, 16, 18, 20, 22, 24});
-        fontSizeSelector.setSelectedItem(15); // default
+        fontSizeSelector = new JComboBox<>(IFontConstants.FONT_SIZES);
+        fontSizeSelector.setSelectedItem(IFontConstants.DEFAULT_FONT_SIZE); // default
         /////////////////////////////////////////////////////////
          
         pannelloSinistro = new JPanel();

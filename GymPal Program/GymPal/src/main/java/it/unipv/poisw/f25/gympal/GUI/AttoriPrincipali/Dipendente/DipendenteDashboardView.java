@@ -22,29 +22,31 @@ import javax.swing.JSplitPane;
 import javax.swing.plaf.FontUIResource;
 
 import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.FontManager.IFontManager;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.CommonInterfaces.DashboardsCommonInterface.IDashboard;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.CommonInterfaces.FontConstantsCommonInterface.IFontConstants;
 
-public class DipendenteDashboardView extends JFrame implements IDashboard {
+public class DipendenteDashboardView extends JFrame implements IDashboard, IFontConstants {
 
 
 	private static final long serialVersionUID = 1L;
 	
     //----------------------------------------------------------------
 	
+	/*CardLayout*/
     private CardLayout cardLayout;
     
+    /*Pannelli & SplitPanes*/
     private JPanel pannelloDestro;
     private JPanel pannelloSinistro;
     
-    private JButton mostraTurni;
-    private JButton logOutButton;
-    
     private JSplitPane operazioniECards;
     
+    /*Operazioni*/
+    private JButton mostraTurni;
+    private JButton logOutButton;
+            
+    // Mappa interna per associare comandi ad azioni
     private Map<String, Runnable> azioniComandi = new HashMap<>();
-    
-    /*Servizio per alterazioni dinamiche(run-time) del font*/
-    private IFontManager fontManager;
     
     /*ComboBox per selezione dimensioni font*/
     private JComboBox<Integer> fontSizeSelector;
@@ -52,8 +54,6 @@ public class DipendenteDashboardView extends JFrame implements IDashboard {
     //----------------------------------------------------------------
     
     public DipendenteDashboardView(IFontManager fontManager) {
-    	
-    	this.fontManager = fontManager;
     	
     	setTitle("Dipendente Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,8 +71,8 @@ public class DipendenteDashboardView extends JFrame implements IDashboard {
         logOutButton = new JButton("Log Out");
         
         /*Selezione dimensioni font*/////////////////////////////
-        fontSizeSelector = new JComboBox<>(new Integer[]{12, 14, 15, 16, 18, 20, 22, 24});
-        fontSizeSelector.setSelectedItem(15); // default
+        fontSizeSelector = new JComboBox<>(IFontConstants.FONT_SIZES);
+        fontSizeSelector.setSelectedItem(IFontConstants.DEFAULT_FONT_SIZE); // default
         /////////////////////////////////////////////////////////
         
         GridBagConstraints gbc = new GridBagConstraints();
@@ -113,7 +113,7 @@ public class DipendenteDashboardView extends JFrame implements IDashboard {
         	
             int size = (int) fontSizeSelector.getSelectedItem();
             Font newFont = new FontUIResource("Segoe UI", Font.PLAIN, size);
-            this.fontManager.updateFont(newFont);
+            fontManager.updateFont(newFont);
             refreshCurrentCard();
             aggiornaFontPannelloSinistro(newFont);
             
@@ -147,6 +147,15 @@ public class DipendenteDashboardView extends JFrame implements IDashboard {
     public void dispose() {
     	
         super.dispose();
+        
+    }
+	
+    //----------------------------------------------------------------	
+
+	@Override
+    public void registraSchermata(String nome, JPanel schermata) {
+
+        pannelloDestro.add(schermata, nome);
         
     }
 	
@@ -185,20 +194,12 @@ public class DipendenteDashboardView extends JFrame implements IDashboard {
         }
 
         for (ActionListener al : bottone.getActionListeners()) {
+        	
             bottone.removeActionListener(al);
             
         }
 
         bottone.addActionListener(e -> azione.run());
-        
-    }
-	
-    //----------------------------------------------------------------
-
-	@Override
-    public void registraSchermata(String nome, JPanel schermata) {
-
-        pannelloDestro.add(schermata, nome);
         
     }
 	
@@ -227,6 +228,7 @@ public class DipendenteDashboardView extends JFrame implements IDashboard {
     //----------------------------------------------------------------
     
     private void refreshCurrentCard() {
+    	
         for (Component comp : pannelloDestro.getComponents()) {
         	
             if (comp.isVisible()) {

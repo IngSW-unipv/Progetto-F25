@@ -16,8 +16,9 @@ import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.RettificaInfoClien
 import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LogoutView.ILogoutConfirmationView;
 import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LogoutView.LogoutConfirmationController;
 import it.unipv.poisw.f25.gympal.GUI.LoginELogout.LogoutView.LogoutConfirmationView;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.DashboardsCommonInterface.IDashboard;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.CommonInterfaces.ControllersCommonInterface.IRegistraEMostraSchermate;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.CommonInterfaces.DashboardsCommonInterface.IDashboard;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 
 public class ManagerController implements IRegistraEMostraSchermate{
 	
@@ -49,13 +50,17 @@ public class ManagerController implements IRegistraEMostraSchermate{
             				 IEventiESessioniServicesBundle eventiESessioniServices) {
 
    	
+    	/*Dashboard*/
 		this.manDashView = view;
+		
+		/*Servizi*/
 		this.serviziComuni = serviziComuni;
 		this.generatoreIDs = generatoreIDs;
 		this.calendarioService = calendarioFacade;
 		this.eventiESessioniServices = eventiESessioniServices;
     	this.turniDipServices = turniDipServices; 
 		
+    	/*Inizializzazioni*/
 		registraAzioniPulsanti();
 		inizializzaSchermateStatiche();
 		
@@ -83,7 +88,8 @@ public class ManagerController implements IRegistraEMostraSchermate{
     
     private void inizializzaSchermateStatiche() {
 
-        logoutView = new LogoutConfirmationView();
+        logoutView = new LogoutConfirmationView(serviziComuni.getFontChangeRegister(),
+        										new DynamicButtonSizeSetter());
         manDashView.registraSchermata("LOGOUT_VIEW", logoutView.getMainPanel());
         
     }

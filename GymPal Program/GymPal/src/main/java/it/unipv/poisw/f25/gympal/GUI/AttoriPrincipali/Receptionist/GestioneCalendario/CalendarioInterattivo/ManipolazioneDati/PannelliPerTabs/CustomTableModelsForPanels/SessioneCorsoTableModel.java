@@ -10,7 +10,7 @@ public class SessioneCorsoTableModel extends AbstractTableModel{
 	
 	private static final long serialVersionUID = 1L;
 
-    private final List<SessioneCorso> sessioni;
+    private List<SessioneCorso> sessioni;
     
     private final String[] columnNames = {
     		

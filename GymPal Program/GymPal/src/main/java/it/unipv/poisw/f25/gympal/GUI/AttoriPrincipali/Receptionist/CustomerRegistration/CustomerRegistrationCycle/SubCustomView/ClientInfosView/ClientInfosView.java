@@ -1,6 +1,8 @@
 package it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView;
 
 
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
@@ -91,8 +93,8 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
         /*Costruzione contenuto pannello*/
         initFields();
         JScrollPane upperScrollPane = buildUpperScrollPanel();
-        JPanel bottomPanel = buildBottomPanel();
-        this.userInfoSplitPanel = buildUserInfoSplitPane(upperScrollPane, bottomPanel);
+        JScrollPane bottomScrollPane = buildBottomPanel();
+        this.userInfoSplitPanel = buildUserInfoSplitPane(upperScrollPane, bottomScrollPane);
         this.navigationPanel = buildNavigationPanel();
         this.mainSplitPanel = buildMainSplitPane(userInfoSplitPanel, navigationPanel);
 
@@ -107,6 +109,7 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 	
     // Inizializzazione componenti base
     private void initFields() {
+    	
         nome = new JTextField(80);
         cognome = new JTextField(80);
         codiceFiscale = new JTextField(80);
@@ -159,6 +162,9 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
         upperPanel.setBorder(BorderFactory.createTitledBorder("Dati Anagrafici & idoneità:"));
 
         upperPanel.add(Box.createVerticalGlue());
+        
+        JPanel spinnerWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        spinnerWrapper.add(dateSpinner);
 
         JLabel titleLabel = new JLabel("-=Compila il Form con i dati del cliente=-");
         titleLabel.setAlignmentX(CENTER_ALIGNMENT);
@@ -169,7 +175,7 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
         upperPanel.add(Box.createVerticalStrut(10));
         upperPanel.add(campoEtichettato.creaCampoEtichettato("Cognome: ", cognome));
         upperPanel.add(Box.createVerticalStrut(10));
-        upperPanel.add(campoEtichettato.creaCampoEtichettato("Data di nascita (dd/MM/aa): ", dateSpinner));
+        upperPanel.add(campoEtichettato.creaCampoEtichettato("Data di nascita (dd/MM/aa): ", spinnerWrapper));
         upperPanel.add(Box.createVerticalStrut(10));
         upperPanel.add(campoEtichettato.creaCampoEtichettato("Codice Fiscale: ", codiceFiscale));
         upperPanel.add(Box.createVerticalStrut(10));
@@ -197,8 +203,8 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
 
         JScrollPane scrollPane = new JScrollPane(upperPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBorder(null);
         return scrollPane;
         
     }
@@ -206,7 +212,7 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
     //--------------------------------------------------------------
     
     // Parte inferiore: Permesso genitoriale
-    private JPanel buildBottomPanel() {
+    private JScrollPane buildBottomPanel() {
     	
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
@@ -228,15 +234,22 @@ public class ClientInfosView extends JPanel implements IClientInfosView{
         bottomPanel.add(Box.createVerticalStrut(10));
 
         bottomPanel.add(Box.createVerticalGlue());
+        
+        JScrollPane scrollableBottomPanel = new JScrollPane(bottomPanel);
+        scrollableBottomPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scrollableBottomPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollableBottomPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollableBottomPanel.setBorder(null);
+        scrollableBottomPanel.getVerticalScrollBar().setUnitIncrement(20);
 
-        return bottomPanel;
+        return scrollableBottomPanel;
         
     }
 
     //--------------------------------------------------------------
     
     // SplitPanel con top e bottom panel
-    private JSplitPane buildUserInfoSplitPane(JScrollPane upper, JPanel bottom) {
+    private JSplitPane buildUserInfoSplitPane(JScrollPane upper, JScrollPane bottom) {
     	
         JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         split.setTopComponent(upper);

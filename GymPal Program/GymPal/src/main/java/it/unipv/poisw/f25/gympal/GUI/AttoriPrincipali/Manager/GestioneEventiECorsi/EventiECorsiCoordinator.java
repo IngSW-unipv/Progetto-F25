@@ -11,7 +11,7 @@ import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.GenerazioneIDSessioneCo
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneEventiECorsi.VistaEControllore.EventiECorsiController;
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneEventiECorsi.VistaEControllore.EventiECorsiView;
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneEventiECorsi.VistaEControllore.IEventiECorsiView;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.CommonInterfaces.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 
 public class EventiECorsiCoordinator implements IEventiECorsiCoordinator{

@@ -37,6 +37,10 @@ public class ManipolazioneController {
     private ICalendarioFacadeService calendarioFacade;
     private IFasciaOrariaValidator fasciaValidator;
     private IDateUtils dateUtils;
+    
+    /*Modelli Tabelle*/
+    private SessioneCorsoTableModel sessioneCorsoTableModel;
+    private AppuntamentoPTTableModel appuntamentoPTTableModel;
 
     /*Managers*/
     private final SessioneCorsoManager corsoManager;
@@ -67,7 +71,7 @@ public class ManipolazioneController {
 	    
 	    this.ptManager = new AppuntamentoPTManager(calendarioFacade, 
 	    										   this.coordinator);
-		
+		/*Inizializzazione vista*/
         inizializzaPannelli();
         		
 	}
@@ -108,6 +112,8 @@ public class ManipolazioneController {
 	    apptPanel.addFissaBtnListener(e -> gestisciPrenotazionePT(apptPanel));
 
 	    apptPanel.addAnnullaBtnListener(e -> gestisciAnnullamentoPT(apptPanel));
+	    
+	    apptPanel.addPulisciBtnListener(e -> pulisciAppuntamentiPTVecchi());
 	    
 	    popolaStaffIdComboBox(apptPanel::setStaffIdOptions);
 	    
@@ -154,15 +160,14 @@ public class ManipolazioneController {
 	        
 	    }
 
-	    SessioneCorsoTableModel model = (SessioneCorsoTableModel) table.getModel();
-	    SessioneCorso sessione = model.getSessioneAt(selectedRow);
+	    SessioneCorso sessione = sessioneCorsoTableModel.getSessioneAt(selectedRow);
 
 	    String cfCliente = richiediCfCliente();
 	    if (cfCliente == null) return;
 
 	    try {
 	    	
-	        corsoManager.iscrivi(cfCliente, sessione);
+	        corsoManager.onIscrivi(cfCliente, sessione);
 	        refreshTables();
 	        mostraMessaggio("Iscrizione effettuata.");
 	        
@@ -205,13 +210,12 @@ public class ManipolazioneController {
 	        
 	    }
 
-	    SessioneCorsoTableModel model = (SessioneCorsoTableModel) table.getModel();
-	    SessioneCorso sessione = model.getSessioneAt(selectedRow);
+	    SessioneCorso sessione = sessioneCorsoTableModel.getSessioneAt(selectedRow);
 
 	    String cfCliente = richiediCfCliente();
 	    if (cfCliente == null) return;
 
-	    boolean success = corsoManager.annulla(cfCliente, sessione);
+	    boolean success = corsoManager.onAnnulla(cfCliente, sessione);
 
 	    if (success) {
 	    	
@@ -257,7 +261,7 @@ public class ManipolazioneController {
 	        }
 
 	        // Prenotazione
-	        ptManager.prenota(nuovoAppuntamento.getCf(),
+	        ptManager.onPrenota(nuovoAppuntamento.getCf(),
 	        				  nuovoAppuntamento);
 
 	        refreshTables();
@@ -289,7 +293,7 @@ public class ManipolazioneController {
 	
 	private void gestisciAnnullamentoPT(AppuntamentiPTPanel apptPanel) {
 		
-	    JTable table = apptPanel.getAppuntamentiTable();
+		JTable table = apptPanel.getAppuntamentiTable();
 	    int selectedRow = table.getSelectedRow();
 
 	    if (selectedRow == -1) {
@@ -299,13 +303,31 @@ public class ManipolazioneController {
 	        
 	    }
 
-	    AppuntamentoPTTableModel model = (AppuntamentoPTTableModel) table.getModel();
-	    AppuntamentoPT app = model.getAppuntamentoAt(selectedRow);
+	    AppuntamentoPT app = appuntamentoPTTableModel.getAppuntamentoAt(selectedRow);
 
-	    String cfCliente = richiediCfCliente();
-	    if (cfCliente == null) return;
+	    // Pre-compilazione con il CF del cliente
+	    String cfClientePredefinito = app.getCf();
 
-	    boolean success = ptManager.annulla(cfCliente, app);
+	    // Dialog con campo precompilato
+	    String cfCliente = (String) JOptionPane.
+	    							showInputDialog(apptPanel,
+	    											"Conferma o modifica il CF del cliente:",
+	    											"Conferma CF Cliente",
+	    											JOptionPane.PLAIN_MESSAGE,
+	    											null,
+	    											null,
+	    											cfClientePredefinito);
+
+	    // Annulla se il dialog è stato chiuso o se il campo è vuoto
+	    if (cfCliente == null || cfCliente.trim().isEmpty()) {
+	    	
+	        return;
+	        
+	    }
+
+	    cfCliente = cfCliente.trim();
+
+	    boolean success = ptManager.onAnnulla(cfCliente, app);
 
 	    if (success) {
 	    	
@@ -320,6 +342,26 @@ public class ManipolazioneController {
 	    
 	}
 
+	
+	//----------------------------------------------------------------
+	
+	private void pulisciAppuntamentiPTVecchi() {
+		
+		boolean success = ptManager.onPulisci();
+		
+	    if (success) {
+	    	
+	        refreshTables();
+	        mostraMessaggio("Rimossi vecchi appuntamenti.");
+	        
+	    } else {
+	    	
+	        mostraErrore("Nessun app.to precedente a data odierna.");
+	        
+	    }
+		
+	}
+	
 	
 	//----------------------------------------------------------------
 	
@@ -347,9 +389,6 @@ public class ManipolazioneController {
 	}
 	
 	//----------------------------------------------------------------
-	 
-    /* Popola table model con sessioni disponibili / appuntamenti esistenti
-     * tramite servizio esposto da coordinatore*/
 
 	private void refreshTables() {
 		
@@ -357,7 +396,6 @@ public class ManipolazioneController {
 	    refreshAppuntamentiPTTable();
 	    
 	}
-
 	
 	//----------------------------------------------------------------
 	
@@ -371,8 +409,9 @@ public class ManipolazioneController {
 	    
 	    try {
 	    	
-	        List<SessioneCorso> sessioni = corsoManager.recuperaSessioniDaStringhe(tipo, inizioStr, fineStr);
-	        corsiPanel.getSessioniTable().setModel(new SessioneCorsoTableModel(sessioni));
+	        List<SessioneCorso> sessioni = corsoManager.getSessioniFiltrate(tipo, inizioStr, fineStr);
+	        sessioneCorsoTableModel = new SessioneCorsoTableModel(sessioni);
+	        corsiPanel.getSessioniTable().setModel(sessioneCorsoTableModel);
 	        
 	    } catch (IllegalArgumentException ex) {
 	    	
@@ -404,8 +443,8 @@ public class ManipolazioneController {
 	        									.getAppuntamentiPT(cfCliente, staffId);
 	        
 	        /*Punto applicazione di table-model custom*/
-	        apptPanel.getAppuntamentiTable()
-	        		 .setModel(new AppuntamentoPTTableModel(appuntamenti));
+	        appuntamentoPTTableModel = new AppuntamentoPTTableModel(appuntamenti);
+	        apptPanel.getAppuntamentiTable().setModel(appuntamentoPTTableModel);
 	        
 	    } catch (Exception ex) {
 	    	

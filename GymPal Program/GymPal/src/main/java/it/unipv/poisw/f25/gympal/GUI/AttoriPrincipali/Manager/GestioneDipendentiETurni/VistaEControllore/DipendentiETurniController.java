@@ -24,6 +24,7 @@ import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneDipendenti
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneDipendentiETurni.VistaEControllore.PannelliPerTabs.PannelloDipendenti;
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneDipendentiETurni.VistaEControllore.PannelliPerTabs.PannelloTurni;
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.CustomerRegistration.CustomerRegistrationCycle.SubCustomView.ClientInfosView.ClientInfosViewHelpers.ValidazioneCampo;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.TableGiversCommonInterface.ITabellaSelezionabile;
 
 public class DipendentiETurniController implements IDipendentiChangeListener{
 	
@@ -188,30 +189,21 @@ public class DipendentiETurniController implements IDipendentiChangeListener{
     
     //----------------------------------------------------------------
 
-    private void impostaDeselezioneClickFuoriTabella(JPanel panel) {
-    	
-        panel.addMouseListener(new MouseAdapter() {
-        	
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            	
-                if (panel instanceof PannelloTurni) {
-                	
-                    JTable table = ((PannelloTurni) panel).getTurniTable();
-                    clearIfClickedOutside(table, e);
-                    
-                } else if (panel instanceof PannelloDipendenti) {
-                	
-                    JTable table = ((PannelloDipendenti) panel).getDipendentiTable();
-                    clearIfClickedOutside(table, e);
-                    
-                }
-                
-            }
-            
-        });
-        
-    }
+	private void impostaDeselezioneClickFuoriTabella(ITabellaSelezionabile pannello) {
+		
+	    JTable table = pannello.getTabella();
+
+	    ((JPanel) pannello).addMouseListener(new MouseAdapter() {
+	    	
+	        @Override
+	        public void mouseClicked(MouseEvent e) {
+	            clearIfClickedOutside(table, e);
+	            
+	        }
+	        
+	    });
+	    
+	}
 
 
     private void clearIfClickedOutside(JTable table, MouseEvent e) {
@@ -226,14 +218,6 @@ public class DipendentiETurniController implements IDipendentiChangeListener{
         }
         
     }
-
-    //----------------------------------------------------------------
-
-    /*private void mostraErrore(String msg) {
-    	
-        JOptionPane.showMessageDialog(null, msg, "Errore", JOptionPane.ERROR_MESSAGE);
-        
-    }*/
 
     //----------------------------------------------------------------
     
@@ -269,6 +253,5 @@ public class DipendentiETurniController implements IDipendentiChangeListener{
     }
     
     //----------------------------------------------------------------
-
 
 }

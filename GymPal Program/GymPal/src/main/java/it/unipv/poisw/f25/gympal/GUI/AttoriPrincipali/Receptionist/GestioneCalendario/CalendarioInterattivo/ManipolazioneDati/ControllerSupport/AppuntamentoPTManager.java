@@ -36,7 +36,7 @@ public class AppuntamentoPTManager {
 
 	//----------------------------------------------------------------
     
-    public void prenota(String cfCliente, AppuntamentoPT app) 
+    public void onPrenota(String cfCliente, AppuntamentoPT app) 
     					throws ConflittoOrarioException, 
     						   ClienteNonAbbonatoException, 
 	                           DatiNonTrovatiException {
@@ -48,7 +48,7 @@ public class AppuntamentoPTManager {
     
 	//----------------------------------------------------------------
 
-    public boolean annulla(String cfCliente, AppuntamentoPT app) {
+    public boolean onAnnulla(String cfCliente, AppuntamentoPT app) {
     	
         boolean success = calendarioFacade.annullaLezionePT(cfCliente, 
         												    app.getStaffId(), 
@@ -63,6 +63,14 @@ public class AppuntamentoPTManager {
         
         return success;
         
+    }
+    
+	//----------------------------------------------------------------
+    
+    public boolean onPulisci() {
+    	
+    	return calendarioFacade.pulisciAppuntamentiVecchi();
+    	
     }
     
 	//----------------------------------------------------------------

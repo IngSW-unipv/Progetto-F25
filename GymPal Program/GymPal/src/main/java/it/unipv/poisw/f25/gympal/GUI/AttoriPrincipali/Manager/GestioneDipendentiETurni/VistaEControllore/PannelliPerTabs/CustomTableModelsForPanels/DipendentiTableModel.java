@@ -11,7 +11,8 @@ public class DipendentiTableModel extends AbstractTableModel{
 
 	private static final long serialVersionUID = 1L;
 
-    private final List<Dipendente> dipendenti;
+    private List<Dipendente> dipendenti;
+    
     private final String[] columnNames = {
         "Staff ID", "Nome", "Cognome", "Contatto"
     };
@@ -149,6 +150,11 @@ public class DipendentiTableModel extends AbstractTableModel{
     public void clear() {
     	
         dipendenti.clear();
+        
+        /* Notifies all listeners that all cell values in the table's rows may have
+         * changed. The number of rows may also have changed and the JTable should
+         * redraw the table from scratch. The structure of the table (as in the 
+         * order of the columns) is assumed to be the same.*/
         fireTableDataChanged();
         
     }

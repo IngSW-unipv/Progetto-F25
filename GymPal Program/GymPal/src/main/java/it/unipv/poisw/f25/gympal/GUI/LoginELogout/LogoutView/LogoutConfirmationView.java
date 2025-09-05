@@ -6,6 +6,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import it.unipv.poisw.f25.gympal.ApplicationLayer.UtilityServices.GestioneFont.IFontChangeRegister;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.IDynamicButtonSizeSetter;
+
 public class LogoutConfirmationView extends JPanel implements ILogoutConfirmationView {
 
     private static final long serialVersionUID = 1L;
@@ -15,7 +18,9 @@ public class LogoutConfirmationView extends JPanel implements ILogoutConfirmatio
     
 	//----------------------------------------------------------------    
 
-    public LogoutConfirmationView() {
+    public LogoutConfirmationView(IFontChangeRegister fontChangeRegister,
+    							  IDynamicButtonSizeSetter buttonSizeSetter) {
+    	
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JLabel messageLabel = new JLabel("Sei sicuro di voler uscire?");
@@ -26,6 +31,8 @@ public class LogoutConfirmationView extends JPanel implements ILogoutConfirmatio
 
         cancelButton = new JButton("No");
         cancelButton.setAlignmentX(CENTER_ALIGNMENT);
+        
+        buttonSizeSetter.uniformButtonSize(confirmButton, cancelButton);
 
         add(Box.createVerticalGlue());
         add(messageLabel);
@@ -34,6 +41,10 @@ public class LogoutConfirmationView extends JPanel implements ILogoutConfirmatio
         add(Box.createVerticalStrut(10));
         add(cancelButton);
         add(Box.createVerticalGlue());
+        
+        /*Sottoscrizione a meccanismo cambio-font*/
+        fontChangeRegister.register(this, buttonSizeSetter);
+        
     }
     
 	//----------------------------------------------------------------

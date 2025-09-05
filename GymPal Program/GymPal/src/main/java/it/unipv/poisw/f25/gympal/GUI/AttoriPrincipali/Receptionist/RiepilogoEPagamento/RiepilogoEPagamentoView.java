@@ -40,7 +40,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	private JSplitPane secondSplitPanel; //Il pannello superiore coincide con "mainSplitPanel"
 	
 	/*Pannelli*/
-	private JPanel mainUpperPanel;
+	private JPanel mainUpperPanel; //Qui finiscono i dati Anagrafici
 	private JPanel mainBottomLeftPanel; //Qui finisce il riepilogo
 	private JPanel mainBottomRightPanel; //Opzioni per la factory che calcola i prezzi
 	private JPanel navigationPanel; //Qui finisce il pannello con il bottone "Intrietro"
@@ -107,7 +107,7 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	// Inizializzazione componenti vista
     private void initComponents() {
         
-        mainUpperPanel = new JPanel(new GridLayout(0, 2, 10, 10));
+        mainUpperPanel = new JPanel(new GridLayout(0, 2, 5, 5));
         mainUpperPanel.setBorder(BorderFactory.createCompoundBorder(
         	    		
         	            BorderFactory.createTitledBorder("Riepilogo Anagrafica:"),
@@ -187,9 +187,17 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 
     private void buildMainUpperPanel() {
     	
-        JPanel upperPanelContainer = new JPanel(new BorderLayout());
-        upperPanelContainer.add(mainUpperPanel, BorderLayout.CENTER);
-        mainSplitPanel.setTopComponent(upperPanelContainer);
+    	JScrollPane scrollPane = new JScrollPane(mainUpperPanel);
+
+        scrollPane.setBorder(null); 
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        // Impostare una dimensione preferita (altezza minima visibile)
+        scrollPane.setPreferredSize(new Dimension(100, 300));
+        scrollPane.setMinimumSize(new Dimension(100, 200));
+
+        mainSplitPanel.setTopComponent(scrollPane);
         
     }
     
@@ -295,10 +303,16 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 			 *il tipo. Alla fine è restituito un array avente tanti elementi quanti sono gli
 			 *elementi della lista convertita.*/
 			
-		JList<String> lista = new JList<>(selezione != null ? selezione.toArray(new String[0]) : new String[0]);
+		JList<String> lista = new JList<>(selezione != null ? 
+							  selezione.toArray(new String[0]) : new String[0]);
 		lista.setEnabled(false); //Listan NON modificabile
+		lista.setVisibleRowCount(2);
+		
+		JScrollPane scrollPane = new JScrollPane(lista);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(30);
+		scrollPane.getHorizontalScrollBar().setUnitIncrement(30);
 			
-		return new JScrollPane(lista);
+		return scrollPane;
 			
 	}
 	
@@ -338,6 +352,9 @@ public class RiepilogoEPagamentoView extends JPanel implements IRiepilogoEPagame
 	        labeledList(mainUpperPanel, "Componenti abbonamento selezionate: ", abbDTO.getSezioniAbbonamento());
 	        labeledList(mainUpperPanel, "Corsi selezionati: ", abbDTO.getCorsiSelezionati());
 
+	        mainUpperPanel.setPreferredSize(new Dimension(0, mainUpperPanel.getPreferredSize().height + 100));
+
+	        
 	        revalidate();
 	        repaint();
 	    }

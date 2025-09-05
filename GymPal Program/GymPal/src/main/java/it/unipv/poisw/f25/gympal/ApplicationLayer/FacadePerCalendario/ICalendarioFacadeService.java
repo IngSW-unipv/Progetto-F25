@@ -63,6 +63,10 @@ public interface ICalendarioFacadeService {
     
 	//----------------------------------------------------------------
     
+    public boolean pulisciAppuntamentiVecchi();
+    
+	//----------------------------------------------------------------
+    
     public List<AppuntamentoPT> getAppuntamentiPT(String cf);
     
     public List<AppuntamentoPT> getAppuntamentiPT(String cf, String staffId);

@@ -18,9 +18,16 @@ import it.unipv.poisw.f25.gympal.persistence.beans.TurnoBean.Turno;
 public class TurniManager {
 
     /* Servizi */
-    private final ITurniCRUDFacadeService turniService;
-    private final ICRUDTurniSupportServices support;
-    private final PannelloTurni turniPanel;
+    private ITurniCRUDFacadeService turniService;
+    private ICRUDTurniSupportServices support;
+    
+    /*Pannello*/
+    private PannelloTurni turniPanel;
+    
+    /*Modello Tabella*/
+    private TurnoTableModel tableModel;
+    
+    //------------------------------------------------------------
 
     public TurniManager(ITurniCRUDFacadeService turniService,
     					ICRUDTurniSupportServices support,
@@ -76,6 +83,8 @@ public class TurniManager {
                 LocalDate end = support.getDateRangeUtils()
                 					   .getFineMeseCorrente();
                 turni = turniService.findTurniByRange(start, end);
+                tableModel = new TurnoTableModel(turni);
+                turniPanel.getTabella().setModel(tableModel);
                 
             } else {
             	
@@ -84,7 +93,7 @@ public class TurniManager {
                 
             }
 
-            turniPanel.getTurniTable().setModel(new TurnoTableModel(turni));
+            turniPanel.getTabella().setModel(new TurnoTableModel(turni));
 
         } catch (DateTimeParseException ex) {
         	
@@ -152,7 +161,7 @@ public class TurniManager {
     
     public void onModificaTurno() {
     	
-        JTable tabella = turniPanel.getTurniTable();
+        JTable tabella = turniPanel.getTabella();
         int riga = tabella.getSelectedRow();
 
         if (riga == -1) {
@@ -163,8 +172,7 @@ public class TurniManager {
         }
 
         int modelRow = tabella.convertRowIndexToModel(riga);
-        TurnoTableModel model = (TurnoTableModel) tabella.getModel();
-        Turno turnoEsistente = model.getTurnoAt(modelRow);
+        Turno turnoEsistente = tableModel.getTurnoAt(modelRow);
 
         String dataStr = turniPanel.getDataTurno();
         String recMat = turniPanel.getRecMat();
@@ -219,7 +227,7 @@ public class TurniManager {
     
     public void onCancellaTurno() {
     	
-        JTable tabella = turniPanel.getTurniTable();
+        JTable tabella = turniPanel.getTabella();
         int riga = tabella.getSelectedRow();
 
         if (riga == -1) {
@@ -230,8 +238,7 @@ public class TurniManager {
         }
 
         int modelRow = tabella.convertRowIndexToModel(riga);
-        TurnoTableModel model = (TurnoTableModel) tabella.getModel();
-        Turno turno = model.getTurnoAt(modelRow);
+        Turno turno = tableModel.getTurnoAt(modelRow);
 
         int conferma = support.getDialogUtils().conferma(
                        "Vuoi davvero cancellare il turno del " + turno.getData() + "?",
@@ -258,7 +265,7 @@ public class TurniManager {
     
     public void onSelezioneRiga() {
     	
-        JTable tabella = turniPanel.getTurniTable();
+        JTable tabella = turniPanel.getTabella();
         int riga = tabella.getSelectedRow();
 
         if (riga == -1) {
@@ -269,8 +276,7 @@ public class TurniManager {
         }
 
         int modelRow = tabella.convertRowIndexToModel(riga);
-        TurnoTableModel model = (TurnoTableModel) tabella.getModel();
-        Turno turno = model.getTurnoAt(modelRow);
+        Turno turno = tableModel.getTurnoAt(modelRow);
 
         turniPanel.setDataTurno(turno.getData().toString());
         turniPanel.setRecMat(turno.getRecMat());

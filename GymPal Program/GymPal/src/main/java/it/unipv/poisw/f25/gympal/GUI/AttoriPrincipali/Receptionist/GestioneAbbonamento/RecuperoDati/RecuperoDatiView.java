@@ -1,5 +1,6 @@
 package it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Receptionist.GestioneAbbonamento.RecuperoDati;
 
+import java.awt.Component;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
@@ -8,6 +9,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -70,8 +72,8 @@ public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
         /*Costruzione contenuto pannello*/
         initFields();
         JPanel upperPanel = buildUpperPanel();
-        JPanel bottomPanel = buildBottomPanel();
-        this.userInfoSplitPanel = buildUserInfoSplitPanel(upperPanel, bottomPanel);
+        JScrollPane bottomScrollPane = buildBottomPanel();
+        this.userInfoSplitPanel = buildUserInfoSplitPanel(upperPanel, bottomScrollPane);
         this.navigationPanel = buildNavigationPanel();
         this.mainSplitPanel = buildMainSplitPanel(userInfoSplitPanel, navigationPanel);
 
@@ -142,7 +144,7 @@ public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
     //--------------------------------------------------------------
     
     // Pannello inferiore: visualizzazione dati estratti
-    private JPanel buildBottomPanel() {
+    private JScrollPane buildBottomPanel() {
     	
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
@@ -161,14 +163,22 @@ public class RecuperoDatiView extends JPanel implements IRecuperoDatiView{
         }
 
         bottomPanel.add(Box.createVerticalGlue());
-        return bottomPanel;
+        
+        JScrollPane scrollableBottomPanel = new JScrollPane(bottomPanel);
+        scrollableBottomPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scrollableBottomPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollableBottomPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollableBottomPanel.setBorder(null);
+        scrollableBottomPanel.getVerticalScrollBar().setUnitIncrement(20);
+
+        return scrollableBottomPanel;
         
     }
 
     //--------------------------------------------------------------
     
     // Split con pannello superiore e inferiore
-    private JSplitPane buildUserInfoSplitPanel(JPanel upper, JPanel bottom) {
+    private JSplitPane buildUserInfoSplitPanel(JPanel upper, JScrollPane bottom) {
     	
         JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         split.setTopComponent(upper);

@@ -13,7 +13,7 @@ import it.unipv.poisw.f25.gympal.Dominio.UtilityServices.GeneratoreStaffID.IStaf
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneDipendentiETurni.VistaEControllore.DipendentiETurniController;
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneDipendentiETurni.VistaEControllore.DipendentiETurniView;
 import it.unipv.poisw.f25.gympal.GUI.AttoriPrincipali.Manager.GestioneDipendentiETurni.VistaEControllore.IDipendentiETurniView;
-import it.unipv.poisw.f25.gympal.GUI.Utilities.ControllersCommonInterface.IRegistraEMostraSchermate;
+import it.unipv.poisw.f25.gympal.GUI.Utilities.CommonInterfaces.ControllersCommonInterface.IRegistraEMostraSchermate;
 import it.unipv.poisw.f25.gympal.GUI.Utilities.DynamicButtons.DynamicButtonSizeSetter;
 
 public class DipendentiETurniCoordinator implements IDipendentiETurniCoordinator{
@@ -25,7 +25,7 @@ public class DipendentiETurniCoordinator implements IDipendentiETurniCoordinator
     private ITurniCRUDFacadeService turniCRUDService;
     private ICRUDTurniSupportServices supportoCRUDTurni;
 	private IDipendentiCRUDFacadeService dipCRUDService;
-    private ICRUDDipendentiSupportServices supportpCRUDdip;
+    private ICRUDDipendentiSupportServices supportoCRUDdip;
     private IStaffIdGeneratorService generatoreStaffIDs;
     private ICampoValidabileFactory campovalidabileFactory;
     private IValidatoreCampi validatoreCampi;
@@ -44,7 +44,7 @@ public class DipendentiETurniCoordinator implements IDipendentiETurniCoordinator
     	this.turniCRUDService = turniDipServices.getTurniCRUD();
     	this.supportoCRUDTurni = turniDipServices.getTurniSupport();
     	this.dipCRUDService = turniDipServices.getDipCRUD();
-    	this.supportpCRUDdip = turniDipServices.getDipSupport();
+    	this.supportoCRUDdip = turniDipServices.getDipSupport();
     	this.generatoreStaffIDs = turniDipServices.getStaffIdGenerator();
     	this.campovalidabileFactory = serviziComuni.getCampoValidabileFactory();
     	this.validatoreCampi = serviziComuni.getValidatoreCampi();
@@ -98,7 +98,7 @@ public class DipendentiETurniCoordinator implements IDipendentiETurniCoordinator
 	@Override
 	public ICRUDDipendentiSupportServices getDipendentiCRUDSupportServices() {
 		
-		return supportpCRUDdip;
+		return supportoCRUDdip;
 		
 	}
 	

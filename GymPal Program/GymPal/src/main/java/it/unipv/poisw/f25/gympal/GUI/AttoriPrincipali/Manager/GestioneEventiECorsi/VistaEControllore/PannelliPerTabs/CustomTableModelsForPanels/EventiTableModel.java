@@ -11,21 +11,24 @@ public class EventiTableModel extends AbstractTableModel{
 	
 	private static final long serialVersionUID = 1L;
 
-	private final List<Calendario> eventi;
+	private List<Calendario> eventi;
 
 	private final String[] columnNames = {
 		"Nome Evento", "Data", "Ora Inizio", "Ora Fine", "Destinatario", "Messaggio"
 	};
 
 	// Formatters per LocalDate e LocalTime
-	private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+	private final DateTimeFormatter dateFormatter;
+	private final DateTimeFormatter timeFormatter;
 
 	//----------------------------------------------------------------
 
 	public EventiTableModel(List<Calendario> eventi) {
 		
 		this.eventi = eventi;
+		
+		dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 		
 	}
 
@@ -89,18 +92,25 @@ public class EventiTableModel extends AbstractTableModel{
 	//----------------------------------------------------------------
 
 	public Calendario getEventoAt(int row) {
+		
 		if (row >= 0 && row < eventi.size()) {
+			
 			return eventi.get(row);
+			
 		}
+		
 		return null;
+		
 	}
 	
 	//----------------------------------------------------------------
 
 	public void updateData(List<Calendario> nuoviEventi) {
+		
 		eventi.clear();
 		eventi.addAll(nuoviEventi);
 		fireTableDataChanged();
+		
 	}
 	
 	//----------------------------------------------------------------

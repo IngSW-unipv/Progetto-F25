@@ -20,11 +20,18 @@ import it.unipv.poisw.f25.gympal.persistence.beans.SessioneCorsoBean.SessioneCor
 
 public class SessioniCorsiManager {
 
+	/*Pannello*/
+	private PannelloCorsi corsiPanel;
+	
+	/*Modello Tabella*/
+	private SessioneCorsoTableModel tableModel;
+	
 	/*Servizi*/
-	private final ICorsiCRUDFacadeService gestioneSessioniService;
-    private final ICalendarioFacadeService calendarioService;
-    private final PannelloCorsi corsiPanel;
-    private final ICRUDCorsiSupportServices supportoCostruzioneCorsi;
+	private ICalendarioFacadeService calendarioService;
+	private ICorsiCRUDFacadeService gestioneSessioniService;
+	
+	/*Supporto*/
+    private ICRUDCorsiSupportServices supportoCostruzioneCorsi;
 
     /*Coordinatore*/
     private final IEventiECorsiCoordinator coordinator;
@@ -179,8 +186,7 @@ public class SessioniCorsiManager {
         }
 
         int modelRow = tabella.convertRowIndexToModel(rigaSelezionata);
-        SessioneCorsoTableModel model = (SessioneCorsoTableModel) tabella.getModel();
-        SessioneCorso sessione = model.getSessioneAt(modelRow);
+        SessioneCorso sessione = tableModel.getSessioneAt(modelRow);
         String id = sessione.getSessioneId();
 
         int conferma = supportoCostruzioneCorsi.getDialogUtils()
@@ -286,6 +292,39 @@ public class SessioniCorsiManager {
     }
 
 	//----------------------------------------------------------------
+    
+    public void onSelezioneRiga() {
+
+        JTable tabella = corsiPanel.getTabella();
+        int rigaSelezionata = tabella.getSelectedRow();
+
+        if (rigaSelezionata == -1) {
+        	
+            corsiPanel.pulisciCampi();
+            return;
+            
+        }
+
+        int modelRow = tabella.convertRowIndexToModel(rigaSelezionata);
+        SessioneCorso sessione = tableModel.getSessioneAt(modelRow);
+
+
+        corsiPanel.getIdSessioneField().setText(sessione.getSessioneId());
+        corsiPanel.setSelectedStaffId(sessione.getStaffId());
+        corsiPanel.setDataField(sessione.getData().toString());
+        corsiPanel.setFasciaOrariaField(sessione.getFasciaOraria());
+
+    }
+
+	//----------------------------------------------------------------
+
+    public void onPulisciSessioniVecchie() {
+    	
+        onPulisciSessioni();
+        
+    }
+
+	//----------------------------------------------------------------
 
     public void popolaStaffIdComboBox() {
 
@@ -344,8 +383,9 @@ public class SessioniCorsiManager {
 
             List<SessioneCorso> sessioni = calendarioService
             		                      .getSessioniDisponibili(tipo, inizio, fine);
-            corsiPanel.getTabella()
-                      .setModel(new SessioneCorsoTableModel(sessioni));
+            
+            tableModel = new SessioneCorsoTableModel(sessioni);
+            corsiPanel.getTabella().setModel(tableModel);
 
         } catch (DateTimeParseException ex) {
         	
@@ -366,39 +406,6 @@ public class SessioniCorsiManager {
     }
 
 	//----------------------------------------------------------------    
-
-    public void onSelezioneRiga() {
-
-        JTable tabella = corsiPanel.getTabella();
-        int rigaSelezionata = tabella.getSelectedRow();
-
-        if (rigaSelezionata == -1) {
-        	
-            corsiPanel.pulisciCampi();
-            return;
-            
-        }
-
-        int modelRow = tabella.convertRowIndexToModel(rigaSelezionata);
-        SessioneCorsoTableModel model = (SessioneCorsoTableModel) tabella.getModel();
-        SessioneCorso sessione = model.getSessioneAt(modelRow);
-
-        corsiPanel.getIdSessioneField().setText(sessione.getSessioneId());
-        corsiPanel.setSelectedStaffId(sessione.getStaffId());
-        corsiPanel.setDataField(sessione.getData().toString());
-        corsiPanel.setFasciaOrariaField(sessione.getFasciaOraria());
-
-    }
-
-	//----------------------------------------------------------------
-
-    public void onPulisciSessioniVecchie() {
-    	
-        onPulisciSessioni();
-        
-    }
-
-	//----------------------------------------------------------------
 
 }
 

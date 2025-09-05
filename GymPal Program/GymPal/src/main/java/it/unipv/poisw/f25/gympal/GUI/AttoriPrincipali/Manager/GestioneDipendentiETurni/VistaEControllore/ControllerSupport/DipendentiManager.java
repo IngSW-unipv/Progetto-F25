@@ -16,11 +16,11 @@ import it.unipv.poisw.f25.gympal.persistence.beans.DipendenteBean.Dipendente;
 public class DipendentiManager {
 	
 	/*Servizi*/
-	private final IDipendentiCRUDFacadeService dipendentiService;
-    private final ICRUDDipendentiSupportServices support;
+	private IDipendentiCRUDFacadeService dipendentiService;
+    private ICRUDDipendentiSupportServices support;
     
-    /*Pannello su cui agisce il manager*/
-    private final PannelloDipendenti dipendentiPanel;
+    /*Pannello*/
+    private PannelloDipendenti dipendentiPanel;
     
     /**/
     private String staffIdSelezionato;
@@ -29,7 +29,7 @@ public class DipendentiManager {
     private DipendentiTableModel tableModel;
     
     /*Per meccanismo observable*/
-    private final List<IDipendentiChangeListener> listeners = new ArrayList<>();
+    private List<IDipendentiChangeListener> listeners;
     
     //--------------------------------------------------------------------
 
@@ -37,9 +37,15 @@ public class DipendentiManager {
                              ICRUDDipendentiSupportServices support,
                              PannelloDipendenti dipendentiPanel) {
 
+    	/*Servizi*/
         this.dipendentiService = dipendentiService;
         this.support = support;
+        
+        /*Pannello*/
         this.dipendentiPanel = dipendentiPanel;
+        
+        /*Lista di ascoltatori*/
+        listeners = new ArrayList<>();
     }
 
     //--------------------------------------------------------------------
@@ -50,8 +56,8 @@ public class DipendentiManager {
         	
             List<Dipendente> lista = dipendentiService.getAllDipendenti();
             tableModel = new DipendentiTableModel(lista);
-            dipendentiPanel.getDipendentiTable().setModel(tableModel);
-            dipendentiPanel.getDipendentiTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            dipendentiPanel.getTabella().setModel(tableModel);
+            dipendentiPanel.getTabella().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             
         } catch (Exception e) {
         	
@@ -66,7 +72,7 @@ public class DipendentiManager {
 
     public void onSelezioneRiga() {
     	
-        JTable table = dipendentiPanel.getDipendentiTable();
+        JTable table = dipendentiPanel.getTabella();
         int selectedRow = table.getSelectedRow();
 
         if (selectedRow >= 0) {
@@ -216,7 +222,7 @@ public class DipendentiManager {
     public void onPulisciCampi() {
     	
         dipendentiPanel.pulisciCampi();
-        dipendentiPanel.getDipendentiTable().clearSelection();
+        dipendentiPanel.getTabella().clearSelection();
         staffIdSelezionato = null;
         
     }

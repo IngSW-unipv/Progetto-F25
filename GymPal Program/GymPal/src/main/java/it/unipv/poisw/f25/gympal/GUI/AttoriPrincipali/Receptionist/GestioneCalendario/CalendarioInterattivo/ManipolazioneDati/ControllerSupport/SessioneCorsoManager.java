@@ -43,8 +43,42 @@ public class SessioneCorsoManager {
     }
     
 	//----------------------------------------------------------------
+    
+    public List<SessioneCorso> getSessioniFiltrate(String tipo,
+			  							   		   String inizioStr,
+			  							   		   String fineStr) throws IllegalArgumentException {
 
-    public void iscrivi(String cfCliente, SessioneCorso sessione)
+		LocalDate inizio = inizioStr.isEmpty() ? null : dateUtils.parseData(inizioStr);
+		LocalDate fine = fineStr.isEmpty() ? null : dateUtils.parseData(fineStr);
+		
+		if ((inizioStr.isEmpty() && !fineStr.isEmpty()) || 
+			  (!inizioStr.isEmpty() && fineStr.isEmpty())) {
+			throw new IllegalArgumentException("Inserisci entrambe le date o nessuna.");
+		}
+		
+		/* Il metodo "parseData" di "dateUtils" restituisce 'null' quando la
+		 * data ad esso fornita (tipo 'String') non possiede il giusto formato.
+		 * Al contrario, se la data ha il giusto formato, il metodo "parseData"
+		 * restituisce il risultato della conversione da 'String' a 'LocalDate'*/
+		if (inizio == null && !inizioStr.isEmpty()) {
+			throw new IllegalArgumentException("Formato data inizio non valido. "
+											 + "Usa yyyy-MM-dd.");}
+		
+		if (fine == null && !fineStr.isEmpty()) {
+			throw new IllegalArgumentException("Formato data fine non valido. "
+					                         + "Usa yyyy-MM-dd.");}
+		
+		if (!dateUtils.isRangeValido(inizio, fine)) {
+			throw new IllegalArgumentException("La data fine non può essere precedente "
+											 + "alla data inizio.");}
+		
+		return recuperaSessioniDisponibili(tipo, inizio, fine);
+	
+	}
+	
+	//----------------------------------------------------------------
+
+    public void onIscrivi(String cfCliente, SessioneCorso sessione)
 			            throws ClienteNonAbbonatoException,
 			                   ConflittoOrarioException,
 			                   DatiNonTrovatiException,
@@ -57,7 +91,7 @@ public class SessioneCorsoManager {
     
 	//----------------------------------------------------------------
 
-    public boolean annulla(String cfCliente, SessioneCorso sessione) {
+    public boolean onAnnulla(String cfCliente, SessioneCorso sessione) {
     	
         boolean success = calendarioFacade
         				 .annullaPartecipazione(cfCliente, sessione.getSessioneId());
@@ -72,35 +106,4 @@ public class SessioneCorsoManager {
     
 	//----------------------------------------------------------------
     
-    public List<SessioneCorso> recuperaSessioniDaStringhe(String tipo,
-            											  String inizioStr,
-            											  String fineStr) throws IllegalArgumentException {
-    	
-		LocalDate inizio = inizioStr.isEmpty() ? null : dateUtils.parseData(inizioStr);
-		LocalDate fine = fineStr.isEmpty() ? null : dateUtils.parseData(fineStr);
-		
-		if ((inizioStr.isEmpty() && !fineStr.isEmpty()) || 
-			(!inizioStr.isEmpty() && fineStr.isEmpty())) {
-		    throw new IllegalArgumentException("Inserisci entrambe le date o nessuna.");
-		}
-		
-		if (inizio == null && !inizioStr.isEmpty()) {
-		throw new IllegalArgumentException("Formato data inizio non valido. "
-										  + "Usa yyyy-MM-dd.");}
-		
-		if (fine == null && !fineStr.isEmpty()) {
-		throw new IllegalArgumentException("Formato data fine non valido. "
-										 + "Usa yyyy-MM-dd.");}
-		
-		if (!dateUtils.isRangeValido(inizio, fine)) {
-		throw new IllegalArgumentException("La data fine non può essere precedente "
-										 + "alla data inizio.");}
-		
-		return recuperaSessioniDisponibili(tipo, inizio, fine);
-		
-    }
-    
-	//----------------------------------------------------------------
-
-
 }

@@ -14,6 +14,7 @@ public class DipendentiETurniView extends JPanel implements IDipendentiETurniVie
 
 	private static final long serialVersionUID = 1L;
 
+	/*TabbedPane & Pannelli*/
 	private JTabbedPane tabbedPane;
 	
 	private PannelloTurni turniPanel;
@@ -25,8 +26,10 @@ public class DipendentiETurniView extends JPanel implements IDipendentiETurniVie
 	public DipendentiETurniView(IDynamicButtonSizeSetter buttonSizeSetter,
 								IFontChangeRegister changeRegister) {
 		
+		/*Layout Pannello principale*/
 		setLayout(new BorderLayout());
 		
+		/*Costruzione contenuto pannello*/
 		tabbedPane = new JTabbedPane();
 		
 		turniPanel = new PannelloTurni(buttonSizeSetter, changeRegister);
